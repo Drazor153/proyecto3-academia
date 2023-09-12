@@ -1,0 +1,7 @@
+$var: #ff0000;
+
+body{
+  background-color: $var;
+}
+
+@import 'component'

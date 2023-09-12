@@ -1,0 +1,14 @@
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      HOST: string
+      PORT: number
+      USERNAME: string
+      PASSWORD: string
+      DATABASE: string
+      // add more environment variables and their types here
+    }
+  }
+}
+
+export {}
