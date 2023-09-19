@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+:root {
+    --font: 'Lato', sans-serif;
+    --color-orange: #FF5418;
+    --color-lightorange: #F8B69E;
+    --color-whiteorange: #FFE7D6;
+    --color-white: #FFFFFF;
+    --color-bluemarine: #2F4858;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: 100px max-content;
+    grid-template-areas:
+        'sidebar title user'
+        'sidebar content content';
+}
+
+body {
+    font-family: var(--font);
+    background-color: var(--color-white);
+}
+
+main {
+    width: 100%;
+    grid-area: content;
+
+    .content {
+        padding: 0px 10px;
+    }
+}
+
+h1 {
+    grid-area: title;
+    font-weight: 900;
+    color: var(--color-bluemarine);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    margin: 5px 10px;
+}
+
+h2 {
+    font-weight: 700;
+    color: var(--color-bluemarine);
+}

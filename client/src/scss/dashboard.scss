@@ -1,0 +1,44 @@
+// .dashboard {}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    padding: 5px;
+    gap: 5px;
+}
+
+.shortcut {
+    color: var(--color-bluemarine);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+    border-radius: 5px;
+    padding: 5px;
+
+
+    .icon {
+        font-size: 4rem;
+    }
+
+    &:hover {
+
+        .icon,
+        .name {
+            mix-blend-mode: difference;
+        }
+    }
+}
+
+.shortcuts-container {
+    padding: 5px 10px;
+    background-color: var(--color-whiteorange);
+    width: max-content;
+
+    h2 {
+        padding: 5px;
+        border-radius: 5px;
+        color: var(--color-whiteorange);
+        background-color: var(--color-orange);
+    }
+}
