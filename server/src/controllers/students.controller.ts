@@ -4,9 +4,9 @@ import { prisma } from '../services/db';
 type Student = {
   run: number;
   dv: string;
-  nombre: string;
-  primerApellido: string;
-  segundoApellido: string;
+  name: string;
+  firstLastname: string;
+  secondLastname: string;
   level: number;
 };
 
@@ -21,7 +21,7 @@ export const all = async (_req: Request, res: Response): Promise<void> => {
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  const { run, dv, nombre, primerApellido, segundoApellido, level }: Student =
+  const { run, dv, name, firstLastname, secondLastname, level }: Student =
     req.body;
 
   const studenExist = await prisma.student.findUnique({ where: { run } });
@@ -46,14 +46,14 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       data: {
         run,
         dv,
-        nombre,
-        primerApellido,
-        segundoApellido,
+        name,
+        firstLastname,
+        secondLastname,
         levels: {
           create: [
             {
               status: 'Cursando',
-              year: Number('s'),
+              year: 2023,
               level: {
                 connect: {
                   id: level_id?.id
