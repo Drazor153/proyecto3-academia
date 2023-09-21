@@ -11,15 +11,16 @@ datasource db {
 }
 
 model Student {
-  id              Int                @id @default(autoincrement())
-  run             Int                @unique
-  dv              String
-  nombre          String
-  primerApellido  String
-  segundoApellido String
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-  levels          LevelsOnStudents[]
+  id             Int                @id @default(autoincrement())
+  run            Int                @unique
+  dv             String
+  name           String
+  firstLastname  String
+  secondLastname String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  levels         LevelsOnStudents[]
+  Results        Results[]
 }
 
 model Level {
@@ -38,4 +39,21 @@ model LevelsOnStudents {
   status    String
 
   @@id([studentId, levelId])
+}
+
+model Exam {
+  id      Int       @id @default(autoincrement())
+  name    String
+  date    DateTime
+  Results Results[]
+}
+
+model Results {
+  exam      Exam    @relation(fields: [examId], references: [id])
+  examId    Int
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int
+  grade     Int
+
+  @@id([examId, studentId])
 }
