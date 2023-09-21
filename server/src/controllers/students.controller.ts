@@ -3,10 +3,11 @@ import { prisma } from '../services/db';
 
 type Student = {
   run: number;
-  dv: number;
-  nombre: string;
-  primerApellido: string;
-  segundoApellido: string;
+  dv: string;
+  name: string;
+  firstLastname: string;
+  secondLastname: string;
+  level: number;
 };
 
 export const ping = (_req: Request, res: Response): void => {
@@ -20,7 +21,7 @@ export const all = async (_req: Request, res: Response): Promise<void> => {
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  const { run, dv, nombre, primerApellido, segundoApellido }: Student =
+  const { run, dv, name, firstLastname, secondLastname, level }: Student =
     req.body;
 
   const studenExist = await prisma.student.findUnique({ where: { run } });
@@ -32,17 +33,40 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
+    const level_id = await prisma.level.findFirst({
+      where: {
+        level_number: level
+      },
+      select: {
+        id: true
+      }
+    });
+
     const student = await prisma.student.create({
       data: {
         run,
         dv,
-        nombre,
-        primerApellido,
-        segundoApellido
+        name,
+        firstLastname,
+        secondLastname,
+        levels: {
+          create: [
+            {
+              status: 'Cursando',
+              year: 2023,
+              level: {
+                connect: {
+                  id: level_id?.id
+                }
+              },
+            }
+          ]
+        }
       }
     });
     res.status(201).json({ message: 'Usuario creado correctamente!', student });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: 'Error!', error });
   }
 };
