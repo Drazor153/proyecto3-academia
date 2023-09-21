@@ -11,12 +11,31 @@ datasource db {
 }
 
 model Student {
-  id              Int      @id @default(autoincrement())
-  run             Int      @unique
-  dv              Int
+  id              Int                @id @default(autoincrement())
+  run             Int                @unique
+  dv              String
   nombre          String
   primerApellido  String
   segundoApellido String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  levels          LevelsOnStudents[]
+}
+
+model Level {
+  id           Int                @id @default(autoincrement())
+  name         String
+  level_number Int
+  students     LevelsOnStudents[]
+}
+
+model LevelsOnStudents {
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int
+  level     Level   @relation(fields: [levelId], references: [id])
+  levelId   Int
+  year      Int
+  status    String
+
+  @@id([studentId, levelId])
 }
