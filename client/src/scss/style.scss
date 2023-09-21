@@ -1,12 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
 
 :root {
-    --font: 'Lato', sans-serif;
+    --font: 'Lato Flex', sans-serif;
     --color-orange: #FF5418;
     --color-lightorange: #F8B69E;
     --color-whiteorange: #FFE7D6;
     --color-white: #FFFFFF;
+    --color-blue: #3C5380;
+    --color-skyblue: #8AADE1;
     --color-bluemarine: #2F4858;
+    --color-pink: #EF3164;
+    --color-purple: #765298;
+    --color-green: #007200;
 }
 
 * {
@@ -30,23 +35,37 @@ body {
 }
 
 main {
-    width: 100%;
+    padding: 10px 15px;
     grid-area: content;
+    width: max-content;
 
-    .content {
-        padding: 0px 10px;
+
+    h2 {
+        padding: 5px;
+        border-radius: 5px;
+        color: var(--color-whiteorange);
+        background-color: var(--color-orange);
     }
 }
 
 h1 {
+    font-size: 3.5rem;
     grid-area: title;
     font-weight: 900;
     color: var(--color-bluemarine);
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    margin: 5px 10px;
+    margin: 5px 20px;
 }
 
 h2 {
     font-weight: 700;
     color: var(--color-bluemarine);
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+    margin: 5px;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
 }

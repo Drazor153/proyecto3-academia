@@ -2,7 +2,6 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 100px);
-    padding: 5px;
     gap: 5px;
 }
 
@@ -27,18 +26,5 @@
         .name {
             mix-blend-mode: difference;
         }
-    }
-}
-
-.shortcuts-container {
-    padding: 5px 10px;
-    background-color: var(--color-whiteorange);
-    width: max-content;
-
-    h2 {
-        padding: 5px;
-        border-radius: 5px;
-        color: var(--color-whiteorange);
-        background-color: var(--color-orange);
     }
 }
