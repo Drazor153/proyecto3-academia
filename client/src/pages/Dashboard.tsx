@@ -1,4 +1,4 @@
-import menuItems from '../pages.tsx'
+import { menuItems } from '../utils/pages'
 import '../scss/dashboard.scss'
 import { NavLink } from 'react-router-dom'
 

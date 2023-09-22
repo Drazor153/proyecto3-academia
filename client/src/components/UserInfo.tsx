@@ -1,20 +1,21 @@
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { swaptype } from '../redux/features/userSlice'
 import '../scss/userinfo.scss'
 import { BiSolidUserRectangle } from 'react-icons/bi'
 
-interface Props {
-    name: string;
-    role: string;
-}
 
-function UserInfo({ name, role }: Props) {
+function UserInfo() {
+    const user = useAppSelector(state => state.userReducer)
+    const dispatch = useAppDispatch()
+
     return (
-        <div className='user-info-container'>
+        <div className='user-info-container' onClick={() => dispatch(swaptype())}>
             <div className='user-icon'>
                 <BiSolidUserRectangle />
             </div>
             <div className='user-info'>
-                <b className='user-name'>{name}</b>
-                <small className='user-role'>{role}</small>
+                <b className='user-name'>{user.name}</b>
+                <small className='user-role'>{user.role}</small>
             </div>
         </div>
     )

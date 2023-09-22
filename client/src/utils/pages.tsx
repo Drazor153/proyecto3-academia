@@ -1,10 +1,11 @@
-import { FaTh, FaBookOpen, FaRegCalendarAlt, FaSignOutAlt } from 'react-icons/fa'
-import Dashboard from './pages/Dashboard'
-import Grades from './pages/Grades'
-import Classes from './pages/Classes'
-import Logout from './components/Logout'
+import { FaTh, FaBookOpen, FaRegCalendarAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import Dashboard from '../pages/Dashboard'
+import Grades from '../pages/Grades'
+import Classes from '../pages/Classes'
+import Logout from '../components/Logout'
+import Administration from '../pages/Administration'
 
-const menuItems = [
+export const menuItems = [
     {
         path: "/",
         name: "Dashboard",
@@ -35,4 +36,12 @@ const menuItems = [
     }
 ]
 
-export default menuItems
+export const privilegedItems = [
+    {
+        path: "/Administration",
+        name: "Administration",
+        icon: <FaUser />,
+        component: <Administration />,
+        color: "#BDA69E"
+    }
+]

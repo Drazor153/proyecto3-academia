@@ -5,7 +5,7 @@
         "oselector grades";
     width: auto;
     grid-template-columns: max-content 1fr;
-    grid-template-rows: max-content;
+    grid-template-rows: max-content 1fr;
 }
 
 .topics-selector {

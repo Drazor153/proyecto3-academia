@@ -2,6 +2,7 @@ import '../scss/grades.scss'
 import '../scss/buttons.scss'
 import { useState } from "react"
 import { FaPen, FaBookOpenReader, FaEarListen, FaCommentDots } from "react-icons/fa6"
+import TopicTable from '../components/TopicTable'
 
 const topics = [
     {
@@ -24,40 +25,21 @@ const topics = [
 
 // TEMPORAL VALUES
 const years = ['2023', '2022', '2021']
-const grades = {
-    "Writing": [1, 1, 1],
-    "Reading": [3, 2, 1],
-    "Listening": [4, 5, 7],
-    "Speaking": [6, 2, 5]
-}
-
-const examstopics = {
-    Writing: ['test 1', 'test 2', 'test 3'],
-    Reading: ['test 1', 'test 2', 'test 3'],
-    Listening: ['test 1', 'test 2', 'test 3'],
-    Speaking: ['test 1', 'test 2', 'test 3']
-}
 
 
-function GradesByTopic({ topics, year }: { topics: string[], year: string }) {
-    if (!topics || !year) return null
+function GradesByTopics({ topics, year }: { topics: string[], year: string }) {
+    if (!topics || !year) return null;
+
     return (
         <div className='grades'>
             {topics.map((topic, index) => (
-                <section key={index}>
-                    <h2>{topic}</h2>
-                    <table>
-                        <tr>
-                            <th>Test Topics</th>
-                            <th>Score</th>
-                        </tr>
-                        <tr>
-                        </tr>
-                    </table>
-                </section>
-
+                <TopicTable
+                    key={index}
+                    topic={topic}
+                />
             ))}
-        </div>)
+        </div>
+    );
 }
 
 
@@ -99,7 +81,7 @@ function Grades() {
                         ))}
                     </select>
                 </section>
-                <GradesByTopic topics={selectedTopic} year={selectedYear} />
+                <GradesByTopics topics={selectedTopic} year={selectedYear} />
 
             </main>
         </>
