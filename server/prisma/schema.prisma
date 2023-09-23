@@ -11,8 +11,7 @@ datasource db {
 }
 
 model Student {
-  id             Int                @id @default(autoincrement())
-  run            Int                @unique
+  run            Int                @id
   dv             String
   name           String
   firstLastname  String
@@ -21,16 +20,18 @@ model Student {
   updatedAt      DateTime           @updatedAt
   levels         LevelsOnStudents[]
   Results        Results[]
+  Attendance     Attendance[]
 }
 
 model Level {
-  id       String             @id
-  name     String
-  students LevelsOnStudents[]
+  id         String             @id
+  name       String
+  students   LevelsOnStudents[]
+  ClassGroup ClassGroup[]
 }
 
 model LevelsOnStudents {
-  student   Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [run])
   studentId Int
   level     Level   @relation(fields: [levelId], references: [id])
   levelId   String
@@ -50,9 +51,54 @@ model Exam {
 model Results {
   exam      Exam    @relation(fields: [examId], references: [id])
   examId    Int
-  student   Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [run])
   studentId Int
   grade     Int
 
   @@id([examId, studentId])
+}
+
+model Group {
+  letter     String       @id
+  topic      String
+  ClassGroup ClassGroup[]
+}
+
+model Teacher {
+  id             Int          @id @default(autoincrement())
+  names          String
+  firstLastname  String
+  secondLastname String
+  ClassGroup     ClassGroup[]
+}
+
+model ClassGroup {
+  id        Int      @id @default(autoincrement())
+  year      Int
+  level     Level    @relation(fields: [levelId], references: [id])
+  levelId   String
+  group     Group    @relation(fields: [groupId], references: [letter])
+  groupId   String
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+  teacherId Int?
+  Class     Class[]
+}
+
+model Class {
+  id           Int          @id @default(autoincrement())
+  title        String
+  description  String
+  classTime    DateTime
+  classgroup   ClassGroup   @relation(fields: [classGroupId], references: [id])
+  classGroupId Int
+  Attendance   Attendance[]
+}
+
+model Attendance {
+  class     Class   @relation(fields: [classId], references: [id])
+  classId   Int
+  student   Student @relation(fields: [studentId], references: [run])
+  studentId Int
+
+  @@id([classId, studentId])
 }
