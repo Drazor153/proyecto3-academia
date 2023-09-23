@@ -3,8 +3,9 @@ import * as studentsController from '../controllers/students.controller';
 
 const router = Router();
 
-router.get('/ping', studentsController.ping);
-router.get('/all', studentsController.all)
-router.post('/create', studentsController.create);
+router.get('/', studentsController.get);
+router.post('/', studentsController.create);
+
+router.get('/grades/:run', studentsController.getStudentGrades);
 
 export default router;
