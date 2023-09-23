@@ -1,6 +1,34 @@
 import { menuItems } from '../utils/pages'
+import { privilegedItemsShortcuts } from '../utils/pages'
 import '../scss/dashboard.scss'
 import { NavLink } from 'react-router-dom'
+import { useAppSelector } from '../redux/hooks'
+
+function AdministrationShortcuts() {
+    const role = useAppSelector(state => state.userReducer.role)
+    if (role !== 'SUPERUSER') return null
+    return (
+        <section>
+            <h2>Administration Shortcuts</h2>
+            <div className='grid'>
+                {privilegedItemsShortcuts.map((item, index) => (
+                    <NavLink className='shortcut'
+                        to={item.path}
+                        key={index}
+                        style={{ backgroundColor: item.color }}
+                    >
+                        <div className='icon'>
+                            {item.icon}
+                        </div>
+                        <div className='name'>
+                            {item.name}
+                        </div>
+                    </NavLink>
+                ))}
+            </div>
+        </section>
+    )
+}
 
 function Dashboard() {
     return (
@@ -26,6 +54,7 @@ function Dashboard() {
                         ))}
                     </div>
                 </section>
+                {AdministrationShortcuts()}
             </main>
         </>
     )

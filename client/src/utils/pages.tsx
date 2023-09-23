@@ -41,7 +41,16 @@ export const privilegedItems = [
         path: "/Administration",
         name: "Administration",
         icon: <FaUser />,
-        component: <Administration />,
+        component: <Administration shortcut='' />,
+        color: "#BDA69E"
+    }]
+
+export const privilegedItemsShortcuts = [
+    {
+        path: "/Administration/Student/Registration",
+        name: "Student Registration",
+        icon: <FaUser />,
+        component: <Administration shortcut={['Students', 'Registration']} />,
         color: "#BDA69E"
     }
 ]

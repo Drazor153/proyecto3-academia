@@ -1,0 +1,16 @@
+{
+    "menu": "Menu",
+    "administration": "Administration",
+    "name": "Name",
+    "students": "Students",
+    "students_menu": "Students Menu",
+    "registration": "Registration",
+    "student_registration": "Register an Student",
+    "rut_input": "Enter the RUT of the student",
+    "dv": "Verification Digit",
+    "names_input": "Enter the full name of the student",
+    "first_surname": "First Surname",
+    "second_surname": "Second Surname",
+    "level_input": "Select the student's English level",
+    "register": "Register Student"
+}

@@ -19,11 +19,30 @@ button {
         opacity: .7;
     }
 
+    &:disabled {
+        opacity: .7;
+        cursor: default;
+    }
+
     .icon {
         font-size: 1.5rem;
     }
 
     &.selected {
         opacity: .5;
+    }
+}
+
+.lang-swapper {
+    padding: 0px 10px;
+    color: var(--color-white);
+    background-color: var(--color-orange);
+    margin: 5px 10px;
+    grid-area: lang;
+    height: 50px;
+    width: max-content;
+
+    img {
+        width: 50px;
     }
 }

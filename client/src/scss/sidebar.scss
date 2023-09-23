@@ -30,6 +30,21 @@
     cursor: pointer;
 }
 
+a {
+
+    &[href="/"],
+    &[href="/Dashboard"] {
+        order: 0;
+    }
+
+    order: 1;
+
+    &[href="/Logout"] {
+        margin-top: auto;
+        order: 2;
+    }
+}
+
 .link {
     display: flex;
     align-items: center;
@@ -61,7 +76,4 @@
         display: flex;
     }
 
-    &:last-of-type {
-        margin-top: auto;
-    }
 }

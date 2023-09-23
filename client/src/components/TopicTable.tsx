@@ -7,25 +7,42 @@ const grades = {
     Speaking: [6, 2, 5]
 }
 
-const examstopics = {
-    Writing: ['test 1', 'test 2', 'test 3'],
-    Reading: ['test 1', 'test 2', 'test 3'],
-    Listening: ['test 1', 'test 2', 'test 3'],
-    Speaking: ['test 1', 'test 2', 'test 3']
+const exams = {
+    Writing: [{ theme: 'test 1', date: 'dd/mm/aa' },
+    { theme: 'test 2', date: 'dd/mm/aa' },
+    { theme: 'test 3', date: 'dd/mm/aa' }],
+    Reading: [{ theme: 'test 1', date: 'dd/mm/aa' },
+    { theme: 'test 2', date: 'dd/mm/aa' },
+    { theme: 'test 3', date: 'dd/mm/aa' }],
+    Listening: [{ theme: 'test 1', date: 'dd/mm/aa' },
+    { theme: 'test 2', date: 'dd/mm/aa' },
+    { theme: 'test 3', date: 'dd/mm/aa' }],
+    Speaking: [{ theme: 'test 1', date: 'dd/mm/aa' },
+    { theme: 'test 2', date: 'dd/mm/aa' },
+    { theme: 'test 3', date: 'dd/mm/aa' }]
 }
 
-function TableRowTeacher({ test }: { test: string }) {
+type exam = {
+    theme: string;
+    date: string;
+}
+
+function TableRowTeacher({ test }: { test: exam }) {
+    console.log(typeof test);
+
     return (
         <tr>
-            <td>{test}</td>
+            <td>{test.theme}</td>
+            <td>{test.date}</td>
         </tr>
     );
 }
 
-function TableRowStudent({ test, score }: { test: string, score: number }) {
+function TableRowStudent({ test, score }: { test: exam, score: number }) {
     return (
         <tr>
-            <td>{test}</td>
+            <td>{test.theme}</td>
+            <td>{test.date}</td>
             <td>{score}</td>
         </tr>
     );
@@ -33,7 +50,7 @@ function TableRowStudent({ test, score }: { test: string, score: number }) {
 
 function TopicTable({ topic }: { topic: string }) {
     const user = useAppSelector(state => state.userReducer)
-    const tests = examstopics[topic as keyof typeof examstopics]
+    const tests = exams[topic as keyof typeof exams]
     const tablerows: React.ReactNode[] = []
     if (user.role == 'STUDENT') {
         const scores = grades[topic as keyof typeof grades]
@@ -53,6 +70,7 @@ function TopicTable({ topic }: { topic: string }) {
                 <thead>
                     <tr>
                         <th>Test Topics</th>
+                        <th>Date</th>
                         <th>{user.role == 'STUDENT' ? 'Score' : 'Action'}</th>
                     </tr>
                 </thead>
