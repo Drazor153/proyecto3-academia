@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fdograph/rut-utilities": "^1.4.0",
     "@hookform/resolvers": "^3.3.1",
     "@reduxjs/toolkit": "^1.9.5",
     "i18next": "^23.5.1",
