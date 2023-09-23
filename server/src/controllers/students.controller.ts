@@ -7,16 +7,11 @@ type Student = {
   name: string;
   firstLastname: string;
   secondLastname: string;
-  level: number;
+  level: string;
 };
 
-export const ping = (_req: Request, res: Response): void => {
-  res.send('pooooooong');
-};
-
-export const all = async (_req: Request, res: Response): Promise<void> => {
+export const get = async (_req: Request, res: Response): Promise<void> => {
   const students = await prisma.student.findMany();
-
   res.json({ data: students });
 };
 
@@ -35,7 +30,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const level_id = await prisma.level.findFirst({
       where: {
-        level_number: level
+        id: level
       },
       select: {
         id: true
@@ -58,7 +53,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
                 connect: {
                   id: level_id?.id
                 }
-              },
+              }
             }
           ]
         }
@@ -69,4 +64,22 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     console.log(error);
     res.status(400).json({ message: 'Error!', error });
   }
+};
+
+export const getStudentGrades = async (req: Request, res: Response) => {
+  const { run } = req.params;
+
+  const studentGrades = await prisma.student.findUnique({
+    where: {
+      run: Number(run)
+    },
+    include: {
+      Results: true
+    }
+  });
+  
+
+  res.status(200).json({
+    data: studentGrades
+  });
 };

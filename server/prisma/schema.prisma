@@ -24,17 +24,16 @@ model Student {
 }
 
 model Level {
-  id           Int                @id @default(autoincrement())
-  name         String
-  level_number Int
-  students     LevelsOnStudents[]
+  id       String             @id
+  name     String
+  students LevelsOnStudents[]
 }
 
 model LevelsOnStudents {
   student   Student @relation(fields: [studentId], references: [id])
   studentId Int
   level     Level   @relation(fields: [levelId], references: [id])
-  levelId   Int
+  levelId   String
   year      Int
   status    String
 
