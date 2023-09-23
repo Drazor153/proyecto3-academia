@@ -1,13 +1,15 @@
 import { useState } from 'react'
-import { menuItems } from '../utils/pages'
+import { menuItems, privilegedItems } from '../utils/pages'
 import { FaBars } from 'react-icons/fa'
 import '../scss/sidebar.scss'
 import { NavLink } from 'react-router-dom'
+import { useAppSelector } from '../redux/hooks'
 
 
 function Sidebar({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = () => setIsOpen(!isOpen)
+    const role = useAppSelector(state => state.userReducer.role)
 
     return (
         <>
@@ -19,7 +21,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                     </div>
                 </div>
                 {
-                    menuItems.map((item, index) => (
+                    (role == 'SUPERUSER' ? [...menuItems, ...privilegedItems] : menuItems).map((item, index) => (
                         <NavLink
                             to={item.path}
                             key={index}

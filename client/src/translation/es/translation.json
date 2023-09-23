@@ -1,0 +1,16 @@
+{
+    "menu": "Menú",
+    "administration": "Administración",
+    "name": "Nombre",
+    "students": "Estudiantes",
+    "students_menu": "Menú de estudiantes",
+    "registration": "Registro",
+    "student_registration": "Registrar a un estudiante matriculado",
+    "rut_input": "Ingrese el RUT del estudiante",
+    "dv": "Dígito verificador",
+    "names_input": "Ingrese el nombre completo del estudiante",
+    "first_surname": "Apellido paterno",
+    "second_surname": "Apellido materno",
+    "level_input": "Seleccione el nivel de inglés del estudiante",
+    "register": "Inscribir alumno"
+}

@@ -1,0 +1,21 @@
+.admin-layout {
+    display: grid;
+    grid-template-areas:
+        'menu-selector content'
+        'action-selector content';
+    width: auto;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: max-content 1fr;
+}
+
+.menu-selector {
+    grid-area: menu-selector;
+}
+
+.action-selector {
+    grid-area: action-selector;
+}
+
+.content {
+    grid-area: content;
+}

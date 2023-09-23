@@ -1,10 +1,11 @@
 .user-info-container {
+    box-sizing: border-box;
     padding: 5px 10px;
     display: flex;
     background-color: var(--color-orange);
     color: var(--color-white);
     border-radius: 5px;
-    height: max-content;
+    height: 50px;
     grid-area: user;
     margin: 5px 10px;
 
