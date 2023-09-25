@@ -12,5 +12,8 @@
     "first_surname": "Apellido paterno",
     "second_surname": "Apellido materno",
     "level_input": "Seleccione el nivel de inglés del estudiante",
-    "register": "Inscribir alumno"
+    "register": "Inscribir alumno",
+    "no_input": "Sin seleccionar",
+    "Run already registered": "El RUT ya se encuentra registrado",
+    "Invalid value": "Un campo ingresado no es valido"
 }
