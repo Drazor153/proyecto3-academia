@@ -42,10 +42,12 @@ model LevelsOnStudents {
 }
 
 model Exam {
-  id      Int       @id @default(autoincrement())
-  name    String
-  date    DateTime
-  Results Results[]
+  id           Int        @id @default(autoincrement())
+  name         String
+  date         DateTime
+  classgroup   ClassGroup @relation(fields: [classGroupId], references: [id])
+  classGroupId Int
+  Results      Results[]
 }
 
 model Results {
@@ -65,7 +67,7 @@ model Group {
 }
 
 model Teacher {
-  id             Int          @id @default(autoincrement())
+  run            Int          @id
   names          String
   firstLastname  String
   secondLastname String
@@ -79,9 +81,10 @@ model ClassGroup {
   levelId   String
   group     Group    @relation(fields: [groupId], references: [letter])
   groupId   String
-  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+  teacher   Teacher? @relation(fields: [teacherId], references: [run])
   teacherId Int?
   Class     Class[]
+  Exam      Exam[]
 }
 
 model Class {

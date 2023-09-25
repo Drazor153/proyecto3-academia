@@ -18,22 +18,31 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   const results = validationResult(req);
-
+  
   if (!results.isEmpty()) {
-    res.status(400).json({ errorMsg: results.array() });
+    res
+      .status(400)
+      .json({ errorType: 'invalidFields', errorMsg: results.array() });
     return;
   }
   const { run, dv, name, first_surname, second_surname, level }: Student =
     req.body;
 
+  if (typeof run !== 'number') {
+    res.status(400).json({
+      errorType: 'msg',
+      errorMsg: 'Run type must be number'
+    });
+    return;
+  }
+
   const studenExist = await prisma.student.findUnique({ where: { run } });
 
   if (studenExist !== null) {
-    res
-      .status(400)
-      .json({
-        errorMsg: 'El estudiante ya ha sido registrado con el rut dado'
-      });
+    res.status(400).json({
+      errorType: 'msg',
+      errorMsg: 'Run already registered'
+    });
     return;
   }
   try {
@@ -67,18 +76,27 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const getStudentGrades = async (req: Request, res: Response) => {
-  const { run } = req.params;
+  const { year, level, run } = req.params;
 
-  const studentGrades = await prisma.student.findUnique({
+  const classGroupExams = await prisma.exam.findMany({
     where: {
-      run: Number(run)
+      classgroup: {
+        levelId: level,
+        year: Number(year)
+      }
     },
     include: {
-      Results: true
+      Results: {
+        where: {
+          studentId: Number(run)
+        }
+      }
     }
   });
 
+  // console.log(classGroupExams);
+
   res.status(200).json({
-    data: studentGrades
+    data: classGroupExams
   });
 };
