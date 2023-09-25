@@ -1,0 +1,54 @@
+.float-label-field {
+    border: none;
+    outline: none;
+    position: relative;
+    margin: 0 0 20px 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: text;
+}
+
+.float-label-field input {
+    box-sizing: border-box;
+    background-color: var(--color-whitegrey);
+    background-color: none;
+    border: none;
+    outline: none;
+    padding: 5px 5px 8px 3px;
+    width: 100%;
+    font-size: 18px;
+    border-bottom: solid 1px var(--color-lightgrey);
+}
+
+.float-label-field label {
+    opacity: 0.5;
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    transition: all 0.2s ease;
+    font-size: 18px;
+    cursor: inherit;
+}
+
+.float-label-field.focus label {
+    color: var(--color-orange);
+}
+
+.float-label-field.focus input {
+    border-bottom: solid 1px var(--color-orange);
+}
+
+.float-label-field.float label {
+    opacity: 1;
+    top: -15px;
+    left: 0px;
+    font-size: 60%;
+    transition: all 0.2s ease;
+    font-weight: bold;
+}
+
+select {
+    outline: 0;
+    font-size: 1.1rem;
+    height: 40px;
+}

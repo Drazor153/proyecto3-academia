@@ -12,7 +12,7 @@ type Student = {
 export const studentsApi = createApi({
     reducerPath: 'studentsAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://7gv0ggpz-3000.brs.devtunnels.ms/api'
+        baseUrl: 'http://10.242.108.185:3000/api'
     }),
     endpoints: (builder) => ({
         getStudents: builder.query<Student[], null>({

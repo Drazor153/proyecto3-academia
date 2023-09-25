@@ -6,6 +6,9 @@ import { t } from 'i18next';
 import { useAddStudentMutation } from '../redux/services/studentsApi';
 import { useState } from 'react';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+import FloatLabelInput from './FloatLabelInput';
 
 const levels = [
     { level: 'A1', nombre: 'Básico A1' },
@@ -16,8 +19,7 @@ const levels = [
 ];
 
 type Student = {
-    run: number;
-    dv: string;
+    run: string;
     name: string;
     first_surname: string;
     second_surname: string;
@@ -25,8 +27,7 @@ type Student = {
 };
 
 const formSchema: ZodType<Student> = z.object({
-    run: z.coerce.number().positive(),
-    dv: z.string().max(1),
+    run: z.string(),
     name: z.string(),
     first_surname: z.string(),
     second_surname: z.string(),
@@ -34,6 +35,27 @@ const formSchema: ZodType<Student> = z.object({
 });
 
 type formType = z.infer<typeof formSchema>;
+
+type Response = {
+    errorMsg: [] | string,
+    errorType: string
+}
+
+type ServerResponse = { status: number, data: Response, message: string }
+
+function handleSuccessMsg(payload: ServerResponse) {
+    toast.success(payload.message)
+}
+
+function handleErrorMsg(error: ServerResponse) {
+    switch (error.data.errorType) {
+        case 'invalidFields':
+            toast.error(t(error.data.errorMsg[0].msg));
+            break;
+        case 'msg':
+            toast.error(t(error.data.errorMsg));
+    }
+}
 
 function FormNewStudent() {
     const [rut, setRut] = useState('');
@@ -52,44 +74,55 @@ function FormNewStudent() {
     });
 
     const onSubmit: SubmitHandler<formType> = (data) => {
-        console.log(data);
+        const { digits, verifier } = deconstructRut(data.run);
+
         addStudent({
-            run: data.run,
-            dv: data.dv,
+            run: parseInt(digits),
+            dv: verifier,
             name: data.name,
             first_surname: data.first_surname,
             second_surname: data.second_surname,
             level: data.level
         }).unwrap()
-            .then((payload) => console.log('fulfilled', payload))
-            .catch((error) => console.error('rejected', error))
+            .then((payload) => handleSuccessMsg(payload))
+            .catch((error) => handleErrorMsg(error));
     };
-
-
 
     return (
         <>
             <h2><Trans>student_registration</Trans></h2>
             <form onSubmit={handleSubmit(onSubmit)} className='student-register'>
-                <h3><Trans>rut_input</Trans></h3>
-                <div className='run-input-container'>
-                    <input type="text" placeholder='12345678-K' {...register('run')} onChange={handleRUTChange} value={rut} />
-                    {errors.dv && <span>{errors.dv.message}</span>}
+                <div className='input-section'>
+                    <h3><Trans>rut_input</Trans></h3>
+                    <div className='run-input-container'>
+                        <fieldset className='float-label-field'>
+                            <input type="text" {...register('run')} onChange={handleRUTChange} value={rut} />
+                        </fieldset>
+                    </div>
                 </div>
-                <h3><Trans>names_input</Trans></h3>
-                <div className='name-input-container'>
-                    <input type="text" placeholder={t('name')} {...register('name')} />
-                    <input type="text" placeholder={t('first_surname')} {...register('first_surname')} />
-                    <input type="text" placeholder={t('second_surname')} {...register('second_surname')} />
+                <div className='input-section'>
+                    <h3><Trans>names_input</Trans></h3>
+                    <div className='name-input-container'>
+                        <FloatLabelInput name='name' type='text' register={register} />
+                        <FloatLabelInput name='first_surname' type='text' register={register} />
+                        <FloatLabelInput name='second_surname' type='text' register={register} />
+
+                    </div>
                 </div>
-                <select defaultValue='0' {...register('level')} >
-                    <option value="0"><Trans>level_input</Trans></option>
-                    {levels.map(level => (
-                        <option key={level.nombre} value={level.level}>{level.nombre}</option>
-                    ))}
-                </select>
-                <button type="submit"><Trans>register</Trans></button>
+                <div className='input-section'>
+                    <h3><Trans>level_input</Trans></h3>
+                    <select defaultValue='0' {...register('level')} >
+                        <option value="0"><Trans>no_input</Trans></option>
+                        {levels.map(level => (
+                            <option key={level.nombre} value={level.level}>{level.nombre}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className='submit-btn'>
+                    <button type="submit"><Trans>register</Trans></button>
+                </div>
             </form>
+            <ToastContainer />
         </>
     )
 }
