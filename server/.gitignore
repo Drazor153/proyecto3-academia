@@ -1,4 +1,7 @@
 node_modules
 build
+dist
+coverage
 .env
 *.log
+jest.config.js

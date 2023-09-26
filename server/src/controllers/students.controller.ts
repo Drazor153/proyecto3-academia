@@ -13,7 +13,7 @@ type Student = {
 
 export const get = async (_req: Request, res: Response): Promise<void> => {
   const students = await prisma.student.findMany();
-  res.json({ data: students });
+  res.status(200).json({ data: students });
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
