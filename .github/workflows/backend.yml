@@ -29,7 +29,9 @@ jobs:
         with: 
           node-version: 18
       - name: Setup Database URL
-        run: cp .env.ci .env
+        run: |
+          cd ./server
+          cp .env.ci .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
