@@ -1,0 +1,39 @@
+name: Backend Testing
+
+on:
+  push:
+    branches:
+      - backend
+
+jobs:
+
+  backend-testing:
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+          mysql database: 'academia-ingles' # Optional, default value is "test". The specified database which will be create
+          # mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: ${{ secrets.DatabaseUser }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: backend
+      - name: Set Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18
+      - name: Push database schema
+        run: npx prisma db push
+      - name: Setup Database URL
+        run: cp .env.dev .env
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache --check-cache #yarn install
+      - name: Test server
+        run: yarn test
