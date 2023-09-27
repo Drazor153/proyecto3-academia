@@ -8,6 +8,9 @@ on:
 jobs:
   backend-testing:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
     services:
       mydb:
         image: mysql:5.7
@@ -30,7 +33,6 @@ jobs:
           node-version: 18
       - name: Setup Database URL
         run: |
-          cd ./server
           cp .env.ci .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
