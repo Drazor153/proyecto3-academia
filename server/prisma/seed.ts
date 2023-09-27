@@ -47,18 +47,14 @@ async function main() {
                   where: {
                     letter: group.letter
                   },
-                  create: {
-                    letter: group.letter,
-                    topic: group.topic
-                  }
+                  create: group
                 }
               }
             }
           }
         },
         create: {
-          id: level.id,
-          name: level.name,
+          ...level,
           ClassGroup: {
             create: {
               year: 2023,
@@ -67,10 +63,7 @@ async function main() {
                   where: {
                     letter: group.letter
                   },
-                  create: {
-                    letter: group.letter,
-                    topic: group.topic
-                  }
+                  create: group
                 }
               }
             }
