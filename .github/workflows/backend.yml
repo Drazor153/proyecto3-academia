@@ -11,6 +11,9 @@ jobs:
     services:
       mydb:
         image: mysql:5.7
+        credentials:
+          username: ${{ secrets.DatabaseUser }}
+          password: ${{ secrets.DatabasePassword }}
         env:
           MYSQL_DATABASE: academia-ingles
           MYSQL_USER: ${{ secrets.DatabaseUser }}
@@ -18,7 +21,6 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DatabasePassword }}
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - run: sudo service mysql restart
       - name: Pull repo
         uses: actions/checkout@v4
         with:
