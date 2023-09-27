@@ -8,6 +8,7 @@ on:
 jobs:
   backend-testing:
     runs-on: ubuntu-latest
+    container: ubuntu
     services:
       mydb:
         image: mysql:5.7
@@ -20,7 +21,6 @@ jobs:
     steps:
       - name: Verify MySQL connection from container 
         run: |
-          sudo apt-get update
           sudo apt-get install -y mysql-client
           mysql --host mydb -uroot -ppassword -e "SHOW DATABASES"
       - name: Pull repo
