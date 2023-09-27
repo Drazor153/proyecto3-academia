@@ -8,9 +8,6 @@ on:
 jobs:
   backend-testing:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     steps:
       - name: Setup MySQL
         uses: mirromutth/mysql-action@v1.1
@@ -35,7 +32,9 @@ jobs:
         with: 
           node-version: 18
       - name: Setup Database URL
-        run: cp .env.ci .env
+        run: | 
+          cd ./server
+          cp .env.ci .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
