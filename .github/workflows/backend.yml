@@ -13,9 +13,9 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: 'academia-ingles'
-          MYSQL_USER: ${{ secrets.DatabaseUser }}
-          MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
-          MYSQL_ROOT_PASSWORD: password
+          MYSQL_USER: proyecto3-su
+          MYSQL_PASSWORD: proyecto-2023
+          MYSQL_ROOT_PASSWORD: proyecto-2023
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - run: sudo service mysql restart
