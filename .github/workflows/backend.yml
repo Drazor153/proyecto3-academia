@@ -9,6 +9,9 @@ jobs:
 
   backend-testing:
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - uses: mirromutth/mysql-action@v1.1
         with:
@@ -28,6 +31,8 @@ jobs:
           node-version: 18
       - name: Push database schema
         run: npx prisma db push
+      - name: Setup Database URL
+        run: cp .env.example .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Test server
