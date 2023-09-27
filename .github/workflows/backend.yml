@@ -34,11 +34,12 @@ jobs:
           node-version: 18
       - name: Setup Database URL
         run: cp .env.dev .env
-      - name: Install dependencies
-        run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
         run: |
           npx prisma db push
           npx prisma db seed
+      - name: Install dependencies
+        run: yarn install --immutable --immutable-cache --check-cache #yarn install
+      
       - name: Test server
         run: yarn test
