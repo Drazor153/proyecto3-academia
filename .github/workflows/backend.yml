@@ -32,7 +32,7 @@ jobs:
       - name: Push database schema
         run: npx prisma db push
       - name: Setup Database URL
-        run: cp .env.example .env
+        run: cp .env.dev .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Test server
