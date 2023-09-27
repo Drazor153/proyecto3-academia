@@ -11,9 +11,6 @@ jobs:
     services:
       mydb:
         image: mysql:5.7
-        credentials:
-          username: ${{ secrets.DatabaseUser }}
-          password: ${{ secrets.DatabasePassword }}
         env:
           MYSQL_DATABASE: academia-ingles
           MYSQL_USER: ${{ secrets.DatabaseUser }}
