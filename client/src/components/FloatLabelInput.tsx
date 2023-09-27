@@ -39,6 +39,7 @@ function FloatLabelInput({ name, type, register }: InputComponentProps) {
                 id={`${name}Input`}
                 type={type}
                 onFocus={handleFocus}
+                {...register(name)}
                 onBlur={handleBlur}
             />
 

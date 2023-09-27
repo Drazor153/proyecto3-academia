@@ -1,4 +1,4 @@
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm, UseFormRegister } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ZodType, z } from 'zod';
 import { Trans, useTranslation } from 'react-i18next';
@@ -9,14 +9,8 @@ import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import FloatLabelInput from './FloatLabelInput';
-
-const levels = [
-    { level: 'A1', nombre: 'Básico A1' },
-    { level: 'A2', nombre: 'Básico A2' },
-    { level: 'B1', nombre: 'Intermedio B1' },
-    { level: 'B2', nombre: 'Intermedio B2' },
-    { level: 'C1', nombre: 'Avanzado C1' }
-];
+import { useGetLevelsQuery } from '../redux/services/levelsApi';
+import LoadingIcons from 'react-loading-icons'
 
 type Student = {
     run: string;
@@ -25,6 +19,12 @@ type Student = {
     second_surname: string;
     level: string;
 };
+
+type Level = {
+    id: string,
+    name: string
+};
+
 
 const formSchema: ZodType<Student> = z.object({
     run: z.string(),
@@ -37,9 +37,11 @@ const formSchema: ZodType<Student> = z.object({
 type formType = z.infer<typeof formSchema>;
 
 type Response = {
-    errorMsg: [] | string,
-    errorType: string
-}
+    errorMsg: {
+        msg: string;
+    }[],
+    errorType: string;
+};
 
 type ServerResponse = { status: number, data: Response, message: string }
 
@@ -57,19 +59,46 @@ function handleErrorMsg(error: ServerResponse) {
     }
 }
 
+function LevelsSelect(register: UseFormRegister<Student>) {
+    const { data, isLoading, isFetching, isError } = useGetLevelsQuery(null);
+    let levels: Level[] = [];
+
+    if (isLoading || isFetching) {
+        return (<LoadingIcons.ThreeDots fill='#2F4858' />);
+    }
+
+    if (isError) {
+        return (<p>{t('error_loading_data')}</p>);
+    }
+
+    if (data) {
+        levels = data as Level[];
+    } else {
+        return (<p>{t('no_data')}</p>);
+    }
+
+    return (
+        <select defaultValue='0' {...register('level')}>
+            {levels.map((level: Level) => (
+                <option key={level.id} value={level.id}>{level.name}</option>
+            ))}
+        </select>
+    );
+}
+
 function FormNewStudent() {
-    const [rut, setRut] = useState('');
+    const [run, setRun] = useState('');
     useTranslation();
 
-    const handleRUTChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newRUT = event.target.value;
-        const cleanRUT = newRUT.replace(/[^0-9kK]/g, '').toUpperCase();
-        setRut(formatRut(cleanRUT, RutFormat.DOTS_DASH));
+    const handleRUNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newRUN = event.target.value;
+        const cleanRUN = newRUN.replace(/[^0-9kK]/g, '').toUpperCase();
+        setRun(formatRut(cleanRUN, RutFormat.DOTS_DASH));
     };
 
     const [addStudent] = useAddStudentMutation()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<formType>({
+    const { register, handleSubmit } = useForm<formType>({
         resolver: zodResolver(formSchema)
     });
 
@@ -93,10 +122,10 @@ function FormNewStudent() {
             <h2><Trans>student_registration</Trans></h2>
             <form onSubmit={handleSubmit(onSubmit)} className='student-register'>
                 <div className='input-section'>
-                    <h3><Trans>rut_input</Trans></h3>
+                    <h3><Trans>run_input</Trans></h3>
                     <div className='run-input-container'>
                         <fieldset className='float-label-field'>
-                            <input type="text" {...register('run')} onChange={handleRUTChange} value={rut} />
+                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} />
                         </fieldset>
                     </div>
                 </div>
@@ -111,12 +140,8 @@ function FormNewStudent() {
                 </div>
                 <div className='input-section'>
                     <h3><Trans>level_input</Trans></h3>
-                    <select defaultValue='0' {...register('level')} >
-                        <option value="0"><Trans>no_input</Trans></option>
-                        {levels.map(level => (
-                            <option key={level.nombre} value={level.level}>{level.nombre}</option>
-                        ))}
-                    </select>
+
+                    {LevelsSelect(register)}
                 </div>
                 <div className='submit-btn'>
                     <button type="submit"><Trans>register</Trans></button>
