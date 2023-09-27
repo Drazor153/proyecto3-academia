@@ -22,7 +22,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: ${{ secrets.DatabasePassword }
+          POSTGRES_PASSWORD: ${{ secrets.DatabasePassword }}
           POSTGRES_USER: ${{ secrets.DatabaseUser }}
           POSTGRES_DB: academia-ingles
         # Set health checks to wait until postgres has started
