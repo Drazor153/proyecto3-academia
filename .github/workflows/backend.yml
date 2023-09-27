@@ -34,6 +34,8 @@ jobs:
         run: cp .env.dev .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop
       - name: Push database schema
         run: npx prisma db push
       - name: Test server
