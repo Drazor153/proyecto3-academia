@@ -21,7 +21,7 @@ jobs:
       - name: Verify MySQL connection from container 
         run: |
           sudo service mysql restart
-          mysql --host localhost -uroot -ppassword -e "SHOW DATABASES"
+          mysql --host localhost -uroot -p${{ secrets.DatabasePassword }} -e "SHOW DATABASES"
       - name: Pull repo
         uses: actions/checkout@v4
         with:
