@@ -12,7 +12,7 @@ jobs:
       run:
         working-directory: ./server
     services:
-      mysql:
+      database:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: 'academia-ingles'
@@ -20,7 +20,7 @@ jobs:
           MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
           MYSQL_ROOT_PASSWORD: rootpassword
         ports:
-          - 3306:3306
+          - 5200:5432
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Pull repo
@@ -33,7 +33,7 @@ jobs:
         with: 
           node-version: 18
       - name: Setup Database URL
-        run: cp .env.dev .env
+        run: cp .env.ci .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
