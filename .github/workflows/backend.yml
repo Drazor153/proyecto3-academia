@@ -55,7 +55,7 @@ jobs:
       - name: Push database schema
         run: |
           cd ./server
-          npx prisma migrate reset
+          npx prisma migrate reset --force
       - name: Test server
         run: |
           cd ./server
