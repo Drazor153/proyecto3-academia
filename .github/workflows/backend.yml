@@ -9,16 +9,30 @@ jobs:
   backend-testing:
     runs-on: ubuntu-latest
     services:
-      mydb:
-        image: mysql:5.7
+      # mydb:
+      #   image: mysql:5.7
+      #   env:
+      #     MYSQL_DATABASE: academia-ingles
+      #     MYSQL_USER: ${{ secrets.DatabaseUser }}
+      #     MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
+      #     MYSQL_ROOT_PASSWORD: ${{ secrets.DatabasePassword }}
+      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
         env:
-          MYSQL_DATABASE: academia-ingles
-          MYSQL_USER: ${{ secrets.DatabaseUser }}
-          MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DatabasePassword }}
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          POSTGRES_PASSWORD: ${{ secrets.DatabasePassword }
+          POSTGRES_USER: ${{ secrets.DatabaseUser }}
+          POSTGRES_DB: academia-ingles
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - run: sudo service mysql restart
+      # - run: sudo service mysql restart
       - name: Pull repo
         uses: actions/checkout@v4
         with:
