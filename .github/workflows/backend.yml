@@ -13,7 +13,10 @@ jobs:
       run:
         working-directory: ./server
     steps:
-      - uses: mirromutth/mysql-action@v1.1
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
         with:
           character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
           mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
@@ -34,8 +37,6 @@ jobs:
         run: cp .env.dev .env
       - name: Install dependencies
         run: yarn install --immutable --immutable-cache --check-cache #yarn install
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop
       - name: Push database schema
         run: npx prisma db push
       - name: Test server
