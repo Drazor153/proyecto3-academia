@@ -18,10 +18,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - name: Verify MySQL connection from container 
-        run: |
-          sudo service mysql restart
-          mysql --host localhost -uroot -p${{ secrets.DatabasePassword }} -e "SHOW DATABASES"
+      - run: sudo service mysql restart
       - name: Pull repo
         uses: actions/checkout@v4
         with:
