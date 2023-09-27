@@ -8,9 +8,6 @@ on:
 jobs:
   backend-testing:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     services:
       mydb:
         image: mysql:5.7
@@ -33,12 +30,18 @@ jobs:
           node-version: 18
       - name: Setup Database URL
         run: |
+          cd ./server
           cp .env.ci .env
       - name: Install dependencies
-        run: yarn install --immutable --immutable-cache --check-cache #yarn install
+        run: |
+          cd ./server
+          yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
         run: |
+          cd ./server
           npx prisma db push
           npx prisma db seed
       - name: Test server
-        run: yarn test
+        run: |
+          cd ./server
+          yarn test
