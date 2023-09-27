@@ -1,36 +1,36 @@
 import { PrismaClient } from '@prisma/client';
-import { levels, groups, levels_groups } from './dataseed';
+import { levels, groups } from './dataseed';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.level.createMany({
-    data: levels
-  });
+  // await prisma.level.createMany({
+  //   data: levels
+  // });
 
-  await prisma.group.createMany({
-    data: groups
-  });
+  // await prisma.group.createMany({
+  //   data: groups
+  // });
 
-  levels_groups.forEach(async (unit) => {
-    await prisma.level.update({
-      where: {
-        id: unit.level_id
-      },
-      data: {
-        ClassGroup: {
-          create: {
-            year: 2023,
-            group: {
-              connect: {
-                letter: unit.group_letter
-              }
-            }
-          }
-        }
-      }
-    });
-  });
+  // levels_groups.forEach(async (unit) => {
+  //   await prisma.level.update({
+  //     where: {
+  //       id: unit.level_id
+  //     },
+  //     data: {
+  //       ClassGroup: {
+  //         create: {
+  //           year: 2023,
+  //           group: {
+  //             connect: {
+  //               letter: unit.group_letter
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   });
+  // });
 
   levels.forEach((level) => {
     groups.forEach(async (group) => {
@@ -38,7 +38,24 @@ async function main() {
         where: {
           id: level.id
         },
-        update: {},
+        update: {
+          ClassGroup: {
+            create: {
+              year: 2023,
+              group: {
+                connectOrCreate: {
+                  where: {
+                    letter: group.letter
+                  },
+                  create: {
+                    letter: group.letter,
+                    topic: group.topic
+                  }
+                }
+              }
+            }
+          }
+        },
         create: {
           id: level.id,
           name: level.name,
