@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { levels, groups } from './dataseed';
+import { levels } from './dataseed';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // await prisma.level.createMany({
-  //   data: levels
-  // });
+  await prisma.level.createMany({
+    data: levels
+  });
 
   // await prisma.group.createMany({
   //   data: groups
@@ -32,47 +32,47 @@ async function main() {
   //   });
   // });
 
-  levels.forEach((level) => {
-    groups.forEach(async (group) => {
-      await prisma.level.upsert({
-        where: {
-          id: level.id
-        },
-        update: {
-          ClassGroup: {
-            create: {
-              year: 2023,
-              group: {
-                connectOrCreate: {
-                  where: {
-                    letter: group.letter
-                  },
-                  create: group
-                }
-              }
-            }
-          }
-        },
-        create: {
-          id: level.id,
-          name: level.name,
-          ClassGroup: {
-            create: {
-              year: 2023,
-              group: {
-                connectOrCreate: {
-                  where: {
-                    letter: group.letter
-                  },
-                  create: group
-                }
-              }
-            }
-          }
-        }
-      });
-    });
-  });
+  // levels.forEach((level) => {
+  //   groups.forEach(async (group) => {
+  //     await prisma.level.upsert({
+  //       where: {
+  //         id: level.id
+  //       },
+  //       update: {
+  //         ClassGroup: {
+  //           create: {
+  //             year: 2023,
+  //             group: {
+  //               connectOrCreate: {
+  //                 where: {
+  //                   letter: group.letter
+  //                 },
+  //                 create: group
+  //               }
+  //             }
+  //           }
+  //         }
+  //       },
+  //       create: {
+  //         id: level.id,
+  //         name: level.name,
+  //         ClassGroup: {
+  //           create: {
+  //             year: 2023,
+  //             group: {
+  //               connectOrCreate: {
+  //                 where: {
+  //                   letter: group.letter
+  //                 },
+  //                 create: group
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     });
+  //   });
+  // });
 }
 
 main()
