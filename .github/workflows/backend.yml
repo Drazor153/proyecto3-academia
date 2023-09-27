@@ -8,9 +8,6 @@ on:
 jobs:
   backend-testing:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
     services:
       mydb:
         image: mysql:5.7
