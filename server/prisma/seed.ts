@@ -54,7 +54,8 @@ async function main() {
           }
         },
         create: {
-          ...level,
+          id: level.id,
+          name: level.name,
           ClassGroup: {
             create: {
               year: 2023,
