@@ -20,7 +20,8 @@ jobs:
     steps:
       - name: Verify MySQL connection from container 
         run: |
-          sudo apt-get install mysql-server
+          service mysql stop
+          service mysql start
           mysql --host localhost -uroot -ppassword -e "SHOW DATABASES"
       - name: Pull repo
         uses: actions/checkout@v4
