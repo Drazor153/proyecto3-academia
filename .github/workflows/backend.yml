@@ -11,18 +11,16 @@ jobs:
     defaults:
       run:
         working-directory: ./server
-    services:
-      database:
-        image: mysql:5.7
-        env:
-          MYSQL_DATABASE: 'academia-ingles'
-          MYSQL_USER: ${{ secrets.DatabaseUser }}
-          MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
-          MYSQL_ROOT_PASSWORD: rootpassword
-        ports:
-          - 5200:5432
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
+          mysql database: 'academia-ingles' # Optional, default value is "test". The specified database which will be create
+          mysql root password: root-admin2023 # Required if "mysql user" is empty, default is empty. The root superuser password
+          mysql user: ${{ secrets.DatabaseUser }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
       - name: Pull repo
         uses: actions/checkout@v4
         with:
