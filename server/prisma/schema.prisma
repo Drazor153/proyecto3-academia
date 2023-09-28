@@ -31,9 +31,9 @@ model Level {
 }
 
 model LevelsOnStudents {
-  student   Student @relation(fields: [studentId], references: [run])
+  student   Student @relation(fields: [studentId], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentId Int
-  level     Level   @relation(fields: [levelId], references: [id])
+  level     Level   @relation(fields: [levelId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   levelId   String
   year      Int
   status    String
@@ -55,7 +55,7 @@ model Results {
   examId    Int
   student   Student @relation(fields: [studentId], references: [run])
   studentId Int
-  grade     Int
+  grade     Float
 
   @@id([examId, studentId])
 }
@@ -81,7 +81,7 @@ model ClassGroup {
   levelId   String
   group     Group    @relation(fields: [groupId], references: [letter])
   groupId   String
-  teacher   Teacher? @relation(fields: [teacherId], references: [run])
+  teacher   Teacher? @relation(fields: [teacherId], references: [run], onDelete: SetNull, onUpdate: Cascade)
   teacherId Int?
   Class     Class[]
   Exam      Exam[]
@@ -92,7 +92,7 @@ model Class {
   title        String
   description  String
   classTime    DateTime
-  classgroup   ClassGroup   @relation(fields: [classGroupId], references: [id])
+  classgroup   ClassGroup   @relation(fields: [classGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   classGroupId Int
   Attendance   Attendance[]
 }
