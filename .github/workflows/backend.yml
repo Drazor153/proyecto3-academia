@@ -6,21 +6,35 @@ on:
       - backend
 
 jobs:
-
   backend-testing:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
+    services:
+      # mydb:
+      #   image: mysql:5.7
+      #   env:
+      #     MYSQL_DATABASE: academia-ingles
+      #     MYSQL_USER: ${{ secrets.DatabaseUser }}
+      #     MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
+      #     MYSQL_ROOT_PASSWORD: ${{ secrets.DatabasePassword }}
+      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - "5432:5432"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - uses: mirromutth/mysql-action@v1.1
-        with:
-          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-          mysql database: 'academia-ingles' # Optional, default value is "test". The specified database which will be create
-          # mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
-          mysql user: ${{ secrets.DatabaseUser }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-          mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
+      # - run: sudo service mysql restart
       - name: Pull repo
         uses: actions/checkout@v4
         with:
@@ -31,10 +45,19 @@ jobs:
         with: 
           node-version: 18
       - name: Setup Database URL
-        run: cp .env.dev .env
+        run: |
+          cd ./server
+          cp .env.ci .env
       - name: Install dependencies
-        run: yarn install --immutable --immutable-cache --check-cache #yarn install
+        run: |
+          cd ./server
+          yarn install --immutable --immutable-cache --check-cache #yarn install
       - name: Push database schema
-        run: npx prisma db push
+        run: |
+          cd ./server
+          npx prisma db push
+          npx prisma db seed
       - name: Test server
-        run: yarn test
+        run: |
+          cd ./server
+          yarn test
