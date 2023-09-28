@@ -18,7 +18,7 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   const results = validationResult(req);
-  
+
   if (!results.isEmpty()) {
     res
       .status(400)
@@ -89,6 +89,12 @@ export const getStudentGrades = async (req: Request, res: Response) => {
       Results: {
         where: {
           studentId: Number(run)
+        }
+      },
+      classgroup: {
+        select: {
+          teacherId: true,
+          group: { select: { letter: true, topic: true } }
         }
       }
     }
