@@ -14,9 +14,6 @@ async function main() {
 
   levels_groups.forEach(async (unit) => {
     await prisma.level.update({
-      where: {
-        id: unit.level_id
-      },
       data: {
         ClassGroup: {
           create: {
@@ -28,6 +25,9 @@ async function main() {
             }
           }
         }
+      },
+      where: {
+        id: unit.level_id
       }
     });
   });
