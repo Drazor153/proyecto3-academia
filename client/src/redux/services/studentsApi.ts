@@ -9,14 +9,37 @@ type Student = {
     level: string;
 };
 
+type Grade = {
+    id: number,
+    name: string,
+    date: Date,
+    classGroupId: number,
+    Results: {
+        examId: number,
+        studentId: number,
+        grade: number
+    }[],
+    classgroup: {
+        teacherId: number,
+        group: { letter: string, topic: string }
+    }
+}
+
+type Data = {
+    data: Grade[]
+}
+
 export const studentsApi = createApi({
     reducerPath: 'studentsAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://10.242.108.185:3000/api'
+        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`
     }),
     endpoints: (builder) => ({
         getStudents: builder.query<Student[], null>({
             query: () => '/students'
+        }),
+        getStudentsGrades: builder.query<Data, { year: number, level: string, run: number }>({
+            query: ({ year, level, run }) => `/students/grades/${year}/${level}/${run}`
         }),
 
         addStudent: builder.mutation({
@@ -31,5 +54,6 @@ export const studentsApi = createApi({
 
 export const {
     useGetStudentsQuery,
-    useAddStudentMutation
+    useAddStudentMutation,
+    useGetStudentsGradesQuery
 } = studentsApi

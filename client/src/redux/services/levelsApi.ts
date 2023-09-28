@@ -5,13 +5,17 @@ type Levels = {
     name: string
 };
 
+type Data = {
+    data: Levels[]
+}
+
 export const levelsApi = createApi({
     reducerPath: 'levelsAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://10.242.108.185:3000/api'
+        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`
     }),
     endpoints: (builder) => ({
-        getLevels: builder.query<Levels[], null>({
+        getLevels: builder.query<Data, null>({
             query: () => '/levels'
         })
     })

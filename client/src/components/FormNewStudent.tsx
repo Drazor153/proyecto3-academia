@@ -37,16 +37,18 @@ const formSchema: ZodType<Student> = z.object({
 type formType = z.infer<typeof formSchema>;
 
 type Response = {
-    errorMsg: {
-        msg: string;
-    }[],
-    errorType: string;
+    errorMsg: { msg: string; }[],
+    errorType: 'invalidFields';
+} | {
+    errorMsg: string,
+    errorType: 'msg';
 };
 
 type ServerResponse = { status: number, data: Response, message: string }
 
 function handleSuccessMsg(payload: ServerResponse) {
     toast.success(payload.message)
+
 }
 
 function handleErrorMsg(error: ServerResponse) {
@@ -56,12 +58,12 @@ function handleErrorMsg(error: ServerResponse) {
             break;
         case 'msg':
             toast.error(t(error.data.errorMsg));
+            break;
     }
 }
 
 function LevelsSelect(register: UseFormRegister<Student>) {
-    const { data, isLoading, isFetching, isError } = useGetLevelsQuery(null);
-    let levels: Level[] = [];
+    const { data: response, isLoading, isFetching, isError } = useGetLevelsQuery(null);
 
     if (isLoading || isFetching) {
         return (<LoadingIcons.ThreeDots fill='#2F4858' />);
@@ -71,16 +73,16 @@ function LevelsSelect(register: UseFormRegister<Student>) {
         return (<p>{t('error_loading_data')}</p>);
     }
 
-    if (data) {
-        levels = data as Level[];
-    } else {
+    if (!response) {
         return (<p>{t('no_data')}</p>);
     }
+
+    const levels: Level[] = response.data;
 
     return (
         <select defaultValue='0' {...register('level')}>
             {levels.map((level: Level) => (
-                <option key={level.id} value={level.id}>{level.name}</option>
+                <option key={level.id} value={level.id}>{level.name} {level.id}</option>
             ))}
         </select>
     );
