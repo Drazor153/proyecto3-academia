@@ -48,6 +48,7 @@ jobs:
         run: |
           cd ./server
           cp .env.ci .env
+          cp ./prisma/schema.prisma.ci ./prisma/schema.prisma
       - name: Install dependencies
         run: |
           cd ./server
