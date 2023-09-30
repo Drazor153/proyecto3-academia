@@ -1,6 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
 import FormNewStudent from '../components/FormNewStudent';
-import '../scss/administration.scss'
 import { Dispatch, SetStateAction, useState } from "react";
 
 type Menus = {

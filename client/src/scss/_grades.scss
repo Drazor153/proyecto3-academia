@@ -1,3 +1,5 @@
+@use 'base';
+
 .grades-layout {
     display: grid;
     grid-template-areas:
@@ -34,7 +36,7 @@
 }
 
 .year-select {
-    border: solid 1px var(--color-bluemarine);
+    border: solid 1px base.$bluemarine;
     font-size: 1.2rem;
     padding: 5px 2px;
     outline: 0;

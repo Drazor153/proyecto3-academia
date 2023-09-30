@@ -1,6 +1,5 @@
 import { menuItems } from '../utils/pages'
 import { privilegedItemsShortcuts } from '../utils/pages'
-import '../scss/dashboard.scss'
 import { NavLink } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
 

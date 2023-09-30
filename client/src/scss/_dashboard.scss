@@ -1,4 +1,5 @@
-// .dashboard {}
+@use 'base';
+
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 100px);
@@ -6,7 +7,7 @@
 }
 
 .shortcut {
-    color: var(--color-bluemarine);
+    color: base.$bluemarine;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { menuItems, privilegedItems, privilegedItemsShortcuts } from './utils/pages.tsx';
-import './scss/buttons.scss'
 import Sidebar from './components/Sidebar.tsx';
 import UserInfo from './components/UserInfo.tsx';
 import { useAppSelector } from './redux/hooks.ts';

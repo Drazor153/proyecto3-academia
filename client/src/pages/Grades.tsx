@@ -1,4 +1,3 @@
-import '../scss/grades.scss'
 import { useState } from "react"
 import { FaPen, FaBookOpenReader, FaEarListen, FaCommentDots } from "react-icons/fa6"
 import TopicTable from '../components/TopicTable'

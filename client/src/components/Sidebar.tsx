@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { menuItems, privilegedItems } from '../utils/pages'
 import { FaBars } from 'react-icons/fa'
-import '../scss/sidebar.scss'
 import { NavLink } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
 

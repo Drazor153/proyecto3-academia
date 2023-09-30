@@ -7,7 +7,6 @@ import { useAddStudentMutation } from '../redux/services/studentsApi';
 import { useState } from 'react';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 import FloatLabelInput from './FloatLabelInput';
 import { useGetLevelsQuery } from '../redux/services/levelsApi';
 import LoadingIcons from 'react-loading-icons'
