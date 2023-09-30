@@ -2,7 +2,7 @@ import { useAppSelector } from "../redux/hooks";
 
 const grades = {
     Writing: [1, 1, 1],
-    Reading: [3, 2, 1],
+    Grammar: [3, 2, 1],
     Listening: [4, 5, 7],
     Speaking: [6, 2, 5]
 }
@@ -11,7 +11,7 @@ const exams = {
     Writing: [{ theme: 'test 1', date: 'dd/mm/aa' },
     { theme: 'test 2', date: 'dd/mm/aa' },
     { theme: 'test 3', date: 'dd/mm/aa' }],
-    Reading: [{ theme: 'test 1', date: 'dd/mm/aa' },
+    Grammar: [{ theme: 'test 1', date: 'dd/mm/aa' },
     { theme: 'test 2', date: 'dd/mm/aa' },
     { theme: 'test 3', date: 'dd/mm/aa' }],
     Listening: [{ theme: 'test 1', date: 'dd/mm/aa' },
@@ -64,7 +64,7 @@ function TopicTable({ topic }: { topic: string }) {
     }
 
     return (
-        <section>
+        <div className="topic-grades">
             <h2>{topic}</h2>
             <table>
                 <thead>
@@ -78,7 +78,7 @@ function TopicTable({ topic }: { topic: string }) {
                     {tablerows}
                 </tbody>
             </table>
-        </section>
+        </div>
     );
 }
 

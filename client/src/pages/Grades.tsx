@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { FaPen, FaBookOpenReader, FaEarListen, FaCommentDots } from "react-icons/fa6"
+import { FaPen, FaEarListen, FaCommentDots, FaSpellCheck } from "react-icons/fa6"
 import TopicTable from '../components/TopicTable'
 
 const topics = [
@@ -8,8 +8,8 @@ const topics = [
         icon: <FaPen />
     },
     {
-        name: "Reading",
-        icon: <FaBookOpenReader />
+        name: "Grammar",
+        icon: <FaSpellCheck />
     },
     {
         name: "Listening",
@@ -25,31 +25,26 @@ const topics = [
 const years = ['2023', '2022', '2021']
 
 
-function GradesByTopics({ topics, year }: { topics: string[], year: string }) {
-    if (!topics || !year) return null;
+function GradesByTopics({ topic, year }: { topic: string, year: string }) {
+    if (!topic || !year) return null;
 
     return (
-        <div className='grades'>
-            {topics.map((topic, index) => (
-                <TopicTable
-                    key={index}
-                    topic={topic}
-                />
-            ))}
-        </div>
+        <section className='grades'>
+            <TopicTable
+                topic={topic}
+            />
+        </section>
     );
 }
 
 
+
 function Grades() {
-    const [selectedTopic, setSelectedTopic] = useState<string[]>([]);
+    const [selectedTopic, setSelectedTopic] = useState<string>("");
     const [selectedYear, setSelectedYear] = useState(years[0]);
 
     const handleBtnClick = (name: string) => {
-        if (selectedTopic.includes(name))
-            setSelectedTopic(selectedTopic.filter((topic) => topic !== name))
-        else
-            setSelectedTopic([...selectedTopic, name]);
+        setSelectedTopic(name)
     }
 
     return (
@@ -63,7 +58,7 @@ function Grades() {
                             <button
                                 onClick={() => handleBtnClick(topic.name)}
                                 key={index}
-                                className={selectedTopic.includes(topic.name) ? 'selected' : ''}
+                                className={selectedTopic == topic.name ? 'selected' : ''}
                             >
                                 {topic.icon}
                                 <span>{topic.name}</span>
@@ -79,7 +74,7 @@ function Grades() {
                         ))}
                     </select>
                 </section>
-                <GradesByTopics topics={selectedTopic} year={selectedYear} />
+                <GradesByTopics topic={selectedTopic} year={selectedYear} />
 
             </main>
         </>
