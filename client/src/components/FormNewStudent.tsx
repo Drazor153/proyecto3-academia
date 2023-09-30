@@ -68,7 +68,7 @@ function LevelsSelect(register: UseFormRegister<Student>) {
     return (
         <select defaultValue='0' {...register('level')}>
             {levels.map((level: Level) => (
-                <option key={level.id} value={level.id}>{level.name} {level.id}</option>
+                <option key={level.code} value={level.code}>{level.name} {level.code}</option>
             ))}
         </select>
     );
