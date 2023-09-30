@@ -183,7 +183,7 @@ function Classes() {
         </section>
         <section className="class-list">
           {topic !== "" && (
-            <table>
+            <table className="classes-table">
               <thead>
                 <tr><td colSpan={5}>Lista de clases</td></tr>
                 <tr>

@@ -4,7 +4,7 @@
     display: flex;
     box-sizing: border-box;
     width: 100%;
-    porsition: relative;
+    position: relative;
 
     .class-list {
         width: 100%;
@@ -87,7 +87,7 @@
     transform: translate(-50%, -50%);
 }
 
-table {
+.classes-table {
     color: base.$whiteorange;
 
     thead {
