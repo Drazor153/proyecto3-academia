@@ -1,3 +1,5 @@
+@use 'base';
+
 .classes-layout {
     display: flex;
     box-sizing: border-box;
@@ -17,58 +19,84 @@
 .dropdown {
     display: grid;
     grid-auto-rows: max-content;
-    grid-auto-columns: max-content;
-    background-color: rgba(#FF5418, .25);
+    // grid-auto-columns: max-content;
+    background-color: rgba(base.$bluemarine, .25);
     max-height: 40px;
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: bold;
-    color: var(--color-whiteorange);
+    color: base.$whiteorange;
     gap: 5px;
     overflow: hidden;
     border-radius: 10px;
     transition: max-height .5s;
 
     .flex {
+        box-sizing: border-box;
         display: flex;
         cursor: pointer;
-        background-color: rgba(#FF5418, .25);
+        background-color: rgba(base.$bluemarine, .25);
         justify-content: space-between;
         align-items: center;
         padding-inline: 10px;
         height: 40px;
         transition: background-color .25s;
+        min-width: max-content;
 
         &:hover {
-            background-color: var(--color-orange);
+            background-color: base.$bluemarine;
         }
     }
 
     .active {
-        background-color: var(--color-orange);
+        background-color: base.$bluemarine;
     }
 
-    .dropdown {
+    .dropdown,
+    .topic {
         border-radius: 0 10px 10px 0;
         // border-radius: 10px 0 0 10px;
         margin: 0 5px 0 0;
+
         // margin: 0 0 0 10px;
-        background-color: rgba(#2F4858, .25);
+        background-color: rgba(base.$bluemarine, .25);
+
+        min-width: max-content;
 
         .flex {
-            background-color: rgba(#2F4858, .25);
+            background-color: rgba(base.$bluemarine, .25);
 
             &:hover {
-                background-color: var(--color-bluemarine);
+                background-color: base.$bluemarine;
             }
         }
 
         .active {
-            background-color: var(--color-bluemarine);
+            background-color: base.$bluemarine;
         }
 
         &:last-child {
             margin-bottom: 5px;
         }
+
+
+    }
+
+    .topic {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding-inline: 10px;
+        height: 40px;
+
+        // border-radius: 0 10px 10px 0;
+        &:hover {
+            background-color: base.$bluemarine;
+        }
+
+    }
+
+    .active {
+        background-color: base.$bluemarine;
     }
 
 
@@ -76,7 +104,7 @@
 
 
 .expand {
-    max-height: 270px;
+    max-height: 500px;
     color: white;
 }
 
@@ -90,7 +118,7 @@
 
 
 table {
-    color: var(--color-whiteorange);
+    color: base.$whiteorange;
 
     thead {
         tr {
@@ -105,8 +133,8 @@ table {
                 // width: 20%;
                 border-radius: 3px;
                 text-align: center;
-                font-size: 1.5rem;
-                background-color: var(--color-orange);
+                font-size: 1.35rem;
+                background-color: base.$orange;
             }
         }
     }
@@ -122,6 +150,8 @@ table {
 
 p {
     display: flex;
+    text-align: center;
     align-items: center;
     justify-content: center;
+    height: 40px
 }
