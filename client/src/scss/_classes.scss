@@ -12,6 +12,7 @@
 
     .options-selector {
         height: max-content;
+        max-height: 100%;
     }
 }
 
@@ -19,7 +20,6 @@
 .dropdown {
     display: grid;
     grid-auto-rows: max-content;
-    // grid-auto-columns: max-content;
     background-color: rgba(base.$bluemarine, .25);
     max-height: 40px;
     font-size: 1.35rem;
@@ -30,7 +30,8 @@
     border-radius: 10px;
     transition: max-height .5s;
 
-    .flex {
+    .flex,
+    .topic {
         box-sizing: border-box;
         display: flex;
         cursor: pointer;
@@ -47,58 +48,20 @@
         }
     }
 
-    .active {
-        background-color: base.$bluemarine;
-    }
-
     .dropdown,
     .topic {
         border-radius: 0 10px 10px 0;
-        // border-radius: 10px 0 0 10px;
         margin: 0 5px 0 0;
-
-        // margin: 0 0 0 10px;
-        background-color: rgba(base.$bluemarine, .25);
-
         min-width: max-content;
-
-        .flex {
-            background-color: rgba(base.$bluemarine, .25);
-
-            &:hover {
-                background-color: base.$bluemarine;
-            }
-        }
-
-        .active {
-            background-color: base.$bluemarine;
-        }
 
         &:last-child {
             margin-bottom: 5px;
         }
-
-
-    }
-
-    .topic {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        padding-inline: 10px;
-        height: 40px;
-
-        // border-radius: 0 10px 10px 0;
-        &:hover {
-            background-color: base.$bluemarine;
-        }
-
     }
 
     .active {
         background-color: base.$bluemarine;
     }
-
 
 }
 
@@ -130,7 +93,6 @@ table {
             }
 
             td {
-                // width: 20%;
                 border-radius: 3px;
                 text-align: center;
                 font-size: 1.35rem;

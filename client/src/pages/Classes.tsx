@@ -1,4 +1,6 @@
+import { t } from "i18next";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -15,26 +17,26 @@ const enrol: {
     {
       year: 2024,
       semester: 1,
-      levelName: "Básico",
-      status: "En curso",
+      levelName: "basic",
+      status: "in_progress",
     },
     {
       year: 2023,
       semester: 1,
-      levelName: "Básico",
-      status: "Reprobado",
+      levelName: "basic",
+      status: "failed",
     },
     {
       year: 2022,
       semester: 2,
-      levelName: "Principiante",
-      status: "Aprobado",
+      levelName: "beginner",
+      status: "approved",
     },
     {
       year: 2022,
       semester: 1,
-      levelName: "Principiante",
-      status: "Aprobado",
+      levelName: "beginner",
+      status: "approved",
     },
   ];
 
@@ -66,14 +68,18 @@ const enrol: {
 //   ]
 
 const topics: string[] = [
-  "Grammar",
-  "Listening & Speaking",
-  "Writing",
+  "grammar",
+  "listening & speaking",
+  "writing",
 ];
 
 // const groups: string[] = ["A", "B", "C"];
 
 function Classes() {
+
+  useTranslation();
+
+
   const [semesterYear, setSemesterYear] = useState<{
     year: number;
     semester: number;
@@ -85,11 +91,22 @@ function Classes() {
   const [topic, setTopic] = useState<string>("");
 
 
+
+  const handlerClickLevel = (newLevel: string) => {
+    setLevel(newLevel === level ? "" : newLevel);
+    setSemesterYear({
+      year: 0,
+      semester: 0,
+    });
+    setTopic("");
+  }
+
   const handlerClickYear = (year: number) => {
     setSemesterYear({
       year: year === semesterYear.year ? 0 : year,
       semester: 0,
     });
+    setTopic("");
   };
 
   const handlerClickSemester = (semester: number) => {
@@ -99,18 +116,8 @@ function Classes() {
         semester: semester === semesterYear.semester ? 0 : semester,
       };
     });
-  };
-
-  const handlerClickLevel = (newLevel: string) => {
-
-    setLevel(newLevel === level ? "" : newLevel);
-    setSemesterYear({
-      year: 0,
-      semester: 0,
-    });
     setTopic("");
-
-  }
+  };
 
   const handlerClickTopic = (newTopic: string) => {
     setTopic(newTopic === topic ? "" : newTopic);
@@ -123,13 +130,12 @@ function Classes() {
 
   return (
     <>
-      <h1>Classes</h1>
+      <h1>{t('classes')}</h1>
       <main className="classes-layout">
         <section className="options-selector">
-          <h2>Nivel</h2>
+          <h2>{t('level')}</h2>
           {
             enrol.map(({ levelName }) => {
-
               const isLevelSelect = levelName === level;
               if (iL !== levelName) {
                 iL = levelName
@@ -141,7 +147,7 @@ function Classes() {
                     className={`flex ${isLevelSelect ? "active" : ""}`}
                     onClick={() => handlerClickLevel(levelName)}
                   >
-                    <p>{levelName}</p>
+                    <p>{t(levelName)}</p>
                     <IoIosArrowDown className={`ioIosArrowDown ${isLevelSelect ? 'rotate' : ''}`}></IoIosArrowDown>
                   </div>
                   {
@@ -170,17 +176,18 @@ function Classes() {
                                   <div
                                     className={`flex ${isSemesterSelect ? "active" : ""}`}
                                     onClick={() => handlerClickSemester(semester)}>
-                                    <p>Semestre {semester}</p>
+                                    <p>{t('semester')} {semester}</p>
                                     <IoIosArrowDown className={`ioIosArrowDown ${isSemesterSelect ? 'rotate' : ''}`}></IoIosArrowDown>
                                   </div>
                                   {
-                                    topics.map((t) => {
+                                    topics.map((tc) => {
+                                      const [t1, t2, t3] = tc.split(" ");
                                       return <div
-                                        key={`${levelName}-${year}-${semester}-${t}`}
-                                        className={`topic ${t === topic ? "active" : ""}`}
-                                        onClick={() => handlerClickTopic(t)}
+                                        key={`${levelName}-${year}-${semester}-${tc}`}
+                                        className={`topic ${tc === topic ? "active" : ""}`}
+                                        onClick={() => handlerClickTopic(tc)}
                                       >
-                                        {t}
+                                        {t(t1)} {t2 && t(t2)} {t3 && t(t3)}
                                       </div>
                                     })
                                   }
@@ -196,65 +203,33 @@ function Classes() {
               }
             })
           }
-          {/* {semestersYears.map(({ year }) => {
-            if (iY !== year) {
-              iY = year
-              const isYear = year === semesterYear.year;
-              return (
-                <div
-                  key={`${ year } `}
-                  className={`dropdown ${ isYear ? "expand" : "" } `}
-                >
-                  <div
-                    className={`flex ${ isYear ? "active" : "" } `}
-                    onClick={() => handlerClickYear(year)}
-                  >
-                    <p>{year}</p>
-                    <IoIosArrowDown className={`ioIosArrowDown ${ isYear ? 'rotate' : '' } `}></IoIosArrowDown>
-                  </div>
-                  {semestersYears.map(({ year: y, semester }, index) => {
-                    if (year === y) {
-                      const isSemester = semester === semesterYear.semester;
-                      return (
-                        <div
-                          key={`${ year } -${ semester } `}
-                          className={`dropdown ${ isYear && isSemester ? "expand" : "" } `}
-                        >
-                          <div
-                            className={`flex ${ isYear && isSemester ? "active" : "" } `}
-
-                            onClick={() => handlerClickSemester(semester)}
-                          >
-                            <p>Semestre {semester}</p>
-                            <IoIosArrowDown className={`ioIosArrowDown ${ isYear && isSemester ? 'rotate' : '' } `}></IoIosArrowDown>
-                          </div>
-                          <p>Tópicos ...</p>
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            }
-          })} */}
         </section>
         <section className="class-list">
-          <table>
-            <thead>
-              <tr><td colSpan={5}>Lista de clases</td></tr>
-              <tr>
-                <td>Semana</td>
-                <td>Contenido</td>
-                <td>Docente</td>
-                <td>Grupo</td>
-                <td>Asistencia</td>
-                {/* <td>Justificativo</td> */}
-              </tr>
-            </thead>
-            <tbody>
+          {topic !== "" && (
+            <table>
+              <thead>
+                <tr><td colSpan={5}>Lista de clases</td></tr>
+                <tr>
+                  <td>Semana</td>
+                  <td>Contenido</td>
+                  <td>Docente</td>
+                  <td>Grupo</td>
+                  <td>Asistencia</td>
+                  {/* <td>Justificativo</td> */}
+                </tr>
+              </thead>
+              <tbody>
 
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
+          {
+            topic === "" && (
+              <div className="empty-list">
+                <p>Seleccione un tópico</p>
+              </div>
+            )
+          }
         </section>
       </main >
     </>
