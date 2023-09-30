@@ -4,6 +4,7 @@
     display: flex;
     box-sizing: border-box;
     width: 100%;
+    porsition: relative;
 
     .class-list {
         width: 100%;
@@ -25,7 +26,7 @@
     font-size: 1.35rem;
     font-weight: bold;
     color: base.$whiteorange;
-    gap: 5px;
+    gap: 7.5px;
     overflow: hidden;
     border-radius: 10px;
     transition: max-height .5s;
@@ -51,11 +52,11 @@
     .dropdown,
     .topic {
         border-radius: 0 10px 10px 0;
-        margin: 0 5px 0 0;
+        margin: 0 10px 0 0;
         min-width: max-content;
 
         &:last-child {
-            margin-bottom: 5px;
+            margin-bottom: 7.5px;
         }
     }
 
@@ -79,6 +80,12 @@
     }
 }
 
+.threeDots {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 table {
     color: base.$whiteorange;

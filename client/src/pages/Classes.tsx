@@ -3,69 +3,49 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { IoIosArrowDown } from "react-icons/io";
+import { StudentLevels, useGetStudentLevelsQuery } from "../redux/services/studentsApi";
+
+import { ThreeDots } from 'react-loading-icons'
 
 
 var iL = "";
 var iY = 0;
 
-const enrol: {
-  year: number;
-  semester: number;
-  levelName: string;
-  status: string;
-}[] = [
-    {
-      year: 2024,
-      semester: 1,
-      levelName: "basic",
-      status: "in_progress",
-    },
-    {
-      year: 2023,
-      semester: 1,
-      levelName: "basic",
-      status: "failed",
-    },
-    {
-      year: 2022,
-      semester: 2,
-      levelName: "beginner",
-      status: "approved",
-    },
-    {
-      year: 2022,
-      semester: 1,
-      levelName: "beginner",
-      status: "approved",
-    },
-  ];
+// const response.data:
+//   StudentLevels
+//   // {
+//   //   year: number;
+//   //   semester: number;
+//   //   levelName: string;
+//   // status: string;
+//   // }[]
+//   = [
+//     {
+//       year: 2024,
+//       semester: 1,
+//       levelName: "basic",
+//       // status: "in_progress",
+//     },
+//     {
+//       year: 2023,
+//       semester: 1,
+//       levelName: "basic",
+//       // status: "failed",
+//     },
+//     {
+//       year: 2022,
+//       semester: 2,
+//       levelName: "beginner",
+//       // status: "approved",
+//     },
+//     {
+//       year: 2022,
+//       semester: 1,
+//       levelName: "beginner",
+//       // status: "approved",
+//     },
+//   ];
 
-
-// const levels: {
-//   id: string;
-//   name: string;
-// }[] = [
-//     {
-//       id: "A1",
-//       name: "Principiante"
-//     },
-//     {
-//       id: "A2",
-//       name: "Elemental"
-//     },
-//     {
-//       id: "B1",
-//       name: "Intermedio"
-//     },
-//     {
-//       id: "B2",
-//       name: "Intermedio-Superior"
-//     },
-//     {
-//       id: "C1",
-//       name: "Avanzado"
-//     }
-//   ]
 
 const topics: string[] = [
   "grammar",
@@ -73,12 +53,10 @@ const topics: string[] = [
   "writing",
 ];
 
-// const groups: string[] = ["A", "B", "C"];
 
 function Classes() {
 
   useTranslation();
-
 
   const [semesterYear, setSemesterYear] = useState<{
     year: number;
@@ -91,6 +69,7 @@ function Classes() {
   const [topic, setTopic] = useState<string>("");
 
 
+  const { data: response, isLoading, isFetching } = useGetStudentLevelsQuery({ run: 12345678 });
 
   const handlerClickLevel = (newLevel: string) => {
     setLevel(newLevel === level ? "" : newLevel);
@@ -124,18 +103,16 @@ function Classes() {
   }
 
 
-  useEffect(() => {
-    console.log(topic);
-  }, [topic])
 
   return (
     <>
       <h1>{t('classes')}</h1>
-      <main className="classes-layout">
+      {(isLoading || isFetching) && (<ThreeDots className="threeDots" fill='#2F4858' />)}
+      {response && (<main className="classes-layout">
         <section className="options-selector">
           <h2>{t('level')}</h2>
           {
-            enrol.map(({ levelName }) => {
+            response.data.map(({ levelName }) => {
               const isLevelSelect = levelName === level;
               if (iL !== levelName) {
                 iL = levelName
@@ -148,10 +125,10 @@ function Classes() {
                     onClick={() => handlerClickLevel(levelName)}
                   >
                     <p>{t(levelName)}</p>
-                    <IoIosArrowDown className={`ioIosArrowDown ${isLevelSelect ? 'rotate' : ''}`}></IoIosArrowDown>
+                    <IoIosArrowDown className={`ioIosArrowDown ${isLevelSelect ? 'rotate' : ''}`} />
                   </div>
                   {
-                    enrol.map(({ year, semester, levelName: lName }) => {
+                    response.data.map(({ year, semester, levelName: lName }) => {
                       const isLevel = lName === levelName;
                       const isYear = iY !== year;
                       if (isLevel && isYear) {
@@ -164,10 +141,10 @@ function Classes() {
                             className={`flex ${isYearSelect ? "active" : ""}`}
                             onClick={() => handlerClickYear(year)}>
                             <p>{year}</p>
-                            <IoIosArrowDown className={`ioIosArrowDown ${isYearSelect ? 'rotate' : ''}`}></IoIosArrowDown>
+                            <IoIosArrowDown className={`ioIosArrowDown ${isYearSelect ? 'rotate' : ''}`} />
                           </div>
                           {
-                            enrol.map(({ year: y, semester }) => {
+                            response.data.map(({ year: y, semester }) => {
                               if (isLevel && year === y) {
                                 const isSemesterSelect = semester === semesterYear.semester;
                                 return <div
@@ -177,7 +154,7 @@ function Classes() {
                                     className={`flex ${isSemesterSelect ? "active" : ""}`}
                                     onClick={() => handlerClickSemester(semester)}>
                                     <p>{t('semester')} {semester}</p>
-                                    <IoIosArrowDown className={`ioIosArrowDown ${isSemesterSelect ? 'rotate' : ''}`}></IoIosArrowDown>
+                                    <IoIosArrowDown className={`ioIosArrowDown ${isSemesterSelect ? 'rotate' : ''}`} />
                                   </div>
                                   {
                                     topics.map((tc) => {
@@ -231,7 +208,7 @@ function Classes() {
             )
           }
         </section>
-      </main >
+      </main >)}
     </>
   );
 }
