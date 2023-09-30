@@ -9,7 +9,7 @@ import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
 import FloatLabelInput from './FloatLabelInput';
 import { useGetLevelsQuery } from '../redux/services/levelsApi';
-import LoadingIcons from 'react-loading-icons'
+import { ThreeDots } from 'react-loading-icons'
 import { Level, Student } from '../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
@@ -52,7 +52,7 @@ function LevelsSelect(register: UseFormRegister<Student>) {
     const { data: response, isLoading, isFetching, isError } = useGetLevelsQuery(null);
 
     if (isLoading || isFetching) {
-        return (<LoadingIcons.ThreeDots fill='#2F4858' />);
+        return (<ThreeDots fill='#2F4858' />);
     }
 
     if (isError) {

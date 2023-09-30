@@ -6,6 +6,7 @@ function LanguageSwap() {
         const languageValue = i18n.language == 'es' ? 'en' : 'es'
 
         i18n.changeLanguage(languageValue);
+        localStorage.setItem('language', languageValue);
     }
 
     return (
