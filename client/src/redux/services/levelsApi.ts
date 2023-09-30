@@ -1,12 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-type Levels = {
-    id: string,
-    name: string
-};
+import { Level } from '../../utils/types'
 
 type Data = {
-    data: Levels[]
+    data: Level[]
 }
 
 export const levelsApi = createApi({

@@ -1,32 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { Student, Grade } from '../../utils/types'
 
-type Student = {
-    run: number;
-    dv: string;
-    name: string;
-    firstLastname: string;
-    secondLastname: string;
-    level: string;
-};
-
-type Grade = {
-    id: number,
-    name: string,
-    date: Date,
-    classGroupId: number,
-    Results: {
-        examId: number,
-        studentId: number,
-        grade: number
-    }[],
-    classgroup: {
-        teacherId: number,
-        group: { letter: string, topic: string }
-    }
-}
-
-type Data = {
+export type Data = {
     data: Grade[]
+
 }
 
 export const studentsApi = createApi({

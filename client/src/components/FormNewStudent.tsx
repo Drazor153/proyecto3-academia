@@ -11,20 +11,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import FloatLabelInput from './FloatLabelInput';
 import { useGetLevelsQuery } from '../redux/services/levelsApi';
 import LoadingIcons from 'react-loading-icons'
-
-type Student = {
-    run: string;
-    name: string;
-    first_surname: string;
-    second_surname: string;
-    level: string;
-};
-
-type Level = {
-    id: string,
-    name: string
-};
-
+import { Level, Student } from '../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
     run: z.string(),
@@ -105,7 +92,7 @@ function FormNewStudent() {
     });
 
     const onSubmit: SubmitHandler<formType> = (data) => {
-        const { digits, verifier } = deconstructRut(data.run);
+        const { digits, verifier } = deconstructRut(String(data.run));
 
         addStudent({
             run: parseInt(digits),
