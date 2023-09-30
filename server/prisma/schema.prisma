@@ -11,97 +11,58 @@ datasource db {
 }
 
 model Student {
-  run            Int                @id
-  dv             String
+  run            Int      @id
+  dv             String   @db.Char(1)
   name           String
-  firstLastname  String
-  secondLastname String
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  levels         LevelsOnStudents[]
-  Results        Results[]
-  Attendance     Attendance[]
+  first_surname  String
+  second_surname String
+  enrols         enrols[]
+  gives          gives[]
 }
 
 model Level {
-  id         String             @id
-  name       String
-  students   LevelsOnStudents[]
-  ClassGroup ClassGroup[]
+  code   String   @id @db.Char(2)
+  name   String
+  enrols enrols[]
+  Quiz   Quiz[]
 }
 
-model LevelsOnStudents {
-  student   Student @relation(fields: [studentId], references: [run], onDelete: Cascade, onUpdate: Cascade)
-  studentId Int
-  level     Level   @relation(fields: [levelId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  levelId   String
+model enrols {
+  level      Level   @relation(fields: [levelCode], references: [code])
+  levelCode  String  @db.Char(2)
+  student    Student @relation(fields: [studentRun], references: [run])
+  studentRun Int
+  status     String
+  year       Int
+  semester   Int
+
+  @@id([levelCode, studentRun, year, semester])
+}
+
+model Topic {
+  id   Int    @id @default(autoincrement())
+  name String
+  Quiz Quiz[]
+}
+
+model Quiz {
+  id        Int     @id @default(autoincrement())
+  number    Int
   year      Int
-  status    String
-
-  @@id([studentId, levelId])
+  semester  Int
+  topic     Topic   @relation(fields: [topicId], references: [id])
+  topicId   Int
+  level     Level   @relation(fields: [levelCode], references: [code])
+  levelCode String  @db.Char(2)
+  gives     gives[]
 }
 
-model Exam {
-  id           Int        @id @default(autoincrement())
-  name         String
-  date         DateTime
-  classgroup   ClassGroup @relation(fields: [classGroupId], references: [id])
-  classGroupId Int
-  Results      Results[]
-}
+model gives {
+  quiz       Quiz    @relation(fields: [quizId], references: [id])
+  quizId     Int
+  student    Student @relation(fields: [studentRun], references: [run])
+  studentRun Int
+  grade      Float   @db.Float
 
-model Results {
-  exam      Exam    @relation(fields: [examId], references: [id])
-  examId    Int
-  student   Student @relation(fields: [studentId], references: [run])
-  studentId Int
-  grade     Float
-
-  @@id([examId, studentId])
-}
-
-model Group {
-  letter     String       @id
-  topic      String
-  ClassGroup ClassGroup[]
-}
-
-model Teacher {
-  run            Int          @id
-  names          String
-  firstLastname  String
-  secondLastname String
-  ClassGroup     ClassGroup[]
-}
-
-model ClassGroup {
-  id        Int      @id @default(autoincrement())
-  year      Int
-  level     Level    @relation(fields: [levelId], references: [id])
-  levelId   String
-  group     Group    @relation(fields: [groupId], references: [letter])
-  groupId   String
-  teacher   Teacher? @relation(fields: [teacherId], references: [run], onDelete: SetNull, onUpdate: Cascade)
-  teacherId Int?
-  Class     Class[]
-  Exam      Exam[]
-}
-
-model Class {
-  id           Int          @id @default(autoincrement())
-  title        String
-  description  String
-  classTime    DateTime
-  classgroup   ClassGroup   @relation(fields: [classGroupId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  classGroupId Int
-  Attendance   Attendance[]
-}
-
-model Attendance {
-  class     Class   @relation(fields: [classId], references: [id])
-  classId   Int
-  student   Student @relation(fields: [studentId], references: [run])
-  studentId Int
-
-  @@id([classId, studentId])
+  @@id([quizId, studentRun])
 }

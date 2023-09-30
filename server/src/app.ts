@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import studentsRoute from './routes/students.routes';
 import levelsRoute from './routes/levels.routes';
-import classesRoute from './routes/classes.routes'
+// import classesRoute from './routes/classes.routes'
 
 const app = express();
 
@@ -15,6 +15,6 @@ app.use(morgan('dev'));
 // Routes
 app.use('/api/students', studentsRoute);
 app.use('/api/levels', levelsRoute);
-app.use('/api/classes', classesRoute)
+// app.use('/api/classes', classesRoute)
 
 export default app;

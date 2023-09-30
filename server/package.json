@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "start": "node build/index.js",
-    "lint": "ts-standard",
     "dev": "ts-node-dev src/index.ts",
     "build": "tsc",
     "test": "cross-env NODE_ENV=test jest --setTimeout=10000"
