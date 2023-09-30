@@ -7,6 +7,7 @@ const router = Router();
 router.get('/', studentsController.get);
 router.post('/', studentRegisterValidator, studentsController.create);
 
-router.get('/grades/:year/:level/:run', studentsController.getStudentGrades);
+router.get('/levels/:run', studentsController.getLevels);
+router.get('/grades/:year/:semester/:level/:run', studentsController.getStudentGrades);
 
 export default router;
