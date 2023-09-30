@@ -1,5 +1,5 @@
 export type Level = {
-  id: string;
+  code: string;
   name: string;
 };
 

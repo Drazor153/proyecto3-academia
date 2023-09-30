@@ -16,9 +16,10 @@ button {
     align-items: center;
     gap: 5px;
     background-color: base.$bluemarine;
+    opacity: .7;
 
     &:hover:not([disabled]) {
-        opacity: .7;
+        opacity: .8;
     }
 
     &:disabled {
@@ -31,7 +32,7 @@ button {
     }
 
     &.selected {
-        opacity: .5;
+        opacity: 1;
     }
 }
 

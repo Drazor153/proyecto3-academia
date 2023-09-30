@@ -21,10 +21,10 @@
 .grades {
     grid-area: grades;
     display: flex;
-    flex-direction: column;
 
-    section {
-        height: 100%;
+    .topic-grades {
+        background-color: base.$whitegrey;
+        color: base.$bluemarine;
     }
 }
 
