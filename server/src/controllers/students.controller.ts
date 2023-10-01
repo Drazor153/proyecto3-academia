@@ -17,12 +17,12 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  const results = validationResult(req);
+  const errors = validationResult(req);
 
-  if (!results.isEmpty()) {
+  if (!errors.isEmpty()) {
     res
       .status(400)
-      .json({ errorType: 'invalidFields', errorMsg: results.array() });
+      .json({ errorType: 'invalidFields', errorMsg: errors.array() });
     return;
   }
   const { run, dv, name, first_surname, second_surname, level }: Student =
@@ -137,7 +137,7 @@ export const getStudentGrades = async (req: Request, res: Response) => {
     return {
       topic: val.topic.name,
       quizNumber: val.number,
-      studentGrade: val.gives.length === 0 ? -1 : val.gives[0].grade
+      studentGrade: val.gives.length === 0 ? 0 : val.gives[0].grade
     };
   });
 

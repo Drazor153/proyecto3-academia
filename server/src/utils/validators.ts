@@ -8,3 +8,9 @@ export const studentRegisterValidator = [
   body('second_surname').notEmpty(),
   body('level').notEmpty()
 ];
+
+export const postGradeValidator = [
+  body('run').notEmpty().isInt(),
+  body('quizId').notEmpty().isInt(),
+  body('grade').notEmpty().isFloat()
+];
