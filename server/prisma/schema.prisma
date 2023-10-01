@@ -21,10 +21,11 @@ model Student {
 }
 
 model Level {
-  code   String   @id @db.Char(2)
-  name   String
-  enrols enrols[]
-  Quiz   Quiz[]
+  code    String    @id @db.Char(2)
+  name    String
+  enrols  enrols[]
+  Quiz    Quiz[]
+  teaches teaches[]
 }
 
 model enrols {
@@ -65,4 +66,22 @@ model gives {
   grade      Float   @db.Float
 
   @@id([quizId, studentRun])
+}
+
+model Teacher {
+  run           Int       @id
+  dv            String    @db.Char(1)
+  name          String
+  first_surname String
+  teaches       teaches[]
+}
+
+model teaches {
+  teacher    Teacher @relation(fields: [teacherRun], references: [run])
+  teacherRun Int
+  level      Level   @relation(fields: [levelCode], references: [code])
+  levelCode  String  @db.Char(2)
+  id         Int     @id @default(autoincrement())
+  year       Int
+  semester   Int
 }
