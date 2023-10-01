@@ -17,12 +17,12 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  const results = validationResult(req);
-  
-  if (!results.isEmpty()) {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
     res
       .status(400)
-      .json({ errorType: 'invalidFields', errorMsg: results.array() });
+      .json({ errorType: 'invalidFields', errorMsg: errors.array() });
     return;
   }
   const { run, dv, name, first_surname, second_surname, level }: Student =
@@ -51,21 +51,27 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         run,
         dv,
         name,
-        firstLastname: first_surname,
-        secondLastname: second_surname,
-        levels: {
+        first_surname,
+        second_surname,
+        enrols: {
           create: [
             {
               status: 'Cursando',
-              year: 2023,
+              year: new Date(Date.now()).getFullYear(),
+              semester: 1,
               level: {
                 connect: {
-                  id: level
+                  code: level
                 }
               }
             }
           ]
         }
+      },
+      select: {
+        run: true,
+        name: true,
+        first_surname: true
       }
     });
     res.status(201).json({ message: 'Usuario creado correctamente!', student });
@@ -75,28 +81,67 @@ export const create = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getStudentGrades = async (req: Request, res: Response) => {
-  const { year, level, run } = req.params;
+export const getLevels = async (req: Request, res: Response) => {
+  const { run } = req.params;
 
-  const classGroupExams = await prisma.exam.findMany({
+  const query = await prisma.enrols.findMany({
     where: {
-      classgroup: {
-        levelId: level,
-        year: Number(year)
-      }
+      studentRun: +run
+    },
+    orderBy: {
+      year: 'desc'
     },
     include: {
-      Results: {
-        where: {
-          studentId: Number(run)
-        }
-      }
+      level: true
     }
   });
 
-  // console.log(classGroupExams);
+  const studentLevels = query.map(val => ({
+    semester: val.semester,
+    year: val.year,
+    levelName: val.level.name,
+    status: val.status,
+    levelCode: val.levelCode
+  }))
+
+
+  res.status(200).json({ data: studentLevels });
+};
+
+export const getStudentGrades = async (req: Request, res: Response) => {
+  const { year, semester, level, run } = req.params;
+
+  const topicQuizzesQuery = await prisma.quiz.findMany({
+    where: {
+      year: +year,
+      semester: +semester,
+      levelCode: level
+    },
+    include: {
+      gives: {
+        where: {
+          studentRun: +run
+        },
+        select: {
+          grade: true
+        }
+      },
+      topic: true
+    },
+    orderBy: {
+      id: 'asc'
+    }
+  });
+
+  const topicQuizzesSanitizied = topicQuizzesQuery.map((val) => {
+    return {
+      topic: val.topic.name,
+      quizNumber: val.number,
+      studentGrade: val.gives.length === 0 ? 0 : val.gives[0].grade
+    };
+  });
 
   res.status(200).json({
-    data: classGroupExams
+    data: topicQuizzesSanitizied
   });
 };

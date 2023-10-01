@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -63,7 +63,7 @@ model gives {
   quizId     Int
   student    Student @relation(fields: [studentRun], references: [run])
   studentRun Int
-  grade      Float   @db.Float
+  grade      Float
 
   @@id([quizId, studentRun])
 }

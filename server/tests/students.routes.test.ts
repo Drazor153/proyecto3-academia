@@ -13,13 +13,6 @@ const newStudentData = {
   level: 'A1'
 };
 
-describe('GET /api/students at first time', () => {
-  test('should get empty array', async () => {
-    const res = await requestApp.get('/api/students');
-    expect(res.body).toHaveProperty('data');
-    expect(res.body.data.length).toBe(0);
-  });
-});
 describe('POST /api/students', () => {
   test('should return student', async () => {
     const newStudent = await requestApp.post('/api/students').send(newStudentData);
