@@ -28,5 +28,16 @@
   "listening": "Listening",
   "reading": "Reading",
   "&": "&",
-  "classes": "Classes"
+  "writing": "Writing",
+  "classes": "Classes",
+  "class_list": "Class List",
+  "week": "Week",
+  "content": "Content",
+  "teacher": "Teacher",
+  "group": "Group",
+  "attendance": "Attendance",
+  "actions": "Actions",
+  "attendance_list": "Attendance List",
+  "present": "Present",
+  "absent": "Absent"
 }

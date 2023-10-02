@@ -31,5 +31,16 @@
   "listening": "Escucha",
   "reading": "Lectura",
   "&": "y",
-  "classes": "Clases"
+  "writing": "Escritura",
+  "classes": "Clases",
+  "class_list": "Lista de clases",
+  "week": "Semana",
+  "content": "Contenido",
+  "teacher": "Profesor",
+  "group": "Grupo",
+  "attendance": "Asistencia",
+  "actions": "Acciones",
+  "attendance_list": "Lista de asistencia",
+  "present": "Presente",
+  "absent": "Ausente"
 }
