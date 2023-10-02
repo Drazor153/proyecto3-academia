@@ -3,11 +3,10 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useAppSelector } from "../redux/hooks";
-import { StudentLevels, useGetStudentLevelsQuery } from "../redux/services/studentsApi";
+import { useGetStudentLevelsQuery } from "../redux/services/studentsApi";
 
 import { ImEyeMinus, ImEyePlus } from "react-icons/im";
 import { IoIosArrowDown, IoIosClose } from "react-icons/io";
-import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { ThreeDots } from 'react-loading-icons'
 import { BiSolidPlusSquare } from "react-icons/bi";
 
@@ -595,7 +594,7 @@ function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClas
     const _group = classes.find(({ week }) => week === watchWeek)?.group ?? "A";
     setGroup(_group);
 
-  }, [watchWeek]);
+  }, [classes, watchWeek]);
 
   return (<>
     <div className={`background ${open ? 'open' : ''}`} />
