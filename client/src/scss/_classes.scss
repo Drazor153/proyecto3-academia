@@ -13,7 +13,7 @@
     }
 
     .class-list {
-        // position: relative;
+        position: initial;
         border-radius: 5px;
         width: 100%;
     }
@@ -183,6 +183,7 @@
                 border-radius: 3px;
                 justify-content: center;
                 align-items: center;
+                // text-align: center;
                 height: 100%;
                 padding: 5px;
                 gap: 3px;
@@ -194,11 +195,7 @@
                     p:before {
                         content: "•";
                         margin-right: 5px;
-                        height: 100dvh;
-                    }
-
-                    p[more-than-two]:before {
-                        display: none;
+                        // height: 100dvh;
                     }
                 }
 
@@ -302,6 +299,7 @@
         ;
         grid-template-columns: .5fr 1.25fr;
         font-size: 1.5rem;
+        height: 80%;
         padding: 10px;
         gap: 10px;
 
@@ -395,11 +393,8 @@
 
                     td {
                         background-color: base.$bluemarine;
-                        // background-color: base.$pink;
                     }
 
-
-                    // border-radius: 5px;
                     &:first-child {
                         height: 40px;
 
