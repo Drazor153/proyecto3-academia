@@ -2,7 +2,6 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import '../scss/inputs.scss'
 
 type inputType = 'number' | 'text' | 'email'
 
@@ -39,6 +38,7 @@ function FloatLabelInput({ name, type, register }: InputComponentProps) {
                 id={`${name}Input`}
                 type={type}
                 onFocus={handleFocus}
+                {...register(name)}
                 onBlur={handleBlur}
             />
 

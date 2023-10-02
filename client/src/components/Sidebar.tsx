@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { menuItems, privilegedItems } from '../utils/pages'
 import { FaBars } from 'react-icons/fa'
-import '../scss/sidebar.scss'
 import { NavLink } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
 
@@ -13,7 +12,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <div className={`sidebar ${isOpen ? "" : "closed"}`}>
+            <nav className={`sidebar ${isOpen ? "" : "closed"}`}>
                 <div className='top-section'>
                     <img className={`logo ${isOpen ? "" : "closed"}`} src="src\assets\logo.png" alt="logo" />
                     <div className='bars'>
@@ -35,7 +34,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                         </NavLink>
                     ))
                 }
-            </div>
+            </nav>
             {children}
         </>
     )

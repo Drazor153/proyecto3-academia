@@ -1,3 +1,5 @@
+@use 'base';
+
 .float-label-field {
     border: none;
     outline: none;
@@ -10,14 +12,14 @@
 
 .float-label-field input {
     box-sizing: border-box;
-    background-color: var(--color-whitegrey);
+    background-color: base.$whitegrey;
     background-color: none;
     border: none;
     outline: none;
     padding: 5px 5px 8px 3px;
     width: 100%;
     font-size: 18px;
-    border-bottom: solid 1px var(--color-lightgrey);
+    border-bottom: solid 1px base.$lightgrey;
 }
 
 .float-label-field label {
@@ -31,11 +33,11 @@
 }
 
 .float-label-field.focus label {
-    color: var(--color-orange);
+    color: base.$bluemarine;
 }
 
 .float-label-field.focus input {
-    border-bottom: solid 1px var(--color-orange);
+    border-bottom: solid 1px base.$bluemarine;
 }
 
 .float-label-field.float label {
@@ -45,6 +47,26 @@
     font-size: 60%;
     transition: all 0.2s ease;
     font-weight: bold;
+}
+
+input[type=number] {
+    background-color: transparent;
+    width: 50px;
+    outline: 0;
+    border: 0;
+    border-bottom: 2px solid base.$lightorange;
+    font-size: 1rem;
+    transition: all .2s;
+
+    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    &:focus {
+        outline: none;
+        border-bottom: 2px solid base.$orange;
+    }
 }
 
 select {

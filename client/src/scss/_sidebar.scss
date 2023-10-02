@@ -1,7 +1,9 @@
+@use 'base';
+
 .sidebar {
     display: flex;
     flex-direction: column;
-    background-color: var(--color-whiteorange);
+    background-color: base.$whiteorange;
     height: 100vh;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
     max-width: max-content;
@@ -13,11 +15,11 @@
 }
 
 .top-section {
-    background-color: var(--color-orange);
+    background-color: base.$orange;
     display: flex;
     align-items: center;
     padding: 20px 10px;
-    color: var(--color-bluemarine)
+    color: base.$bluemarine
 }
 
 .logo {
@@ -48,23 +50,23 @@ a {
 .link {
     display: flex;
     align-items: center;
-    background-color: var(--color-lightorange);
+    background-color: base.$lightorange;
     margin: 5px;
     border-radius: 5px;
     padding: 5px 7px;
     gap: 15px;
     transition: all 0.2s;
-    color: var(--color-bluemarine);
+    color: base.$bluemarine;
     font-size: 1.1rem;
 
     &:hover {
-        background-color: var(--color-orange);
-        color: var(--color-whiteorange);
+        background-color: base.$orange;
+        color: base.$whiteorange;
     }
 
     &.active {
-        background-color: var(--color-orange);
-        color: var(--color-whiteorange);
+        background-color: base.$orange;
+        color: base.$whiteorange;
     }
 
     &.center {

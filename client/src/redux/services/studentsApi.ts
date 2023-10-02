@@ -1,35 +1,38 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
-type Student = {
-    run: number;
-    dv: string;
-    name: string;
-    firstLastname: string;
-    secondLastname: string;
-    level: string;
-};
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Data, ExamStudent, Student, StudentLevels } from "../../utils/types";
 
 export const studentsApi = createApi({
-    reducerPath: 'studentsAPI',
+    reducerPath: "studentsAPI",
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://10.242.108.185:3000/api'
+        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
     }),
     endpoints: (builder) => ({
         getStudents: builder.query<Student[], null>({
-            query: () => '/students'
+            query: () => "/students",
+        }),
+
+        getStudentsGrades: builder.query<Data<ExamStudent[]>, { year: number; semester: number; level: string; run: number }>({
+            query: ({ year, semester, level, run }) =>
+                `/students/grades/${year}/${semester}/${level}/${run}`,
         }),
 
         addStudent: builder.mutation({
             query: (student) => ({
-                url: '/students',
-                method: 'POST',
-                body: student
-            })
-        })
-    })
-})
+                url: "/students",
+                method: "POST",
+                body: student,
+            }),
+        }),
+
+        getStudentLevels: builder.query<Data<StudentLevels[]>, { run: number }>({
+            query: ({ run }) => `/students/levels/${run}`,
+        }),
+    }),
+});
 
 export const {
     useGetStudentsQuery,
-    useAddStudentMutation
-} = studentsApi
+    useAddStudentMutation,
+    useGetStudentsGradesQuery,
+    useGetStudentLevelsQuery,
+} = studentsApi;

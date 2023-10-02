@@ -1,30 +1,16 @@
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm, UseFormRegister } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ZodType, z } from 'zod';
 import { Trans, useTranslation } from 'react-i18next';
 import { t } from 'i18next';
-import { useAddStudentMutation } from '../redux/services/studentsApi';
+import { useAddStudentMutation } from '../../../redux/services/studentsApi';
 import { useState } from 'react';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
-import FloatLabelInput from './FloatLabelInput';
-
-const levels = [
-    { level: 'A1', nombre: 'Básico A1' },
-    { level: 'A2', nombre: 'Básico A2' },
-    { level: 'B1', nombre: 'Intermedio B1' },
-    { level: 'B2', nombre: 'Intermedio B2' },
-    { level: 'C1', nombre: 'Avanzado C1' }
-];
-
-type Student = {
-    run: string;
-    name: string;
-    first_surname: string;
-    second_surname: string;
-    level: string;
-};
+import FloatLabelInput from '../../../components/FloatLabelInput';
+import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
+import { ThreeDots } from 'react-loading-icons'
+import { Level, Student } from '../../../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
     run: z.string(),
@@ -37,44 +23,78 @@ const formSchema: ZodType<Student> = z.object({
 type formType = z.infer<typeof formSchema>;
 
 type Response = {
-    errorMsg: [] | string,
-    errorType: string
-}
+    errorMsg: { msg: string; }[],
+    errorType: 'invalidFields';
+} | {
+    errorMsg: string,
+    errorType: 'msg';
+};
 
 type ServerResponse = { status: number, data: Response, message: string }
 
-function handleSuccessMsg(payload: ServerResponse) {
-    toast.success(payload.message)
-}
 
-function handleErrorMsg(error: ServerResponse) {
-    switch (error.data.errorType) {
-        case 'invalidFields':
-            toast.error(t(error.data.errorMsg[0].msg));
-            break;
-        case 'msg':
-            toast.error(t(error.data.errorMsg));
+function LevelsSelect(register: UseFormRegister<Student>) {
+    const { data: response, isLoading, isFetching, isError } = useGetLevelsQuery(null);
+
+    if (isLoading || isFetching) {
+        return (<ThreeDots fill='#2F4858' />);
     }
+
+    if (isError) {
+        return (<p>{t('error_loading_data')}</p>);
+    }
+
+    if (!response) {
+        return (<p>{t('no_data')}</p>);
+    }
+
+    const levels: Level[] = response.data;
+
+    return (
+        <select defaultValue='0' {...register('level')}>
+            {levels.map((level: Level) => (
+                <option key={level.levelCode} value={level.levelCode}>{level.levelName} {level.levelCode}</option>
+            ))}
+        </select>
+    );
 }
 
 function FormNewStudent() {
-    const [rut, setRut] = useState('');
+    const [run, setRun] = useState('');
     useTranslation();
 
-    const handleRUTChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newRUT = event.target.value;
-        const cleanRUT = newRUT.replace(/[^0-9kK]/g, '').toUpperCase();
-        setRut(formatRut(cleanRUT, RutFormat.DOTS_DASH));
+    const handleRUNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newRUN = event.target.value;
+        const cleanRUN = newRUN.replace(/[^0-9kK]/g, '').toUpperCase();
+        setRun(formatRut(cleanRUN, RutFormat.DOTS_DASH));
     };
 
     const [addStudent] = useAddStudentMutation()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<formType>({
+    const { register, handleSubmit, reset } = useForm<formType>({
         resolver: zodResolver(formSchema)
     });
 
+    
+    const handleSuccessMsg = (payload: ServerResponse) => {
+        toast.success(payload.message)
+        setRun('')
+        reset()
+    }
+
+    const handleErrorMsg = (error: ServerResponse) => {
+        switch (error.data.errorType) {
+            case 'invalidFields':
+                toast.error(t(error.data.errorMsg[0].msg));
+                break;
+            case 'msg':
+                toast.error(t(error.data.errorMsg));
+                break;
+        }
+    }
+
     const onSubmit: SubmitHandler<formType> = (data) => {
-        const { digits, verifier } = deconstructRut(data.run);
+        const { digits, verifier } = deconstructRut(String(data.run));
 
         addStudent({
             run: parseInt(digits),
@@ -93,10 +113,10 @@ function FormNewStudent() {
             <h2><Trans>student_registration</Trans></h2>
             <form onSubmit={handleSubmit(onSubmit)} className='student-register'>
                 <div className='input-section'>
-                    <h3><Trans>rut_input</Trans></h3>
+                    <h3><Trans>run_input</Trans></h3>
                     <div className='run-input-container'>
                         <fieldset className='float-label-field'>
-                            <input type="text" {...register('run')} onChange={handleRUTChange} value={rut} />
+                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} />
                         </fieldset>
                     </div>
                 </div>
@@ -111,12 +131,8 @@ function FormNewStudent() {
                 </div>
                 <div className='input-section'>
                     <h3><Trans>level_input</Trans></h3>
-                    <select defaultValue='0' {...register('level')} >
-                        <option value="0"><Trans>no_input</Trans></option>
-                        {levels.map(level => (
-                            <option key={level.nombre} value={level.level}>{level.nombre}</option>
-                        ))}
-                    </select>
+
+                    {LevelsSelect(register)}
                 </div>
                 <div className='submit-btn'>
                     <button type="submit"><Trans>register</Trans></button>

@@ -1,0 +1,114 @@
+@use 'base';
+
+.grades-layout {
+    display: grid;
+    grid-template-areas:
+        "tselector grades"
+        "options grades";
+    width: auto;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: min-content auto;
+}
+
+.topics-selector {
+    grid-area: tselector;
+    
+    button {
+        width: 100%;
+    }
+}
+
+.options-container {
+    grid-area: options;
+    option {
+        text-overflow: ellipsis;
+    }
+}
+
+.grades {
+    grid-area: grades;
+    display: flex;
+    color: base.$bluemarine;
+    position: static;
+
+    h3 {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: base.$bluemarine;
+        margin: 0;
+    }
+
+    .average-container,
+    .status-container {
+        padding: 0 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: base.$bluemarine;
+        margin: 0;
+    }
+
+    button {
+        font-size: 1rem;
+        height: 30px;
+        width: 60px;
+    }
+}
+
+.grades-table {
+    border-collapse: collapse;
+    width: 100%;
+    color: base.$bluemarine;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 5px;
+    overflow: hidden;
+    table-layout: fixed;
+
+    th {
+        font-size: 1rem;
+        background-color: adjust-color($color: base.$orange, $lightness: 5%);
+        color: base.$whiteorange;
+        font-weight: 800;
+        padding: 7px 5px;
+        text-transform: uppercase;
+        border-top: 1px solid base.$whitegrey;
+        border-bottom: 1px solid base.$whitegrey;
+    }
+
+    td {
+        font-size: 1rem;
+        padding: 10px;
+        border-bottom: 1px solid base.$lightgrey;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) td {
+        background-color: base.$whitegrey;
+    }
+
+    tr:hover td {
+        background-color: base.$lightgrey;
+    }
+}
+
+.btn-container {
+    display: flex;
+    gap: 5px;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 0px;
+}
+
+.year-select {
+    border: solid 1px base.$bluemarine;
+    font-size: 1.2rem;
+    padding: 5px 2px;
+    outline: 0;
+    border-radius: 5px;
+}
