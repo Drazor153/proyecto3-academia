@@ -10,7 +10,8 @@ export const studentRegisterValidator = [
 ];
 
 export const postGradeValidator = [
-  body('run').notEmpty().isInt(),
   body('quizId').notEmpty().isInt(),
-  body('grade').notEmpty().isFloat()
+  body('grades').notEmpty().isArray(),
+  body('grades.*.run').notEmpty().isInt(),
+  body('grades.*.grade').notEmpty().isInt()
 ];
