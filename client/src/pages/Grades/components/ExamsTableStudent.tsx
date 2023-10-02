@@ -56,7 +56,7 @@ function ExamsTable({ topic, year, semester, level }: { topic: string, year: num
                     </tr>
                 </thead>
                 <tbody>
-                    {tablerows}
+                    {tablerows.length > 0 ? tablerows : <tr><td colSpan={2}>There is not quizzes available yet</td></tr>}
                 </tbody>
             </table>
             <div className="more-info">

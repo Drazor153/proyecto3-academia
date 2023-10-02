@@ -1,5 +1,5 @@
 import { ThreeDots } from "react-loading-icons";
-import { useGetExamsByYearSemesterLevelQuery, useGetGradesByExamIdQuery } from "../../../redux/services/teacherApi";
+import { useGetExamsByYearSemesterLevelQuery, useGetGradesByExamIdQuery, useUploadGradesMutation } from "../../../redux/services/teacherApi";
 import { ExamTeacher, Quiz } from "../../../utils/types";
 import Modal from "../../../components/Modal";
 import { Dispatch, useReducer, useState } from "react";
@@ -64,6 +64,8 @@ function ExamsTableTeacher({year, semester, level, topic}: {year: number, semest
 function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>}){
     // const [isModalOpen, setIsModalOpen] = useState(true)
     const {data: response, isLoading, isFetching} = useGetGradesByExamIdQuery({quizId: examTarget.quizId})
+    const [uploadGrades] = useUploadGradesMutation();
+    
     const [stateQuizzes, dispatch] = useReducer(quizReducer, {
         quizzesEdited: []
     })
@@ -75,14 +77,26 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
         <QuizRow key={quiz.run} {...quiz} handlerDispatch={dispatch}/>
         ))
     
-    const handleButton = () => {
+    
+    const HandleMutatorButton = () => {
+        const data  = {
+            quizId: examTarget.quizId,
+            grades: [...stateQuizzes.quizzesEdited]
+        }
+        console.log(data);
         
+
+        uploadGrades(data).unwrap().then((response) => {
+            if(response.status === 200){
+                setIsModalOpen(false)
+            }
+        })
     }
 
     const props = {
         title: `Quiz ${examTarget.quizNumber} ${examTarget.topic}`,
         setIsOpen: setIsModalOpen,
-        footer: <button onClick={handleButton}>Save</button>
+        footer: <button onClick={HandleMutatorButton}>Save</button>
     }
     console.log(stateQuizzes);
     

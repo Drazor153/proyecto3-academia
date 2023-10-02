@@ -49,7 +49,7 @@ function Grades() {
 
     const examsByRole = () => {
         if (role == 'STUDENT') {
-            if (!state.topic) return null
+            if (!state.topic || !state.year || !state.semester || !state.level ) return null
 
             return <ExamsTableStudent 
                 year={parseInt(state.year)} 

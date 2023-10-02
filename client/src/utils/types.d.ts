@@ -1,3 +1,5 @@
+import { QuizData } from "../pages/Grades/quizesReducer";
+
 export type Data<T> = {
   data: T;
 }
@@ -67,4 +69,9 @@ export type Quiz = {
   first_surname: string,
   grade: number,
   dv: string
+}
+
+export type GradesMutator = {
+  quizId: number;
+  grades: QuizData[];
 }

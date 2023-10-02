@@ -66,7 +66,7 @@ export const getQuizGrades = async (
   });
 
   if (!quiz) {
-    res.status(404).json({errorType: 'msg', errorMsg: 'Quiz not found' });
+    res.status(404).json({ errorType: 'msg', errorMsg: 'Quiz not found' });
     return;
   }
 
@@ -90,7 +90,7 @@ export const getQuizGrades = async (
     }
   });
 
-  const gradesData = query.map(val => {
+  const gradesData = query.map((val) => {
     const grade = val.gives[0]?.grade;
     return {
       run: val.run,
@@ -98,12 +98,18 @@ export const getQuizGrades = async (
       first_surname: val.first_surname,
       grade: grade ? grade : 0,
       dv: val.dv
-    }
-  })
+    };
+  });
 
   res.status(200).json({ data: gradesData });
 };
-
+type QuizPost = {
+  quizId: number;
+  grades: {
+    run: number;
+    grade: number;
+  }[];
+};
 export const postQuizzesGrades = async (
   req: Request,
   res: Response
@@ -113,4 +119,32 @@ export const postQuizzesGrades = async (
     res.status(400).json({ errors: errors.array() });
     return;
   }
+
+  const { quizId, grades }: QuizPost = req.body;
+
+  let count = 0
+  grades.forEach(async (val) => {
+    await prisma.gives.upsert({
+      where: {
+        quizId_studentRun: {
+          quizId: quizId,
+          studentRun: val.run
+        }
+      },
+      update: {
+        grade: val.grade
+      },
+      create: {
+        quizId: quizId,
+        studentRun: val.run,
+        grade: val.grade
+      }
+    });
+
+    count = count + 1
+  });
+
+  console.log(`${count} notas actualizadas`);
+  
+  res.status(200).json({ msg: 'Notas actualizadas!' });
 };

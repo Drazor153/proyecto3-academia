@@ -13,5 +13,5 @@ export const postGradeValidator = [
   body('quizId').notEmpty().isInt(),
   body('grades').notEmpty().isArray(),
   body('grades.*.run').notEmpty().isInt(),
-  body('grades.*.grade').notEmpty().isInt()
+  body('grades.*.grade').notEmpty().isFloat()
 ];

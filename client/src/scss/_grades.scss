@@ -25,6 +25,11 @@
     }
 }
 
+.more-info{
+    display: flex;
+    justify-content: center;
+}
+
 .grades {
     grid-area: grades;
     display: flex;
