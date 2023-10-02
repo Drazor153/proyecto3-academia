@@ -1,7 +1,10 @@
 import { useTranslation } from "react-i18next";
+import enFlag from '../assets/en.png';
+import esFlag from '../assets/es.png';
 
 function LanguageSwap() {
     const { i18n } = useTranslation();
+    const languageFlag = i18n.language == 'es' ? esFlag : enFlag
     const changeLanguageHandler = () => {
         const languageValue = i18n.language == 'es' ? 'en' : 'es'
 
@@ -11,7 +14,7 @@ function LanguageSwap() {
 
     return (
         <button className="lang-swapper" onClick={changeLanguageHandler}>
-            <img src={`../../src/assets/${i18n.language}.png`} alt="" />
+            <img src={languageFlag} alt="" />
             <span>{i18n.language == 'es' ? 'Español' : 'English'}</span>
         </button>
     )

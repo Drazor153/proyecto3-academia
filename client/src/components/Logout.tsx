@@ -1,4 +1,4 @@
-function Logout({ }) {
+function Logout() {
     return (
         <></>
     )

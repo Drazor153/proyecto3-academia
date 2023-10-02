@@ -5,6 +5,7 @@ import Modal from "../../../components/Modal";
 import { Dispatch, useReducer, useState } from "react";
 import {formatRut, RutFormat} from '@fdograph/rut-utilities'
 import { quizReducer, QuizActionsEnum, QuizActionType } from "../quizesReducer";
+import { countDecimals } from "../../../utils/functions";
 
 function TableRow({ exam, rowHandler }: { exam: ExamTeacher, rowHandler: (exam: ExamTeacher) => void }) {
     const handleGradeBtn = (exam: ExamTeacher) => {
@@ -60,31 +61,6 @@ function ExamsTableTeacher({year, semester, level, topic}: {year: number, semest
     );
 }
 
-function QuizRow({run, name, first_surname, grade, dv, handlerDispatch}: Quiz & {handlerDispatch: Dispatch<QuizActionType>}){
-    const runFormat = formatRut(`${run}-${dv}`, RutFormat.DOTS_DASH);
-    const fullName = `${first_surname} ${name}`
-
-    const [gradeInt, setGradeInt] = useState(grade)
-
-    const handlerGrade = (newGrade: number) => {
-        setGradeInt(newGrade)
-    }
-    const handlerBlur = (newGrade: number) => {
-        const action = newGrade === grade ? QuizActionsEnum.DELETE: QuizActionsEnum.INSERT
-        handlerDispatch({run: run, grade: newGrade, type: action})
-    }
-    return (
-        <tr>
-            <td>{runFormat}</td>
-            <td>{fullName}</td>
-            <td>
-                <input type="number" value={gradeInt} onChange={(e) => handlerGrade(parseFloat(e.target.value))}
-                onBlur={e => handlerBlur(parseFloat(e.target.value))}/>
-            </td>
-        </tr>
-    )
-}
-
 function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>}){
     // const [isModalOpen, setIsModalOpen] = useState(true)
     const {data: response, isLoading, isFetching} = useGetGradesByExamIdQuery({quizId: examTarget.quizId})
@@ -123,6 +99,32 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
                 <tbody>{quizzesRow}</tbody>
             </table>
         </Modal>
+    )
+}
+function QuizRow({run, name, first_surname, grade, dv, handlerDispatch}: Quiz & {handlerDispatch: Dispatch<QuizActionType>}){
+    const runFormat = formatRut(`${run}-${dv}`, RutFormat.DOTS_DASH);
+    const fullName = `${first_surname} ${name}`
+
+    const [gradeInt, setGradeInt] = useState(grade)
+
+    const handlerGrade = (newGrade: number) => {
+        if(newGrade < 0 || newGrade > 7) return
+        if(countDecimals(newGrade) > 1) return
+        setGradeInt(newGrade)
+    }
+    const handlerBlur = (newGrade: number) => {
+        const action = newGrade === grade ? QuizActionsEnum.DELETE: QuizActionsEnum.INSERT
+        handlerDispatch({run: run, grade: newGrade, type: action})
+    }
+    return (
+        <tr>
+            <td>{runFormat}</td>
+            <td>{fullName}</td>
+            <td>
+                <input type="number" value={gradeInt} onChange={(e) => handlerGrade(parseFloat(e.target.value))}
+                onBlur={e => handlerBlur(parseFloat(e.target.value))}/>
+            </td>
+        </tr>
     )
 }
 

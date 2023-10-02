@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import { useAddStudentMutation } from '../../../redux/services/studentsApi';
 import { useState } from 'react';
-import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
+import { RutFormat, deconstructRut, formatRut, validateRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
@@ -13,7 +13,7 @@ import { ThreeDots } from 'react-loading-icons'
 import { Level, Student } from '../../../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
-    run: z.string(),
+    run: z.string().max(12),
     name: z.string(),
     first_surname: z.string(),
     second_surname: z.string(),
@@ -94,6 +94,9 @@ function FormNewStudent() {
     }
 
     const onSubmit: SubmitHandler<formType> = (data) => {
+        
+        if(!validateRut(String(data.run))) return toast.error(t('invalid_run'))
+        
         const { digits, verifier } = deconstructRut(String(data.run));
 
         addStudent({

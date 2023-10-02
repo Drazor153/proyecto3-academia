@@ -39,8 +39,11 @@
   "attendance_list": "Attendance List",
   "present": "Present",
   "absent": "Absent",
-  "level_select_input": "Seleccione el nivel",
-  "year_select_input": "Seleccione el año",
-  "semester_select_input": "Seleccione el semestre",
-  "topic_select_input": "Seleccione el tópico"
+  "level_select_input": "Select a level",
+  "year_select_input": "Select a year",
+  "semester_select_input": "Select a semester",
+  "topic_select_input": "Select a topic",
+  "topics": "Topics",
+  "options": "Options",
+  "grades": "Grades"
 }
