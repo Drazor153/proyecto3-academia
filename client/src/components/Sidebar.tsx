@@ -12,7 +12,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <div className={`sidebar ${isOpen ? "" : "closed"}`}>
+            <nav className={`sidebar ${isOpen ? "" : "closed"}`}>
                 <div className='top-section'>
                     <img className={`logo ${isOpen ? "" : "closed"}`} src="src\assets\logo.png" alt="logo" />
                     <div className='bars'>
@@ -34,7 +34,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                         </NavLink>
                     ))
                 }
-            </div>
+            </nav>
             {children}
         </>
     )

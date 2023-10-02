@@ -29,7 +29,11 @@
   "grammar": "Gramática",
   "speaking": "Habla",
   "listening": "Escucha",
-  "reading": "Lectura",
+  "writing": "Escritura",
   "&": "y",
-  "classes": "Clases"
+  "classes": "Clases",
+  "level_select_input": "Seleccione el nivel",
+  "year_select_input": "Seleccione el año",
+  "semester_select_input": "Seleccione el semestre",
+  "topic_select_input": "Seleccione el tópico"
 }

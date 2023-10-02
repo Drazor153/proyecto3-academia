@@ -1,18 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  rut: "",
+  run: 87654321,
   name: "User",
   role: "SUPERUSER",
 };
-
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     swaptype: (state) => {
-      state.role = state.role == "SUPERUSER" ? "STUDENT" : "SUPERUSER";
-    },
+      if (state.role === "SUPERUSER") {
+        state.role = "STUDENT";
+        state.run = 12345678;
+      } else {
+        state.role = "SUPERUSER";
+        state.run = 87654321;
+      }
+    }
   },
 });
 

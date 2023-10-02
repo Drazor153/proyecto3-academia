@@ -1,9 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Level } from "../../utils/types";
+import { Data, Level } from "../../utils/types";
 
-type Data = {
-  data: Level[];
-};
 
 export const levelsApi = createApi({
   reducerPath: "levelsAPI",
@@ -11,7 +8,7 @@ export const levelsApi = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
   }),
   endpoints: (builder) => ({
-    getLevels: builder.query<Data, null>({
+    getLevels: builder.query<Data<Level[]>, null>({
       query: () => "/levels",
     }),
   }),

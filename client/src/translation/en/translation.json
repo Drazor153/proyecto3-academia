@@ -26,7 +26,11 @@
   "grammar": "Grammar",
   "speaking": "Speaking",
   "listening": "Listening",
-  "reading": "Reading",
+  "writing": "Writing",
   "&": "&",
-  "classes": "Classes"
+  "classes": "Classes",
+  "level_select_input": "Select a level",
+  "year_select_input": "Select a year",
+  "semester_select_input": "Select a semester",
+  "topic_select_input": "Select a topic"
 }

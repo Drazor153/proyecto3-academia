@@ -1,19 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Student, Grade } from "../../utils/types";
-
-export type Data = {
-    data: Grade[];
-};
-
-export type StudentLevels = {
-    data: {
-        year: number;
-        semester: number;
-        levelName: string;
-        status: string;
-        levelCode: string;
-    }[]
-};
+import { Data, ExamStudent, Student, StudentLevels } from "../../utils/types";
 
 export const studentsApi = createApi({
     reducerPath: "studentsAPI",
@@ -25,9 +11,9 @@ export const studentsApi = createApi({
             query: () => "/students",
         }),
 
-        getStudentsGrades: builder.query<Data, { year: number; level: string; run: number }>({
-            query: ({ year, level, run }) =>
-                `/students/grades/${year}/${level}/${run}`,
+        getStudentsGrades: builder.query<Data<ExamStudent[]>, { year: number; semester: number; level: string; run: number }>({
+            query: ({ year, semester, level, run }) =>
+                `/students/grades/${year}/${semester}/${level}/${run}`,
         }),
 
         addStudent: builder.mutation({
@@ -38,7 +24,7 @@ export const studentsApi = createApi({
             }),
         }),
 
-        getStudentLevels: builder.query<StudentLevels, { run: number }>({
+        getStudentLevels: builder.query<Data<StudentLevels[]>, { run: number }>({
             query: ({ run }) => `/students/levels/${run}`,
         }),
     }),

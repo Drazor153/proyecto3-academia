@@ -14,3 +14,29 @@ $purple: #765298;
 $green: #007200;
 $lightgrey: #c7c7c7;
 $whitegrey: #eeeeee;
+
+
+$colors: (
+    'orange': #FF5418,
+    'lightorange': #F8B69E,
+    'whiteorange': #FFE7D6,
+    'white': #FFFFFF,
+    'blue': #3C5380,
+    'skyblue': #8AADE1,
+    'bluemarine': #2F4858,
+    'pink': #EF3164,
+    'purple': #765298,
+    'green': #007200,
+    'lightgrey': #c7c7c7,
+    'whitegrey': #eeeeee
+);
+
+@each $name, $color in $colors {
+    .bg-#{$name} {
+        background-color: $color;
+    }
+
+    .color-#{$name} {
+        color: $color;
+    }
+}
