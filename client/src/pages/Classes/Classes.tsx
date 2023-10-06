@@ -10,8 +10,6 @@ import * as Selector from './components/Selector';
 import ClassTable from "./components/ClassTable";
 import { ClassesStudent, ClassesTeacher, Data, StudentLevels, TeacherLevels } from "../../utils/types";
 
-
-
 const responseS: Data<StudentLevels[]> = {
   data: [
     {

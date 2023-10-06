@@ -5,8 +5,6 @@ import { studentsApi } from './services/studentsApi'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { levelsApi } from './services/levelsApi'
 import { teacherApi } from './services/teacherApi'
-import { levelsApi } from './services/levelsApi'
-import { teacherApi } from './services/teacherApi'
 
 export const store = configureStore({
     reducer: {
@@ -21,10 +19,6 @@ export const store = configureStore({
             studentsApi.middleware,
             levelsApi.middleware,
             teacherApi.middleware])
-        getDefaultMiddleware().concat([
-                studentsApi.middleware,
-                levelsApi.middleware,
-                teacherApi.middleware])
 })
 
 setupListeners(store.dispatch)
