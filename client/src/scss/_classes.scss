@@ -13,7 +13,7 @@
     }
 
     .class-list {
-        // position: relative;
+        position: initial;
         border-radius: 5px;
         width: 100%;
     }
@@ -37,12 +37,12 @@
     overflow: hidden;
     border-radius: 10px;
     transition: max-height .5s;
-
+    user-select: none;
 
 
 
     .flex,
-    .topic {
+    .lesson {
         box-sizing: border-box;
         display: flex;
         color: base.$whiteorange;
@@ -62,7 +62,7 @@
     }
 
     .dropdown,
-    .topic {
+    .lesson {
         border-radius: 0 10px 10px 0;
         margin: 0 10px 0 0;
         min-width: max-content;
@@ -109,9 +109,12 @@
 }
 
 .table-class-list {
+    user-select: none;
     color: white;
     border-collapse: collapse;
+    // font-size: 50%;
     font-size: 1.35rem;
+    width: 100%;
 
     * {
         box-sizing: border-box;
@@ -183,27 +186,35 @@
                 border-radius: 3px;
                 justify-content: center;
                 align-items: center;
+                // text-align: center;
                 height: 100%;
                 padding: 5px;
                 gap: 3px;
 
-                &[datatype="content"] {
+                &[datatype="content"],
+                &[datatype="teacher"] {
                     flex-direction: column;
                     align-items: start;
+                    user-select: text;
 
-                    p:before {
-                        content: "•";
-                        margin-right: 5px;
-                        height: 100dvh;
+                    &[datatype="content"] p {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        width: 100%;
+                        // max-width: 357.16px;
+
+                        &:before {
+                            content: "•";
+                            margin-right: 5px;
+                        }
                     }
 
-                    p[more-than-two]:before {
-                        display: none;
-                    }
-                }
-
-                &[datatype="teacher"] {
-                    justify-content: start;
+                    // @media screen and (min-width: 1366px) {
+                    //     &[datatype="content"] p {
+                    //         width: 357.16px;
+                    //     }
+                    // }
                 }
 
             }
@@ -223,30 +234,51 @@
     }
 
     &[user-role="SUPERUSER"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
+        .grid {
+            // grid-template-columns: minmax(20%, 10%) auto minmax(30%, 10%) minmax(20%, 10%);
+            grid-template-columns: 20% calc(35% - 6px) 25% 20%
+        }
+
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% auto 15% 10%
             }
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
-            }
-        }
+        // thead {
+        // tr:last-child {
+        // grid-template-columns: minmax(max-content, 10%) auto minmax(max-content, 10%) minmax(max-content, 10%);
+        //     }
+        // }
+
+        // tbody {
+        //     tr {
+        //         grid-template-columns: minmax(max-content, 10%) auto minmax(max-content, 10%) minmax(max-content, 10%);
+        //     }
+        // }
     }
 
     &[user-role="STUDENT"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
-
-            }
+        .grid {
+            grid-template-columns: 15% auto 25% 20%
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
+        // thead {
+        //     tr:last-child {
+        //         grid-template-columns: 10% auto 30% 10%;
+
+        //     }
+        // }
+
+        // tbody {
+        //     tr {
+        //         grid-template-columns: 10% auto 30% 10%;
+        //     }
+        // }
+
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% auto 30% 10%
             }
         }
     }
@@ -302,6 +334,7 @@
         ;
         grid-template-columns: .5fr 1.25fr;
         font-size: 1.5rem;
+        height: 80%;
         padding: 10px;
         gap: 10px;
 
@@ -395,11 +428,8 @@
 
                     td {
                         background-color: base.$bluemarine;
-                        // background-color: base.$pink;
                     }
 
-
-                    // border-radius: 5px;
                     &:first-child {
                         height: 40px;
 

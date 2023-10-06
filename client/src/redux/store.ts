@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
+import classesReducer from './features/classesSlice'
 import { studentsApi } from './services/studentsApi'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { levelsApi } from './services/levelsApi'
@@ -7,6 +8,7 @@ import { levelsApi } from './services/levelsApi'
 export const store = configureStore({
     reducer: {
         userReducer,
+        classesReducer,
         [studentsApi.reducerPath]: studentsApi.reducer,
         [levelsApi.reducerPath]: levelsApi.reducer
     },
