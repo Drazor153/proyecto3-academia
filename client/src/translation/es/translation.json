@@ -29,9 +29,8 @@
   "grammar": "Gramática",
   "speaking": "Habla",
   "listening": "Escucha",
-  "reading": "Lectura",
-  "&": "y",
   "writing": "Escritura",
+  "&": "y",
   "classes": "Clases",
   "class_list": "Lista de clases",
   "week": "Semana",
@@ -42,5 +41,12 @@
   "actions": "Acciones",
   "attendance_list": "Lista de asistencia",
   "present": "Presente",
-  "absent": "Ausente"
+  "absent": "Ausente",
+  "level_select_input": "Seleccione el nivel",
+  "year_select_input": "Seleccione el año",
+  "semester_select_input": "Seleccione el semestre",
+  "topic_select_input": "Seleccione el tópico",
+  "topics": "Tópicos",
+  "options": "Opciones",
+  "grades": "Notas"
 }

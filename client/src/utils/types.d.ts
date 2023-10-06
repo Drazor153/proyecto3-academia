@@ -81,6 +81,7 @@ type Class = {
   lesson: string;
   year?: number;
   semester?: number;
+  level?: string;
   // topicName: string;
   // levelName: string;
 }

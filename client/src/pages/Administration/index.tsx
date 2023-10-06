@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
-import FormNewStudent from '../components/FormNewStudent';
+import FormNewStudent from './components/FormNewStudent';
 import { Dispatch, SetStateAction, useState } from "react";
 
 type Menus = {
@@ -54,7 +54,7 @@ function Administration({ shortcut }: { shortcut: shortcut }) {
             <main className='admin-layout'>
                 <section className='menu-selector'>
                     <h2><Trans>menu</Trans></h2>
-                    <button onClick={() => setMenu('Students')} disabled={menu == 'Students' ? true : false}><Trans>students</Trans></button>
+                    <button onClick={() => setMenu('Students')} className={menu == 'Students' ? 'selected' : ''}><Trans>students</Trans></button>
                 </section>
                 {renderSwitch(menu, content, setContent)}
                 {Content(menu, content)}

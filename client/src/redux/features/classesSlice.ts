@@ -12,13 +12,18 @@ export const classesSlice = createSlice({
         setClasses: (prevState, action) => {
             prevState.splice(0, prevState.length);
             prevState.push(...action.payload);
-            // return action.payload;
+        },
+        updateClasses: (prevState, action) => {
+            prevState[action.payload.index] = action.payload.class;
+        },
+        pushClasses: (prevState, action) => {
+            prevState.push(action.payload);
+        },
+        deleteClasses: (prevState, action) => {
+            prevState.splice(action.payload, 1);
         }
     }
 });
 
-classesSlice.actions.setClasses([]);
-// console.log(classesSlice.)
-
 export default classesSlice.reducer;
-export const { setClasses } = classesSlice.actions;
+export const { setClasses, updateClasses, pushClasses, deleteClasses } = classesSlice.actions;

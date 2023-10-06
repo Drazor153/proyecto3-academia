@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { swaptype } from '../redux/features/userSlice'
 import { BiSolidUserRectangle } from 'react-icons/bi'
+import { setClasses } from '../redux/features/classesSlice'
 
 
 function UserInfo() {

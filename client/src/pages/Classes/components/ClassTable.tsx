@@ -4,23 +4,36 @@ import { t } from "i18next";
 import { BiSolidPlusSquare } from "react-icons/bi";
 import { ImEyeMinus, ImEyePlus } from "react-icons/im";
 import { IoIosClose } from "react-icons/io";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { deleteClasses, pushClasses, updateClasses } from "../../../redux/features/classesSlice";
+import { MdOutlineDeleteForever } from "react-icons/md";
+
+type Select = { level: string, year: number, semester: number, lesson: string };
 
 interface ClassTableProps {
-    classes: ClassesStudent[] | ClassesTeacher[],
     role: string;
+    select: Select;
 }
 
-function ClassTable({ classes, role }: ClassTableProps) {
+function ClassTable({ role, select }: ClassTableProps) {
+    const classes = useAppSelector(state => state.classesReducer) as ClassesStudent[] | ClassesTeacher[];
+    const dispatch = useAppDispatch();
+
     const [open, setOpen] = useState<boolean>(false)
-    const [watchWeek, setWatchWeek] = useState<number>(0)
+    const [weekSelect, setWeekSelect] = useState<number>(0)
 
     const handlerClickEye = ({ open, week }: { open: boolean, week: number }) => {
         if (open) {
-            setWatchWeek(week)
+            setWeekSelect(week)
         } else {
-            setWatchWeek(0)
+            setWeekSelect(0)
         }
         setOpen(open)
+    }
+
+    const handlerClickDelete = ({ index }: { index: number; }) => {
+        dispatch(deleteClasses(index));
+        //TODO deleteQueryDB
     }
 
     return (
@@ -47,7 +60,6 @@ function ClassTable({ classes, role }: ClassTableProps) {
                         {role === 'STUDENT' &&
                             <td>{t('teacher')}</td>
                         }
-                        {/* <td>{t('lesson')}</td> */}
                         <td>{t('attendance')}</td>
                         {role === "SUPERUSER" &&
                             <td>{t('actions')}</td>
@@ -56,56 +68,59 @@ function ClassTable({ classes, role }: ClassTableProps) {
                 </thead>
                 <tbody>
                     {
-                        role === 'STUDENT' && (classes as ClassesStudent[]).map(({ attendance, contents, lesson, teacher, week }) => {
-                            const contentsList = contents.split(',')
-                            return (
-                                <tr key={week} className="grid">
-                                    <td>{week}</td>
-                                    <td datatype="content">{
-                                        contentsList.map((content) => (
-                                            <p key={content.trim()}>
-                                                {content.trim()}
-                                            </p>
-                                        ))}</td>
-                                    <td datatype="teacher">{teacher}</td>
-                                    {/* <td>{lesson}</td> */}
-                                    <td>
-                                        {attendance}
-                                    </td>
-                                </tr>
-                            );
+                        role === 'STUDENT' && (classes as ClassesStudent[]).map(({ attendance, contents, teacher, week, lesson: lesson }) => {
+                            if (select.lesson.split(' ')[1] === lesson) {
+                                const contentsList = contents.split(',')
+                                return (
+                                    <tr key={week} className="grid">
+                                        <td>{week}</td>
+                                        <td datatype="content">{
+                                            contentsList.map((content) => (
+                                                <p key={content.trim()}>
+                                                    {content.trim()}
+                                                </p>
+                                            ))}</td>
+                                        <td datatype="teacher">{teacher}</td>
+                                        <td>
+                                            {attendance}
+                                        </td>
+                                    </tr>
+                                );
+                            }
                         }
                         )
                     }
                     {
-                        role === 'SUPERUSER' && (classes as ClassesTeacher[]).map(({ absent, attendees, contents, lesson, week }) => {
-                            const contentsList = contents.split(',')
-                            return (
-                                <tr key={week} className="grid">
-                                    <td>{week}</td>
-                                    <td datatype="content">
-                                        {contentsList.map((content) => (
-                                            <p key={content.trim()}>
-                                                {content.trim()}
-                                            </p>
-                                        ))}
-                                    </td>
-                                    {/* <td>{lesson}</td> */}
-                                    <td>
-                                        {`${attendees.length.toString().padStart(2, "0")} / ${absent.length + attendees.length} (${Math.round(attendees.length / (absent.length + attendees.length) * 100)}%)`}
-                                    </td>
-                                    <td>
-                                        {(!open || watchWeek !== week) && (
-                                            <>
-                                                <ImEyePlus onClick={() => handlerClickEye({ open: true, week: week })} className="imEyePlus" />
-                                            </>
-                                        )}
-                                        {
-                                            open && watchWeek === week && (<ImEyeMinus onClick={() => handlerClickEye({ open: false, week: week })} className="imEyeMinus" />)
-                                        }
-                                    </td>
-                                </tr>
-                            );
+                        role === 'SUPERUSER' && (classes as ClassesTeacher[]).map(({ absent, attendees, contents, week, lesson: lesson }, index) => {
+                            if (select.lesson.split(' ')[1] === lesson) {
+                                const contentsList = contents.split(',')
+                                return (
+                                    <tr key={week} className="grid">
+                                        <td>{week}</td>
+                                        <td datatype="content">
+                                            {contentsList.map((content) => (
+                                                <p key={content.trim()}>
+                                                    {content.trim()}
+                                                </p>
+                                            ))}
+                                        </td>
+                                        <td>
+                                            {`${attendees.length.toString().padStart(2, "0")} / ${absent.length + attendees.length} (${Math.round(attendees.length / (absent.length + attendees.length) * 100)}%)`}
+                                        </td>
+                                        <td>
+                                            {(!open || weekSelect !== week) && (
+                                                <>
+                                                    <ImEyePlus onClick={() => handlerClickEye({ open: true, week: week })} className="imEyePlus" />
+                                                </>
+                                            )}
+                                            {
+                                                open && weekSelect === week && (<ImEyeMinus onClick={() => handlerClickEye({ open: false, week: week })} className="imEyeMinus" />)
+                                            }
+                                            <MdOutlineDeleteForever onClick={() => handlerClickDelete({ index: index })} className="mdOutlineDeleteForever" />
+                                        </td>
+                                    </tr>
+                                );
+                            }
                         }
                         )
                     }
@@ -115,9 +130,9 @@ function ClassTable({ classes, role }: ClassTableProps) {
                 role === 'SUPERUSER' &&
                 <ModalClassList
                     open={open}
-                    watchWeek={watchWeek}
+                    weekSelect={weekSelect}
                     handlerClickEye={handlerClickEye}
-                    classes={classes as ClassesTeacher[]}
+                    select={select}
                 />
             }
         </>
@@ -126,68 +141,95 @@ function ClassTable({ classes, role }: ClassTableProps) {
 
 type ModalClassListProps = {
     open: boolean,
-    watchWeek: number,
+    weekSelect: number,
     handlerClickEye: ({ open, week }: { open: boolean, week: number }) => void,
-    classes: ClassesTeacher[],
+    select: Select,
 }
 
-function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClassListProps) {
+type AttendanceList = { student: string, attendance: string }[];
 
-    const [attendanceList, setAttendanceList] = useState<{ student: string, attendance: string }[]>([])
-    const [contents, setContents] = useState<string>("")
-    const [lesson, setGroup] = useState<string>("")
+type DataType = {
+    attendanceList: AttendanceList,
+    contents: string,
+    lesson: string,
+}
+
+function ModalClassList({ open, weekSelect, handlerClickEye, select }: ModalClassListProps) {
+
+    const classes = useAppSelector(state => state.classesReducer) as ClassesTeacher[];
+    const dispatch = useAppDispatch();
+
+    const [data, setData] = useState<DataType>({
+        attendanceList: [],
+        contents: "",
+        lesson: "",
+    });
 
     const handlerChangeAttendance = (student: string, attendance: string) => {
-        setAttendanceList((prev) => {
-            const _attendanceList = [...prev];
-            const index = _attendanceList.findIndex(({ student: s }) => s === student);
-            _attendanceList[index].attendance = attendance;
-            return _attendanceList;
+        setData((prev) => {
+            const attendanceList = [...prev.attendanceList];
+            const index = attendanceList.findIndex(({ student: s }) => s === student);
+            attendanceList[index].attendance = attendance;
+            return {
+                ...prev,
+                attendanceList: attendanceList,
+            };
         })
     }
 
     const handlerClickConfirm = () => {
 
-
-        const _index = classes.findIndex(({ week }) => week === watchWeek);
-        if (_index !== -1) {
-            classes[_index] = {
-                ...classes[_index],
-                contents,
-                lesson,
-                attendees: attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
-                absent: attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
-            };
+        const index = classes.findIndex(({ week, year, semester, lesson, level }) => {
+            const isLevelSelect = level === select.level;
+            const isYearSelect = year === select.year;
+            const isSemesterSelect = semester === select.semester;
+            const isLessonSelect = lesson === select.lesson.split(' ')[1];
+            const isWeekSelect = week === weekSelect;
+            return isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect;
+        });
+        if (index !== -1) {
+            dispatch(updateClasses({
+                index: index,
+                class: {
+                    ...classes[index],
+                    contents: data.contents,
+                    lesson: data.lesson,
+                    attendees: data.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
+                    absent: data.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
+                }
+            }));
         } else {
-            classes.push({
-                week: watchWeek,
-                contents,
-                lesson,
-                attendees: attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
-                absent: attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
-            });
-            // classesS.push({
-            //     week: watchWeek,
-            //     contents,
-            //     teacher: "Teacher ...",
-            //     lesson,
-            //     attendance: "Present",
-            // });
+            dispatch(pushClasses({
+                week: weekSelect,
+                contents: data.contents,
+                lesson: data.lesson,
+                attendees: data.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
+                absent: data.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
+            }));
         }
 
+        //TODO updateQueryDB
 
-        setAttendanceList([]);
-        setContents("");
-        setGroup("");
+        setData({
+            attendanceList: [],
+            contents: "",
+            lesson: "",
+        });
+
         handlerClickEye({ open: false, week: 0 });
 
     }
 
     useEffect(() => {
-        const _attendanceList: { student: string, attendance: string }[] = [];
+        const _attendanceList: AttendanceList = [];
         classes.map(
-            ({ week, attendees, absent }) => {
-                if (week === watchWeek) {
+            ({ week, attendees, absent, year, semester, lesson, level }) => {
+                const isLevelSelect = level === select.level;
+                const isYearSelect = year === select.year;
+                const isSemesterSelect = semester === select.semester;
+                const isLessonSelect = lesson === select.lesson.split(' ')[1];
+                const isWeekSelect = week === weekSelect;
+                if (isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect) {
                     attendees.map((student) => {
                         _attendanceList.push({ student, attendance: "Present" });
                     });
@@ -197,9 +239,11 @@ function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClas
                 }
             }
         );
+
         if (_attendanceList.length === 0) {
             Array.from({ length: 15 }, (_, i) => `Student ${i + 1}`).map((student) => { _attendanceList.push({ student, attendance: "Absent" }) });
         }
+
         _attendanceList.sort((a, b) => {
             if (a.student < b.student) {
                 return -1;
@@ -209,36 +253,45 @@ function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClas
             }
             return 0;
         });
-        setAttendanceList(_attendanceList);
 
-        const _contents = classes.find(({ week }) => week === watchWeek)?.contents ?? "";
-        setContents(_contents);
 
-        const _group = classes.find(({ week }) => week === watchWeek)?.lesson ?? "A";
-        setGroup(_group);
+        const _contents = classes.find(({ week }) => week === week)?.contents ?? "";
 
-    }, [classes, watchWeek]);
+        const _lesson = classes.find(({ week }) => week === week)?.lesson ?? "A";
+
+        setData({
+            attendanceList: _attendanceList,
+            contents: _contents,
+            lesson: _lesson,
+        });
+
+    }, [classes, weekSelect]);
 
     return (<>
         <div className={`background ${open ? 'open' : ''}`} />
         <div className={`attendance ${open ? 'open' : ''}`}>
-            <h2>{t('week')} {watchWeek}</h2>
+            <h2>{t('week')} {weekSelect}</h2>
             <IoIosClose className="ioClose" onClick={() => {
                 handlerClickEye({ open: false, week: 0 });
-                setAttendanceList([]);
+                setData((prev) => {
+                    return {
+                        ...prev,
+                        attendanceList: [],
+                    }
+                });
             }} />
             <div className="body">
                 <div className="content">
                     <p>{t('content')}</p>
                     <input type={"text"} name="content" id="content"
-                        value={contents}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setContents(e.target.value)}
+                        value={data.contents}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setData((prev) => { return { ...prev, content: e.target.value } })}
                     />
                 </div>
                 <div className="lesson">
                     <p>{t('lesson')}</p>
-                    <select name="lesson" id="lesson" value={lesson}
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setGroup(e.target.value)}
+                    <select name="lesson" id="lesson" value={data.lesson}
+                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setData((prev) => { return { ...prev, lesson: e.target.value } })}
                     >
                         <option value="A">A</option>
                         <option value="B">B</option>
@@ -263,7 +316,7 @@ function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClas
                     </thead>
                     <tbody>
                         {
-                            attendanceList.map(({ student, attendance }) => {
+                            data.attendanceList.map(({ student, attendance }) => {
                                 return (
                                     <tr key={`${student}-${attendance}`} className="student">
                                         <td>
@@ -290,9 +343,11 @@ function ModalClassList({ open, watchWeek, handlerClickEye, classes }: ModalClas
                 >Confirmar</button>
                 <button className="cancel"
                     onClick={() => {
-                        setAttendanceList([]);
-                        setContents("");
-                        setGroup("");
+                        setData({
+                            attendanceList: [],
+                            contents: "",
+                            lesson: "",
+                        });
                         handlerClickEye({ open: false, week: 0 });
                     }}
                 >Cancelar</button>

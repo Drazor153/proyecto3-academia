@@ -1,16 +1,15 @@
+import { useEffect, useState } from "react";
+
 import { t } from "i18next";
-import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAppSelector } from "../../redux/hooks";
-
-import { ImEyeMinus, ImEyePlus } from "react-icons/im";
-import { IoIosClose } from "react-icons/io";
-import { BiSolidPlusSquare } from "react-icons/bi";
-import { ClassesStudent, ClassesTeacher, Data, StudentLevels, TeacherLevels } from "../../utils/types";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setClasses } from "../../redux/features/classesSlice";
 
 import * as Selector from './components/Selector';
 import ClassTable from "./components/ClassTable";
+import { ClassesStudent, ClassesTeacher, Data, StudentLevels, TeacherLevels } from "../../utils/types";
+
 
 
 const responseS: Data<StudentLevels[]> = {
@@ -99,14 +98,14 @@ const classesT: ClassesTeacher[] = [
     absent: ["student 3", "student 4", "student 5", "student 13", "student 14", "student 15"],
   },
   {
-    week: 2,
+    week: 1,
     contents: "Present Simple",
     lesson: "B",
     attendees: ["student 1", "student 2", "student 3", "student 4", "student 5", "student 6", "student 7", "student 8", "student 9", "student 10", "student 11", "student 12"],
     absent: ["student 13", "student 14", "student 15"],
   },
   {
-    week: 3,
+    week: 1,
     contents: "Present Simple",
     lesson: "C",
     attendees: ["student 7", "student 8", "student 9", "student 10", "student 11", "student 12"],
@@ -147,6 +146,13 @@ const classesT: ClassesTeacher[] = [
     attendees: ["student 1", "student 2", "student 3", "student 4", "student 5", "student 6", "student 7", "student 8", "student 9", "student 10", "student 11", "student 12"],
     absent: ["student 13", "student 14", "student 15"],
   },
+  {
+    week: 9,
+    contents: "Present Simple",
+    lesson: "C",
+    attendees: ["student 7", "student 8", "student 9", "student 10", "student 11", "student 12"],
+    absent: ["student 1", "student 2", "student 3", "student 4", "student 5", "student 6", "student 13", "student 14", "student 15"],
+  }
 ]
 
 const classesS: ClassesStudent[] = [
@@ -228,6 +234,8 @@ function Classes() {
 
   const { role } = useAppSelector(state => state.userReducer)
 
+  const dispatch = useAppDispatch()
+
   const [select, setSelect] = useState<Select>({
     level: "",
     year: 0,
@@ -305,6 +313,8 @@ function Classes() {
         }
       });
 
+      dispatch(setClasses(classesS));
+
     } else {
       responseT.data.map(({ levelName, year, semester, lessons }) => {
         if (!levels[levelName]) {
@@ -321,6 +331,9 @@ function Classes() {
           };
         }
       });
+
+      dispatch(setClasses(classesT));
+
     }
 
     setLevels(levels);
@@ -393,14 +406,14 @@ function Classes() {
         <section className="class-list">
           {select.lesson !== "" && (
             <ClassTable
-              classes={role === 'STUDENT' ? classesS : classesT}
               role={role}
+              select={select}
             />
           )}
           {
             select.lesson === "" && (
               <div className="empty-list">
-                <p style={{ textAlign: "center" }}>Seleccione un tópico</p>
+                <p style={{ textAlign: "center" }}>Seleccione un {t('lesson')}</p>
               </div>
             )
           }

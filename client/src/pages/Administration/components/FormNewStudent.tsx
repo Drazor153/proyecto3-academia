@@ -3,17 +3,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ZodType, z } from 'zod';
 import { Trans, useTranslation } from 'react-i18next';
 import { t } from 'i18next';
-import { useAddStudentMutation } from '../redux/services/studentsApi';
+import { useAddStudentMutation } from '../../../redux/services/studentsApi';
 import { useState } from 'react';
-import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
+import { RutFormat, deconstructRut, formatRut, validateRut } from '@fdograph/rut-utilities';
 import { ToastContainer, toast } from 'react-toastify';
-import FloatLabelInput from './FloatLabelInput';
-import { useGetLevelsQuery } from '../redux/services/levelsApi';
+import FloatLabelInput from '../../../components/FloatLabelInput';
+import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons'
-import { Level, Student } from '../utils/types';
+import { Level, Student } from '../../../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
-    run: z.string(),
+    run: z.string().max(12),
     name: z.string(),
     first_surname: z.string(),
     second_surname: z.string(),
@@ -32,21 +32,6 @@ type Response = {
 
 type ServerResponse = { status: number, data: Response, message: string }
 
-function handleSuccessMsg(payload: ServerResponse) {
-    toast.success(payload.message)
-
-}
-
-function handleErrorMsg(error: ServerResponse) {
-    switch (error.data.errorType) {
-        case 'invalidFields':
-            toast.error(t(error.data.errorMsg[0].msg));
-            break;
-        case 'msg':
-            toast.error(t(error.data.errorMsg));
-            break;
-    }
-}
 
 function LevelsSelect(register: UseFormRegister<Student>) {
     const { data: response, isLoading, isFetching, isError } = useGetLevelsQuery(null);
@@ -68,7 +53,7 @@ function LevelsSelect(register: UseFormRegister<Student>) {
     return (
         <select defaultValue='0' {...register('level')}>
             {levels.map((level: Level) => (
-                <option key={level.code} value={level.code}>{level.name} {level.code}</option>
+                <option key={level.levelCode} value={level.levelCode}>{level.levelName} {level.levelCode}</option>
             ))}
         </select>
     );
@@ -86,11 +71,32 @@ function FormNewStudent() {
 
     const [addStudent] = useAddStudentMutation()
 
-    const { register, handleSubmit } = useForm<formType>({
+    const { register, handleSubmit, reset } = useForm<formType>({
         resolver: zodResolver(formSchema)
     });
 
+    
+    const handleSuccessMsg = (payload: ServerResponse) => {
+        toast.success(payload.message)
+        setRun('')
+        reset()
+    }
+
+    const handleErrorMsg = (error: ServerResponse) => {
+        switch (error.data.errorType) {
+            case 'invalidFields':
+                toast.error(t(error.data.errorMsg[0].msg));
+                break;
+            case 'msg':
+                toast.error(t(error.data.errorMsg));
+                break;
+        }
+    }
+
     const onSubmit: SubmitHandler<formType> = (data) => {
+        
+        if(!validateRut(String(data.run))) return toast.error(t('invalid_run'))
+        
         const { digits, verifier } = deconstructRut(String(data.run));
 
         addStudent({
