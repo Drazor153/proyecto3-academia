@@ -1,23 +1,20 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
 import { validationResult } from 'express-validator';
+import { transformarDatos } from '../utils/functions';
 
 export const getTeacherLevels = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { run } = req.params;
-  const teacher = await prisma.teaches.findMany({
+  const query = await prisma.teaches.findMany({
     where: { teacherRun: Number(run) },
     include: { level: true }
   });
-
-  const teacherLevels = teacher.map((val) => ({
-    semester: val.semester,
-    year: val.year,
-    levelName: val.level.name,
-    levelCode: val.levelCode
-  }));
+  
+  const teacherLevels = transformarDatos(query)
+  
 
   res.status(200).json({ data: teacherLevels });
 };

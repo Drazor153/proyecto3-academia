@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import * as jwt from 'jsonwebtoken'
 import { LoginForm } from '../types/auth';
+import { sign } from 'jsonwebtoken';
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const {run, dv}: LoginForm = req.body;
@@ -22,7 +22,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET!)
+  const accessToken = sign(user, process.env.ACCESS_TOKEN_SECRET!)
 
   res.json({user, accessToken})
 };
