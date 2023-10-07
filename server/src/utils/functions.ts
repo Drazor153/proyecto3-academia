@@ -1,46 +1,57 @@
 import { OriginalData, TransformedData } from '../types/teachers';
 
 export const transformarDatos = (input: OriginalData[]): TransformedData[] => {
-  const datosTransformados: Map<string, TransformedData> = new Map();
+  const dataArray: TransformedData[] = [];
 
-  input.forEach((original) => {
-    const {
-      levelCode,
-      level: { name: levelName },
-      year,
-      semester,
-      lesson
-    } = original;
-
-    if (!datosTransformados.has(levelCode)) {
-      datosTransformados.set(levelCode, { levelName, levelCode, years: [] });
+  input.forEach((val) => {
+    const yearExists = dataArray.find((year) => year.year === val.year);
+    if (!yearExists) {
+      dataArray.push({
+        year: val.year,
+        semesters: [
+          {
+            semester: val.semester,
+            levels: [
+              {
+                levelName: val.level.name,
+                levelCode: val.level.code,
+                lessons: [val.lesson]
+              }
+            ]
+          }
+        ]
+      });
+      return;
     }
-
-    const nivel = datosTransformados.get(levelCode)!;
-
-    // const añoExistente = nivel.years.find((item) => item.year === year);
-
-    // if (añoExistente) {
-    //   añoExistente.semesters.push({semester});
-    // } else {
-    //   nivel.years.push({ year, semesters: [semester] });
-    // }
-    let añoExistente = nivel.years.find(item => item.year === year);
-
-    if (!añoExistente) {
-      añoExistente = { year, semesters: [] };
-      nivel.years.push(añoExistente);
+    const semesterExists = yearExists.semesters.find(
+      (semester) => semester.semester === val.semester
+    );
+    if (!semesterExists) {
+      yearExists.semesters.push({
+        semester: val.semester,
+        levels: [
+          {
+            levelName: val.level.name,
+            levelCode: val.level.code,
+            lessons: [val.lesson]
+          }
+        ]
+      });
+      return;
     }
-
-    let semestreExistente = añoExistente.semesters.find(item => item.semester === semester);
-
-    if (!semestreExistente) {
-      semestreExistente = { semester, lessons: [] };
-      añoExistente.semesters.push(semestreExistente);
+    const levelExists = semesterExists.levels.find(
+      (level) => level.levelCode === val.level.code
+    );
+    if (!levelExists) {
+      semesterExists.levels.push({
+        levelName: val.level.name,
+        levelCode: val.level.code,
+        lessons: [val.lesson]
+      });
+      return;
     }
-
-    semestreExistente.lessons.push(lesson);
+    levelExists.lessons.push(val.lesson);
   });
 
-  return [...datosTransformados.values()];
+  return dataArray;
 };

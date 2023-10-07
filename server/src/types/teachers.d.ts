@@ -12,13 +12,13 @@ export type OriginalData = {
 };
 
 export type TransformedData = {
-  levelName: string;
-  levelCode: string;
-  years: {
-    year: number;
-    semesters: {
-      semester: number;
-      lessons: string[]
+  year: number;
+  semesters: {
+    semester: number;
+    levels: {
+      levelName: string;
+      levelCode: string;
+      lessons: string[];
     }[];
   }[];
 };
