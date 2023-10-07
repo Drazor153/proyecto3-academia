@@ -1,20 +1,21 @@
+import { QuizData } from "../pages/Grades/quizesReducer";
+
 export type Data<T> = {
   data: T;
 }
 export type Level = {
   levelCode: string
   levelName: string
+  lessons: string[]
+  year: number
+  semester: number
 }
 
 export type StudentLevels = Level & {
-  year: number
-  semester: number
   status: string
 }
 
 export type TeacherLevels = Level & {
-  year: number
-  semester: number
 }
 
 
@@ -68,3 +69,30 @@ export type Quiz = {
   grade: number,
   dv: string
 }
+
+export type GradesMutator = {
+  quizId: number;
+  grades: QuizData[];
+}
+
+type Class = {
+  week: number;
+  contents: string;
+  lesson: string;
+  year?: number;
+  semester?: number;
+  level?: string;
+  // topicName: string;
+  // levelName: string;
+}
+
+export type ClassesStudent = {
+  teacher: string;
+  attendance: string;
+} & Class;
+
+export type ClassesTeacher = {
+  attendees: string[];
+  absent: string[];
+} & Class;
+

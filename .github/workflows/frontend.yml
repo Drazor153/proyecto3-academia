@@ -1,0 +1,28 @@
+name: Frontend Testing
+
+on:
+  push:
+    branches:
+      - frontend
+
+jobs:
+  frontend-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: frontend
+      - name: Set Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18
+      - name: Install dependencies
+        run: |
+          cd ./client
+          yarn install --immutable --immutable-cache --check-cache #yarn install
+      - name: Test
+        run: |
+          cd ./client
+          yarn lint

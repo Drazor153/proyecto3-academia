@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  run            Int      @id
+  dv             String   @db.Char(1)
+  name           String
+  first_surname  String
+  second_surname String
+  enrols         enrols[]
+  gives          gives[]
+}
+
+model Level {
+  code    String    @id @db.Char(2)
+  name    String
+  enrols  enrols[]
+  Quiz    Quiz[]
+  teaches teaches[]
+}
+
+model enrols {
+  level      Level   @relation(fields: [levelCode], references: [code])
+  levelCode  String  @db.Char(2)
+  student    Student @relation(fields: [studentRun], references: [run])
+  studentRun Int
+  status     String
+  year       Int
+  semester   Int
+
+  @@id([levelCode, studentRun, year, semester])
+}
+
+model Topic {
+  id   Int    @id @default(autoincrement())
+  name String
+  Quiz Quiz[]
+}
+
+model Quiz {
+  id        Int     @id @default(autoincrement())
+  number    Int
+  year      Int
+  semester  Int
+  topic     Topic   @relation(fields: [topicId], references: [id])
+  topicId   Int
+  level     Level   @relation(fields: [levelCode], references: [code])
+  levelCode String  @db.Char(2)
+  gives     gives[]
+}
+
+model gives {
+  quiz       Quiz    @relation(fields: [quizId], references: [id])
+  quizId     Int
+  student    Student @relation(fields: [studentRun], references: [run])
+  studentRun Int
+  grade      Float
+
+  @@id([quizId, studentRun])
+}
+
+model Teacher {
+  run           Int       @id
+  dv            String    @db.Char(1)
+  name          String
+  first_surname String
+  teaches       teaches[]
+}
+
+model teaches {
+  teacher    Teacher @relation(fields: [teacherRun], references: [run])
+  teacherRun Int
+  level      Level   @relation(fields: [levelCode], references: [code])
+  levelCode  String  @db.Char(2)
+  id         Int     @id @default(autoincrement())
+  year       Int
+  semester   Int
+}

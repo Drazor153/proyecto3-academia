@@ -13,7 +13,7 @@
     }
 
     .class-list {
-        // position: relative;
+        position: initial;
         border-radius: 5px;
         width: 100%;
     }
@@ -37,12 +37,12 @@
     overflow: hidden;
     border-radius: 10px;
     transition: max-height .5s;
-
+    user-select: none;
 
 
 
     .flex,
-    .topic {
+    .lesson {
         box-sizing: border-box;
         display: flex;
         color: base.$whiteorange;
@@ -62,7 +62,7 @@
     }
 
     .dropdown,
-    .topic {
+    .lesson {
         border-radius: 0 10px 10px 0;
         margin: 0 10px 0 0;
         min-width: max-content;
@@ -103,15 +103,27 @@
 
 .imEyePlus,
 .imEyeMinus,
-.hiOutlinePencilSquare {
+.hiOutlinePencilSquare,
+.mdOutlineDeleteForever {
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+}
+
+.imEyePlus:hover {
+    color: base.$orange;
+}
+
+.mdOutlineDeleteForever:hover {
+    color: base.$pink;
 }
 
 .table-class-list {
+    user-select: none;
     color: white;
     border-collapse: collapse;
+    // font-size: 50%;
     font-size: 1.35rem;
+    width: 100%;
 
     * {
         box-sizing: border-box;
@@ -170,6 +182,11 @@
     }
 
     tbody {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 72.4vh;
 
         tr {
             margin-top: 2px;
@@ -183,27 +200,27 @@
                 border-radius: 3px;
                 justify-content: center;
                 align-items: center;
+                // text-align: center;
                 height: 100%;
                 padding: 5px;
                 gap: 3px;
 
-                &[datatype="content"] {
+                &[datatype="content"],
+                &[datatype="teacher"] {
                     flex-direction: column;
                     align-items: start;
+                    user-select: text;
 
-                    p:before {
-                        content: "•";
-                        margin-right: 5px;
-                        height: 100dvh;
+                    &[datatype="content"] p {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+
+                        &:before {
+                            content: "•";
+                            margin-right: 5px;
+                        }
                     }
-
-                    p[more-than-two]:before {
-                        display: none;
-                    }
-                }
-
-                &[datatype="teacher"] {
-                    justify-content: start;
                 }
 
             }
@@ -223,30 +240,25 @@
     }
 
     &[user-role="SUPERUSER"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
-            }
+        .grid {
+            grid-template-columns: 20% calc(35% - 6px) 25% 20%
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% auto 15% 10%
             }
         }
     }
 
     &[user-role="STUDENT"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
-
-            }
+        .grid {
+            grid-template-columns: 20% calc(40% - 3px) calc(30% - 3px) 20%
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% calc(40% - 6px) 30% 20%
             }
         }
     }
@@ -297,11 +309,12 @@
         display: grid;
         grid-template-areas:
             "content content"
-            "group teacher"
+            "lesson teacher"
             "attendance attendance"
         ;
         grid-template-columns: .5fr 1.25fr;
         font-size: 1.5rem;
+        height: 80%;
         padding: 10px;
         gap: 10px;
 
@@ -335,10 +348,10 @@
             }
         }
 
-        .group {
+        .lesson {
             display: grid;
             grid-template-columns: 53% auto;
-            grid-area: group;
+            grid-area: lesson;
             align-items: center;
 
             select {
@@ -395,11 +408,8 @@
 
                     td {
                         background-color: base.$bluemarine;
-                        // background-color: base.$pink;
                     }
 
-
-                    // border-radius: 5px;
                     &:first-child {
                         height: 40px;
 

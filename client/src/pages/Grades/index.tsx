@@ -11,19 +11,19 @@ import { t } from "i18next"
 
 const topics = [
     {
-        name: "Writing",
+        name: "writing",
         icon: <FaPen />
     },
     {
-        name: "Grammar",
+        name: "grammar",
         icon: <FaSpellCheck />
     },
     {
-        name: "Listening",
+        name: "listening",
         icon: <FaEarListen />
     },
     {
-        name: "Speaking",
+        name: "speaking",
         icon: <FaCommentDots />
     }
 ]
@@ -49,7 +49,7 @@ function Grades() {
 
     const examsByRole = () => {
         if (role == 'STUDENT') {
-            if (!state.topic) return null
+            if (!state.topic || !state.year || !state.semester || !state.level ) return null
 
             return <ExamsTableStudent 
                 year={parseInt(state.year)} 
@@ -69,10 +69,10 @@ function Grades() {
 
     return (
         <>
-            <h1>Grades</h1>
+            <h1>{t('grades')}</h1>
             <main className='grades-layout'>
                 <section className="topics-selector">
-                    <h2>Topics</h2>
+                    <h2>{t('topics')}</h2>
                     <div className="buttons-container">
                         {topics.map((topic, index) => (
                             <button
@@ -81,7 +81,7 @@ function Grades() {
                                 className={state.topic == topic.name ? 'selected' : ''}
                             >
                                 {topic.icon}
-                                <span>{topic.name}</span>
+                                <span>{t(topic.name)}</span>
                             </button>
                         ))}
                     </div>
@@ -89,7 +89,7 @@ function Grades() {
                 {optionByRole()}
                 <section className='grades'>
                     {
-                        state.topic ? <h2>{state.topic}</h2> : <p>{t('topic_select_input')}</p>}
+                        state.topic ? <h2>{t(state.topic)}</h2> : <p>{t('topic_select_input')}</p>}
                     {examsByRole()}
                 </section>
             </main>

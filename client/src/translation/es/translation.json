@@ -36,7 +36,7 @@
   "week": "Semana",
   "content": "Contenido",
   "teacher": "Profesor",
-  "group": "Grupo",
+  "lesson": "Lección",
   "attendance": "Asistencia",
   "actions": "Acciones",
   "attendance_list": "Lista de asistencia",
@@ -45,5 +45,8 @@
   "level_select_input": "Seleccione el nivel",
   "year_select_input": "Seleccione el año",
   "semester_select_input": "Seleccione el semestre",
-  "topic_select_input": "Seleccione el tópico"
+  "topic_select_input": "Seleccione el tópico",
+  "topics": "Tópicos",
+  "options": "Opciones",
+  "grades": "Notas"
 }

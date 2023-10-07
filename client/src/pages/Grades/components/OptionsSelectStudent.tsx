@@ -55,7 +55,7 @@ function OptionSelectStudent({state, dispatch}: DispatchProps) {
     else {
         return (
             <section className='options-container'>
-                <h2>Options</h2>
+                <h2>{t('options')}</h2>
                 <select value={state.level} onChange={(e) => handleLevelChange(e.target.value)}>
                     <option hidden value=''>{t('level_select_input')}</option>
                     {levels.map((level, index) => (

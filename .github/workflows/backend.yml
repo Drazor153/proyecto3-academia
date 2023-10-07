@@ -1,0 +1,64 @@
+name: Backend Testing
+
+on:
+  push:
+    branches:
+      - backend
+
+jobs:
+  backend-testing:
+    runs-on: ubuntu-latest
+    services:
+      # mydb:
+      #   image: mysql:5.7
+      #   env:
+      #     MYSQL_DATABASE: academia-ingles
+      #     MYSQL_USER: ${{ secrets.DatabaseUser }}
+      #     MYSQL_PASSWORD: ${{ secrets.DatabasePassword }}
+      #     MYSQL_ROOT_PASSWORD: ${{ secrets.DatabasePassword }}
+      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - "5432:5432"
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      # - run: sudo service mysql restart
+      - name: Pull repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: backend
+      - name: Set Node.js
+        uses: actions/setup-node@v3
+        with: 
+          node-version: 18
+      - name: Setup Database URL
+        run: |
+          cd ./server
+          cp .env.ci .env
+          cp ./prisma/schema.prisma.ci ./prisma/schema.prisma
+      - name: Install dependencies
+        run: |
+          cd ./server
+          yarn install --immutable --immutable-cache --check-cache #yarn install
+      - name: Push database schema
+        run: |
+          cd ./server
+          npx prisma db push
+          npx prisma db seed
+      - name: Test server
+        run: |
+          cd ./server
+          yarn test
