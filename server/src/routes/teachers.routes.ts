@@ -4,7 +4,7 @@ import { postGradeValidator } from '../utils/validators';
 
 const router = Router();
 
-router.get('/levels/:run', teachersControllers.getTeacherLevels);
+router.get('/levels/:run', teachersControllers.getTeacherLessons);
 router.get('/grades/:year/:semester/:level', teachersControllers.getLevelQuizzes)
 
 router.get('/grades/quizzes/:quizId', teachersControllers.getQuizGrades)

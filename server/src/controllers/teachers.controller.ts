@@ -3,12 +3,12 @@ import { prisma } from '../services/db';
 import { validationResult } from 'express-validator';
 import { transformarDatos } from '../utils/functions';
 
-export const getTeacherLevels = async (
+export const getTeacherLessons = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { run } = req.params;
-  const query = await prisma.teaches.findMany({
+  const query = await prisma.lesson.findMany({
     where: { teacherRun: Number(run) },
     include: { level: true }
   });

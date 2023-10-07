@@ -11,27 +11,28 @@ datasource db {
 }
 
 model Student {
-  run            Int      @id
-  dv             String   @db.Char(1)
+  run            Int          @id
+  dv             String       @db.Char(1)
   name           String
   first_surname  String
   second_surname String
   enrols         enrols[]
   gives          gives[]
+  attendance     attendance[]
 }
 
 model Level {
-  code    String    @id @db.Char(2)
+  code    String   @id @db.Char(2)
   name    String
   enrols  enrols[]
   Quiz    Quiz[]
-  teaches teaches[]
+  teaches Lesson[]
 }
 
 model enrols {
-  level      Level   @relation(fields: [levelCode], references: [code])
+  level      Level   @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
   levelCode  String  @db.Char(2)
-  student    Student @relation(fields: [studentRun], references: [run])
+  student    Student @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
   status     String
   year       Int
@@ -61,7 +62,7 @@ model Quiz {
 model gives {
   quiz       Quiz    @relation(fields: [quizId], references: [id])
   quizId     Int
-  student    Student @relation(fields: [studentRun], references: [run])
+  student    Student @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
   grade      Float   @db.Float
 
@@ -69,19 +70,39 @@ model gives {
 }
 
 model Teacher {
-  run           Int       @id
-  dv            String    @db.Char(1)
+  run           Int      @id
+  dv            String   @db.Char(1)
   name          String
   first_surname String
-  teaches       teaches[]
+  teaches       Lesson[]
 }
 
-model teaches {
-  teacher    Teacher @relation(fields: [teacherRun], references: [run])
+model Lesson {
+  teacher    Teacher @relation(fields: [teacherRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   teacherRun Int
   level      Level   @relation(fields: [levelCode], references: [code])
   levelCode  String  @db.Char(2)
   id         Int     @id @default(autoincrement())
   year       Int
   semester   Int
+  lesson     String  @db.Char(1)
+  Class      Class[]
+}
+
+model Class {
+  id         Int          @id @default(autoincrement())
+  week       Int
+  contents   String
+  lesson     Lesson       @relation(fields: [lessonId], references: [id])
+  lessonId   Int
+  attendance attendance[]
+}
+
+model attendance {
+  class      Class   @relation(fields: [classId], references: [id])
+  classId    Int
+  student    Student @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  studentRun Int
+
+  @@id([classId, studentRun])
 }

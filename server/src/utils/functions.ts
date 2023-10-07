@@ -8,7 +8,8 @@ export const transformarDatos = (input: OriginalData[]): TransformedData[] => {
       levelCode,
       level: { name: levelName },
       year,
-      semester
+      semester,
+      lesson
     } = original;
 
     if (!datosTransformados.has(levelCode)) {
@@ -17,13 +18,28 @@ export const transformarDatos = (input: OriginalData[]): TransformedData[] => {
 
     const nivel = datosTransformados.get(levelCode)!;
 
-    const añoExistente = nivel.years.find((item) => item.year === year);
+    // const añoExistente = nivel.years.find((item) => item.year === year);
 
-    if (añoExistente) {
-      añoExistente.semesters.push(semester);
-    } else {
-      nivel.years.push({ year, semesters: [semester] });
+    // if (añoExistente) {
+    //   añoExistente.semesters.push({semester});
+    // } else {
+    //   nivel.years.push({ year, semesters: [semester] });
+    // }
+    let añoExistente = nivel.years.find(item => item.year === year);
+
+    if (!añoExistente) {
+      añoExistente = { year, semesters: [] };
+      nivel.years.push(añoExistente);
     }
+
+    let semestreExistente = añoExistente.semesters.find(item => item.semester === semester);
+
+    if (!semestreExistente) {
+      semestreExistente = { semester, lessons: [] };
+      añoExistente.semesters.push(semestreExistente);
+    }
+
+    semestreExistente.lessons.push(lesson);
   });
 
   return [...datosTransformados.values()];

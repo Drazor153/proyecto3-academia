@@ -4,6 +4,7 @@ export type OriginalData = {
   id: number;
   year: number;
   semester: number;
+  lesson: string;
   level: {
     code: string;
     name: string;
@@ -15,6 +16,9 @@ export type TransformedData = {
   levelCode: string;
   years: {
     year: number;
-    semesters: number[];
+    semesters: {
+      semester: number;
+      lessons: string[]
+    }[];
   }[];
 };
