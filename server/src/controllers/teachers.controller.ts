@@ -1,7 +1,8 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
 import { validationResult } from 'express-validator';
-import { transformarDatos } from '../utils/functions';
+import { sanitizeTopicQuizzes, transformarDatos } from '../utils/teacher.utils';
+import { QuizPost } from '../types/teachers';
 
 export const getTeacherLessons = async (
   req: Request,
@@ -12,9 +13,8 @@ export const getTeacherLessons = async (
     where: { teacherRun: Number(run) },
     include: { level: true }
   });
-  
-  const teacherLevels = transformarDatos(query)
-  
+
+  const teacherLevels = transformarDatos(query);
 
   res.status(200).json({ data: teacherLevels });
 };
@@ -39,13 +39,7 @@ export const getLevelQuizzes = async (
     }
   });
 
-  const topicQuizzesSanitizied = topicQuizzesQuery.map((val) => {
-    return {
-      topic: val.topic.name,
-      quizNumber: val.number,
-      quizId: val.id
-    };
-  });
+  const topicQuizzesSanitizied = sanitizeTopicQuizzes(topicQuizzesQuery);
 
   res.status(200).json({
     data: topicQuizzesSanitizied
@@ -100,13 +94,7 @@ export const getQuizGrades = async (
 
   res.status(200).json({ data: gradesData });
 };
-type QuizPost = {
-  quizId: number;
-  grades: {
-    run: number;
-    grade: number;
-  }[];
-};
+
 export const postQuizzesGrades = async (
   req: Request,
   res: Response
@@ -119,7 +107,7 @@ export const postQuizzesGrades = async (
 
   const { quizId, grades }: QuizPost = req.body;
 
-  let count = 0
+  let count = 0;
   grades.forEach(async (val) => {
     await prisma.gives.upsert({
       where: {
@@ -138,10 +126,18 @@ export const postQuizzesGrades = async (
       }
     });
 
-    count = count + 1
+    count = count + 1;
   });
 
   console.log(`${count} notas actualizadas`);
-  
+
   res.status(200).json({ msg: 'Notas actualizadas!' });
+};
+export const getClasses = async (req: Request, res: Response) => {
+  req
+  res
+}
+export const createClass = async (req: Request, res: Response) => {
+  req
+  res
 };

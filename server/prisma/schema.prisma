@@ -11,14 +11,13 @@ datasource db {
 }
 
 model Student {
-  run            Int          @id
-  dv             String       @db.Char(1)
-  name           String
-  first_surname  String
-  second_surname String
-  enrols         enrols[]
-  gives          gives[]
-  attendance     attendance[]
+  run           Int          @id
+  dv            String       @db.Char(1)
+  name          String
+  first_surname String
+  enrols        enrols[]
+  gives         gives[]
+  attendance    attendance[]
 }
 
 model Level {
@@ -78,14 +77,14 @@ model Teacher {
 }
 
 model Lesson {
-  teacher    Teacher @relation(fields: [teacherRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
-  teacherRun Int
-  level      Level   @relation(fields: [levelCode], references: [code])
-  levelCode  String  @db.Char(2)
-  id         Int     @id @default(autoincrement())
+  teacher    Teacher? @relation(fields: [teacherRun], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  teacherRun Int?
+  level      Level    @relation(fields: [levelCode], references: [code])
+  levelCode  String   @db.Char(2)
+  id         Int      @id @default(autoincrement())
   year       Int
   semester   Int
-  lesson     String  @db.Char(1)
+  lesson     String   @db.Char(1)
   Class      Class[]
 }
 

@@ -9,6 +9,7 @@ export const formValidatorsMiddleware = (
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    console.log(errors.array());
     res
       .status(400)
       .json({ errorType: 'invalidFields', errorMsg: errors.array() });
@@ -22,7 +23,6 @@ export const studentRegisterValidator = [
   body('dv').notEmpty(),
   body('name').notEmpty(),
   body('first_surname').notEmpty(),
-  body('second_surname').notEmpty(),
   body('level').notEmpty()
 ];
 
@@ -32,6 +32,13 @@ export const postGradeValidator = [
   body('grades.*.run').notEmpty().isInt(),
   body('grades.*.grade').notEmpty().isFloat()
 ];
+
+export const postClassValidator = [
+  body('week').notEmpty().isInt(),
+  body('teacherRun').notEmpty().isInt(),
+  body('content').notEmpty(),
+  body('lessonId').notEmpty().isInt()
+]
 
 export const loginValidator = [
   body('run').notEmpty().isInt(),

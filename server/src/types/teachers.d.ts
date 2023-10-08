@@ -1,5 +1,13 @@
+export type QuizPost = {
+  quizId: number;
+  grades: {
+    run: number;
+    grade: number;
+  }[];
+};
+
 export type OriginalData = {
-  teacherRun: number;
+  teacherRun: number | null;
   levelCode: string;
   id: number;
   year: number;
@@ -16,9 +24,33 @@ export type TransformedData = {
   semesters: {
     semester: number;
     levels: {
-      levelName: string;
-      levelCode: string;
-      lessons: string[];
+      level: string;
+      code: string;
+      lessons: {
+        id: number;
+        lesson: string;
+      }[];
     }[];
   }[];
+};
+
+export type TopicQuizRaw = {
+  id: number;
+  number: number;
+  year: number;
+  semester: number;
+  topicId: number;
+  levelCode: string;
+  topic: {
+    id: number;
+    name: string;
+  };
+};
+
+export type TopicQuizSanitizied = {
+  topic: string;
+  quizzes: {
+    quizNumber: number;
+    quizId: number;
+  }[]
 };
