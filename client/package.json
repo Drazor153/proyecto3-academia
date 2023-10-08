@@ -4,12 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --host --host",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview --host",
-    "watch": "sass --watch src/scss/style.scss src/style.css",
-    "dev-local": "yarn run dev --mode localhost"
+    "preview": "vite preview",
+    "watch": "sass --watch src/scss/style.scss src/style.css"
   },
   "dependencies": {
     "@fdograph/rut-utilities": "^1.4.0",

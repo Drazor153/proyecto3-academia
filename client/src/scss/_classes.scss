@@ -37,12 +37,12 @@
     overflow: hidden;
     border-radius: 10px;
     transition: max-height .5s;
-
+    user-select: none;
 
 
 
     .flex,
-    .topic {
+    .lesson {
         box-sizing: border-box;
         display: flex;
         color: base.$whiteorange;
@@ -62,7 +62,7 @@
     }
 
     .dropdown,
-    .topic {
+    .lesson {
         border-radius: 0 10px 10px 0;
         margin: 0 10px 0 0;
         min-width: max-content;
@@ -95,23 +95,35 @@
 }
 
 .threeDots {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
 }
 
 .imEyePlus,
 .imEyeMinus,
-.hiOutlinePencilSquare {
+.hiOutlinePencilSquare,
+.mdOutlineDeleteForever {
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+}
+
+.imEyePlus:hover {
+    color: base.$orange;
+}
+
+.mdOutlineDeleteForever:hover {
+    color: base.$pink;
 }
 
 .table-class-list {
+    user-select: none;
     color: white;
     border-collapse: collapse;
+    // font-size: 50%;
     font-size: 1.35rem;
+    width: 100%;
 
     * {
         box-sizing: border-box;
@@ -170,6 +182,11 @@
     }
 
     tbody {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 72.4vh;
 
         tr {
             margin-top: 2px;
@@ -188,19 +205,23 @@
                 padding: 5px;
                 gap: 3px;
 
-                &[datatype="content"] {
+                &[datatype="content"],
+                &[datatype="teacher"] {
                     flex-direction: column;
                     align-items: start;
+                    user-select: text;
 
-                    p:before {
-                        content: "•";
-                        margin-right: 5px;
-                        // height: 100dvh;
+                    &[datatype="content"] p {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        max-width: 100%;
+
+                        &:before {
+                            content: "•";
+                            margin-right: 5px;
+                        }
                     }
-                }
-
-                &[datatype="teacher"] {
-                    justify-content: start;
                 }
 
             }
@@ -220,30 +241,25 @@
     }
 
     &[user-role="SUPERUSER"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
-            }
+        .grid {
+            grid-template-columns: 20% calc(35% - 6px) 25% 20%
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% auto 10% 15% 12.5%;
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% auto 15% 10%
             }
         }
     }
 
     &[user-role="STUDENT"] {
-        thead {
-            tr:last-child {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
-
-            }
+        .grid {
+            grid-template-columns: 20% calc(40% - 3px) calc(30% - 3px) 20%
         }
 
-        tbody {
-            tr {
-                grid-template-columns: 10% 40% 30% 7.5% auto;
+        @media screen and (min-width: 1366px) {
+            .grid {
+                grid-template-columns: 10% calc(40% - 6px) 30% 20%
             }
         }
     }
@@ -294,14 +310,19 @@
         display: grid;
         grid-template-areas:
             "content content"
-            "group teacher"
+            "lesson teacher"
             "attendance attendance"
         ;
         grid-template-columns: .5fr 1.25fr;
         font-size: 1.5rem;
-        height: 80%;
+        height: 75%;
         padding: 10px;
         gap: 10px;
+
+        @media screen and (min-height: 845px) {
+            height: 80%;
+        }
+
 
         p {
             text-align: center;
@@ -311,7 +332,7 @@
         .content {
             grid-area: content;
             display: grid;
-            grid-template-columns: 15% auto;
+            grid-template-columns: 25% auto;
             align-items: center;
 
 
@@ -331,20 +352,35 @@
                     outline: none;
                 }
             }
+
+            @media screen and (min-width: 1366px) {
+                grid-template-columns: 15% auto;
+            }
         }
 
-        .group {
+
+        .lesson {
             display: grid;
-            grid-template-columns: 53% auto;
-            grid-area: group;
+            grid-template-columns: 70% auto;
+            grid-area: lesson;
             align-items: center;
 
-            select {
+            input {
+                pointer-events: none;
                 height: 40px;
                 border-radius: 5px;
                 text-align: center;
                 font-size: 1.25rem;
-                width: 50%;
+                width: 100%;
+                border: 2px solid gray;
+            }
+
+            @media screen and (min-width: 1366px) {
+                grid-template-columns: 53% auto;
+
+                input {
+                    width: 50%;
+                }
             }
         }
 
@@ -373,11 +409,14 @@
             grid-area: attendance;
             place-self: center;
             background-color: #CBD1D5;
-            width: 75%;
+            width: 100%;
             border-radius: 5px;
             border-collapse: collapse;
-
             overflow: hidden;
+
+            @media screen and (min-width: 1366px) {
+                width: 75%;
+            }
 
             td {
                 border-radius: 5px;
@@ -402,11 +441,15 @@
 
                     &:last-child {
                         display: grid;
-                        grid-template-columns: 75% auto;
+                        grid-template-columns: 65% auto;
                         grid-auto-rows: 40px;
                         height: 40px;
                         gap: 2px;
                         margin-top: 2px;
+
+                        @media screen and (min-width: 1366px) {
+                            grid-template-columns: 75% auto;
+                        }
                     }
                 }
             }
@@ -428,12 +471,16 @@
 
                 tr {
                     display: grid;
-                    grid-template-columns: 75% auto;
+                    grid-template-columns: 65% auto;
                     grid-auto-rows: 40px;
                     height: 40px;
                     gap: 2px;
 
                     margin-top: 2px;
+
+                    @media screen and (min-width: 1366px) {
+                        grid-template-columns: 75% auto;
+                    }
 
                     td {
                         display: flex;
@@ -448,16 +495,57 @@
 
                         &:last-child {
 
-                            justify-content: center;
+                            justify-content: space-evenly;
 
-                            select {
-                                height: 40px;
-                                border-radius: 5px;
-                                text-align: center;
-                                font-size: 1.25rem;
-                                width: max-content;
-                                height: 75%;
+                            input[type="checkbox"] {
+                                display: none;
+
+                                &:checked+.label-attendance {
+                                    background-color: base.$bluemarine;
+                                    border-color: base.$bluemarine;
+                                }
                             }
+
+                            .label-attendance {
+                                position: relative;
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                height: 30px;
+                                width: 30px;
+                                border-radius: 5px;
+                                border: 2px solid gray;
+                                background-color: white;
+                                transition: background-color .25s, border-color .25s;
+
+
+
+                                &::before {
+                                    position: absolute;
+                                    content: "";
+                                    height: 10px;
+                                    width: 6px;
+                                    border: 5px solid base.$white;
+                                    border-top: none;
+                                    border-left: none;
+                                    transform: rotate(45deg) translate(-10%, -10%);
+                                    transition: opacity .25s;
+                                }
+
+                                &:hover {
+                                    border-color: base.$bluemarine;
+                                }
+                            }
+
+                            // select {
+                            //     height: 40px;
+                            //     border-radius: 5px;
+                            //     text-align: center;
+                            //     font-size: 1.25rem;
+                            //     width: max-content;
+                            //     height: 75%;
+                            // }
                         }
                     }
 
@@ -516,7 +604,7 @@
     transition: opacity .25s, visibility .25s;
 }
 
-.open {
+.showModal {
     opacity: 1;
     visibility: visible;
 }

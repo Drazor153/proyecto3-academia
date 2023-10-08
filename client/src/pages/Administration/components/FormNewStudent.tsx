@@ -104,7 +104,6 @@ function FormNewStudent() {
             dv: verifier,
             name: data.name,
             first_surname: data.first_surname,
-            second_surname: data.second_surname,
             level: data.level
         }).unwrap()
             .then((payload) => handleSuccessMsg(payload))
@@ -128,8 +127,6 @@ function FormNewStudent() {
                     <div className='name-input-container'>
                         <FloatLabelInput name='name' type='text' register={register} />
                         <FloatLabelInput name='first_surname' type='text' register={register} />
-                        <FloatLabelInput name='second_surname' type='text' register={register} />
-
                     </div>
                 </div>
                 <div className='input-section'>

@@ -4,21 +4,19 @@ export type Data<T> = {
   data: T;
 }
 export type Level = {
-  levelCode: string
-  levelName: string
+  year: number;
+  semesters: {
+    semester: number;
+    levels: {
+      code: string;
+      level: string;
+      lessons: {
+        id: string;
+        lesson: string;
+      }[];
+    }[];
+  }[];
 }
-
-export type StudentLevels = Level & {
-  year: number
-  semester: number
-  status: string
-}
-
-export type TeacherLevels = Level & {
-  year: number
-  semester: number
-}
-
 
 export type Student = {
   run: number | string;
@@ -75,3 +73,26 @@ export type GradesMutator = {
   quizId: number;
   grades: QuizData[];
 }
+
+type Class = {
+  id?: number;
+  week: number;
+  contents: string;
+  lesson: string;
+  year?: number;
+  semester?: number;
+  level?: string;
+  // topicName: string;
+  // levelName: string;
+}
+
+export type ClassesStudent = {
+  teacher: string;
+  attendance: string;
+} & Class;
+
+export type ClassesTeacher = {
+  attendees: string[];
+  students: string[];
+  // absent: string[];
+} & Class;
