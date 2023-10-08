@@ -1,13 +1,12 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { validationResult } from 'express-validator';
+import { sanitizeStudentLevels } from '../utils/student.utils';
 
 type Student = {
   run: number;
   dv: string;
   name: string;
   first_surname: string;
-  second_surname: string;
   level: string;
 };
 
@@ -17,16 +16,7 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    res
-      .status(400)
-      .json({ errorType: 'invalidFields', errorMsg: errors.array() });
-    return;
-  }
-  const { run, dv, name, first_surname, second_surname, level }: Student =
-    req.body;
+  const { run, dv, name, first_surname, level }: Student = req.body;
 
   if (typeof run !== 'number') {
     res.status(400).json({
@@ -52,7 +42,6 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         dv,
         name,
         first_surname,
-        second_surname,
         enrols: {
           create: [
             {
@@ -92,22 +81,43 @@ export const getLevels = async (req: Request, res: Response) => {
       year: 'desc'
     },
     include: {
-      level: true
+      level: {
+        include: {
+          teaches: true
+        }
+      }
     }
   });
 
-  const studentLevels = query.map(val => ({
-    semester: val.semester,
-    year: val.year,
-    levelName: val.level.name,
-    status: val.status,
-    levelCode: val.levelCode
-  }))
-
+  const studentLevels = sanitizeStudentLevels(query);
 
   res.status(200).json({ data: studentLevels });
 };
 
+export const getClasses = async (req: Request, res: Response) => {
+  const { lessonId, run } = req.params;
+  const query = await prisma.class.findMany({
+    where: {
+      lessonId: +lessonId
+    },
+    include: {
+      attendance: {
+        where: {
+          studentRun: +run
+        }
+      }
+    }
+  });
+
+  const classes = query.map((val) => ({
+    id: val.id,
+    week: val.week,
+    contents: val.contents,
+    attendance: val.attendance.length === 0 ? 0 : 1
+  }));
+
+  res.status(200).json({ data: classes });
+};
 export const getStudentGrades = async (req: Request, res: Response) => {
   const { year, semester, level, run } = req.params;
 

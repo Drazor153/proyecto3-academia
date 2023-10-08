@@ -21,29 +21,38 @@ export const levels = [
   }
 ];
 
-export const groups = [
+export const topics = [
   {
-    letter: 'A',
-    topic: 'Writting'
+    name: 'grammar'
   },
   {
-    letter: 'B',
-    topic: 'Reading'
+    name: 'listening'
   },
   {
-    letter: 'C',
-    topic: 'Listening'
+    name: 'speaking'
   },
   {
-    letter: 'D',
-    topic: 'Speaking'
+    name: 'writing'
   }
 ];
 
-export const levels_groups: {level_id: string, group_letter: string}[] = []
+export const lessons = ['A', 'B', 'C'];
+export const lessonRecords: {
+  levelCode: string;
+  year: number;
+  semester: number;
+  lesson: string;
+}[] = [];
 
-levels.forEach(level => {
-  groups.forEach(group => {
-    levels_groups.push({level_id: level.code, group_letter: group.letter})
-  })
-})
+const year = 2023;
+const semester = 1
+levels.forEach((level) => {
+  lessons.forEach((lesson) => {
+    lessonRecords.push({
+      lesson,
+      levelCode: level.code,
+      year,
+      semester
+    });
+  });
+});
