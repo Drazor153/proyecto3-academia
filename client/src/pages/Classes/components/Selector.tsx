@@ -1,5 +1,16 @@
+import { Dispatch } from "react";
+
 import { t } from "i18next";
+
+import { ActionType, TypeKind } from "../reducer/selectedOption";
+
+
+import { Select } from "../types";
+
 import { IoIosArrowDown } from "react-icons/io";
+import ThreeDots from "react-loading-icons/dist/esm/components/three-dots";
+import { useGetLevelsByRoleRunQuery } from "../../../redux/services/levelsApi";
+
 
 interface LevelProps {
     level: string,
@@ -8,7 +19,7 @@ interface LevelProps {
     children?: React.ReactNode,
 }
 
-function Level({ level, isLevelSelect, handlerClickLevel, children }: LevelProps) {
+export function Level({ level, isLevelSelect, handlerClickLevel, children }: LevelProps) {
     return (
         <div className={`dropdown ${isLevelSelect ? "expand" : ""}`}
         >
@@ -31,7 +42,7 @@ interface YearProps {
 }
 
 
-function Year({ year, isYearSelect, handlerClickYear, children }: YearProps) {
+export function Year({ year, isYearSelect, handlerClickYear, children }: YearProps) {
     return (
         <div className={`dropdown ${isYearSelect ? "expand" : ""}`}>
             <div
@@ -53,7 +64,7 @@ interface SemesterProps {
     children?: React.ReactNode,
 }
 
-function Semester({ semester, isSemesterSelect, handlerClickSemester, children }: SemesterProps) {
+export function Semester({ semester, isSemesterSelect, handlerClickSemester, children }: SemesterProps) {
     return (
         <div
             // key={`${level}-${year}-${semester}`}
@@ -79,7 +90,7 @@ interface LessonProps {
     children?: React.ReactNode;
 }
 
-function Lesson({ lesson, isLessonSelect, handlerClickLesson, children }: LessonProps) {
+export function Lesson({ lesson, isLessonSelect, handlerClickLesson, children }: LessonProps) {
     return (
         <div
             className={`lesson ${isLessonSelect ? "active" : ""}`}
@@ -89,5 +100,94 @@ function Lesson({ lesson, isLessonSelect, handlerClickLesson, children }: Lesson
         </div>
     )
 }
+interface SelectorProps {
+    run?: number;
+    role: string;
+    select: Select;
+    setSelect: Dispatch<ActionType>;
+}
 
-export { Level, Year, Semester, Lesson };
+export default function Selector({ role, run, select, setSelect }: SelectorProps) {
+
+    const { data: levels, isLoading: isLoadingLevels } = useGetLevelsByRoleRunQuery({ role: role, run: run ?? 0 })
+
+    const handlerClickYear = ({ year }: { year: number }) => {
+        setSelect({ type: TypeKind.YEAR, payload: `${year}` });
+    }
+
+    const handlerClickSemester = ({ semester }: { semester: number }) => {
+        setSelect({ type: TypeKind.SEMESTER, payload: `${semester}` });
+    }
+
+    const handlerClickLevel = ({ level }: { level: string }) => {
+        setSelect({ type: TypeKind.LEVEL, payload: level });
+    }
+    const handlerClickLesson = ({ lesson }: { lesson: string }) => {
+        setSelect({ type: TypeKind.LESSON, payload: lesson });
+    }
+
+    return (
+        <>
+            <h2>{t('level')}</h2>
+            {isLoadingLevels && (<ThreeDots className="threeDots" fill='#2F4858' />)}
+            {levels &&
+                levels.data.map(({ year, semesters }) => {
+                    const isYearSelect = year === select.year;
+                    return (
+                        <Year
+                            key={year}
+                            year={year}
+                            isYearSelect={isYearSelect}
+                            handlerClickYear={handlerClickYear}
+                        >
+                            {
+                                semesters.map(({ semester, levels }) => {
+                                    const isSemesterSelect = semester === select.semester;
+                                    return (
+                                        <Semester
+                                            key={`${year}-${semester}`}
+                                            semester={semester}
+                                            isSemesterSelect={isSemesterSelect}
+                                            handlerClickSemester={handlerClickSemester}
+                                        >
+                                            {
+                                                levels.map(({ level }) => {
+                                                    const isLevelSelect = level === select.level;
+                                                    return (
+                                                        <Level
+                                                            key={`${year}-${semester}-${level}`}
+                                                            level={level}
+                                                            isLevelSelect={isLevelSelect}
+                                                            handlerClickLevel={handlerClickLevel}
+                                                        >
+                                                            {
+                                                                ['A', 'B', 'C'].map((letter) => {
+                                                                    const lesson = `${level} ${letter}`;
+                                                                    const isLessonSelect = lesson === select.lesson;
+                                                                    return (
+                                                                        <Lesson
+                                                                            key={`${year}-${semester}-${level}-${letter}`}
+                                                                            lesson={lesson}
+                                                                            isLessonSelect={isLessonSelect}
+                                                                            handlerClickLesson={handlerClickLesson}
+                                                                        >
+                                                                            {t('lesson')} {letter}
+                                                                        </Lesson >
+                                                                    )
+                                                                })
+                                                            }
+                                                        </Level>
+                                                    )
+                                                })
+                                            }
+                                        </Semester>
+                                    )
+                                })
+                            }
+                        </Year>
+                    )
+                })
+            }
+        </>
+    )
+}

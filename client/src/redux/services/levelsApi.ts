@@ -11,7 +11,12 @@ export const levelsApi = createApi({
     getLevels: builder.query<Data<Level[]>, null>({
       query: () => "/levels",
     }),
+    getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string, run: number }>({
+      query: ({ role, run }) => {
+        return `${role}/levels/${run}`;
+      },
+    }),
   }),
 });
 
-export const { useGetLevelsQuery } = levelsApi;
+export const { useGetLevelsQuery, useGetLevelsByRoleRunQuery } = levelsApi;

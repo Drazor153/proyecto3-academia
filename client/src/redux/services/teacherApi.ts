@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, ExamTeacher, TeacherLevels, Quiz } from "../../utils/types";
+import { Data, ExamTeacher, Level, Quiz } from "../../utils/types";
 
 export const teacherApi = createApi({
     reducerPath: "teacherAPI",
@@ -8,16 +8,16 @@ export const teacherApi = createApi({
     }),
     tagTypes: ["TeacherLevels", "ExamTeacher", "Quiz"],
     endpoints: (builder) => ({
-        getTeacherLevels: builder.query<Data<TeacherLevels[]>, { run: number }>({
+        getTeacherLevels: builder.query<Data<Level[]>, { run: number }>({
             query: ({ run }) => `/levels/${run}`,
         }),
 
-        getExamsByYearSemesterLevel: builder.query<Data<ExamTeacher[]>, {year: number, semester:number, level: string}>({
-            query: ({year, semester, level}) => `/grades/${year}/${semester}/${level}`,
+        getExamsByYearSemesterLevel: builder.query<Data<ExamTeacher[]>, { year: number, semester: number, level: string }>({
+            query: ({ year, semester, level }) => `/grades/${year}/${semester}/${level}`,
         }),
 
-        getGradesByExamId: builder.query<Data<Quiz[]>, {quizId: number}>({
-            query: ({quizId}) => `/grades/quizzes/${quizId}`,
+        getGradesByExamId: builder.query<Data<Quiz[]>, { quizId: number }>({
+            query: ({ quizId }) => `/grades/quizzes/${quizId}`,
             providesTags: ["Quiz"]
         }),
 

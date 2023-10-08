@@ -1,11 +1,15 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { ClassesStudent, ClassesTeacher } from "../../../utils/types"
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+
 import { t } from "i18next";
+
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { deleteClasses } from "../../../redux/features/classesSlice";
+
+import { ClassesStudent, ClassesTeacher } from "../../../utils/types"
+
 import { BiSolidPlusSquare } from "react-icons/bi";
 import { ImEyeMinus, ImEyePlus } from "react-icons/im";
 import { IoIosClose } from "react-icons/io";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { deleteClasses, pushClasses, updateClasses } from "../../../redux/features/classesSlice";
 import { MdOutlineDeleteForever } from "react-icons/md";
 
 type Select = { level: string, year: number, semester: number, lesson: string };
@@ -19,20 +23,74 @@ function ClassTable({ role, select }: ClassTableProps) {
     const classes = useAppSelector(state => state.classesReducer) as ClassesStudent[] | ClassesTeacher[];
     const dispatch = useAppDispatch();
 
-    const [open, setOpen] = useState<boolean>(false)
-    const [weekSelect, setWeekSelect] = useState<number>(0)
+    const [showModal, setShowModal] = useState<boolean>(false)
+    // const [weekSelect, setWeekSelect] = useState<number>(0)
 
-    const handlerClickEye = ({ open, week }: { open: boolean, week: number }) => {
-        if (open) {
-            setWeekSelect(week)
+    const [selectedClass, setSelectedClass] = useState<SelectedClass>({
+        attendanceList: [],
+        contents: "",
+        lesson: "",
+        teacher: "",
+        week: 0,
+        id: -1,
+    })
+
+    const handlerClickEye = ({ id }: { id: number }) => {
+
+        const attendanceList: AttendanceList = [];
+
+        if (id > -1) {
+            const { attendees, students, contents, week, lesson } = (classes as ClassesTeacher[]).find(({ id: _id }) => _id === id)!;
+
+            students.map((student) => {
+                attendanceList.push({ student, attendance: attendees.includes(student) ? "Present" : "Absent" });
+            });
+
+            setSelectedClass({
+                attendanceList: attendanceList,
+                contents: contents,
+                id: id,
+                lesson: lesson,
+                teacher: "this.name",
+                week: week,
+            });
         } else {
-            setWeekSelect(0)
+            const { students, week } = (classes as ClassesTeacher[]).reverse()[0] ?? {
+                students: [
+                    "Student 1",
+                    "Student 2",
+                    "Student 3",
+                    "Student 4",
+                    "Student 5",
+                    "Student 6",
+                    "Student 7",
+                    "Student 8",
+                    "Student 9",
+                    "Student 10",
+                    "Student 11",
+                    "Student 12",
+                    "Student 13",
+                    "Student 14",
+                    "Student 15",
+                ], week: 0
+            };
+            students.map((student) => {
+                attendanceList.push({ student, attendance: "absent" });
+            });
+            setSelectedClass({
+                attendanceList: attendanceList,
+                contents: "",
+                id: -1,
+                lesson: select.lesson.split(' ')[1],
+                teacher: "this.name",
+                week: week + 1,
+            });
         }
-        setOpen(open)
+        setShowModal(!showModal)
     }
 
-    const handlerClickDelete = ({ index }: { index: number; }) => {
-        dispatch(deleteClasses(index));
+    const handlerClickDelete = ({ id }: { id: number; }) => {
+        dispatch(deleteClasses(id));
         //TODO deleteQueryDB
     }
 
@@ -49,7 +107,7 @@ function ClassTable({ role, select }: ClassTableProps) {
                             {
                                 role === "SUPERUSER" &&
                                 <BiSolidPlusSquare className="biSolidPlusSquare"
-                                    onClick={() => handlerClickEye({ open: true, week: classes.length + 1 })}
+                                    onClick={() => handlerClickEye({ id: -1 })}
                                 />
                             }
                         </td>
@@ -91,7 +149,7 @@ function ClassTable({ role, select }: ClassTableProps) {
                         )
                     }
                     {
-                        role === 'SUPERUSER' && (classes as ClassesTeacher[]).map(({ absent, attendees, contents, week, lesson: lesson }, index) => {
+                        role === 'SUPERUSER' && (classes as ClassesTeacher[]).map(({ id, students, attendees, contents, week, lesson: lesson }) => {
                             if (select.lesson.split(' ')[1] === lesson) {
                                 const contentsList = contents.split(',')
                                 return (
@@ -105,18 +163,18 @@ function ClassTable({ role, select }: ClassTableProps) {
                                             ))}
                                         </td>
                                         <td>
-                                            {`${attendees.length.toString().padStart(2, "0")} / ${absent.length + attendees.length} (${Math.round(attendees.length / (absent.length + attendees.length) * 100)}%)`}
+                                            {`${attendees.length.toString().padStart(2, "0")} / ${students.length} (${Math.round(attendees.length / (students.length) * 100)}%)`}
                                         </td>
                                         <td>
-                                            {(!open || weekSelect !== week) && (
+                                            {(!showModal) && (
                                                 <>
-                                                    <ImEyePlus onClick={() => handlerClickEye({ open: true, week: week })} className="imEyePlus" />
+                                                    <ImEyePlus onClick={() => handlerClickEye({ id: id! })} className="imEyePlus" />
                                                 </>
                                             )}
                                             {
-                                                open && weekSelect === week && (<ImEyeMinus onClick={() => handlerClickEye({ open: false, week: week })} className="imEyeMinus" />)
+                                                showModal && (<ImEyeMinus className="imEyeMinus" />)
                                             }
-                                            <MdOutlineDeleteForever onClick={() => handlerClickDelete({ index: index })} className="mdOutlineDeleteForever" />
+                                            <MdOutlineDeleteForever onClick={() => handlerClickDelete({ id: id! })} className="mdOutlineDeleteForever" />
                                         </td>
                                     </tr>
                                 );
@@ -129,10 +187,11 @@ function ClassTable({ role, select }: ClassTableProps) {
             {
                 role === 'SUPERUSER' &&
                 <ModalClassList
-                    open={open}
-                    weekSelect={weekSelect}
+                    showModal={showModal}
                     handlerClickEye={handlerClickEye}
                     select={select}
+                    selectedClass={selectedClass}
+                    setSelectedClass={setSelectedClass}
                 />
             }
         </>
@@ -140,167 +199,161 @@ function ClassTable({ role, select }: ClassTableProps) {
 }
 
 type ModalClassListProps = {
-    open: boolean,
-    weekSelect: number,
-    handlerClickEye: ({ open, week }: { open: boolean, week: number }) => void,
+    showModal: boolean,
+    handlerClickEye: ({ id }: { id: number }) => void,
     select: Select,
+    selectedClass: SelectedClass,
+    setSelectedClass: Dispatch<SetStateAction<SelectedClass>>
 }
 
 type AttendanceList = { student: string, attendance: string }[];
 
-type DataType = {
-    attendanceList: AttendanceList,
-    contents: string,
-    lesson: string,
+type SelectedClass = {
+    attendanceList: AttendanceList;
+    contents: string;
+    id: number;
+    lesson: string;
+    teacher: string;
+    week: number;
 }
 
-function ModalClassList({ open, weekSelect, handlerClickEye, select }: ModalClassListProps) {
+function ModalClassList({ showModal, handlerClickEye, selectedClass, setSelectedClass }: ModalClassListProps) {
 
-    const classes = useAppSelector(state => state.classesReducer) as ClassesTeacher[];
-    const dispatch = useAppDispatch();
+    // const classes = useAppSelector(state => state.classesReducer) as ClassesTeacher[];
+    // const dispatch = useAppDispatch();
 
-    const [data, setData] = useState<DataType>({
-        attendanceList: [],
-        contents: "",
-        lesson: "",
-    });
+    // const [data, setData] = useState<SelectedClass>(dataClass);
 
-    const handlerChangeAttendance = (student: string, attendance: string) => {
-        setData((prev) => {
-            const attendanceList = [...prev.attendanceList];
-            const index = attendanceList.findIndex(({ student: s }) => s === student);
-            attendanceList[index].attendance = attendance;
-            return {
-                ...prev,
-                attendanceList: attendanceList,
-            };
-        })
-    }
+    // const handlerChangeAttendance = (student: string, attendance: string) => {
+    //     setData((prev) => {
+    //         const attendanceList = [...prev.attendanceList];
+    //         const index = attendanceList.findIndex(({ student: s }) => s === student);
+    //         attendanceList[index].attendance = attendance;
+    //         return {
+    //             ...prev,
+    //             attendanceList: attendanceList,
+    //         };
+    //     })
+    // }
 
-    const handlerClickConfirm = () => {
+    // const handlerClickConfirm = () => {
 
-        const index = classes.findIndex(({ week, year, semester, lesson, level }) => {
-            const isLevelSelect = level === select.level;
-            const isYearSelect = year === select.year;
-            const isSemesterSelect = semester === select.semester;
-            const isLessonSelect = lesson === select.lesson.split(' ')[1];
-            const isWeekSelect = week === weekSelect;
-            return isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect;
-        });
-        if (index !== -1) {
-            dispatch(updateClasses({
-                index: index,
-                class: {
-                    ...classes[index],
-                    contents: data.contents,
-                    lesson: data.lesson,
-                    attendees: data.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
-                    absent: data.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
-                }
-            }));
-        } else {
-            dispatch(pushClasses({
-                week: weekSelect,
-                contents: data.contents,
-                lesson: data.lesson,
-                attendees: data.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
-                absent: data.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
-            }));
-        }
+    //     const index = classes.findIndex(({ week, year, semester, lesson, level }) => {
+    //         const isLevelSelect = level === select.level;
+    //         const isYearSelect = year === select.year;
+    //         const isSemesterSelect = semester === select.semester;
+    //         const isLessonSelect = lesson === select.lesson.split(' ')[1];
+    //         const isWeekSelect = week === weekSelect;
+    //         return isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect;
+    //     });
+    //     if (index !== -1) {
+    //         dispatch(updateClasses({
+    //             index: index,
+    //             class: {
+    //                 ...classes[index],
+    //                 contents: selectedClass.contents,
+    //                 lesson: selectedClass.lesson,
+    //                 attendees: selectedClass.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
+    //                 absent: selectedClass.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
+    //             }
+    //         }));
+    //     } else {
+    //         dispatch(pushClasses({
+    //             week: weekSelect,
+    //             contents: selectedClass.contents,
+    //             lesson: selectedClass.lesson,
+    //             attendees: selectedClass.attendanceList.filter(({ attendance }) => attendance === "Present").map(({ student }) => student),
+    //             absent: selectedClass.attendanceList.filter(({ attendance }) => attendance === "Absent").map(({ student }) => student),
+    //         }));
+    //     }
 
-        //TODO updateQueryDB
+    //     //TODO updateQueryDB
 
-        setData({
-            attendanceList: [],
-            contents: "",
-            lesson: "",
-        });
+    //     setData({
+    //         attendanceList: [],
+    //         contents: "",
+    //         lesson: "",
+    //     });
 
-        handlerClickEye({ open: false, week: 0 });
+    //     handlerClickEye({ showModal: false, week: 0 });
 
-    }
+    // }
 
-    useEffect(() => {
-        const _attendanceList: AttendanceList = [];
-        classes.map(
-            ({ week, attendees, absent, year, semester, lesson, level }) => {
-                const isLevelSelect = level === select.level;
-                const isYearSelect = year === select.year;
-                const isSemesterSelect = semester === select.semester;
-                const isLessonSelect = lesson === select.lesson.split(' ')[1];
-                const isWeekSelect = week === weekSelect;
-                if (isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect) {
-                    attendees.map((student) => {
-                        _attendanceList.push({ student, attendance: "Present" });
-                    });
-                    absent.map((student) => {
-                        _attendanceList.push({ student, attendance: "Absent" });
-                    });
-                }
-            }
-        );
+    // useEffect(() => {
+    //     const _attendanceList: AttendanceList = [];
+    //     classes.map(
+    //         ({ week, attendees, absent, year, semester, lesson, level }) => {
+    //             const isLevelSelect = level === select.level;
+    //             const isYearSelect = year === select.year;
+    //             const isSemesterSelect = semester === select.semester;
+    //             const isLessonSelect = lesson === select.lesson.split(' ')[1];
+    //             const isWeekSelect = week === weekSelect;
+    //             if (isLevelSelect && isYearSelect && isSemesterSelect && isLessonSelect && isWeekSelect) {
+    //                 attendees.map((student) => {
+    //                     _attendanceList.push({ student, attendance: "Present" });
+    //                 });
+    //                 absent.map((student) => {
+    //                     _attendanceList.push({ student, attendance: "Absent" });
+    //                 });
+    //             }
+    //         }
+    //     );
 
-        if (_attendanceList.length === 0) {
-            Array.from({ length: 15 }, (_, i) => `Student ${i + 1}`).map((student) => { _attendanceList.push({ student, attendance: "Absent" }) });
-        }
+    //     if (_attendanceList.length === 0) {
+    //         Array.from({ length: 15 }, (_, i) => `Student ${i + 1}`).map((student) => { _attendanceList.push({ student, attendance: "Absent" }) });
+    //     }
 
-        _attendanceList.sort((a, b) => {
-            if (a.student < b.student) {
-                return -1;
-            }
-            if (a.student > b.student) {
-                return 1;
-            }
-            return 0;
-        });
+    //     _attendanceList.sort((a, b) => {
+    //         if (a.student < b.student) {
+    //             return -1;
+    //         }
+    //         if (a.student > b.student) {
+    //             return 1;
+    //         }
+    //         return 0;
+    //     });
 
 
-        const _contents = classes.find(({ week }) => week === week)?.contents ?? "";
+    //     const _contents = classes.find(({ week }) => week === week)?.contents ?? "";
 
-        const _lesson = classes.find(({ week }) => week === week)?.lesson ?? "A";
+    //     const _lesson = classes.find(({ week }) => week === week)?.lesson ?? "A";
 
-        setData({
-            attendanceList: _attendanceList,
-            contents: _contents,
-            lesson: _lesson,
-        });
+    //     setData({
+    //         attendanceList: _attendanceList,
+    //         contents: _contents,
+    //         lesson: _lesson,
+    //     });
 
-    }, [classes, weekSelect]);
+    // }, [classes, weekSelect]);
 
     return (<>
-        <div className={`background ${open ? 'open' : ''}`} />
-        <div className={`attendance ${open ? 'open' : ''}`}>
-            <h2>{t('week')} {weekSelect}</h2>
+        <div className={`background ${showModal ? 'showModal' : ''}`} />
+        <div className={`attendance ${showModal ? 'showModal' : ''}`}>
+            <h2>{t('week')} {selectedClass.week}</h2>
             <IoIosClose className="ioClose" onClick={() => {
-                handlerClickEye({ open: false, week: 0 });
-                setData((prev) => {
-                    return {
-                        ...prev,
-                        attendanceList: [],
-                    }
-                });
+                handlerClickEye({ id: -1 });
+                // setData((prev) => {
+                //     return {
+                //         ...prev,
+                //         attendanceList: [],
+                //     }
+                // });
             }} />
             <div className="body">
                 <div className="content">
                     <p>{t('content')}</p>
                     <input type={"text"} name="content" id="content"
-                        value={data.contents}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setData((prev) => { return { ...prev, content: e.target.value } })}
+                        value={selectedClass.contents}
+                    // onChange={(e: ChangeEvent<HTMLInputElement>) => setData((prev) => { return { ...prev, content: e.target.value } })}
                     />
                 </div>
                 <div className="lesson">
                     <p>{t('lesson')}</p>
-                    <select name="lesson" id="lesson" value={data.lesson}
-                        onChange={(e: ChangeEvent<HTMLSelectElement>) => setData((prev) => { return { ...prev, lesson: e.target.value } })}
-                    >
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                    </select>
+                    <input type="text" name="lesson" id="lesson" value={selectedClass.lesson} readOnly />
                 </div>
                 <div className="teacher">
                     <p>{t('teacher')}</p>
-                    <input type="text" name="teacher" id="teacher" defaultValue={"Teacher ..."} readOnly />
+                    <input type="text" name="teacher" id="teacher" defaultValue={selectedClass.teacher} readOnly />
                 </div>
                 <table className="table-attendance-list">
                     <thead>
@@ -316,19 +369,25 @@ function ModalClassList({ open, weekSelect, handlerClickEye, select }: ModalClas
                     </thead>
                     <tbody>
                         {
-                            data.attendanceList.map(({ student, attendance }) => {
+                            selectedClass.attendanceList.map(({ student, attendance }) => {
                                 return (
                                     <tr key={`${student}-${attendance}`} className="student">
                                         <td>
                                             <p>{student}</p>
                                         </td>
                                         <td>
-                                            <select name="attendance" id="attendance" value={attendance}
-                                                onChange={(e: ChangeEvent<HTMLSelectElement>) => handlerChangeAttendance(student, e.target.value)}
-                                            >
-                                                <option value="Present">{t('present')}</option>
-                                                <option value="Absent">{t('absent')}</option>
-                                            </select>
+                                            <p>{t('present')}</p>
+                                            <input type="checkbox" name={`attendance ${student}`} id={`attendance ${student}`} checked={attendance === 'present'}
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                                    const attendanceList = [...selectedClass.attendanceList];
+                                                    const index = attendanceList.findIndex(({ student: s }) => {
+                                                        return s === student;
+                                                    });
+                                                    attendanceList[index].attendance = e.target.checked ? 'present' : 'absent';
+                                                    setSelectedClass({ ...selectedClass, attendanceList: attendanceList });
+                                                }}
+                                            />
+                                            <label className="label-attendance" htmlFor={`attendance ${student}`}></label>
                                         </td>
                                     </tr>
                                 );
@@ -339,16 +398,16 @@ function ModalClassList({ open, weekSelect, handlerClickEye, select }: ModalClas
             </div>
             <div className="footer">
                 <button className="confirm"
-                    onClick={handlerClickConfirm}
+                // onClick={handlerClickConfirm}
                 >Confirmar</button>
                 <button className="cancel"
                     onClick={() => {
-                        setData({
-                            attendanceList: [],
-                            contents: "",
-                            lesson: "",
-                        });
-                        handlerClickEye({ open: false, week: 0 });
+                        // setData({
+                        //     attendanceList: [],
+                        //     contents: "",
+                        //     lesson: "",
+                        // });
+                        handlerClickEye({ id: -1 });
                     }}
                 >Cancelar</button>
             </div>
