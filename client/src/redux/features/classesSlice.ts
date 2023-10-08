@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { ClassesStudent, ClassesTeacher } from "../../utils/types";
 
-type initialStateType = {}[] | ClassesStudent[] | ClassesTeacher[];
+type initialStateType = ClassesStudent[] | ClassesTeacher[];
 
 const initialState: initialStateType = [];
 

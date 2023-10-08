@@ -1,7 +1,7 @@
 import { FaTh, FaBookOpen, FaRegCalendarAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
 import Dashboard from '../pages/Dashboard'
 import Grades from '../pages/Grades'
-import Classes from '../pages/Classes/Classes'
+import Classes from '../pages/Classes'
 import Logout from '../components/Logout'
 import Administration from '../pages/Administration'
 
