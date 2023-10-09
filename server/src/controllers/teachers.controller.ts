@@ -15,7 +15,12 @@ export const getTeacherLessons = async (
   const { run } = req.params;
   const query = await prisma.lesson.findMany({
     where: { teacherRun: Number(run) },
-    include: { level: true }
+    include: { level: true },
+    orderBy: {
+      level: {
+        code: 'desc'
+      }
+    }
   });
 
   const teacherLevels = transformarDatos(query);
@@ -166,6 +171,9 @@ export const getStudents = async (req: Request, res: Response) => {
           status: 'Cursando'
         }
       }
+    },
+    orderBy: {
+      first_surname: 'asc'
     },
     select: {
       run: true,
