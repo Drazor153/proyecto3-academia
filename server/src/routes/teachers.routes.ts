@@ -32,4 +32,6 @@ router.post(
   teachersControllers.createClass
 );
 
+router.delete('/classes/:classId', teachersControllers.deleteClass)
+
 export default router;
