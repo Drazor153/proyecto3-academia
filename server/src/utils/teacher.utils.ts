@@ -1,4 +1,6 @@
 import {
+  LessonClassesRaw,
+  LessonClassesSanitized,
   OriginalData,
   TopicQuizRaw,
   TopicQuizSanitizied,
@@ -73,6 +75,29 @@ export const transformarDatos = (input: OriginalData[]): TransformedData[] => {
     levelExists.lessons.push({
       id: val.id,
       lesson: val.lesson
+    });
+  });
+
+  return dataArray;
+};
+
+export const sanitizeLessonClasses = (
+  input: LessonClassesRaw[]
+): LessonClassesSanitized[] => {
+  const dataArray: LessonClassesSanitized[] = [];
+
+  input.forEach((val) => {
+    dataArray.push({
+      id: val.id,
+      week: val.week,
+      contents: val.contents,
+      attendance: val.attendance.map((val) => ({
+        studentRun: val.studentRun,
+        dv: val.student.dv,
+        name: val.student.name,
+        first_surname: val.student.first_surname,
+        attended: val.attended
+      }))
     });
   });
 

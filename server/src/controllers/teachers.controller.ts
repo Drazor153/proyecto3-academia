@@ -1,8 +1,12 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
 import { validationResult } from 'express-validator';
-import { sanitizeTopicQuizzes, transformarDatos } from '../utils/teacher.utils';
-import { QuizPost } from '../types/teachers';
+import {
+  sanitizeLessonClasses,
+  sanitizeTopicQuizzes,
+  transformarDatos
+} from '../utils/teacher.utils';
+import { PostClass, QuizPost } from '../types/teachers';
 
 export const getTeacherLessons = async (
   req: Request,
@@ -130,11 +134,92 @@ export const postQuizzesGrades = (req: Request, res: Response) => {
 
   res.status(200).json({ msg: 'Notas actualizadas!' });
 };
-export const getClasses = async (req: Request, res: Response) => {
-  req;
-  res;
+
+export const getStudents = async (req: Request, res: Response) => {
+  const { lessonId } = req.params;
+
+  const level = await prisma.lesson.findUnique({
+    where: {
+      id: +lessonId
+    },
+    select: {
+      level: true,
+      year: true,
+      semester: true
+    }
+  });
+
+  if (!level) {
+    res.status(404).json({ errorType: 'msg', errorMsg: 'Lesson not found' });
+    return;
+  }
+
+  const studentsInLevel = await prisma.student.findMany({
+    where: {
+      enrols: {
+        some: {
+          levelCode: level.level.code,
+          year: level.year,
+          semester: level.semester,
+          status: 'Cursando'
+        }
+      }
+    }
+  });
+
+  res.status(200).json({ data: studentsInLevel });
 };
+
+export const getClasses = async (req: Request, res: Response) => {
+  const { lessonId } = req.params;
+
+  const query = await prisma.class.findMany({
+    where: { lessonId: +lessonId },
+    include: {
+      attendance: {
+        include: {
+          student: {
+            select: {
+              run: true,
+              name: true,
+              first_surname: true,
+              dv: true
+            }
+          }
+        }
+      }
+    },
+    orderBy: {
+      week: 'asc'
+    }
+  });
+
+  if (!query) {
+    res.status(404).json({ errorType: 'msg', errorMsg: 'Lesson not found' });
+    return;
+  }
+
+  const sanitizied = sanitizeLessonClasses(query);
+
+  res.status(200).json({ data: sanitizied });
+};
+
 export const createClass = async (req: Request, res: Response) => {
-  req;
-  res;
+  const { lessonId, week, contents, attendance }: PostClass = req.body;
+
+  const query = await prisma.class.create({
+    data: {
+      lessonId,
+      week,
+      contents,
+      attendance: {
+        createMany: {
+          data: attendance
+        }
+      }
+    }
+  });
+  console.log(query);
+
+  res.status(200).json({ msg: 'Clase creada!' });
 };

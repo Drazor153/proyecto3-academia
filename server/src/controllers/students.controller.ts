@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { sanitizeStudentGrades, sanitizeStudentLevels } from '../utils/student.utils';
+import {
+  sanitizeStudentGrades,
+  sanitizeStudentLevels
+} from '../utils/student.utils';
 
 type Student = {
   run: number;
@@ -18,14 +21,6 @@ export const get = async (_req: Request, res: Response): Promise<void> => {
 export const create = async (req: Request, res: Response): Promise<void> => {
   const { run, dv, name, first_surname, level }: Student = req.body;
 
-  if (typeof run !== 'number') {
-    res.status(400).json({
-      errorType: 'msg',
-      errorMsg: 'Run type must be number'
-    });
-    return;
-  }
-
   const studenExist = await prisma.student.findUnique({ where: { run } });
 
   if (studenExist !== null) {
@@ -40,21 +35,19 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       data: {
         run,
         dv,
-        name,
-        first_surname,
+        name: name.toUpperCase(),
+        first_surname: first_surname.toUpperCase(),
         enrols: {
-          create: [
-            {
-              status: 'Cursando',
-              year: new Date(Date.now()).getFullYear(),
-              semester: 1,
-              level: {
-                connect: {
-                  code: level
-                }
+          create: {
+            status: 'Cursando',
+            year: new Date(Date.now()).getFullYear(),
+            semester: 1,
+            level: {
+              connect: {
+                code: level
               }
             }
-          ]
+          }
         }
       },
       select: {
@@ -143,7 +136,7 @@ export const getStudentGrades = async (req: Request, res: Response) => {
     }
   });
 
-  const topicQuizzesSanitizied = sanitizeStudentGrades(query)
+  const topicQuizzesSanitizied = sanitizeStudentGrades(query);
 
   res.status(200).json({
     data: topicQuizzesSanitizied

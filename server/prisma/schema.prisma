@@ -98,10 +98,11 @@ model Class {
 }
 
 model attendance {
-  class      Class   @relation(fields: [classId], references: [id])
+  class      Class   @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   classId    Int
   student    Student @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
+  attended   Boolean @default(false)
 
   @@id([classId, studentRun])
 }
