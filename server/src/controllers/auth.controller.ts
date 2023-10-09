@@ -11,14 +11,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  const user = await prisma.student.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       run, dv
+    },
+    select: {
+      run: true,
+      dv: true,
+      name: true,
+      first_surname: true,
+      email: true,
+      role: true,
+      status: true
     }
   })
 
   if (!user) {
-    res.status(404).json({type: 'msg', message: 'Student not found' });
+    res.status(404).json({type: 'msg', message: 'User not found' });
     return;
   }
 

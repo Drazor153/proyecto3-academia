@@ -65,8 +65,9 @@ export const getQuizGrades = async (
     return;
   }
 
-  const query = await prisma.student.findMany({
+  const query = await prisma.user.findMany({
     where: {
+      role: 'STUDENT',
       enrols: {
         some: {
           levelCode: quiz.levelCode,
@@ -154,8 +155,9 @@ export const getStudents = async (req: Request, res: Response) => {
     return;
   }
 
-  const studentsInLevel = await prisma.student.findMany({
+  const studentsInLevel = await prisma.user.findMany({
     where: {
+      role: 'STUDENT',
       enrols: {
         some: {
           levelCode: level.level.code,
@@ -164,6 +166,12 @@ export const getStudents = async (req: Request, res: Response) => {
           status: 'Cursando'
         }
       }
+    },
+    select: {
+      run: true,
+      name: true,
+      first_surname: true,
+      dv: true
     }
   });
 
