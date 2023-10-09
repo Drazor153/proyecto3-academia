@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, ExamStudent, Student, Level } from "../../utils/types";
+import { Data, Student, Level, Exams } from "../../utils/types";
 
 export const studentsApi = createApi({
     reducerPath: "studentsAPI",
@@ -11,7 +11,7 @@ export const studentsApi = createApi({
             query: () => "/",
         }),
 
-        getStudentsGrades: builder.query<Data<ExamStudent[]>, { year: number; semester: number; level: string; run: number }>({
+        getStudentsGrades: builder.query<Data<Exams[]>, { year: number; semester: number; level: string; run: number }>({
             query: ({ year, semester, level, run }) =>
                 `/grades/${year}/${semester}/${level}/${run}`,
         }),

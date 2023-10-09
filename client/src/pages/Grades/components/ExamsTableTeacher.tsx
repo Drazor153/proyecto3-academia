@@ -1,14 +1,15 @@
 import { ThreeDots } from "react-loading-icons";
 import { useGetExamsByYearSemesterLevelQuery, useGetGradesByExamIdQuery, useUploadGradesMutation } from "../../../redux/services/teacherApi";
-import { ExamTeacher, Quiz } from "../../../utils/types";
+import { Exams, GenericExam, Quiz } from "../../../utils/types";
 import Modal from "../../../components/Modal";
 import { Dispatch, useReducer, useState } from "react";
 import {formatRut, RutFormat} from '@fdograph/rut-utilities'
 import { quizReducer, QuizActionsEnum, QuizActionType } from "../quizesReducer";
 import { countDecimals } from "../../../utils/functions";
+import { t } from "i18next";
 
-function TableRow({ exam, rowHandler }: { exam: ExamTeacher, rowHandler: (exam: ExamTeacher) => void }) {
-    const handleGradeBtn = (exam: ExamTeacher) => {
+function TableRow({ exam, rowHandler }: { exam: GenericExam, rowHandler: (exam: GenericExam) => void }) {
+    const handleGradeBtn = (exam: GenericExam) => {
         rowHandler(exam)
     }
 
@@ -17,7 +18,7 @@ function TableRow({ exam, rowHandler }: { exam: ExamTeacher, rowHandler: (exam: 
             <td>Quiz {exam.quizNumber}</td>
             <td>
                 <div className="btn-container">
-                    <button onClick={() => handleGradeBtn(exam)}>Grade</button>
+                    <button onClick={() => handleGradeBtn(exam)}>{t('grades')}</button>
                 </div>
             </td>
         </tr >
@@ -26,10 +27,11 @@ function TableRow({ exam, rowHandler }: { exam: ExamTeacher, rowHandler: (exam: 
 
 function ExamsTableTeacher({year, semester, level, topic}: {year: number, semester: number, level: string, topic: string}) {
     const { data: response, isLoading, isFetching } = useGetExamsByYearSemesterLevelQuery({ year, semester, level })
-    const [examModal, setExamModal] = useState<ExamTeacher|null>(null)
+    const [examModal, setExamModal] = useState<GenericExam|null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    
-    const showModal = (examTarget: ExamTeacher) => {
+        
+
+    const showModal = (examTarget: GenericExam) => {
         setExamModal(examTarget);
         setIsModalOpen(true)
     }
@@ -37,9 +39,8 @@ function ExamsTableTeacher({year, semester, level, topic}: {year: number, semest
     if (isLoading || isFetching) return (<ThreeDots fill='#2F4858' className="threeDots" />)
     if (!response) return (<p>No data</p>)
 
-    const filteredExams: ExamTeacher[] = response.data.filter(exam => exam.topic === topic)
-    
-    const tableRows = filteredExams.map((exam, index) => {
+    const filteredExams: Exams = response.data.filter(exam => exam.topic === topic)[0]
+    const tableRows = filteredExams.quizzes.map((exam, index) => {
         return <TableRow key={index} exam={exam} rowHandler={showModal}/>
     })
 
@@ -56,12 +57,12 @@ function ExamsTableTeacher({year, semester, level, topic}: {year: number, semest
                     {tableRows}
                 </tbody>
             </table>
-            {(isModalOpen && examModal) && <ModalExam examTarget={examModal} setIsModalOpen={setIsModalOpen}/>}
+            {(isModalOpen && examModal) && <ModalExam examTarget={examModal} setIsModalOpen={setIsModalOpen} topic={topic}/>}
         </>
     );
 }
 
-function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>}){
+function ModalExam({examTarget, setIsModalOpen, topic}: {examTarget: GenericExam, setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>, topic: string}){
     // const [isModalOpen, setIsModalOpen] = useState(true)
     const {data: response, isLoading, isFetching} = useGetGradesByExamIdQuery({quizId: examTarget.quizId})
     const [uploadGrades] = useUploadGradesMutation();
@@ -73,8 +74,8 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
     if (isLoading || isFetching) return (<ThreeDots fill='#2F4858' className="threeDots" />)
     if(!response) return (<p></p>)
 
-    const quizzesRow = response.data.map(quiz => (
-        <QuizRow key={quiz.run} {...quiz} handlerDispatch={dispatch}/>
+    const quizzesRow = response.data.map((quiz, i) => (
+        <QuizRow key={quiz.run} {...quiz} n={i+1} handlerDispatch={dispatch}/>
         ))
     
     
@@ -94,7 +95,7 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
     }
 
     const props = {
-        title: `Quiz ${examTarget.quizNumber} ${examTarget.topic}`,
+        title: `Quiz ${examTarget.quizNumber} ${t(topic)}`,
         setIsOpen: setIsModalOpen,
         footer: <button onClick={HandleMutatorButton}>Save</button>
     }
@@ -105,6 +106,7 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>RUN</th>
                         <th>NAME</th>
                         <th>GRADE</th>
@@ -115,7 +117,7 @@ function ModalExam({examTarget, setIsModalOpen}: {examTarget: ExamTeacher, setIs
         </Modal>
     )
 }
-function QuizRow({run, name, first_surname, grade, dv, handlerDispatch}: Quiz & {handlerDispatch: Dispatch<QuizActionType>}){
+function QuizRow({run, name, first_surname, grade, dv, n, handlerDispatch}: Quiz & {handlerDispatch: Dispatch<QuizActionType>, n: number}){
     const runFormat = formatRut(`${run}-${dv}`, RutFormat.DOTS_DASH);
     const fullName = `${first_surname} ${name}`
 
@@ -132,6 +134,7 @@ function QuizRow({run, name, first_surname, grade, dv, handlerDispatch}: Quiz & 
     }
     return (
         <tr>
+            <th>{n}</th>
             <td>{runFormat}</td>
             <td>{fullName}</td>
             <td>

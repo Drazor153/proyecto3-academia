@@ -48,18 +48,16 @@ export type User = {
   name: string;
 }
 
-export type Exam = {
-  topic: string;
+export type GenericExam = {
   quizNumber: number;
+  studentGrade: number;
+  quizId: number;
 }
 
-export type ExamStudent = {
-  studentGrade: number;
-} & Exam
-
-export type ExamTeacher = {
-  quizId: number;
-} & Exam
+export type Exams = {
+  topic: string;
+  quizzes: GenericExam[]
+}
 
 export type Quiz = {
   run: number,

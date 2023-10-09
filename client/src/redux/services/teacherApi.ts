@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, ExamTeacher, Level, Quiz } from "../../utils/types";
+import { Data, Exams, Level, Quiz } from "../../utils/types";
 
 export const teacherApi = createApi({
     reducerPath: "teacherAPI",
@@ -12,7 +12,7 @@ export const teacherApi = createApi({
             query: ({ run }) => `/levels/${run}`,
         }),
 
-        getExamsByYearSemesterLevel: builder.query<Data<ExamTeacher[]>, { year: number, semester: number, level: string }>({
+        getExamsByYearSemesterLevel: builder.query<Data<Exams[]>, { year: number, semester: number, level: string }>({
             query: ({ year, semester, level }) => `/grades/${year}/${semester}/${level}`,
         }),
 

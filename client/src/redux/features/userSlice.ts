@@ -12,7 +12,7 @@ export const userSlice = createSlice({
     swaptype: (state) => {
       if (state.role === "SUPERUSER") {
         state.role = "STUDENT";
-        state.run = 12345678;
+        state.run = 7221200;
       } else {
         state.role = "SUPERUSER";
         state.run = 87654321;

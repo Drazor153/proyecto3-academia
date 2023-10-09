@@ -1,18 +1,18 @@
 import { ThreeDots } from "react-loading-icons";
 import { useAppSelector } from "../../../redux/hooks";
 import { useGetStudentsGradesQuery } from "../../../redux/services/studentsApi";
-import { ExamStudent } from "../../../utils/types";
+import { GenericExam, Exams } from "../../../utils/types";
 
-const getAverage = (exams: ExamStudent[]) => {
+const getAverage = (exams: GenericExam[]) => {
     const sum = exams.reduce((accumulator, exam) => accumulator + exam.studentGrade, 0)
-    return sum / exams.length
+    return (sum / exams.length)
 }
 
 const isApproved = (average: number) => {
     return average >= 4
 }
 
-const getStatus = (exams: ExamStudent[]) => {
+const getStatus = (exams: GenericExam[]) => {
     const average = getAverage(exams)
     for (const exam of exams) {
         if (exam.studentGrade == 0) return 'pending'
@@ -21,7 +21,7 @@ const getStatus = (exams: ExamStudent[]) => {
     return 'failed'
 }
 
-function TableRow({ test }: { test: ExamStudent }) {
+function TableRow({ test }: { test: GenericExam }) {
     return (
         <tr>
             <td>Quiz {test.quizNumber}</td>
@@ -42,9 +42,12 @@ function ExamsTable({ topic, year, semester, level }: { topic: string, year: num
     
     if (isError || !response) return (<p>No data</p>)
     
-    const filteredExams: ExamStudent[] = response.data.filter(exam => exam.topic === topic)
+    const filteredExams: Exams = response.data.filter(exam => exam.topic === topic)[0]
 
-    const tablerows: JSX.Element[] = filteredExams.map((exam, index) => (<TableRow key={index} test={exam} />))
+    console.log(filteredExams);
+    
+
+    const tablerows: JSX.Element[] = filteredExams.quizzes.map((exam, index) => (<TableRow key={index} test={exam} />))
 
     return (
         <>
@@ -62,11 +65,11 @@ function ExamsTable({ topic, year, semester, level }: { topic: string, year: num
             <div className="more-info">
                 <div className="average-container">
                     <h3>Average</h3>
-                    <p>{getAverage(filteredExams)}</p>
+                    <p>{getAverage(filteredExams.quizzes)}</p>
                 </div>
                 <div className="status-container">
                     <h3>Status</h3>
-                    <p>{getStatus(filteredExams)}</p>
+                    <p>{getStatus(filteredExams.quizzes)}</p>
                 </div>
             </div> 
             
