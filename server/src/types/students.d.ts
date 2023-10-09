@@ -6,7 +6,7 @@ export type StudentLevelRaw = {
   semester: number;
   level: {
     code: string;
-    name: string;   
+    name: string;
     teaches: {
       teacherRun: number | null;
       levelCode: string;
@@ -29,5 +29,30 @@ export type StudentLevelSanitized = {
         lesson: string;
       }[];
     }[];
+  }[];
+};
+
+export type StudentGradesRaw = {
+  gives: {
+    grade: number;
+  }[];
+  topic: {
+    id: number;
+    name: string;
+  };
+} & {
+  id: number;
+  number: number;
+  year: number;
+  semester: number;
+  topicId: number;
+  levelCode: string;
+};
+
+export type StudentGradesSanitized = {
+  topic: string;
+  quizzes: {
+    quizNumber: number;
+    studentGrade: number;
   }[];
 };

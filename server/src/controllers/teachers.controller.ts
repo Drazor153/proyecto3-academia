@@ -78,6 +78,9 @@ export const getQuizGrades = async (
           quizId: +quizId
         }
       }
+    },
+    orderBy: {
+      first_surname: 'asc'
     }
   });
 
@@ -95,10 +98,7 @@ export const getQuizGrades = async (
   res.status(200).json({ data: gradesData });
 };
 
-export const postQuizzesGrades = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const postQuizzesGrades = (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });
@@ -107,7 +107,6 @@ export const postQuizzesGrades = async (
 
   const { quizId, grades }: QuizPost = req.body;
 
-  let count = 0;
   grades.forEach(async (val) => {
     await prisma.gives.upsert({
       where: {
@@ -125,19 +124,17 @@ export const postQuizzesGrades = async (
         grade: val.grade
       }
     });
-
-    count = count + 1;
   });
 
-  console.log(`${count} notas actualizadas`);
+  console.log(`${grades.length} notas actualizadas`);
 
   res.status(200).json({ msg: 'Notas actualizadas!' });
 };
 export const getClasses = async (req: Request, res: Response) => {
-  req
-  res
-}
+  req;
+  res;
+};
 export const createClass = async (req: Request, res: Response) => {
-  req
-  res
+  req;
+  res;
 };

@@ -1,4 +1,9 @@
-import { StudentLevelRaw, StudentLevelSanitized } from '../types/students';
+import {
+  StudentGradesRaw,
+  StudentGradesSanitized,
+  StudentLevelRaw,
+  StudentLevelSanitized
+} from '../types/students';
 
 export const sanitizeStudentLevels = (
   input: StudentLevelRaw[]
@@ -58,6 +63,42 @@ export const sanitizeStudentLevels = (
           id: lesson.id,
           lesson: lesson.lesson
         }))
+      });
+      return;
+    }
+  });
+
+  return dataArray;
+};
+
+export const sanitizeStudentGrades = (
+  input: StudentGradesRaw[]
+): StudentGradesSanitized[] => {
+  const dataArray: StudentGradesSanitized[] = [];
+
+  input.forEach((val) => {
+    const topicExists = dataArray.find(
+      (topic) => topic.topic === val.topic.name
+    );
+    if (!topicExists) {
+      dataArray.push({
+        topic: val.topic.name,
+        quizzes: [
+          {
+            quizNumber: val.number,
+            studentGrade: val.gives[0]?.grade ?? 0
+          }
+        ]
+      });
+      return;
+    }
+    const quizExists = topicExists.quizzes.find(
+      (quiz) => quiz.quizNumber === val.number
+    );
+    if (!quizExists) {
+      topicExists.quizzes.push({
+        quizNumber: val.number,
+        studentGrade: val.gives[0]?.grade ?? 0
       });
       return;
     }

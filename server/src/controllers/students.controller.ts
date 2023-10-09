@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { sanitizeStudentLevels } from '../utils/student.utils';
+import { sanitizeStudentGrades, sanitizeStudentLevels } from '../utils/student.utils';
 
 type Student = {
   run: number;
@@ -121,7 +121,7 @@ export const getClasses = async (req: Request, res: Response) => {
 export const getStudentGrades = async (req: Request, res: Response) => {
   const { year, semester, level, run } = req.params;
 
-  const topicQuizzesQuery = await prisma.quiz.findMany({
+  const query = await prisma.quiz.findMany({
     where: {
       year: +year,
       semester: +semester,
@@ -143,13 +143,7 @@ export const getStudentGrades = async (req: Request, res: Response) => {
     }
   });
 
-  const topicQuizzesSanitizied = topicQuizzesQuery.map((val) => {
-    return {
-      topic: val.topic.name,
-      quizNumber: val.number,
-      studentGrade: val.gives.length === 0 ? 0 : val.gives[0].grade
-    };
-  });
+  const topicQuizzesSanitizied = sanitizeStudentGrades(query)
 
   res.status(200).json({
     data: topicQuizzesSanitizied
