@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons'
-import { Level, Student } from '../../../utils/types';
+import { LevelInfo, Student } from '../../../utils/types';
 
 const formSchema: ZodType<Student> = z.object({
     run: z.string().max(12),
@@ -48,11 +48,11 @@ function LevelsSelect(register: UseFormRegister<Student>) {
         return (<p>{t('no_data')}</p>);
     }
 
-    const levels: Level[] = response.data;
+    const levels: LevelInfo[] = response.data;
 
     return (
         <select defaultValue='0' {...register('level')}>
-            {levels.map((level: Level) => (
+            {levels.map((level: LevelInfo) => (
                 <option key={level.levelCode} value={level.levelCode}>{level.levelName} {level.levelCode}</option>
             ))}
         </select>
@@ -118,7 +118,7 @@ function FormNewStudent() {
                     <h3><Trans>run_input</Trans></h3>
                     <div className='run-input-container'>
                         <fieldset className='float-label-field'>
-                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} />
+                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} placeholder='Ej. 12.345.678-9'/>
                         </fieldset>
                     </div>
                 </div>

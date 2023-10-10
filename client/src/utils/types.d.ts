@@ -18,6 +18,11 @@ export type Level = {
   }[];
 }
 
+export type LevelInfo = {
+  levelCode: string;
+  levelName: string
+}
+
 export type Student = {
   run: number | string;
   dv?: string;

@@ -2,12 +2,11 @@ import { useReducer } from "react"
 import { FaPen, FaEarListen, FaCommentDots, FaSpellCheck } from "react-icons/fa6"
 import { useTranslation } from "react-i18next"
 import { useAppSelector } from "../../redux/hooks"
-import OptionSelectStudent from "./components/OptionsSelectStudent"
 import { TypeKind, reducer } from "./selectedOption"
-import OptionSelectTeacher from "./components/OptionsSelectTeacher"
 import ExamsTableTeacher from "./components/ExamsTableTeacher"
 import ExamsTableStudent from "./components/ExamsTableStudent"
 import { t } from "i18next"
+import Options from "./components/Options"
 
 const topics = [
     {
@@ -38,14 +37,6 @@ function Grades() {
         year: '',
         semester: ''
     })
-
-    const optionByRole = () => {
-        if (role == 'STUDENT') {
-            return <OptionSelectStudent state={state} dispatch={dispatch} />
-        } else {
-            return <OptionSelectTeacher state={state} dispatch={dispatch} />
-        }
-    }
 
     const examsByRole = () => {
         if (role == 'STUDENT') {
@@ -86,7 +77,7 @@ function Grades() {
                         ))}
                     </div>
                 </section>
-                {optionByRole()}
+                {Options({state, dispatch})}
                 <section className='grades'>
                     {
                         state.topic ? <h2>{t(state.topic)}</h2> : <p>{t('topic_select_input')}</p>}

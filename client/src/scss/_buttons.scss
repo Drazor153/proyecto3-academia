@@ -15,7 +15,7 @@ button {
     justify-content: center;
     align-items: center;
     gap: 5px;
-    background-color: base.$bluemarine;
+    background-color: base.$crimsonred;
     opacity: .7;
 
     &:hover:not([disabled]) {
@@ -39,7 +39,6 @@ button {
 .lang-swapper {
     padding: 0px 10px;
     color: base.$white;
-    background-color: base.$orange;
     margin: 5px 10px;
     grid-area: lang;
     height: 50px;

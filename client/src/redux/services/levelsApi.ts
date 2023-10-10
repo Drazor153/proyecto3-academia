@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, Level } from "../../utils/types";
+import { Data, Level, LevelInfo } from "../../utils/types";
 
 
 export const levelsApi = createApi({
@@ -8,7 +8,7 @@ export const levelsApi = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
   }),
   endpoints: (builder) => ({
-    getLevels: builder.query<Data<Level[]>, null>({
+    getLevels: builder.query<Data<LevelInfo[]>, null>({
       query: () => "/levels",
     }),
     getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string, run: number }>({
