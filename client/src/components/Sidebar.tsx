@@ -3,7 +3,7 @@ import { menuItems, privilegedItems } from '../utils/pages'
 import { FaBars } from 'react-icons/fa'
 import { NavLink } from 'react-router-dom'
 import { useAppSelector } from '../redux/hooks'
-import logo from '../assets/logo.png'
+import logo from '../assets/hlogo.png'
 
 
 function Sidebar() {

@@ -1,7 +1,8 @@
 import { RequestHandler } from 'express';
 import { prisma } from '../services/db';
-import { LoginForm} from '../types/auth';
+import { LoginForm } from '../types/auth';
 import { sign } from 'jsonwebtoken';
+import { access_token_secret } from '../services/config';
 
 export const login: RequestHandler = async (req, res): Promise<void> => {
   const { run, password }: LoginForm = req.body;
@@ -27,7 +28,7 @@ export const login: RequestHandler = async (req, res): Promise<void> => {
     return;
   }
 
-  const token = sign(user, process.env.ACCESS_TOKEN_SECRET!, {
+  const token = sign(user, access_token_secret, {
     expiresIn: '1h',
   });
   res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });

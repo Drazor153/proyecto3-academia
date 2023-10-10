@@ -7,7 +7,8 @@
 }
 
 .shortcut {
-    color: base.$bluemarine;
+    background-color: adjust-color($color: base.$crimsonred, $lightness: 50%);
+    color: base.$darkbrown;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,10 +24,21 @@
     }
 
     &:hover {
-
         .icon,
         .name {
-            mix-blend-mode: difference;
+            color: base.$brown;
+        }
+    }
+
+    &.privileged {
+        background-color: adjust-color($color: base.$blue, $lightness: 50%);
+        color: base.$blue;
+
+        &:hover {
+            .icon,
+            .name {
+                color: adjust-color($color: base.$blue, $lightness: 20%);;
+            }
         }
     }
 }

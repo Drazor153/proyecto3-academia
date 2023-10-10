@@ -11,28 +11,24 @@ export const menuItems = [
         name: "Dashboard",
         icon: <FaTh />,
         component: <Dashboard />,
-        color: "#BDA69E"
     },
     {
         path: "/Grades",
         name: "Grades",
         icon: <FaBookOpen />,
         component: <Grades />,
-        color: "#F4A460"
     },
     {
         path: "/Classes",
         name: "Classes",
         icon: <FaRegCalendarAlt />,
         component: <Classes />,
-        color: "#FFE5B4"
     },
     {
         path: "/Logout",
         name: "Logout",
         icon: <FaSignOutAlt />,
         component: <Logout />,
-        color: "#DDD06A"
     }
 ]
 
@@ -42,7 +38,6 @@ export const privilegedItems = [
         name: "Administration",
         icon: <FaUser />,
         component: <Administration shortcut='' />,
-        color: "#BDA69E"
     }]
 
 export const privilegedItemsShortcuts = [
@@ -51,6 +46,5 @@ export const privilegedItemsShortcuts = [
         name: "Student Registration",
         icon: <FaUser />,
         component: <Administration shortcut={['Students', 'Registration']} />,
-        color: "#BDA69E"
     }
 ]

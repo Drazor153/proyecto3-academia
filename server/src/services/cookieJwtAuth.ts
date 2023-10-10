@@ -1,6 +1,7 @@
 import type { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UserCookie, UserRequest } from '../types/auth';
+import { access_token_secret } from './config'
 
 export const cookieJwtAuth = (req: UserRequest, res: Response, next: NextFunction) => {
   const token: string = req.cookies.token;
@@ -9,7 +10,7 @@ export const cookieJwtAuth = (req: UserRequest, res: Response, next: NextFunctio
     return;
   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (err, decoded) => {
+  jwt.verify(token, access_token_secret, (err, decoded) => {
     if (err) {
       res.status(401).json({type: 'msg', message: 'Unauthorized' });
       return;
