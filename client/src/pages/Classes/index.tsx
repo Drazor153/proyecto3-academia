@@ -217,13 +217,14 @@ function Classes() {
 
   useTranslation();
 
-  const { role } = useAppSelector(state => state.userReducer)
+  const user = useAppSelector(state => state.userReducer)
 
+  const role = user.role === 'STUDENT' ? 'students' : 'teachers';
   const [select, setSelect] = useReducer(reducer, {
     year: 0,
     semester: 0,
     level: "",
-    lesson: "",
+    lesson: { id: -1, lesson: "" }
   });
 
 
@@ -233,21 +234,22 @@ function Classes() {
       <main className="classes-layout">
         <section className="options-selector">
           <Selector
-            role={role === 'STUDENT' ? 'students' : 'teachers'}
-            run={role === 'STUDENT' ? 7221200 : 87654321}
+            role={role}
+            run={role === 'students' ? 18712569 : 87654321}
             select={select}
             setSelect={setSelect}
           />
         </section>
         <section className="class-list">
-          {select.lesson !== "" && (
+          {select.lesson.lesson !== "" && (
             <ClassTable
               role={role}
+              run={role === 'students' ? 18712569 : 87654321}
               select={select}
             />
           )}
           {
-            select.lesson === "" && (
+            select.lesson.lesson === "" && (
               <div className="empty-list">
                 <p style={{ textAlign: "center" }}>{t('select a lesson')}</p>
               </div>

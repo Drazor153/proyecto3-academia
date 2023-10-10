@@ -4,7 +4,7 @@ export type SelectedOption = {
     year: number;
     semester: number;
     level: string;
-    lesson: string;
+    lesson: { id: number, lesson: string };
 };
 
 export enum TypeKind {
@@ -27,25 +27,37 @@ export const reducer = (state: SelectedOption, action: ActionType) => {
                 year: parseInt(payload),
                 semester: 0,
                 level: '',
-                lesson: '',
+                lesson: {
+                    id: -1,
+                    lesson: ''
+                },
             }
         case TypeKind.SEMESTER:
             return {
                 ...state,
                 semester: parseInt(payload),
                 level: '',
-                lesson: '',
+                lesson: {
+                    id: -1,
+                    lesson: ''
+                },
             }
         case TypeKind.LEVEL:
             return {
                 ...state,
                 level: payload,
-                lesson: '',
+                lesson: {
+                    id: -1,
+                    lesson: ''
+                },
             }
         case TypeKind.LESSON:
             return {
                 ...state,
-                lesson: payload,
+                lesson: {
+                    id: parseInt(payload.toString().split(' ')[0]),
+                    lesson: payload.toString().split(' ')[1],
+                },
             }
         default:
             return state;

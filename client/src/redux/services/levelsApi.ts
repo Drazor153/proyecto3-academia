@@ -8,12 +8,14 @@ export const levelsApi = createApi({
     baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
   }),
   endpoints: (builder) => ({
+
     getLevels: builder.query<Data<Level[]>, null>({
       query: () => "/levels",
     }),
+
     getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string, run: number }>({
       query: ({ role, run }) => {
-        return `${role}/levels/${run}`;
+        return `/${role}/levels/${run}`;
       },
     }),
   }),

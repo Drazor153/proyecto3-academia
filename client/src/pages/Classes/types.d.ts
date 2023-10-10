@@ -2,5 +2,8 @@ export type Select = {
     level: string;
     year: number;
     semester: number;
-    lesson: string;
+    lesson: {
+        id: number;
+        lesson: string;
+    };
 };
