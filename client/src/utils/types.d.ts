@@ -3,6 +3,7 @@ import { QuizData } from "../pages/Grades/quizesReducer";
 export type Data<T> = {
   data: T;
 }
+
 export type Level = {
   year: number;
   semesters: {
@@ -11,7 +12,7 @@ export type Level = {
       code: string;
       level: string;
       lessons: {
-        id: string;
+        id: number;
         lesson: string;
       }[];
     }[];
@@ -23,9 +24,10 @@ export type Student = {
   dv?: string;
   name: string;
   first_surname: string;
-  second_surname: string;
   level: string;
 }
+
+export type Students = Omit<Student, "level">;
 
 export type Grade = {
   id: number;
@@ -73,24 +75,29 @@ export type GradesMutator = {
 }
 
 type Class = {
-  id?: number;
+  id: number;
   week: number;
   contents: string;
-  lesson: string;
-  year?: number;
-  semester?: number;
-  level?: string;
-  // topicName: string;
-  // levelName: string;
 }
 
 export type ClassesStudent = {
-  teacher: string;
-  attendance: string;
+  teacher: {
+    name: string;
+    first_surname: string;
+  };
+  attendance: boolean;
 } & Class;
 
 export type ClassesTeacher = {
-  attendees: string[];
-  students: string[];
-  // absent: string[];
+  attendance: (Students & { run: number, attended: boolean })[];
 } & Class;
+
+export type PostClass = {
+  lessonId: number;
+  week: number;
+  contents: string;
+  attendance: {
+    studentRun: number;
+    attended: boolean;
+  }[];
+}

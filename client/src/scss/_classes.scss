@@ -94,12 +94,12 @@
     }
 }
 
-.threeDots {
-    // position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // transform: translate(-50%, -50%);
-}
+// .threeDots {
+// position: absolute;
+// top: 50%;
+// left: 50%;
+// transform: translate(-50%, -50%);
+// }
 
 .imEyePlus,
 .imEyeMinus,
@@ -240,7 +240,7 @@
         }
     }
 
-    &[user-role="SUPERUSER"] {
+    &[user-role="teachers"] {
         .grid {
             grid-template-columns: 20% calc(35% - 6px) 25% 20%
         }
@@ -252,20 +252,21 @@
         }
     }
 
-    &[user-role="STUDENT"] {
+    &[user-role="students"] {
         .grid {
             grid-template-columns: 20% calc(40% - 3px) calc(30% - 3px) 20%
         }
 
         @media screen and (min-width: 1366px) {
             .grid {
-                grid-template-columns: 10% calc(40% - 6px) 30% 20%
+                grid-template-columns: 10% auto 30% 20%
             }
         }
     }
 }
 
-.attendance {
+.attendance,
+.delete {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -278,6 +279,9 @@
     visibility: hidden;
     transition: opacity .25s, visibility .25s;
     font-size: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     .ioClose {
         position: absolute;
@@ -441,14 +445,14 @@
 
                     &:last-child {
                         display: grid;
-                        grid-template-columns: 65% auto;
+                        grid-template-columns: 20% auto 30%;
                         grid-auto-rows: 40px;
                         height: 40px;
                         gap: 2px;
                         margin-top: 2px;
 
                         @media screen and (min-width: 1366px) {
-                            grid-template-columns: 75% auto;
+                            grid-template-columns: 20% auto 25%;
                         }
                     }
                 }
@@ -471,7 +475,7 @@
 
                 tr {
                     display: grid;
-                    grid-template-columns: 65% auto;
+                    grid-template-columns: 20% auto 30%;
                     grid-auto-rows: 40px;
                     height: 40px;
                     gap: 2px;
@@ -479,7 +483,7 @@
                     margin-top: 2px;
 
                     @media screen and (min-width: 1366px) {
-                        grid-template-columns: 75% auto;
+                        grid-template-columns: 20% auto 25%;
                     }
 
                     td {
@@ -493,7 +497,8 @@
                         }
 
 
-                        &:last-child {
+                        &:last-child,
+                        &:first-child {
 
                             justify-content: space-evenly;
 
@@ -537,15 +542,6 @@
                                     border-color: base.$bluemarine;
                                 }
                             }
-
-                            // select {
-                            //     height: 40px;
-                            //     border-radius: 5px;
-                            //     text-align: center;
-                            //     font-size: 1.25rem;
-                            //     width: max-content;
-                            //     height: 75%;
-                            // }
                         }
                     }
 
@@ -590,6 +586,16 @@
     }
 }
 
+.delete {
+    width: 25%;
+    height: 25%;
+
+    .body {
+        display: flex;
+        height: fit-content;
+    }
+}
+
 .background {
     background-color: rgba(black, .5);
     height: calc(100% - 30px);
@@ -604,7 +610,8 @@
     transition: opacity .25s, visibility .25s;
 }
 
-.showModal {
+.showModalViewClass,
+.showModalDeleteClass {
     opacity: 1;
     visibility: visible;
 }
