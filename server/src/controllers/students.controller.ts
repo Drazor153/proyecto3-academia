@@ -101,7 +101,20 @@ export const getClasses = async (req: Request, res: Response) => {
         where: {
           studentRun: +run
         }
+      },
+      lesson: {
+        include: {
+          teacher: {
+            select: {
+              name: true,
+               first_surname: true
+            }
+          }
+        }
       }
+    },
+    orderBy: {
+      week: 'desc'
     }
   });
 
@@ -109,7 +122,11 @@ export const getClasses = async (req: Request, res: Response) => {
     id: val.id,
     week: val.week,
     contents: val.contents,
-    attendance: val.attendance.length === 0 ? 0 : 1
+    teacher: {
+      name: val.lesson.teacher?.name,
+      first_surname: val.lesson.teacher?.first_surname
+    },
+    attendance: val.attendance[0]?.attended
   }));
 
   res.status(200).json({ data: classes });

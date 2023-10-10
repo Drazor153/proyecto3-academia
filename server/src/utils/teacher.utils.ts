@@ -1,3 +1,4 @@
+import { Topic } from '@prisma/client';
 import {
   LessonClassesRaw,
   LessonClassesSanitized,
@@ -105,10 +106,13 @@ export const sanitizeLessonClasses = (
   return dataArray;
 };
 
-export const sanitizeTopicQuizzes = (
+export const sanitizeTopicQuizzes = (topics: Topic[],
   input: TopicQuizRaw[]
 ): TopicQuizSanitizied[] => {
-  const dataArray: TopicQuizSanitizied[] = [];
+  const dataArray: TopicQuizSanitizied[] = topics.map(val => ({
+    topic: val.name,
+    quizzes: []
+  }));
 
   input.forEach((val) => {
     const topicExists = dataArray.find(

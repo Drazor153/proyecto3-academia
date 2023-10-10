@@ -1,37 +1,47 @@
 import { Router } from 'express';
-import * as teachersControllers from '../controllers/teachers.controller';
+import * as controller from '../controllers/teachers.controller';
 import {
-  formValidatorsMiddleware,
   postClassValidator,
-  postGradeValidator
+  postGradeValidator,
+  putClassValidator,
 } from '../utils/validators';
+import { formValidatorsMiddleware } from '../services/formValidator';
 
 const router = Router();
 
-router.get('/levels/:run', teachersControllers.getTeacherLessons);
+// GET
+router.get('/levels/:run', controller.getTeacherLessons);
 
 router.get(
   '/grades/:year/:semester/:level',
-  teachersControllers.getLevelQuizzes
+  controller.getLevelQuizzes
 );
 
-router.get('/grades/quizzes/:quizId', teachersControllers.getQuizGrades);
+router.get('/grades/quizzes/:quizId', controller.getQuizGrades);
 
+router.get('/classes/:lessonId/students', controller.getStudents);
+
+router.get('/classes/:lessonId', controller.getClasses);
+
+// POST
 router.post(
   '/grades/quizzes',
   postGradeValidator,
-  teachersControllers.postQuizzesGrades
+  formValidatorsMiddleware,
+  controller.postQuizzesGrades
 );
-router.get('/classes/:lessonId/students', teachersControllers.getStudents);
-
-router.get('/classes/:lessonId', teachersControllers.getClasses);
 router.post(
   '/classes',
   postClassValidator,
   formValidatorsMiddleware,
-  teachersControllers.createClass
+  controller.createClass
 );
-
-router.delete('/classes/:classId', teachersControllers.deleteClass)
+router.put(
+  '/classes/:classId',
+  putClassValidator,
+  formValidatorsMiddleware,
+  controller.updateClass
+);
+router.delete('/classes/:classId', controller.deleteClass);
 
 export default router;

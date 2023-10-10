@@ -33,7 +33,10 @@ export type TransformedData = {
     }[];
   }[];
 };
-
+export type Topic = {
+  id: number;
+  name: string;
+}
 export type TopicQuizRaw = {
   id: number;
   number: number;

@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { validationResult } from 'express-validator';
 import {
   sanitizeLessonClasses,
   sanitizeTopicQuizzes,
@@ -34,6 +33,8 @@ export const getLevelQuizzes = async (
 ): Promise<void> => {
   const { year, semester, level } = req.params;
 
+  const topics = await prisma.topic.findMany({});
+
   const topicQuizzesQuery = await prisma.quiz.findMany({
     where: {
       year: +year,
@@ -48,7 +49,7 @@ export const getLevelQuizzes = async (
     },
   });
 
-  const topicQuizzesSanitizied = sanitizeTopicQuizzes(topicQuizzesQuery);
+  const topicQuizzesSanitizied = sanitizeTopicQuizzes(topics, topicQuizzesQuery);
 
   res.status(200).json({
     data: topicQuizzesSanitizied,
@@ -109,12 +110,6 @@ export const getQuizGrades = async (
 };
 
 export const postQuizzesGrades = (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return;
-  }
-
   const { quizId, grades }: QuizPost = req.body;
 
   grades.forEach(async (val) => {
@@ -243,24 +238,22 @@ export const createClass = async (req: Request, res: Response) => {
 
 export const updateClass = async (req: Request, res: Response) => {
   const { classId } = req.params;
-  const { week, contents, attendance }: Omit<PostClass, 'lessonId'> = req.body;
+  const { contents, attendance }: PostClass = req.body;
 
   const query = await prisma.class.update({
     where: { id: +classId },
     data: {
-      week,
       contents,
       attendance: {
-        updateMany: {
-          data: attendance,
-          where: {
-            classId: +classId,
-          },
-        },
+        updateMany: attendance.map((val) => ({
+          where: {classId: +classId, studentRun: val.studentRun},
+          data: {attended: val.attended}
+        }))
       },
     },
   });
-  console.log(query);
+  console.log(`Updated class: ${query}`);
+  
 
   res.status(200).json({ msg: 'Clase actualizada!' });
 }
@@ -270,7 +263,7 @@ export const deleteClass = async (req: Request, res: Response) => {
   const query = await prisma.class.delete({
     where: { id: +classId },
   })
-  console.log(query);
+  console.log(`Deleted class: ${query}`);
 
   res.status(200).json({ msg: 'Clase eliminada!' });
 };
