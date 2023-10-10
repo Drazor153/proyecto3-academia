@@ -8,6 +8,7 @@
 @use 'userinfo';
 @use 'classes';
 @use 'modals';
+@use 'login';
 
 * {
     margin: 0;
@@ -38,8 +39,8 @@ main {
     h2 {
         padding: 5px;
         border-radius: 5px;
-        color: base.$whiteorange;
-        background-color: base.$orange;
+        color: base.$white;
+        background-color: base.$brown;
     }
 }
 
@@ -47,7 +48,7 @@ h1 {
     font-size: 3.5rem;
     grid-area: title;
     font-weight: 900;
-    color: base.$bluemarine;
+    color: adjust-color($color: base.$crimsonred);
     margin: 5px 20px;
 }
 

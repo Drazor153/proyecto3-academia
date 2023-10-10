@@ -19,6 +19,11 @@ export type Level = {
   }[];
 }
 
+export type LevelInfo = {
+  levelCode: string;
+  levelName: string
+}
+
 export type Student = {
   run: number | string;
   dv?: string;
@@ -46,8 +51,13 @@ export type Grade = {
 }
 
 export type User = {
-  rut: number;
-  name: string;
+  run: number,
+  dv: string,
+  name: string,
+  first_surname: string,
+  email: string | null,
+  role: string,
+  status: string
 }
 
 export type GenericExam = {

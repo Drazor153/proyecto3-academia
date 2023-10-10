@@ -73,4 +73,15 @@ select {
     outline: 0;
     font-size: 1.1rem;
     height: 40px;
+    border-radius: 5px;
+    border: 0;
+    background-color: base.$crimsonred;
+    opacity: .7;
+    color: base.$white;
+    padding: 0px 5px;
+
+    &:hover {
+        opacity: 1;
+    }
 }
+

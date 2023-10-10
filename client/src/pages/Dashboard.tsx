@@ -8,13 +8,12 @@ function AdministrationShortcuts() {
     if (role !== 'SUPERUSER') return null
     return (
         <section>
-            <h2>Administration Shortcuts</h2>
+            <h2 className='bg-blue'>Administration Shortcuts</h2>
             <div className='grid'>
                 {privilegedItemsShortcuts.map((item, index) => (
-                    <NavLink className='shortcut'
+                    <NavLink className='shortcut privileged'
                         to={item.path}
                         key={index}
-                        style={{ backgroundColor: item.color }}
                     >
                         <div className='icon'>
                             {item.icon}
@@ -41,7 +40,6 @@ function Dashboard() {
                             <NavLink className='shortcut'
                                 to={item.path}
                                 key={index}
-                                style={{ backgroundColor: item.color }}
                             >
                                 <div className='icon'>
                                     {item.icon}

@@ -27,8 +27,8 @@
   "failed": "Reprobado",
   "in_progress": "En curso",
   "grammar": "Gramática",
-  "speaking": "Habla",
-  "listening": "Escucha",
+  "speaking": "Expresión oral",
+  "listening": "Auditiva",
   "writing": "Escritura",
   "&": "y",
   "classes": "Clases",
@@ -52,5 +52,9 @@
   "delete_class": "Eliminar clase",
   "delete_class_message": "¿Está seguro que desea eliminar la clase?",
   "confirm": "Confirmar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "password": "Contraseña",
+  "login": "Iniciar sesión",
+  "run": "RUT",
+  "invalid_run": "RUT inválido"
 }
