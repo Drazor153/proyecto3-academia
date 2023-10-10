@@ -80,7 +80,7 @@ export type LessonClassesSanitized = {
   week: number;
   contents: string;
   attendance: {
-    studentRun: number;
+    run: number;
     dv: string;
     name: string;
     first_surname: string;

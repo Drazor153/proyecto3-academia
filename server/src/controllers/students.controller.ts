@@ -14,14 +14,14 @@ type Student = {
 };
 
 export const get = async (_req: Request, res: Response): Promise<void> => {
-  const students = await prisma.student.findMany();
+  const students = await prisma.user.findMany();
   res.status(200).json({ data: students });
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   const { run, dv, name, first_surname, level }: Student = req.body;
 
-  const studenExist = await prisma.student.findUnique({ where: { run } });
+  const studenExist = await prisma.user.findUnique({ where: { run } });
 
   if (studenExist !== null) {
     res.status(400).json({
@@ -31,12 +31,15 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
-    const student = await prisma.student.create({
+    const student = await prisma.user.create({
       data: {
         run,
         dv,
         name: name.toUpperCase(),
         first_surname: first_surname.toUpperCase(),
+        role: 'STUDENT',
+        status: 'ENABLED',
+        password: run.toString()+first_surname.toUpperCase(),
         enrols: {
           create: {
             status: 'Cursando',
