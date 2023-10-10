@@ -6,14 +6,16 @@ import {
   transformarDatos,
 } from '../utils/teacher.utils';
 import { PostClass, QuizPost } from '../types/teachers';
+import {  UserRequest } from '../types/auth';
 
 export const getTeacherLessons = async (
-  req: Request,
+  req: UserRequest,
   res: Response
 ): Promise<void> => {
   const { run } = req.params;
+  // const { run } = req.user as UserCookie;
   const query = await prisma.lesson.findMany({
-    where: { teacherRun: Number(run) },
+    where: { teacherRun: +run },
     include: { level: true },
     orderBy: {
       level: {

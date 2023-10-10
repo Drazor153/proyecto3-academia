@@ -4,6 +4,7 @@ import {
   sanitizeStudentGrades,
   sanitizeStudentLevels
 } from '../utils/student.utils';
+import { hashPassword } from '../services/bcrypt';
 
 type Student = {
   run: number;
@@ -31,6 +32,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
+    const hashedPassword = await hashPassword(`${run}_${first_surname.toUpperCase()}`);
     const student = await prisma.user.create({
       data: {
         run,
@@ -39,7 +41,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         first_surname: first_surname.toUpperCase(),
         role: 'STUDENT',
         status: 'ENABLED',
-        password: run.toString()+first_surname.toUpperCase(),
+        password: hashedPassword,
         enrols: {
           create: {
             status: 'Cursando',
