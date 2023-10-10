@@ -1,8 +1,11 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { validationResult } from 'express-validator';
-import { sanitizeTopicQuizzes, transformarDatos } from '../utils/teacher.utils';
-import { QuizPost } from '../types/teachers';
+import {
+  sanitizeLessonClasses,
+  sanitizeTopicQuizzes,
+  transformarDatos,
+} from '../utils/teacher.utils';
+import { PostClass, QuizPost } from '../types/teachers';
 
 export const getTeacherLessons = async (
   req: Request,
@@ -11,7 +14,12 @@ export const getTeacherLessons = async (
   const { run } = req.params;
   const query = await prisma.lesson.findMany({
     where: { teacherRun: Number(run) },
-    include: { level: true }
+    include: { level: true },
+    orderBy: {
+      level: {
+        code: 'desc',
+      },
+    },
   });
 
   const teacherLevels = transformarDatos(query);
@@ -25,24 +33,26 @@ export const getLevelQuizzes = async (
 ): Promise<void> => {
   const { year, semester, level } = req.params;
 
+  const topics = await prisma.topic.findMany({});
+
   const topicQuizzesQuery = await prisma.quiz.findMany({
     where: {
       year: +year,
       semester: +semester,
-      levelCode: level
+      levelCode: level,
     },
     include: {
-      topic: true
+      topic: true,
     },
     orderBy: {
-      id: 'asc'
-    }
+      id: 'asc',
+    },
   });
 
-  const topicQuizzesSanitizied = sanitizeTopicQuizzes(topicQuizzesQuery);
+  const topicQuizzesSanitizied = sanitizeTopicQuizzes(topics, topicQuizzesQuery);
 
   res.status(200).json({
-    data: topicQuizzesSanitizied
+    data: topicQuizzesSanitizied,
   });
 };
 
@@ -53,7 +63,7 @@ export const getQuizGrades = async (
   const { quizId } = req.params;
 
   const quiz = await prisma.quiz.findUnique({
-    where: { id: +quizId }
+    where: { id: +quizId },
   });
 
   if (!quiz) {
@@ -61,27 +71,28 @@ export const getQuizGrades = async (
     return;
   }
 
-  const query = await prisma.student.findMany({
+  const query = await prisma.user.findMany({
     where: {
+      role: 'STUDENT',
       enrols: {
         some: {
           levelCode: quiz.levelCode,
           year: quiz.year,
           semester: quiz.semester,
-          status: 'Cursando'
-        }
-      }
+          status: 'Cursando',
+        },
+      },
     },
     include: {
       gives: {
         where: {
-          quizId: +quizId
-        }
-      }
+          quizId: +quizId,
+        },
+      },
     },
     orderBy: {
-      first_surname: 'asc'
-    }
+      first_surname: 'asc',
+    },
   });
 
   const gradesData = query.map((val) => {
@@ -91,7 +102,7 @@ export const getQuizGrades = async (
       name: val.name,
       first_surname: val.first_surname,
       grade: grade ? grade : 0,
-      dv: val.dv
+      dv: val.dv,
     };
   });
 
@@ -99,12 +110,6 @@ export const getQuizGrades = async (
 };
 
 export const postQuizzesGrades = (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return;
-  }
-
   const { quizId, grades }: QuizPost = req.body;
 
   grades.forEach(async (val) => {
@@ -112,17 +117,17 @@ export const postQuizzesGrades = (req: Request, res: Response) => {
       where: {
         quizId_studentRun: {
           quizId: quizId,
-          studentRun: val.run
-        }
+          studentRun: val.run,
+        },
       },
       update: {
-        grade: val.grade
+        grade: val.grade,
       },
       create: {
         quizId: quizId,
         studentRun: val.run,
-        grade: val.grade
-      }
+        grade: val.grade,
+      },
     });
   });
 
@@ -130,11 +135,135 @@ export const postQuizzesGrades = (req: Request, res: Response) => {
 
   res.status(200).json({ msg: 'Notas actualizadas!' });
 };
-export const getClasses = async (req: Request, res: Response) => {
-  req;
-  res;
+
+export const getStudents = async (req: Request, res: Response) => {
+  const { lessonId } = req.params;
+
+  const level = await prisma.lesson.findUnique({
+    where: {
+      id: +lessonId,
+    },
+    select: {
+      level: true,
+      year: true,
+      semester: true,
+    },
+  });
+
+  if (!level) {
+    res.status(404).json({ errorType: 'msg', errorMsg: 'Lesson not found' });
+    return;
+  }
+
+  const studentsInLevel = await prisma.user.findMany({
+    where: {
+      role: 'STUDENT',
+      enrols: {
+        some: {
+          levelCode: level.level.code,
+          year: level.year,
+          semester: level.semester,
+          status: 'Cursando',
+        },
+      },
+    },
+    orderBy: {
+      first_surname: 'asc',
+    },
+    select: {
+      run: true,
+      name: true,
+      first_surname: true,
+      dv: true,
+    },
+  });
+
+  res.status(200).json({ data: studentsInLevel });
 };
+
+export const getClasses = async (req: Request, res: Response) => {
+  const { lessonId } = req.params;
+
+  const query = await prisma.class.findMany({
+    where: { lessonId: +lessonId },
+    include: {
+      attendance: {
+        include: {
+          student: {
+            select: {
+              run: true,
+              name: true,
+              first_surname: true,
+              dv: true,
+            },            
+          },
+
+        },
+      },
+    },
+    orderBy: {
+      week: 'desc',
+    },
+  });
+
+  if (!query) {
+    res.status(404).json({ errorType: 'msg', errorMsg: 'Lesson not found' });
+    return;
+  }
+
+  const sanitizied = sanitizeLessonClasses(query);
+
+  res.status(200).json({ data: sanitizied });
+};
+
 export const createClass = async (req: Request, res: Response) => {
-  req;
-  res;
+  const { lessonId, week, contents, attendance }: PostClass = req.body;
+
+  const query = await prisma.class.create({
+    data: {
+      lessonId,
+      week,
+      contents,
+      attendance: {
+        createMany: {
+          data: attendance,
+        },
+      },
+    },
+  });
+  console.log(query);
+
+  res.status(200).json({ msg: 'Clase creada!' });
+};
+
+export const updateClass = async (req: Request, res: Response) => {
+  const { classId } = req.params;
+  const { contents, attendance }: PostClass = req.body;
+
+  const query = await prisma.class.update({
+    where: { id: +classId },
+    data: {
+      contents,
+      attendance: {
+        updateMany: attendance.map((val) => ({
+          where: {classId: +classId, studentRun: val.studentRun},
+          data: {attended: val.attended}
+        }))
+      },
+    },
+  });
+  console.log(`Updated class: ${query}`);
+  
+
+  res.status(200).json({ msg: 'Clase actualizada!' });
+}
+
+export const deleteClass = async (req: Request, res: Response) => {
+  const { classId } = req.params;
+  const query = await prisma.class.delete({
+    where: { id: +classId },
+  })
+  console.log(`Deleted class: ${query}`);
+
+  res.status(200).json({ msg: 'Clase eliminada!' });
 };

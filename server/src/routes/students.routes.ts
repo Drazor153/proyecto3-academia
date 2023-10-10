@@ -1,14 +1,17 @@
 import { Router } from 'express';
-import { formValidatorsMiddleware, studentRegisterValidator } from '../utils/validators';
-import * as studentsController from '../controllers/students.controller';
+import { studentRegisterValidator } from '../utils/validators';
+import * as controller from '../controllers/students.controller';
+import { formValidatorsMiddleware } from '../services/formValidator';
 
 const router = Router();
 
-router.get('/', studentsController.get);
-router.post('/', studentRegisterValidator, formValidatorsMiddleware, studentsController.create);
+// GET
+router.get('/', controller.get);
+router.get('/levels/:run', controller.getLevels);
+router.get('/classes/:lessonId/:run', controller.getClasses);
+router.get('/grades/:year/:semester/:level/:run', controller.getStudentGrades);
 
-router.get('/levels/:run', studentsController.getLevels);
-router.get('/classes/:lessonId/:run', studentsController.getClasses);
-router.get('/grades/:year/:semester/:level/:run', studentsController.getStudentGrades);
+// POST
+router.post('/', studentRegisterValidator, formValidatorsMiddleware, controller.create);
 
 export default router;

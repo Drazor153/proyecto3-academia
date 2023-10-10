@@ -82,7 +82,10 @@ export function Semester({ semester, isSemesterSelect, handlerClickSemester, chi
 }
 
 interface LessonProps {
-    lesson: string;
+    lesson: {
+        id: number;
+        lesson: string;
+    };
     isLessonSelect: boolean;
     handlerClickLesson: ({ lesson }: {
         lesson: string;
@@ -91,17 +94,18 @@ interface LessonProps {
 }
 
 export function Lesson({ lesson, isLessonSelect, handlerClickLesson, children }: LessonProps) {
+    // const letter = ;
     return (
         <div
             className={`lesson ${isLessonSelect ? "active" : ""}`}
-            onClick={() => handlerClickLesson({ lesson: lesson })}
+            onClick={() => handlerClickLesson({ lesson: `${lesson.id} ${lesson.lesson}` })}
         >
             {children}
         </div>
     )
 }
 interface SelectorProps {
-    run?: number;
+    run: number;
     role: string;
     select: Select;
     setSelect: Dispatch<ActionType>;
@@ -109,7 +113,7 @@ interface SelectorProps {
 
 export default function Selector({ role, run, select, setSelect }: SelectorProps) {
 
-    const { data: levels, isLoading: isLoadingLevels } = useGetLevelsByRoleRunQuery({ role: role, run: run ?? 0 })
+    const { data: levels, isLoading: isLoadingLevels } = useGetLevelsByRoleRunQuery({ role: role, run: run })
 
     const handlerClickYear = ({ year }: { year: number }) => {
         setSelect({ type: TypeKind.YEAR, payload: `${year}` });
@@ -151,7 +155,7 @@ export default function Selector({ role, run, select, setSelect }: SelectorProps
                                             handlerClickSemester={handlerClickSemester}
                                         >
                                             {
-                                                levels.map(({ level }) => {
+                                                levels.map(({ level, lessons }) => {
                                                     const isLevelSelect = level === select.level;
                                                     return (
                                                         <Level
@@ -161,9 +165,10 @@ export default function Selector({ role, run, select, setSelect }: SelectorProps
                                                             handlerClickLevel={handlerClickLevel}
                                                         >
                                                             {
-                                                                ['A', 'B', 'C'].map((letter) => {
-                                                                    const lesson = `${level} ${letter}`;
-                                                                    const isLessonSelect = lesson === select.lesson;
+                                                                lessons.map(({ id, lesson: letter }) => {
+                                                                    // const letter = lesson.split(' ')[1];
+                                                                    const lesson = { id, lesson: letter }
+                                                                    const isLessonSelect = lesson.id === select.lesson.id;
                                                                     return (
                                                                         <Lesson
                                                                             key={`${year}-${semester}-${level}-${letter}`}

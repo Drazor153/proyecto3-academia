@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as levelsController from '../controllers/levels.controller';
+import * as controller from '../controllers/levels.controller';
 const router = Router();
 
-router.get('/', levelsController.all);
+router.get('/', controller.all);
 
 export default router;

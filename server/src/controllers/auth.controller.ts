@@ -1,28 +1,40 @@
-import type { Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import { prisma } from '../services/db';
 import { LoginForm } from '../types/auth';
 import { sign } from 'jsonwebtoken';
+import { access_token_secret } from '../services/config';
 
-export const login = async (req: Request, res: Response): Promise<void> => {
-  const {run, dv}: LoginForm = req.body;
+export const login: RequestHandler = async (req, res): Promise<void> => {
+  const { run, password }: LoginForm = req.body;
 
-  if(typeof dv !== 'string') {
-    res.status(400).json({type: 'msg', message: 'Dv type must be string' });
-    return;
-  }
-
-  const user = await prisma.student.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
-      run, dv
-    }
-  })
+      run,
+      password,
+    },
+    select: {
+      run: true,
+      dv: true,
+      name: true,
+      first_surname: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+  });
 
   if (!user) {
-    res.status(404).json({type: 'msg', message: 'Student not found' });
+    res.status(404).json({ type: 'msg', message: 'Credentials are incorrect' });
     return;
   }
 
-  const accessToken = sign(user, process.env.ACCESS_TOKEN_SECRET!)
+  const token = sign(user, access_token_secret, {
+    expiresIn: '1h',
+  });
+  res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+  res.json({ user });
+};
 
-  res.json({user, accessToken})
+export const logout: RequestHandler = (_req, res): void => {
+  res.clearCookie('token').json({ type: 'msg', message: 'Logout successful' });
 };

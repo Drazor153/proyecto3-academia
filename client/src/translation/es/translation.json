@@ -48,5 +48,9 @@
   "topic_select_input": "Seleccione el tópico",
   "topics": "Tópicos",
   "options": "Opciones",
-  "grades": "Notas"
+  "grades": "Notas",
+  "delete_class": "Eliminar clase",
+  "delete_class_message": "¿Está seguro que desea eliminar la clase?",
+  "confirm": "Confirmar",
+  "cancel": "Cancelar"
 }

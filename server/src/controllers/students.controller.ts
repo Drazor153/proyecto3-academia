@@ -1,6 +1,9 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../services/db';
-import { sanitizeStudentGrades, sanitizeStudentLevels } from '../utils/student.utils';
+import {
+  sanitizeStudentGrades,
+  sanitizeStudentLevels
+} from '../utils/student.utils';
 
 type Student = {
   run: number;
@@ -11,22 +14,14 @@ type Student = {
 };
 
 export const get = async (_req: Request, res: Response): Promise<void> => {
-  const students = await prisma.student.findMany();
+  const students = await prisma.user.findMany();
   res.status(200).json({ data: students });
 };
 
 export const create = async (req: Request, res: Response): Promise<void> => {
   const { run, dv, name, first_surname, level }: Student = req.body;
 
-  if (typeof run !== 'number') {
-    res.status(400).json({
-      errorType: 'msg',
-      errorMsg: 'Run type must be number'
-    });
-    return;
-  }
-
-  const studenExist = await prisma.student.findUnique({ where: { run } });
+  const studenExist = await prisma.user.findUnique({ where: { run } });
 
   if (studenExist !== null) {
     res.status(400).json({
@@ -36,25 +31,26 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     return;
   }
   try {
-    const student = await prisma.student.create({
+    const student = await prisma.user.create({
       data: {
         run,
         dv,
-        name,
-        first_surname,
+        name: name.toUpperCase(),
+        first_surname: first_surname.toUpperCase(),
+        role: 'STUDENT',
+        status: 'ENABLED',
+        password: run.toString()+first_surname.toUpperCase(),
         enrols: {
-          create: [
-            {
-              status: 'Cursando',
-              year: new Date(Date.now()).getFullYear(),
-              semester: 1,
-              level: {
-                connect: {
-                  code: level
-                }
+          create: {
+            status: 'Cursando',
+            year: new Date(Date.now()).getFullYear(),
+            semester: 1,
+            level: {
+              connect: {
+                code: level
               }
             }
-          ]
+          }
         }
       },
       select: {
@@ -105,7 +101,20 @@ export const getClasses = async (req: Request, res: Response) => {
         where: {
           studentRun: +run
         }
+      },
+      lesson: {
+        include: {
+          teacher: {
+            select: {
+              name: true,
+               first_surname: true
+            }
+          }
+        }
       }
+    },
+    orderBy: {
+      week: 'desc'
     }
   });
 
@@ -113,7 +122,11 @@ export const getClasses = async (req: Request, res: Response) => {
     id: val.id,
     week: val.week,
     contents: val.contents,
-    attendance: val.attendance.length === 0 ? 0 : 1
+    teacher: {
+      name: val.lesson.teacher?.name,
+      first_surname: val.lesson.teacher?.first_surname
+    },
+    attendance: val.attendance[0]?.attended
   }));
 
   res.status(200).json({ data: classes });
@@ -143,7 +156,7 @@ export const getStudentGrades = async (req: Request, res: Response) => {
     }
   });
 
-  const topicQuizzesSanitizied = sanitizeStudentGrades(query)
+  const topicQuizzesSanitizied = sanitizeStudentGrades(query);
 
   res.status(200).json({
     data: topicQuizzesSanitizied
