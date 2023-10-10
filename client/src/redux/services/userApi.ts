@@ -4,16 +4,23 @@ import { User } from '../../utils/types'
 export const userApi = createApi({
     reducerPath: 'userAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://jsonplaceholder.typicode.com/'
+        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
+        // credentials: 'include'
     }),
     endpoints: (builder) => ({
-        getUsers: builder.query<User[], null>({
-            query: () => 'users'
-        }),
-        getUserByRut: builder.query<User, { rut: string }>({
-            query: ({ rut }) => `users/${rut}`
+
+        authUser: builder.mutation<User, { run: string, password: string }>({
+            query: ({ run, password }) => ({
+                url: '/auth/login',
+                method: 'POST',
+                body: {
+                    run: parseInt(run),
+                    password
+                }
+            }),
         })
+
     })
 })
 
-export const { useGetUsersQuery, useGetUserByRutQuery } = userApi
+export const { useAuthUserMutation } = userApi

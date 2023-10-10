@@ -6,7 +6,7 @@ import { useAppSelector } from '../redux/hooks'
 import logo from '../assets/logo.png'
 
 
-function Sidebar({ children }: { children: React.ReactNode }) {
+function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOpen = () => setIsOpen(!isOpen)
     const role = useAppSelector(state => state.userReducer.role)
@@ -36,7 +36,6 @@ function Sidebar({ children }: { children: React.ReactNode }) {
                     ))
                 }
             </nav>
-            {children}
         </>
     )
 }

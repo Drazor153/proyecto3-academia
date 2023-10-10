@@ -9,7 +9,7 @@ export const levelsApi = createApi({
   }),
   endpoints: (builder) => ({
 
-    getLevels: builder.query<Data<Level[]>, null>({
+    getLevels: builder.query<Data<{ levelCode: number, levelName: string }[]>, null>({
       query: () => "/levels",
     }),
 

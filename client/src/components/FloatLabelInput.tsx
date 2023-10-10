@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { FieldValues, UseFormRegister } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-type inputType = 'number' | 'text' | 'email'
+type inputType = 'number' | 'text' | 'email' | 'password'
 
 type Register = UseFormRegister<FieldValues>;
 
@@ -11,9 +11,13 @@ interface InputComponentProps {
     name: string;
     type: inputType;
     register: Register;
+    children?: React.ReactNode;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    value?: string;
+    maxLength?: number;
 }
 
-function FloatLabelInput({ name, type, register }: InputComponentProps) {
+function FloatLabelInput({ name, type, register, children, onChange, value, maxLength }: InputComponentProps) {
     useTranslation();
 
     const [isFocused, setIsFocused] = useState(false);
@@ -39,8 +43,17 @@ function FloatLabelInput({ name, type, register }: InputComponentProps) {
                 type={type}
                 onFocus={handleFocus}
                 {...register(name)}
+                onChange={(e) => {
+                    register(name).onChange(e);
+                    if (onChange) {
+                        onChange(e);
+                    };
+                }}
                 onBlur={handleBlur}
+                value={value}
+                maxLength={maxLength}
             />
+            {children}
 
         </fieldset>
     );
