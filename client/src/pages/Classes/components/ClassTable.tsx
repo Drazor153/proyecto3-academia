@@ -138,10 +138,10 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
     const handlerClickNewClass = () => {
         if (students) {
             const attendanceList: AttendanceList[] = [];
-            students!.data.map(({ run, dv, name, first_surname }) => {
+            students.data.map(({ run, dv, name, first_surname }) => {
                 attendanceList.push({ student: { run: formatRut(`${run}-${dv}`, RutFormat.DOTS_DASH), name, first_surname }, attendance: "absent" });
             });
-            const week = (classes!.data as ClassesTeacher[]).length + 1;
+            const week = (classes.data as ClassesTeacher[]).length + 1;
             setSelectedClass({
                 ...selectedClass,
                 attendanceList,
@@ -306,6 +306,8 @@ function ModalClassList({ showModalViewClass, selectedClass, setSelectedClass, s
         if (selectedClass.id > -1) {
 
             const { lessonId, week, ...rest } = body;
+            lessonId;
+            week;
 
             updateClass({ id: selectedClass.id, body: rest }).unwrap().then((res) => {
                 console.log(res.msg);

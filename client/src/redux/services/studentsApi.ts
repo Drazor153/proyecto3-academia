@@ -5,6 +5,8 @@ export const studentsApi = createApi({
     reducerPath: "studentsAPI",
     baseQuery: fetchBaseQuery({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/students`,
+        credentials: 'include',
+
     }),
     endpoints: (builder) => ({
         getStudents: builder.query<Student[], null>({

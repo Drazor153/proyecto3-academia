@@ -47,7 +47,7 @@ function FloatLabelInput({ name, type, register, children, onChange, value, maxL
                     register(name).onChange(e);
                     if (onChange) {
                         onChange(e);
-                    };
+                    }
                 }}
                 onBlur={handleBlur}
                 value={value}

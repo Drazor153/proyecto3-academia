@@ -7,7 +7,6 @@ import {
 import { Exams, GenericExam, Quiz } from "../../../utils/types";
 import Modal from "../../../components/Modal";
 import { Dispatch, useReducer, useState } from "react";
-import { formatRut, RutFormat } from '@fdograph/rut-utilities'
 import { formatRut, RutFormat } from "@fdograph/rut-utilities";
 import { quizReducer, QuizActionsEnum, QuizActionType } from "../quizesReducer";
 import { countDecimals } from "../../../utils/functions";

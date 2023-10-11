@@ -6,8 +6,10 @@ import { useTranslation } from "react-i18next";
 import { TypeKind, DispatchProps } from "../selectedOption";
 
 function GetLevelsData() {
-    const run = useAppSelector(state => state.userReducer.run);
-    const { data: response } = useGetTeacherLevelsQuery({ run: run });
+    const user = useAppSelector(state => state.userReducer);
+    console.log(user);
+    
+    const { data: response } = useGetTeacherLevelsQuery({ run: user.run });
     if (!response) return null;
 
     return response.data;

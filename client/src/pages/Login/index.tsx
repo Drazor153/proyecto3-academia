@@ -65,6 +65,8 @@ function Login() {
         auth(data).unwrap().then((res) => {
             dispatch(setUser(res));
             //TODO: cookies
+        }).catch(err => {
+            toast.error(t(err.data.message))
         });
 
     }

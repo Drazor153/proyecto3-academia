@@ -5,6 +5,7 @@ export const teacherApi = createApi({
     reducerPath: "teacherAPI",
     baseQuery: fetchBaseQuery({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/teachers`,
+        credentials: 'include',
     }),
     tagTypes: ["TeacherLevels", "ExamTeacher", "Quiz"],
     endpoints: (builder) => ({

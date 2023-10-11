@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { useAppSelector } from '../redux/hooks'
 // import { swaptype } from '../redux/features/userSlice'
 import { BiSolidUserRectangle } from 'react-icons/bi'
 
