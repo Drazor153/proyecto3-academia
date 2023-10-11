@@ -11,7 +11,9 @@ import { cookieJwtAuth } from '../services/cookieJwtAuth';
 const router = Router();
 
 // GET
-router.get('/levels/:run', controller.getTeacherLessons);
+router.get('/levels/:run',
+  cookieJwtAuth, 
+  controller.getTeacherLessons);
 
 router.get('/grades/:year/:semester/:level', controller.getLevelQuizzes);
 
@@ -24,25 +26,27 @@ router.get('/classes/:lessonId', controller.getClasses);
 // POST
 router.post(
   '/grades/quizzes',
-  cookieJwtAuth,
+  // cookieJwtAuth,
   postGradeValidator,
   formValidatorsMiddleware,
   controller.postQuizzesGrades
 );
 router.post(
   '/classes',
-  cookieJwtAuth,
+  // cookieJwtAuth,
   postClassValidator,
   formValidatorsMiddleware,
   controller.createClass
 );
 router.put(
   '/classes/:classId',
-  cookieJwtAuth,
+  // cookieJwtAuth,
   putClassValidator,
   formValidatorsMiddleware,
   controller.updateClass
 );
-router.delete('/classes/:classId', cookieJwtAuth, controller.deleteClass);
+router.delete('/classes/:classId', 
+  // cookieJwtAuth, 
+  controller.deleteClass);
 
 export default router;

@@ -6,7 +6,7 @@ import {
   transformarDatos,
 } from '../utils/teacher.utils';
 import { PostClass, QuizPost } from '../types/teachers';
-import {  UserRequest } from '../types/auth';
+import { UserRequest } from '../types/auth';
 
 export const getTeacherLessons = async (
   req: UserRequest,

@@ -44,7 +44,7 @@ export const login: RequestHandler = async (req, res) => {
   }
 
   const token = sign(userData, access_token_secret, {
-    expiresIn: '1h',
+    expiresIn: '15m',
   });
 
   res.cookie('token', token, { httpOnly: true, maxAge: 3600000, sameSite: 'strict', secure: true });
