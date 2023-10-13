@@ -5,15 +5,14 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.level.createMany({
-    data: levels
+    data: levels,
   });
   await prisma.topic.createMany({
-    data: topics
+    data: topics,
   });
   await prisma.lesson.createMany({
-    data: lessonRecords
+    data: lessonRecords,
   });
-  
 }
 
 main()
