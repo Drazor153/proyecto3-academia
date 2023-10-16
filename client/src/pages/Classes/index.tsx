@@ -212,30 +212,26 @@ import Selector from "./components/Selector";
 //   },
 // ];
 
-
 function Classes() {
-
   useTranslation();
 
-  const user = useAppSelector(state => state.userReducer)
-
-  const role = user.role === 'STUDENT' ? 'students' : 'teachers';
+  const user = useAppSelector((state) => state.userReducer);
+  const role = user.role === "STUDENT" ? "students" : "teachers";
   const [select, setSelect] = useReducer(reducer, {
     year: 0,
     semester: 0,
     level: "",
-    lesson: { id: -1, lesson: "" }
+    lesson: { id: -1, lesson: "" },
   });
-
 
   return (
     <>
-      <h1>{t('classes')}</h1>
+      <h1>{t("classes")}</h1>
       <main className="classes-layout">
         <section className="options-selector">
           <Selector
             role={role}
-            run={role === 'students' ? 18712569 : 87654321}
+            run={role === "students" ? 18712569 : 87654321}
             select={select}
             setSelect={setSelect}
           />
@@ -244,22 +240,19 @@ function Classes() {
           {select.lesson.lesson !== "" && (
             <ClassTable
               role={role}
-              run={role === 'students' ? 18712569 : 87654321}
+              run={role === "students" ? 18712569 : 87654321}
               select={select}
             />
           )}
-          {
-            select.lesson.lesson === "" && (
-              <div className="empty-list">
-                <p style={{ textAlign: "center" }}>{t('select a lesson')}</p>
-              </div>
-            )
-          }
+          {select.lesson.lesson === "" && (
+            <div className="empty-list">
+              <p style={{ textAlign: "center" }}>{t("select a lesson")}</p>
+            </div>
+          )}
         </section>
-      </main >
+      </main>
     </>
   );
 }
 
 export default Classes;
-
