@@ -13,8 +13,6 @@ export class GetLevelsParams {
 export class GetClassesParams {
   @IsNumberString()
   lessonId: number;
-  @IsNumberString()
-  run: number;
 }
 
 export class GetStudentGradesParams {
@@ -24,8 +22,6 @@ export class GetStudentGradesParams {
   semester: number;
   @IsString()
   level: string;
-  @IsNumberString()
-  run: number;
 }
 
 export class CreateNewStudentDto {

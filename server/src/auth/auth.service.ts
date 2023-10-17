@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { comparePassword } from 'src/services/bcrypt';
+import { RoleEnum } from './roles.decorator';
 
 @Injectable()
 export class AuthService {
@@ -45,14 +46,41 @@ export class AuthService {
       );
     }
 
-    const token = await this.jwtService.signAsync(userData);
+    const token = await this.jwtService.signAsync({
+      run: userData.run,
+      role: userData.role,
+    });
 
-    // res.cookie('token', token, {
-    //   httpOnly: true,
-    //   sameSite: 'none',
-    //   maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    //   secure: true,
-    // });
     return { token, userData };
+  }
+
+  async autologin(run: number, role: RoleEnum) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        run,
+        role,
+      },
+      select: {
+        run: true,
+        dv: true,
+        name: true,
+        first_surname: true,
+        email: true,
+        role: true,
+        status: true,
+      },
+    });
+    if (!user) {
+      throw new HttpException(
+        { type: 'msg', message: 'User not found' },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const token = await this.jwtService.signAsync({
+      run: user.run,
+      role: user.role,
+    });
+
+    return { token, user };
   }
 }

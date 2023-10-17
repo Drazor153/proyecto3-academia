@@ -1,3 +1,4 @@
+import { Topic } from '@prisma/client';
 import {
   StudentGradesRaw,
   StudentGradesSanitized,
@@ -72,9 +73,13 @@ export const sanitizeStudentLevels = (
 };
 
 export const sanitizeStudentGrades = (
+  topics: Topic[],
   input: StudentGradesRaw[],
 ): StudentGradesSanitized[] => {
-  const dataArray: StudentGradesSanitized[] = [];
+  const dataArray: StudentGradesSanitized[] = topics.map((topic) => ({
+    topic: topic.name,
+    quizzes: [],
+  }));
 
   input.forEach((val) => {
     const topicExists = dataArray.find(

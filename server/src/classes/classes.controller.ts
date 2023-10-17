@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  UseGuards,
 } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import {
@@ -14,8 +15,12 @@ import {
   LessonParams,
   UpdateClassDto,
 } from 'src/dtos/classes.dto';
+import { RoleEnum, Roles } from 'src/auth/roles.decorator';
+import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('api/teachers/classes')
+@UseGuards(RoleGuard)
+@Roles(RoleEnum.Teacher)
 export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
 
