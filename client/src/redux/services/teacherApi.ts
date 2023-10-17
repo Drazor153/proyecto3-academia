@@ -1,17 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, Exams, Level, Quiz } from "../../utils/types";
+import { Data, Exams, Quiz } from "../../utils/types";
 
 export const teacherApi = createApi({
     reducerPath: "teacherAPI",
     baseQuery: fetchBaseQuery({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/teachers`,
-        credentials: "include",
+        credentials: 'include',
     }),
     tagTypes: ["TeacherLevels", "ExamTeacher", "Quiz"],
     endpoints: (builder) => ({
-        getTeacherLevels: builder.query<Data<Level[]>, { run: number }>({
-            query: ({ run }) => `/levels/${run}`,
-        }),
 
         getExamsByYearSemesterLevel: builder.query<Data<Exams[]>, { year: number, semester: number, level: string }>({
             query: ({ year, semester, level }) => `/grades/${year}/${semester}/${level}`,
@@ -34,7 +31,6 @@ export const teacherApi = createApi({
 });
 
 export const {
-    useGetTeacherLevelsQuery,
     useGetExamsByYearSemesterLevelQuery,
     useGetGradesByExamIdQuery,
     useUploadGradesMutation

@@ -9,7 +9,7 @@ export const userApi = createApi({
     }),
     endpoints: (builder) => ({
 
-        authUser: builder.mutation<User, { run: string, password: string }>({
+        authUser: builder.mutation<{userData: User}, { run: string, password: string }>({
             query: ({ run, password }) => ({
                 url: '/auth/login',
                 method: 'POST',
@@ -18,9 +18,20 @@ export const userApi = createApi({
                     password
                 }
             }),
+        }),
+        autoLogin: builder.query<{userData: User}, null>({
+            query: () => ({
+                url: '/auth/auto-login',
+                method: 'GET',
+            }),
+        }),
+        logout: builder.query<{msg: string}, null>({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'GET',
+            })
         })
-
     })
 })
 
-export const { useAuthUserMutation } = userApi
+export const { useAuthUserMutation, useAutoLoginQuery, useLazyAutoLoginQuery, useLogoutQuery, useLazyLogoutQuery } = userApi

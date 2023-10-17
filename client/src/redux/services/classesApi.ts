@@ -6,15 +6,15 @@ export const classesApi = createApi({
     reducerPath: "classesAPI",
     baseQuery: fetchBaseQuery({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
-
+        credentials: 'include',
     }),
     tagTypes: ['Classes', 'Students'],
     endpoints: (builder) => ({
 
-        getClassesByLessonId: builder.query<Data<ClassesStudent[] | ClassesTeacher[]>, { role: string, lesson: number, run?: number }>({
-            query: ({ role, lesson, run }) => {
+        getClassesByLessonId: builder.query<Data<ClassesStudent[] | ClassesTeacher[]>, { role: string, lesson: number }>({
+            query: ({ role, lesson }) => {
                 return ({
-                    url: `/${role}/classes/${lesson}${run ? `/${run}` : ''}`,
+                    url: `/${role}/classes/${lesson}`,
                 });
             },
             providesTags: ['Classes'],

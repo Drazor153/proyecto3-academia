@@ -6,15 +6,16 @@ export const levelsApi = createApi({
   reducerPath: "levelsAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
+    credentials: 'include',
   }),
   endpoints: (builder) => ({
     getLevels: builder.query<Data<LevelInfo[]>, null>({
       query: () => "/levels",
     }),
 
-    getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string, run: number }>({
-      query: ({ role, run }) => {
-        return `/${role}/levels/${run}`;
+    getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string }>({
+      query: ({ role }) => {
+        return `/${role}/levels/`;
       },
     }),
   }),

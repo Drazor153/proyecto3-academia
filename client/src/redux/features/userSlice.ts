@@ -7,7 +7,7 @@ const initialState: User = {
   name: "",
   first_surname: "",
   email: null,
-  role: "STUDENT",
+  role: "",
   status: ""
 };
 
@@ -17,9 +17,10 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (_, action) => {
       return action.payload;
-    }
+    },
+    logout: () => initialState,
   },
 });
 
 export default userSlice.reducer;
-export const { setUser } = userSlice.actions;
+export const { setUser, logout } = userSlice.actions;

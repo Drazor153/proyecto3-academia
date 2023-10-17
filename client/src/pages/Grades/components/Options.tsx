@@ -7,11 +7,10 @@ import { useGetLevelsByRoleRunQuery } from "../../../redux/services/levelsApi";
 import Select from "react-select";
 
 function GetLevelsData() {
-  const user = useAppSelector((state) => state.userReducer.userData);
+  const user = useAppSelector((state) => state.userReducer);
   const role = user.role == "STUDENT" ? "students" : "teachers";
   const { data: response } = useGetLevelsByRoleRunQuery({
     role: role,
-    run: user.run,
   });
 
   if (!response) return null;

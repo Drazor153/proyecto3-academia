@@ -64,7 +64,7 @@ function Login() {
     auth(data)
       .unwrap()
       .then((res) => {
-        dispatch(setUser(res));
+        dispatch(setUser(res.userData));
         //TODO: cookies
       })
       .catch((err) => {

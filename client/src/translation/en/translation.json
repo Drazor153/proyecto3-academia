@@ -2,6 +2,7 @@
   "menu": "Menu",
   "administration": "Administration",
   "name": "Name",
+  "student": "Student",
   "students": "Students",
   "students_menu": "Students Menu",
   "registration": "Registration",
@@ -53,5 +54,6 @@
   "password": "Password",
   "login": "Login",
   "run": "RUT",
-  "invalid_run": "Invalid RUN"
+  "invalid_run": "Invalid RUN",
+  "logging_out": "Logging Out"
 }

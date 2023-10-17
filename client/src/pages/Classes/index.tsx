@@ -231,18 +231,14 @@ function Classes() {
         <section className="options-selector">
           <Selector
             role={role}
-            run={role === "students" ? 18712569 : 87654321}
+            run={user.run}
             select={select}
             setSelect={setSelect}
           />
         </section>
         <section className="class-list">
           {select.lesson.lesson !== "" && (
-            <ClassTable
-              role={role}
-              run={role === "students" ? 18712569 : 87654321}
-              select={select}
-            />
+            <ClassTable role={role} run={user.run} select={select} />
           )}
           {select.lesson.lesson === "" && (
             <div className="empty-list">
