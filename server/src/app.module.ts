@@ -8,6 +8,9 @@ import { TeachersModule } from './teachers/teachers.module';
 import { StudentsModule } from './students/students.module';
 import { ClassesModule } from './classes/classes.module';
 import { LoggerModule } from 'nestjs-pino';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -45,6 +48,6 @@ import { LoggerModule } from 'nestjs-pino';
     ClassesModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }, JwtStrategy],
 })
 export class AppModule {}

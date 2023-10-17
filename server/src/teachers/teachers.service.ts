@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
-  GetTeacherLessonsParams,
   PostQuizzesGradesBody,
 } from 'src/dtos/teachers.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -15,7 +14,7 @@ import {
 export class TeachersService {
   constructor(private prisma: PrismaService) {}
 
-  async getTeacherLessons({ run }: GetTeacherLessonsParams) {
+  async getTeacherLessons(run: number) {
     const query = await this.prisma.lesson.findMany({
       where: { teacherRun: +run },
       include: { level: true },

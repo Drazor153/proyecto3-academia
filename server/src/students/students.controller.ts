@@ -1,13 +1,25 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { StudentsService } from './students.service';
 import {
   CreateNewStudentDto,
   GetClassesParams,
-  GetLevelsParams,
   GetStudentGradesParams,
 } from 'src/dtos/students.dto';
+import { RoleEnum, Roles } from 'src/auth/roles.decorator';
+import { RoleGuard } from 'src/auth/role.guard';
+import { UserRequest } from 'src/interfaces/request.interface';
 
 @Controller('api/students')
+@UseGuards(RoleGuard)
+@Roles(RoleEnum.Student)
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
@@ -16,19 +28,28 @@ export class StudentsController {
     return this.studentsService.getAllStudents();
   }
 
-  @Get('levels/:run')
-  getLevels(@Param() params: GetLevelsParams) {
-    return this.studentsService.getLevels(params.run);
+  @Get('levels')
+  getLevels(@Req() req: UserRequest) {
+    return this.studentsService.getLevels(req.user.run);
   }
 
-  @Get('classes/:lessonId/:run')
-  GetClasses(@Param() params: GetClassesParams) {
-    return this.studentsService.getClasses(params);
+  @Get('classes/:lessonId')
+  GetClasses(@Param() params: GetClassesParams, @Req() req: UserRequest) {
+    return this.studentsService.getClasses({
+      lessonId: params.lessonId,
+      run: req.user.run,
+    });
   }
 
-  @Get('grades/:year/:semester/:level/:run')
-  GetStudentGrades(@Param() params: GetStudentGradesParams) {
-    return this.studentsService.getStudentGrades(params);
+  @Get('grades/:year/:semester/:level')
+  GetStudentGrades(
+    @Param() params: GetStudentGradesParams,
+    @Req() req: UserRequest,
+  ) {
+    return this.studentsService.getStudentGrades({
+      ...params,
+      run: req.user.run,
+    });
   }
 
   @Post()

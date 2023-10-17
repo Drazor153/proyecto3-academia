@@ -97,10 +97,12 @@ export class StudentsService {
 
     return { data: studentLevels };
   }
-  async getClasses({ lessonId, run }: GetClassesParams) {
+  async getClasses({ lessonId, run }: GetClassesParams & { run: number }) {
+    console.log('Entrando a getClasses');
+
     const query = await this.prisma.class.findMany({
       where: {
-        lessonId: lessonId,
+        lessonId: +lessonId,
       },
       include: {
         attendance: {
@@ -142,11 +144,13 @@ export class StudentsService {
     semester,
     level,
     run,
-  }: GetStudentGradesParams) {
+  }: GetStudentGradesParams & { run: number }) {
+    const topics = await this.prisma.topic.findMany();
+
     const query = await this.prisma.quiz.findMany({
       where: {
-        year,
-        semester,
+        year: +year,
+        semester: +semester,
         levelCode: level,
       },
       include: {
@@ -165,7 +169,7 @@ export class StudentsService {
       },
     });
 
-    const sanitiziedQuery = sanitizeStudentGrades(query);
+    const sanitiziedQuery = sanitizeStudentGrades(topics, query);
 
     return { data: sanitiziedQuery };
   }

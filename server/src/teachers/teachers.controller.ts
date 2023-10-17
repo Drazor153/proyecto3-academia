@@ -1,19 +1,31 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
-  GetTeacherLessonsParams,
   PostQuizzesGradesBody,
 } from 'src/dtos/teachers.dto';
+import { RoleEnum, Roles } from 'src/auth/roles.decorator';
+import { RoleGuard } from 'src/auth/role.guard';
+import { UserRequest } from 'src/interfaces/request.interface';
 
 @Controller('api/teachers')
+@UseGuards(RoleGuard)
+@Roles(RoleEnum.Teacher)
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
-  @Get('levels/:run')
-  getTeacherLessons(@Param() params: GetTeacherLessonsParams) {
-    return this.teachersService.getTeacherLessons(params);
+  @Get('levels')
+  getTeacherLessons(@Req() req: UserRequest) {
+    return this.teachersService.getTeacherLessons(req.user.run);
   }
 
   @Get('grades/:year/:semester/:level')
