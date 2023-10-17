@@ -6,7 +6,6 @@ export const classesApi = createApi({
     reducerPath: "classesAPI",
     baseQuery: fetchBaseQuery({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
-        credentials: 'include',
 
     }),
     tagTypes: ['Classes', 'Students'],

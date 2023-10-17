@@ -14,7 +14,7 @@ export enum TypeKind {
 }
 export type ActionType = {
   type: TypeKind
-  payload: string
+  payload: string 
 }
 export const reducer = (state: SelectedOption, action: ActionType) => {
   const { type, payload } = action

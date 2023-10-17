@@ -37,7 +37,8 @@ $colors: (
     'purple': $purple,
     'green': $green,
     'lightgrey': $lightgrey,
-    'whitegrey': $whitegrey
+    'whitegrey': $whitegrey,
+    'pink': $pink
 );
 
 @each $name, $color in $colors {
@@ -46,6 +47,10 @@ $colors: (
     }
 
     .color-#{$name} {
+        color: $color;
+    }
+
+    .border-#{$name} {
         color: $color;
     }
 }
