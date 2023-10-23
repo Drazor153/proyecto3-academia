@@ -8,7 +8,7 @@
 
 
     h2 {
-        background-color: base.$bluemarine;
+        background-color: base.$brown;
         color: white
     }
 
@@ -29,7 +29,7 @@
 .dropdown {
     display: grid;
     grid-auto-rows: max-content;
-    background-color: rgba(base.$bluemarine, .25);
+    background-color: rgba(base.$brown, .25);
     max-height: 40px;
     font-size: 1.35rem;
     font-weight: bold;
@@ -45,9 +45,9 @@
     .lesson {
         box-sizing: border-box;
         display: flex;
-        color: base.$whiteorange;
+        color: base.$crimsonred;
         cursor: pointer;
-        background-color: rgba(base.$bluemarine, .25);
+        background-color: rgba(base.$brown, .25);
         justify-content: space-between;
         align-items: center;
         padding-inline: 10px;
@@ -56,7 +56,7 @@
         min-width: max-content;
 
         &:hover {
-            background-color: base.$bluemarine;
+            background-color: base.$brown;
         }
 
     }
@@ -74,7 +74,7 @@
 
     .active {
         color: white;
-        background-color: base.$bluemarine;
+        background-color: base.$brown;
     }
 
 
@@ -137,7 +137,7 @@
             td {
                 border-radius: 3px;
                 text-align: center;
-                background-color: base.$bluemarine;
+                background-color: base.$brown;
                 font-weight: bold;
             }
 
@@ -228,13 +228,13 @@
 
             &:nth-child(odd) {
                 td {
-                    background-color: rgba(base.$bluemarine, .25);
+                    background-color: rgba(base.$brown, .25);
                 }
             }
 
             &:nth-child(even) {
                 td {
-                    background-color: rgba(base.$bluemarine, .5);
+                    background-color: rgba(base.$brown, .5);
                 }
             }
         }
@@ -267,7 +267,7 @@
 
 .attendance,
 .delete {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -311,112 +311,56 @@
 
 
     .body {
-        display: grid;
-        grid-template-areas:
-            "content content"
-            "lesson teacher"
-            "attendance attendance"
-        ;
-        grid-template-columns: .5fr 1.25fr;
+        display: flex;
+        flex-direction: column;
         font-size: 1.5rem;
-        height: 75%;
-        padding: 10px;
+        height: 100%;
+        padding: 10px 10px 0 10px;
         gap: 10px;
-
-        @media screen and (min-height: 845px) {
-            height: 80%;
-        }
-
 
         p {
             text-align: center;
-            font-weight: bold;
+
+            &[data-type="student name"] {
+                text-transform: capitalize;
+            }
         }
 
         .content {
-            grid-area: content;
             display: grid;
-            grid-template-columns: 25% auto;
+            grid-template-columns: 20% auto;
             align-items: center;
 
 
             input[type="text"] {
                 height: 40px;
                 border-radius: 5px;
-
                 font-size: 1.25rem;
-                width: 100%;
-                resize: none;
                 border: 2px solid gray;
                 padding-inline: 5px;
+                // width: 95%;
 
                 &:focus {
                     border-radius: 5px;
-                    border: 2px solid base.$bluemarine;
+                    border: 2px solid base.$brown;
                     outline: none;
                 }
             }
 
             @media screen and (min-width: 1366px) {
-                grid-template-columns: 15% auto;
+                grid-template-columns: 12.5% auto;
             }
         }
-
-
-        .lesson {
-            display: grid;
-            grid-template-columns: 70% auto;
-            grid-area: lesson;
-            align-items: center;
-
-            input {
-                pointer-events: none;
-                height: 40px;
-                border-radius: 5px;
-                text-align: center;
-                font-size: 1.25rem;
-                width: 100%;
-                border: 2px solid gray;
-            }
-
-            @media screen and (min-width: 1366px) {
-                grid-template-columns: 53% auto;
-
-                input {
-                    width: 50%;
-                }
-            }
-        }
-
-        .teacher {
-            grid-area: teacher;
-            display: grid;
-            grid-template-columns: 30% auto;
-            align-items: center;
-
-            input[type="text"] {
-                pointer-events: none;
-                height: 40px;
-                border-radius: 5px;
-
-                font-size: 1.25rem;
-                width: 100%;
-                resize: none;
-                border: 2px solid gray;
-                padding-inline: 5px;
-
-            }
-        }
-
 
         .table-attendance-list {
-            grid-area: attendance;
             place-self: center;
             background-color: #CBD1D5;
             width: 100%;
             border-radius: 5px;
             border-collapse: collapse;
             overflow: hidden;
+
+            height: 100%;
 
             @media screen and (min-width: 1366px) {
                 width: 75%;
@@ -427,32 +371,36 @@
             }
 
             thead {
-                background-color: #CBD1D5;
+                background-color: transparent;
 
                 tr {
                     color: white;
                     text-align: center;
                     font-weight: bold;
+                    height: 40px;
 
                     td {
-                        background-color: base.$bluemarine;
+                        background-color: base.$brown;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
                     }
 
-                    &:first-child {
-                        height: 40px;
-
-                    }
+                    // &:first-child {
+                    //     height: 40px;
+                    // }
 
                     &:last-child {
                         display: grid;
-                        grid-template-columns: 20% auto 30%;
+                        grid-template-columns: 5% 20% auto 30%;
                         grid-auto-rows: 40px;
                         height: 40px;
                         gap: 2px;
                         margin-top: 2px;
 
                         @media screen and (min-width: 1366px) {
-                            grid-template-columns: 20% auto 25%;
+                            grid-template-columns: 5% 20% auto 25%;
                         }
                     }
                 }
@@ -462,7 +410,9 @@
                 display: flex;
                 flex-direction: column;
                 overflow: auto;
-                height: 275px;
+                font-size: 1.25rem;
+                height: 100%;
+                background-color: transparent;
 
                 &::-webkit-scrollbar {
                     display: none;
@@ -475,7 +425,7 @@
 
                 tr {
                     display: grid;
-                    grid-template-columns: 20% auto 30%;
+                    grid-template-columns: 5% 20% auto 30%;
                     grid-auto-rows: 40px;
                     height: 40px;
                     gap: 2px;
@@ -483,7 +433,7 @@
                     margin-top: 2px;
 
                     @media screen and (min-width: 1366px) {
-                        grid-template-columns: 20% auto 25%;
+                        grid-template-columns: 5% 20% auto 25%;
                     }
 
                     td {
@@ -505,13 +455,17 @@
                             input[type="checkbox"] {
                                 display: none;
 
+                                // width: 10px;
+                                // height: 10px;
+
                                 &:checked+.label-attendance {
-                                    background-color: base.$bluemarine;
-                                    border-color: base.$bluemarine;
+                                    background-color: base.$brown;
+                                    border-color: base.$brown;
                                 }
                             }
 
                             .label-attendance {
+
                                 position: relative;
                                 cursor: pointer;
                                 display: flex;
@@ -539,7 +493,7 @@
                                 }
 
                                 &:hover {
-                                    border-color: base.$bluemarine;
+                                    border-color: base.$brown;
                                 }
                             }
                         }
@@ -547,13 +501,13 @@
 
                     &:nth-child(odd) {
                         td {
-                            background-color: rgba(base.$bluemarine, .25);
+                            background-color: rgba(base.$brown, .25);
                         }
                     }
 
                     &:nth-child(even) {
                         td {
-                            background-color: rgba(base.$bluemarine, .5);
+                            background-color: rgba(base.$brown, .5);
                         }
                     }
                 }
@@ -574,12 +528,12 @@
 
 
             &.confirm:hover {
-                background-color: base.$bluemarine;
+                background-color: base.$brown;
                 opacity: 1;
             }
 
             &.cancel:hover {
-                background-color: base.$pink;
+                background-color: base.$brown;
                 opacity: 1;
             }
         }
@@ -598,13 +552,15 @@
 
 .background {
     background-color: rgba(black, .5);
-    height: calc(100% - 30px);
-    border-radius: 5px;
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(100% - 40px);
+    // height: calc(100% - 30px);
+    height: 100%;
+    // border-radius: 5px;
+    position: fixed;
+    left: 0%;
+    top: 0%;
+    // transform: translate(-50%, -50%);
+    // width: calc(100% - 40px);
+    width: 100%;
     opacity: 0;
     visibility: hidden;
     transition: opacity .25s, visibility .25s;

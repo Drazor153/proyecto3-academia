@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import { t } from "i18next";
 
@@ -47,7 +47,7 @@ interface ClassTableProps {
 
 function ClassesTable({ role, select }: ClassTableProps) {
   const { data: classes, isLoading: isLoadingClasses } =
-    useGetClassesByLessonIdQuery({ role: role, lesson: select.lesson.id });
+    useGetClassesByLessonIdQuery({ lesson: select.lesson.id });
 
   return (
     <>
@@ -236,13 +236,13 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
                       <td>
                         {(!showModalViewClass ||
                           selectedClass.week !== week) && (
-                          <>
-                            <ImEyePlus
-                              onClick={() => handlerClickViewClass({ id: id })}
-                              className="imEyePlus"
-                            />
-                          </>
-                        )}
+                            <>
+                              <ImEyePlus
+                                onClick={() => handlerClickViewClass({ id: id })}
+                                className="imEyePlus"
+                              />
+                            </>
+                          )}
                         {showModalViewClass && selectedClass.week === week && (
                           <ImEyeMinus className="imEyeMinus" />
                         )}
@@ -289,8 +289,11 @@ function ModalClassList({
   setSelectedClass,
   setShowModalViewClass,
 }: ModalClassListProps) {
+
+
   const [addClass] = useAddClassMutation();
   const [updateClass] = useUpdateClassMutation();
+  const labelRef = useRef<HTMLLabelElement>(null);
 
   const handlerChangeContent = (e: ChangeEvent<HTMLInputElement>) => {
     setSelectedClass({ ...selectedClass, contents: e.target.value });
@@ -352,17 +355,62 @@ function ModalClassList({
     setPositionTable();
   };
 
+  const handlerOnChangeAttendance = (e: ChangeEvent<HTMLInputElement>, student: {
+    run: string;
+    name: string;
+    first_surname: string;
+  }) => {
+    const attendanceList = [
+      ...selectedClass.attendanceList,
+    ];
+    const index = attendanceList.findIndex(
+      ({ student: s }) => {
+        return s === student;
+      }
+    );
+    attendanceList[index].attendance = e.target.checked
+      ? "present"
+      : "absent";
+    console.log(
+      {
+        ...selectedClass,
+        attendanceList: attendanceList,
+      }
+    )
+    setSelectedClass({
+      ...selectedClass,
+      attendanceList: attendanceList,
+    });
+  }
+
+  const handlerLabelKeyDown = (e: React.KeyboardEvent<HTMLLabelElement>, student: {
+    run: string;
+    name: string;
+    first_surname: string;
+  }) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      const cb = document.getElementById(`attendance ${student.name}`) as HTMLInputElement;
+      cb.checked = !cb.checked;
+      handlerOnChangeAttendance({ target: { checked: cb.checked } } as ChangeEvent<HTMLInputElement>, student);
+    }
+  }
+
+
+  useEffect(() => {
+    labelRef.current?.focus();
+
+    // labelRefs.current[index]!.focus();
+  }, [selectedClass]);
+
   return (
     <>
       <div
-        className={`background ${
-          showModalViewClass ? "showModalViewClass" : ""
-        }`}
+        className={`background ${showModalViewClass ? "showModalViewClass" : ""
+          }`}
       />
       <div
-        className={`attendance ${
-          showModalViewClass ? "showModalViewClass" : ""
-        }`}
+        className={`attendance ${showModalViewClass ? "showModalViewClass" : ""
+          }`}
       >
         <h2>
           {t("week")} {selectedClass.week}
@@ -379,26 +427,6 @@ function ModalClassList({
               onChange={handlerChangeContent}
             />
           </div>
-          <div className="lesson">
-            <p>{t("lesson")}</p>
-            <input
-              type="text"
-              name="lesson"
-              id="lesson"
-              value={selectedClass.lesson.lesson}
-              readOnly
-            />
-          </div>
-          <div className="teacher">
-            <p>{t("teacher")}</p>
-            <input
-              type="text"
-              name="teacher"
-              id="teacher"
-              defaultValue={"Teacher..."}
-              readOnly
-            />
-          </div>
           <table className="table-attendance-list">
             <thead>
               <tr>
@@ -407,21 +435,29 @@ function ModalClassList({
                 </td>
               </tr>
               <tr>
+                <td>Nº</td>
                 <td>Run</td>
-                <td>{t("students")}</td>
-                <td>{t("attendance")}</td>
+                <td>
+                  <p>{t("students")}</p>
+                </td>
+                <td>
+                  <p>{t("attendance")}</p>
+                </td>
               </tr>
             </thead>
-            <tbody>
-              {selectedClass.attendanceList.map(({ attendance, student }) => {
+            <tbody onKeyDown={(e) => { if (e.key === ' ') e.preventDefault(); }}>
+              {selectedClass.attendanceList.map(({ attendance, student }, index) => {
                 return (
                   <tr key={`${student.run} ${attendance}`} className="student">
+                    <td>
+                      <p>{index + 1}</p>
+                    </td>
                     <td>
                       <p>{student.run}</p>
                     </td>
                     <td>
-                      <p>
-                        {student.first_surname}, {student.name}
+                      <p data-type="student name">
+                        {student.first_surname.toLowerCase()}, {student.name.toLowerCase()}
                       </p>
                     </td>
                     <td>
@@ -431,27 +467,14 @@ function ModalClassList({
                         name={`attendance ${student.name}`}
                         id={`attendance ${student.name}`}
                         checked={attendance === "present"}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          const attendanceList = [
-                            ...selectedClass.attendanceList,
-                          ];
-                          const index = attendanceList.findIndex(
-                            ({ student: s }) => {
-                              return s === student;
-                            }
-                          );
-                          attendanceList[index].attendance = e.target.checked
-                            ? "present"
-                            : "absent";
-                          setSelectedClass({
-                            ...selectedClass,
-                            attendanceList: attendanceList,
-                          });
-                        }}
+                        onChange={(e) => { console.log(e); handlerOnChangeAttendance(e, student) }}
                       />
                       <label
+                        tabIndex={0}
                         className="label-attendance"
                         htmlFor={`attendance ${student.name}`}
+                        onKeyDown={(e) => handlerLabelKeyDown(e, student)}
+                        ref={labelRef}
                       ></label>
                     </td>
                   </tr>
@@ -459,8 +482,6 @@ function ModalClassList({
               })}
             </tbody>
           </table>
-          {/* )
-                } */}
         </div>
         <div className="footer">
           <button className="confirm" onClick={handlerClickConfirm}>
@@ -500,14 +521,12 @@ function ModalDeleteClass({
   return (
     <>
       <div
-        className={`background ${
-          showModalDeleteClass ? "showModalDeleteClass" : ""
-        }`}
+        className={`background ${showModalDeleteClass ? "showModalDeleteClass" : ""
+          }`}
       />
       <div
-        className={`delete ${
-          showModalDeleteClass ? "showModalDeleteClass" : ""
-        }`}
+        className={`delete ${showModalDeleteClass ? "showModalDeleteClass" : ""
+          }`}
       >
         <h2>{t("delete_class")}</h2>
         <IoIosClose

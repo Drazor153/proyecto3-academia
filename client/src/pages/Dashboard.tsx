@@ -5,7 +5,7 @@ import { useAppSelector } from "../redux/hooks";
 
 function AdministrationShortcuts() {
   const role = useAppSelector((state) => state.userReducer.role);
-  if (role !== "SUPERUSER") return null;
+  if (role !== "ADMIN") return null;
   return (
     <section>
       <h2 className="bg-blue">Administration Shortcuts</h2>

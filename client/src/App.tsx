@@ -15,39 +15,38 @@ import UserInfo from "./components/UserInfo.tsx";
 import { useAppDispatch, useAppSelector } from "./redux/hooks.ts";
 import LanguageSwap from "./components/LanguageSwap.tsx";
 import Login from "./pages/Login";
-import { useLazyAutoLoginQuery } from "./redux/services/userApi.ts";
+import { useAutoLoginQuery } from "./redux/services/userApi.ts";
 import { useEffect } from "react";
 import { setUser } from "./redux/features/userSlice.ts";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const user = useAppSelector((state) => state.userReducer);
-  const [getCredentials, result] = useLazyAutoLoginQuery();
-
   const dispatch = useAppDispatch();
 
+  const { data: result, isLoading, isSuccess } = useAutoLoginQuery(null);
+
+
   const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    if (user.run === -1 && !result.isUninitialized) {
-      return <Navigate to={"/login"} replace />;
+    if (isLoading) {
+      return <>
+        <h1>Loading...</h1>
+      </>
     }
-    return (
-      <>
+
+    if (isSuccess) {
+      return <>
         {children}
         <Outlet />
       </>
-    );
+    } else {
+      return <Navigate to={"/login"} replace />;
+    }
   };
 
-  if (!result.isUninitialized) {
-    if (result.isError) {
-      console.log(result.error);
-    } else {
-      dispatch(setUser(result.data?.userData));
-    }
-  }
-
   useEffect(() => {
-    getCredentials(null);
-  }, []);
+    dispatch(setUser(result?.userData));
+  }, [result, dispatch]);
 
   return (
     <div className="layout">
@@ -62,7 +61,7 @@ function App() {
               </ProtectedRoute>
             }
           >
-            {(user.role == "SUPERUSER"
+            {(user.role == "ADMIN"
               ? [...menuItems, ...privilegedItems, ...privilegedItemsShortcuts]
               : menuItems
             ).map((item, index) => (
@@ -73,7 +72,9 @@ function App() {
           <Route path="*" element={<h1>404</h1>} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </div>
+
   );
 }
 

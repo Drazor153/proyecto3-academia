@@ -7,9 +7,10 @@ export const userApi = createApi({
         baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
         credentials: 'include'
     }),
+    tagTypes: ['login'],
     endpoints: (builder) => ({
 
-        authUser: builder.mutation<{userData: User}, { run: string, password: string }>({
+        authUser: builder.mutation<{ userData: User }, { run: string, password: string }>({
             query: ({ run, password }) => ({
                 url: '/auth/login',
                 method: 'POST',
@@ -18,20 +19,23 @@ export const userApi = createApi({
                     password
                 }
             }),
+            invalidatesTags: ['login']
         }),
-        autoLogin: builder.query<{userData: User}, null>({
+        autoLogin: builder.query<{ userData: User }, null>({
             query: () => ({
                 url: '/auth/auto-login',
                 method: 'GET',
             }),
+            providesTags: ['login']
         }),
-        logout: builder.query<{msg: string}, null>({
+        logout: builder.mutation<{ msg: string }, null>({
             query: () => ({
                 url: '/auth/logout',
                 method: 'GET',
-            })
+            }),
+            invalidatesTags: ['login']
         })
     })
 })
 
-export const { useAuthUserMutation, useAutoLoginQuery, useLazyAutoLoginQuery, useLogoutQuery, useLazyLogoutQuery } = userApi
+export const { useAuthUserMutation, useAutoLoginQuery, useLazyAutoLoginQuery, useLogoutMutation } = userApi

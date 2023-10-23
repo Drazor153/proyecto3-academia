@@ -143,6 +143,7 @@ export default function Selector({ role, select, setSelect }: SelectorProps) {
     isError,
     error,
   } = useGetLevelsByRoleRunQuery({ role: role });
+  // console.log(role);
 
   if (isError) {
     console.log(error);

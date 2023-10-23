@@ -20,8 +20,8 @@ export type Level = {
 }
 
 export type LevelInfo = {
-  levelCode: string;
-  levelName: string
+  code: string;
+  name: string
 }
 
 export type Student = {

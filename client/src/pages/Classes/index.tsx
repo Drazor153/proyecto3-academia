@@ -216,13 +216,20 @@ function Classes() {
   useTranslation();
 
   const user = useAppSelector((state) => state.userReducer);
+
+  // console.log(user.role);
   const role = user.role === "STUDENT" ? "students" : "teachers";
+
   const [select, setSelect] = useReducer(reducer, {
     year: 0,
     semester: 0,
     level: "",
     lesson: { id: -1, lesson: "" },
   });
+
+  if (user.role === "") {
+    return <></>
+  }
 
   return (
     <>

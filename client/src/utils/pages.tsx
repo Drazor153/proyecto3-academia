@@ -1,8 +1,14 @@
-import { FaTh, FaBookOpen, FaRegCalendarAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import {
+    FaTh,
+    FaBookOpen,
+    FaRegCalendarAlt,
+    // FaSignOutAlt,
+    FaUser
+} from 'react-icons/fa'
 import Dashboard from '../pages/Dashboard'
 import Grades from '../pages/Grades'
 import Classes from '../pages/Classes'
-import Logout from '../components/Logout'
+// import Logout from '../components/Logout'
 import Administration from '../pages/Administration'
 
 export const menuItems = [
@@ -24,12 +30,12 @@ export const menuItems = [
         icon: <FaRegCalendarAlt />,
         component: <Classes />,
     },
-    {
-        path: "/Logout",
-        name: "Logout",
-        icon: <FaSignOutAlt />,
-        component: <Logout />,
-    }
+    // {
+    //     path: "/Logout",
+    //     name: "Logout",
+    //     icon: <FaSignOutAlt />,
+    //     component: <Logout />,
+    // }
 ]
 
 export const privilegedItems = [

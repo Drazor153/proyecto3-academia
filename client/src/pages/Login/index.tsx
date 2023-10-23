@@ -11,7 +11,7 @@ import { BiSolidUserCircle } from "react-icons/bi";
 import { GrFormViewHide, GrFormView } from "react-icons/gr";
 import { useState } from "react";
 import { RutFormat, formatRut, validateRut } from "@fdograph/rut-utilities";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAuthUserMutation } from "../../redux/services/userApi";
 import { setUser } from "../../redux/features/userSlice";
 
@@ -65,7 +65,6 @@ function Login() {
       .unwrap()
       .then((res) => {
         dispatch(setUser(res.userData));
-        //TODO: cookies
       })
       .catch((err) => {
         toast.error(t(err.data.message));
@@ -108,7 +107,6 @@ function Login() {
           </FloatLabelInput>
           <button type="submit">{t("login")}</button>
         </form>
-        <ToastContainer />
       </div>
     </main>
   );

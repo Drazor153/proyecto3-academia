@@ -11,10 +11,12 @@ export const classesApi = createApi({
     tagTypes: ['Classes', 'Students'],
     endpoints: (builder) => ({
 
-        getClassesByLessonId: builder.query<Data<ClassesStudent[] | ClassesTeacher[]>, { role: string, lesson: number }>({
-            query: ({ role, lesson }) => {
+        getClassesByLessonId: builder.query<Data<ClassesStudent[] | ClassesTeacher[]>, { lesson: number }>({
+            query: ({ lesson }) => {
+                // const url = role === 'student' ? `students/classes/lesson/${lesson}` : `/classes/lesson/${lesson}`;
+
                 return ({
-                    url: `/${role}/classes/${lesson}`,
+                    url: `/lesson/${lesson}/classes`, //TODO: change to /lesson/:lessonId/classes
                 });
             },
             providesTags: ['Classes'],
@@ -22,13 +24,14 @@ export const classesApi = createApi({
 
         getStudentsByLesson: builder.query<Data<Students[]>, { lesson: number }>({
             query: ({ lesson }) => {
-                return `/teachers/classes/${lesson}/students`;
+                // return `/classes/lesson/${lesson}/students`; //TODO: change to /lesson/:lessonId/students
+                return `/lesson/${lesson}/students`; //TODO: change to /lesson/:lessonId/students
             },
         }),
 
         addClass: builder.mutation<{ msg: string }, { body: PostClass }>({
             query: ({ body }) => ({
-                url: '/teachers/classes',
+                url: '/classes',
                 method: "POST",
                 body,
             }),
@@ -37,7 +40,7 @@ export const classesApi = createApi({
 
         deleteClass: builder.mutation<{ msg: string }, { id: number }>({
             query: ({ id }) => ({
-                url: `/teachers/classes/${id}`,
+                url: `/classes/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: ['Classes'],
@@ -46,7 +49,7 @@ export const classesApi = createApi({
         updateClass: builder.mutation<{ msg: string }, { id: number, body: Omit<PostClass, 'lessonId' | 'week'> }>({
             query: ({ id, body }) => {
                 return ({
-                    url: `/teachers/classes/${id}`,
+                    url: `/classes/${id}`,
                     method: "PUT",
                     body,
                 });

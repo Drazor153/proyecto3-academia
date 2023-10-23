@@ -6,7 +6,7 @@ import { t } from 'i18next';
 import { useAddStudentMutation } from '../../../redux/services/studentsApi';
 import { useState } from 'react';
 import { RutFormat, deconstructRut, formatRut, validateRut } from '@fdograph/rut-utilities';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons'
@@ -16,7 +16,6 @@ const formSchema: ZodType<Student> = z.object({
     run: z.string().max(12),
     name: z.string(),
     first_surname: z.string(),
-    second_surname: z.string(),
     level: z.string().min(2).max(2)
 });
 
@@ -48,12 +47,12 @@ function LevelsSelect(register: UseFormRegister<Student>) {
         return (<p>{t('no_data')}</p>);
     }
 
-    const levels: LevelInfo[] = response.data;
+    const levels = response.data;
 
     return (
         <select defaultValue='0' {...register('level')}>
             {levels.map((level: LevelInfo) => (
-                <option key={level.levelCode} value={level.levelCode}>{level.levelName} {level.levelCode}</option>
+                <option key={level.code} value={level.code}>{level.name} {level.code}</option>
             ))}
         </select>
     );
@@ -75,7 +74,7 @@ function FormNewStudent() {
         resolver: zodResolver(formSchema)
     });
 
-    
+
     const handleSuccessMsg = (payload: ServerResponse) => {
         toast.success(payload.message)
         setRun('')
@@ -94,9 +93,8 @@ function FormNewStudent() {
     }
 
     const onSubmit: SubmitHandler<formType> = (data) => {
-        
-        if(!validateRut(String(data.run))) return toast.error(t('invalid_run'))
-        
+        if (!validateRut(String(data.run))) return toast.error(t('invalid_run'))
+
         const { digits, verifier } = deconstructRut(String(data.run));
 
         addStudent({
@@ -118,7 +116,7 @@ function FormNewStudent() {
                     <h3><Trans>run_input</Trans></h3>
                     <div className='run-input-container'>
                         <fieldset className='float-label-field'>
-                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} placeholder='Ej. 12.345.678-9'/>
+                            <input type="text" {...register('run')} onChange={handleRUNChange} value={run} placeholder='Ej. 12.345.678-9' />
                         </fieldset>
                     </div>
                 </div>
@@ -138,7 +136,6 @@ function FormNewStudent() {
                     <button type="submit"><Trans>register</Trans></button>
                 </div>
             </form>
-            <ToastContainer />
         </>
     )
 }
