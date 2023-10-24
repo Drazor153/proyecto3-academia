@@ -1,17 +1,17 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { RoleEnum, Roles } from 'src/auth/roles.decorator';
 
 @Controller('api/levels')
+@UseGuards(RoleGuard)
+@Roles(RoleEnum.Admin)
 export class LevelsController {
   constructor(private readonly levelsService: LevelsService) {}
 
   @Get('/')
-  getLevels(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    console.log(req.cookies);
-    req;
-    res;
-    // res.cookie('cookieName', 'cookieValue', { httpOnly: true });
-    return this.levelsService.getAllLevels();
+  async getLevels() {
+    const levels = await this.levelsService.getAllLevels();
+    return { data: levels };
   }
 }

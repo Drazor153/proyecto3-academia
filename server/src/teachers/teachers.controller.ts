@@ -12,14 +12,14 @@ import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
   PostQuizzesGradesBody,
-} from 'src/dtos/teachers.dto';
+} from 'src/teachers/dto/teachers.dto';
 import { RoleEnum, Roles } from 'src/auth/roles.decorator';
-import { RoleGuard } from 'src/auth/role.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { UserRequest } from 'src/interfaces/request.interface';
 
 @Controller('api/teachers')
 @UseGuards(RoleGuard)
-@Roles(RoleEnum.Teacher)
+@Roles(RoleEnum.Teacher, RoleEnum.Admin)
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 

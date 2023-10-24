@@ -10,11 +10,10 @@ import {
 import { StudentsService } from './students.service';
 import {
   CreateNewStudentDto,
-  GetClassesParams,
   GetStudentGradesParams,
-} from 'src/dtos/students.dto';
+} from 'src/students/dto/students.dto';
 import { RoleEnum, Roles } from 'src/auth/roles.decorator';
-import { RoleGuard } from 'src/auth/role.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { UserRequest } from 'src/interfaces/request.interface';
 
 @Controller('api/students')
@@ -31,14 +30,6 @@ export class StudentsController {
   @Get('levels')
   getLevels(@Req() req: UserRequest) {
     return this.studentsService.getLevels(req.user.run);
-  }
-
-  @Get('classes/:lessonId')
-  GetClasses(@Param() params: GetClassesParams, @Req() req: UserRequest) {
-    return this.studentsService.getClasses({
-      lessonId: params.lessonId,
-      run: req.user.run,
-    });
   }
 
   @Get('grades/:year/:semester/:level')

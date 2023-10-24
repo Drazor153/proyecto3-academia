@@ -13,7 +13,7 @@ export class LessonParams {
   lessonId: number;
 }
 
-export class Attendance {
+export class AttendanceDto {
   @IsNotEmpty()
   @IsInt()
   studentRun: number;
@@ -39,8 +39,8 @@ export class CreateClassDto {
   @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Attendance)
-  attendance: Attendance[];
+  @Type(() => AttendanceDto)
+  attendance: AttendanceDto[];
 }
 
 export class UpdateClassDto {
@@ -51,8 +51,8 @@ export class UpdateClassDto {
   @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Attendance)
-  attendance: Attendance[];
+  @Type(() => AttendanceDto)
+  attendance: AttendanceDto[];
 }
 
 export class ClassParams {

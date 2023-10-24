@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class LevelsService {
   constructor(private prisma: PrismaService) {}
 
-  async getAllLevels() {
+  getAllLevels() {
     return this.prisma.level.findMany();
   }
 }

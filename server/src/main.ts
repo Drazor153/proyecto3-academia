@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+
 const httpsOptions = {
   key: fs.readFileSync('./ssl/key.pem', 'utf8'),
   cert: fs.readFileSync('./ssl/cert.pem', 'utf8'),
@@ -22,7 +23,11 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: ['https://localhost:5173', 'https://10.242.212.120:5173'],
+    origin: [
+      'https://localhost:5173',
+      'https://10.242.212.120:5173',
+      'https://10.242.251.119:5173',
+    ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders:

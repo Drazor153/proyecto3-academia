@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import {
   CreateNewStudentDto,
-  GetClassesParams,
   GetStudentGradesParams,
-} from 'src/dtos/students.dto';
+} from 'src/students/dto/students.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { hashPassword } from 'src/services/bcrypt';
-import {
-  sanitizeStudentGrades,
-  sanitizeStudentLevels,
-} from '../sanitizers/students.sanitizers';
+import { StudentsSanitizersService } from 'src/services/students.sanitizer.service';
+import { BcryptService } from 'src/services/bcrypt.service';
 
 @Injectable()
 export class StudentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private sanity: StudentsSanitizersService,
+    private bcrypt: BcryptService,
+  ) {}
 
   async getAllStudents() {
     return await this.prisma.user.findMany({
@@ -41,7 +41,7 @@ export class StudentsService {
       return { error: 'El estudiante ya existe' };
     }
 
-    const hashedPassword = await hashPassword(
+    const hashedPassword = await this.bcrypt.hashPassword(
       `${run}_${first_surname.toUpperCase()}`,
     );
     const student = await this.prisma.user.create({
@@ -93,52 +93,11 @@ export class StudentsService {
       },
     });
 
-    const studentLevels = sanitizeStudentLevels(query);
+    const studentLevels = this.sanity.sanitizeStudentLevels(query);
 
     return { data: studentLevels };
   }
-  async getClasses({ lessonId, run }: GetClassesParams & { run: number }) {
-    console.log('Entrando a getClasses');
 
-    const query = await this.prisma.class.findMany({
-      where: {
-        lessonId: +lessonId,
-      },
-      include: {
-        attendance: {
-          where: {
-            studentRun: run,
-          },
-        },
-        lesson: {
-          include: {
-            teacher: {
-              select: {
-                name: true,
-                first_surname: true,
-              },
-            },
-          },
-        },
-      },
-      orderBy: {
-        week: 'desc',
-      },
-    });
-
-    const classes = query.map((val) => ({
-      id: val.id,
-      week: val.week,
-      contents: val.contents,
-      teacher: {
-        name: val.lesson.teacher?.name,
-        first_surname: val.lesson.teacher?.first_surname,
-      },
-      attendance: val.attendance[0]?.attended,
-    }));
-
-    return { data: classes };
-  }
   async getStudentGrades({
     year,
     semester,
@@ -169,7 +128,7 @@ export class StudentsService {
       },
     });
 
-    const sanitiziedQuery = sanitizeStudentGrades(topics, query);
+    const sanitiziedQuery = this.sanity.sanitizeStudentGrades(topics, query);
 
     return { data: sanitiziedQuery };
   }

@@ -3,16 +3,16 @@ import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
   PostQuizzesGradesBody,
-} from 'src/dtos/teachers.dto';
+} from 'src/teachers/dto/teachers.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  sanitizeTeacherLevels,
-  sanitizeTopicQuizzes,
-} from 'src/sanitizers/teachers.sanitizers';
+import { TeachersSanitizersService } from 'src/services/teachers.sanitizer.service';
 
 @Injectable()
 export class TeachersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private sanity: TeachersSanitizersService,
+  ) {}
 
   async getTeacherLessons(run: number) {
     const query = await this.prisma.lesson.findMany({
@@ -25,7 +25,7 @@ export class TeachersService {
       },
     });
 
-    const teacherLevels = sanitizeTeacherLevels(query);
+    const teacherLevels = this.sanity.sanitizeTeacherLevels(query);
 
     return { data: teacherLevels };
   }
@@ -47,7 +47,7 @@ export class TeachersService {
       },
     });
 
-    const topicQuizzesSanitizied = sanitizeTopicQuizzes(
+    const topicQuizzesSanitizied = this.sanity.sanitizeTopicQuizzes(
       topics,
       topicQuizzesQuery,
     );

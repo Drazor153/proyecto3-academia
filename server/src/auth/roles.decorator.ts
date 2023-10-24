@@ -3,6 +3,7 @@ import { SetMetadata } from '@nestjs/common';
 export enum RoleEnum {
   Student = 'STUDENT',
   Teacher = 'TEACHER',
+  Admin = 'ADMIN',
 }
 
 export const PUBLIC_KEY = 'isPublic';

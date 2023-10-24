@@ -1,14 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { comparePassword } from 'src/services/bcrypt';
 import { RoleEnum } from './roles.decorator';
+import { BcryptService } from 'src/services/bcrypt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private bcrypt: BcryptService,
   ) {}
 
   async login(run: number, password: string) {
@@ -37,7 +38,7 @@ export class AuthService {
 
     const { password: userPassword, ...userData } = user;
 
-    const result = await comparePassword(password, userPassword);
+    const result = await this.bcrypt.comparePassword(password, userPassword);
 
     if (!result) {
       throw new HttpException(

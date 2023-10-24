@@ -6,14 +6,12 @@ import {
   HttpStatus,
   Get,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { LoginFormDto } from '../dtos/auth.dto';
+import { LoginFormDto } from './dto/auth.dto';
 import { UserRequest } from 'src/interfaces/request.interface';
-import { Public, Roles, RoleEnum } from './roles.decorator';
-import { RoleGuard } from './role.guard';
+import { Public } from './roles.decorator';
 
 @Controller('api/auth')
 export class AuthController {
@@ -77,20 +75,5 @@ export class AuthController {
     return {
       msg: 'Logout successful',
     };
-  }
-
-  // @UseGuards(JwtAuthGuard)
-  @Get('test')
-  @UseGuards(RoleGuard)
-  @Roles(RoleEnum.Teacher)
-  testing(@Req() req: UserRequest) {
-    return req.user;
-  }
-
-  @Get('test2')
-  @UseGuards(RoleGuard)
-  @Roles(RoleEnum.Student)
-  testing2() {
-    return ['test2'];
   }
 }

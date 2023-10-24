@@ -9,8 +9,9 @@ import { StudentsModule } from './students/students.module';
 import { ClassesModule } from './classes/classes.module';
 import { LoggerModule } from 'nestjs-pino';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
-import { JwtStrategy } from './auth/jwt.strategy';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
+import { LessonsModule } from './lessons/lessons.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
         },
         serializers: {
           req: (req) => ({
+            hostname: req.hostname,
             id: req.id,
             method: req.method,
             url: req.url,
@@ -40,12 +42,13 @@ import { JwtStrategy } from './auth/jwt.strategy';
         messageKey: 'message',
       },
     }),
-    LevelsModule,
     PrismaModule,
     AuthModule,
-    TeachersModule,
+    LevelsModule,
     StudentsModule,
+    TeachersModule,
     ClassesModule,
+    LessonsModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }, JwtStrategy],
