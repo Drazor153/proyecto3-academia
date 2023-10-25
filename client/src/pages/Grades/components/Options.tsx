@@ -47,7 +47,7 @@ function Options({ state, dispatch }: DispatchProps) {
 		label: year.year,
 	}));
 
-	const semesterOptions = () => {
+	const SemesterOptions = () => {
 		if (!state.year) return null;
 
 		const semesterOptions = levels
@@ -59,13 +59,16 @@ function Options({ state, dispatch }: DispatchProps) {
 
 		return (
 			<Select
+				className="react-select-container"
+				classNamePrefix="react-select"
+				placeholder={t('semester_select')}
 				options={semesterOptions}
 				onChange={choice => handleSemesterChange(choice?.value)}
 			/>
 		);
 	};
 
-	const levelOptions = () => {
+	const LevelOptions = () => {
 		if (!state.semester) return null;
 
 		const levelOptions = levels
@@ -79,21 +82,34 @@ function Options({ state, dispatch }: DispatchProps) {
 			}));
 		return (
 			<Select
+				className="react-select-container"
+				classNamePrefix="react-select"
+				placeholder={t('level_select')}
 				options={levelOptions}
 				onChange={choice => handleLevelChange(choice?.value)}
 			/>
 		);
 	};
 
+	console.log(state);
+
 	return (
 		<section className="options-container">
 			<h2>{t('options')}</h2>
+			{/* <div
+			className={``}
+			style={{ height: '50px' }}
+			> */}
 			<Select
+				className="react-select-container"
+				classNamePrefix="react-select"
+				placeholder={t('year_select')}
 				options={yearOptions}
 				onChange={choice => handleYearChange(choice?.value)}
 			/>
-			{semesterOptions()}
-			{levelOptions()}
+			<SemesterOptions />
+			<LevelOptions />
+			{/* </div> */}
 		</section>
 	);
 }

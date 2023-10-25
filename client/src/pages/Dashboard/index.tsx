@@ -5,11 +5,11 @@ import Shortcuts, {
 	AdministrationShortcuts,
 	Shortcut,
 } from './components/Shortcuts';
-import Post from './components/Posts';
-import { PostType } from './types';
+import Announcement from './components/Announcement';
+import { AnnouncementType } from './types';
 import { t } from 'i18next';
 
-const posts: PostType[] = [
+const announcement: AnnouncementType[] = [
 	{
 		id: 1,
 		title: 'Mi primera publicación',
@@ -142,13 +142,17 @@ function Dashboard() {
 					{
 						<Shortcuts>
 							{menuItems /**.slice(1, -1)*/
-								.map((item, index) => (
-									<Shortcut
-										key={item.name}
-										index={index}
-										item={item}
-									/>
-								))}
+								.map((item, index) => {
+									if (item.type !== 'route') {
+										return (
+											<Shortcut
+												key={item.name}
+												index={index}
+												item={item}
+											/>
+										);
+									}
+								})}
 						</Shortcuts>
 					}
 					{role === 'ADMIN' && (
@@ -164,23 +168,22 @@ function Dashboard() {
 						</AdministrationShortcuts>
 					)}
 				</aside>
-				<section className="posts-container">
-					{posts
+				<section className="announcement-container">
+					{announcement
 						.sort((a, b) => {
 							const dateA = a.createdAt.getTime();
 							const dateB = b.createdAt.getTime();
 
 							return dateB - dateA;
 						})
-						.map((post, index) => (
-							<Post
+						.map((announcement, index) => (
+							<Announcement
 								index={index}
-								key={post.title}
-								post={post}
+								key={announcement.title}
+								announcement={announcement}
 							/>
 						))}
 				</section>
-				ºz
 			</main>
 		</>
 	);

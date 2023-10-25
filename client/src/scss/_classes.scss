@@ -552,14 +552,10 @@
 
 .background {
     background-color: rgba(black, .5);
-    // height: calc(100% - 30px);
     height: 100%;
-    // border-radius: 5px;
     position: fixed;
     left: 0%;
     top: 0%;
-    // transform: translate(-50%, -50%);
-    // width: calc(100% - 40px);
     width: 100%;
     opacity: 0;
     visibility: hidden;

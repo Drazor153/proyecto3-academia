@@ -31,7 +31,6 @@ function Classes() {
 				<section className="options-selector">
 					<Selector
 						role={role}
-						run={user.run}
 						select={select}
 						setSelect={setSelect}
 					/>
@@ -40,15 +39,12 @@ function Classes() {
 					{select.lesson.lesson !== '' && (
 						<ClassTable
 							role={role}
-							run={user.run}
 							select={select}
 						/>
 					)}
 					{select.lesson.lesson === '' && (
 						<div className="empty-list">
-							<p style={{ textAlign: 'center' }}>
-								{t('select a lesson')}
-							</p>
+							<p style={{ textAlign: 'center' }}>{t('select_a_lesson')}</p>
 						</div>
 					)}
 				</section>

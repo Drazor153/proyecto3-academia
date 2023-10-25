@@ -17,7 +17,7 @@
 	"no_input": "Sin seleccionar",
 	"Run already registered": "El RUT ya se encuentra registrado",
 	"Invalid value": "Un campo ingresado no es valido",
-	"level": "Nivel",
+	"levels": "Niveles",
 	"beginner": "Principiante",
 	"elementary": "Elemental",
 	"intermediate": "Intermedio",
@@ -62,5 +62,15 @@
 	"dashboard": "Tablero",
 	"date": "Fecha",
 	"shortcuts": "Atajos",
-	"administration_shortcuts": "Atajos de administración"
+	"administration_shortcuts": "Atajos de administración",
+	"error_loading_levels": "Error al cargar los niveles",
+	"error_getting_classes": "Error al obtener las clases",
+	"select_a_lesson": "Seleccione una lección",
+	"announcement": "Anuncios",
+	"search": "Buscar",
+	"level_select": "Seleccione un nivel",
+	"invalid_field": "Campo invalido",
+	"title": "Título",
+	"year_select": "Seleccione un año",
+	"semester_select": "Seleccione un semestre"
 }

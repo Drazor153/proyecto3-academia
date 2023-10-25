@@ -1,7 +1,11 @@
-import { type SubmitHandler, useForm, UseFormRegister } from 'react-hook-form';
+import {
+	type SubmitHandler,
+	useForm,
+	Controller,
+	Control,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ZodType, z } from 'zod';
-import { Trans } from 'react-i18next';
 import { t } from 'i18next';
 import { useAddStudentMutation } from '../../../redux/services/studentsApi';
 import { useState } from 'react';
@@ -15,12 +19,13 @@ import { toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons';
-import { LevelInfo, Student } from '../../../utils/types';
+import { Student } from '../../../utils/types';
+import Select from 'react-select';
 
 const formSchema: ZodType<Student> = z.object({
-	run: z.string().max(12),
-	name: z.string(),
-	first_surname: z.string(),
+	run: z.string().min(9).max(12),
+	name: z.string().min(1),
+	first_surname: z.string().min(1),
 	level: z.string().min(2).max(2),
 });
 
@@ -32,7 +37,7 @@ type Response =
 
 type ServerResponse = { status: number; data: Response; message: string };
 
-function LevelsSelect(register: UseFormRegister<Student>) {
+function LevelsSelect({ control }: { control: Control<Student> }) {
 	const {
 		data: response,
 		isLoading,
@@ -54,20 +59,25 @@ function LevelsSelect(register: UseFormRegister<Student>) {
 
 	const levels = response.data;
 
+	const levelsOptions = levels.map(level => ({
+		value: level.code,
+		label: t(level.name),
+	}));
+
 	return (
-		<select
-			defaultValue="0"
-			{...register('level')}
-		>
-			{levels.map((level: LevelInfo) => (
-				<option
-					key={level.code}
-					value={level.code}
-				>
-					{level.name} {level.code}
-				</option>
-			))}
-		</select>
+		<Controller
+			name="level"
+			control={control}
+			render={({ field: { onChange } }) => (
+				<Select
+					placeholder={t('level_select')}
+					options={levelsOptions}
+					onChange={val => onChange(val?.value)}
+					className="react-select-container"
+					classNamePrefix="react-select"
+				/>
+			)}
+		/>
 	);
 }
 
@@ -82,7 +92,7 @@ function FormNewStudent() {
 
 	const [addStudent] = useAddStudentMutation();
 
-	const { register, handleSubmit, reset } = useForm<formType>({
+	const { register, control, handleSubmit, reset } = useForm<formType>({
 		resolver: zodResolver(formSchema),
 	});
 
@@ -120,19 +130,19 @@ function FormNewStudent() {
 			.catch(error => handleErrorMsg(error));
 	};
 
+	const onError = () => {
+		toast.error(t('invalid_field'));
+	};
+
 	return (
 		<>
-			<h2>
-				<Trans>student_registration</Trans>
-			</h2>
+			<h2>{t('student_registration')}</h2>
 			<form
-				onSubmit={handleSubmit(onSubmit)}
+				onSubmit={handleSubmit(onSubmit, onError)}
 				className="student-register"
 			>
 				<div className="input-section">
-					<h3>
-						<Trans>run_input</Trans>
-					</h3>
+					<h3>{t('run_input')}</h3>
 					<div className="run-input-container">
 						<fieldset className="float-label-field">
 							<input
@@ -146,9 +156,7 @@ function FormNewStudent() {
 					</div>
 				</div>
 				<div className="input-section">
-					<h3>
-						<Trans>names_input</Trans>
-					</h3>
+					<h3>{t('names_input')}</h3>
 					<div className="name-input-container">
 						<FloatLabelInput
 							name="name"
@@ -163,16 +171,12 @@ function FormNewStudent() {
 					</div>
 				</div>
 				<div className="input-section">
-					<h3>
-						<Trans>level_input</Trans>
-					</h3>
+					<h3>{t('level_input')}</h3>
 
-					{LevelsSelect(register)}
+					<LevelsSelect control={control} />
 				</div>
 				<div className="submit-btn">
-					<button type="submit">
-						<Trans>register</Trans>
-					</button>
+					<button type="submit">{t('register')}</button>
 				</div>
 			</form>
 		</>

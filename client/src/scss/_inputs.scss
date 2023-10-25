@@ -58,7 +58,8 @@ input[type=number] {
     font-size: 1rem;
     transition: all .2s;
 
-    &::-webkit-inner-spin-button, &::-webkit-outer-spin-button {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
@@ -69,19 +70,26 @@ input[type=number] {
     }
 }
 
-select {
-    outline: 0;
-    font-size: 1.1rem;
-    height: 40px;
-    border-radius: 5px;
-    border: 0;
-    background-color: base.$crimsonred;
-    opacity: .7;
-    color: base.$white;
-    padding: 0px 5px;
 
-    &:hover {
-        opacity: 1;
+
+.react-select {
+    z-index: 2;
+
+    &__option {
+        &--is-selected {
+            background-color: base.$crimsonred !important;
+        }
+
+        &--is-focused {
+            background-color: base.$crimsonred !important;
+            color: white !important;
+        }
+    }
+
+    &__control {
+        &--is-focused {
+            border-color: base.$crimsonred !important;
+            box-shadow: 0 0 0 1px base.$crimsonred !important;
+        }
     }
 }
-

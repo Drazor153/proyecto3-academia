@@ -1,4 +1,4 @@
-type PostType = {
+export type AnnouncementType = {
     id: number;
     title: string;
     content: string;
@@ -9,5 +9,3 @@ type PostType = {
     updatedAt: Date;
     image?: string;
 };
-
-export { PostType }

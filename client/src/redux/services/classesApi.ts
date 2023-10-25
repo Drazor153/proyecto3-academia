@@ -9,14 +9,14 @@ export const classesApi = createApi({
         credentials: 'include',
     }),
     tagTypes: ['Classes', 'Students'],
+    keepUnusedDataFor: 5,
+    refetchOnFocus: true,
     endpoints: (builder) => ({
 
         getClassesByLessonId: builder.query<Data<ClassesStudent[] | ClassesTeacher[]>, { lesson: number }>({
             query: ({ lesson }) => {
-                // const url = role === 'student' ? `students/classes/lesson/${lesson}` : `/classes/lesson/${lesson}`;
-
                 return ({
-                    url: `/lesson/${lesson}/classes`, //TODO: change to /lesson/:lessonId/classes
+                    url: `/lesson/${lesson}/classes`,
                 });
             },
             providesTags: ['Classes'],
@@ -24,8 +24,7 @@ export const classesApi = createApi({
 
         getStudentsByLesson: builder.query<Data<Students[]>, { lesson: number }>({
             query: ({ lesson }) => {
-                // return `/classes/lesson/${lesson}/students`; //TODO: change to /lesson/:lessonId/students
-                return `/lesson/${lesson}/students`; //TODO: change to /lesson/:lessonId/students
+                return `/lesson/${lesson}/students`;
             },
         }),
 
@@ -66,4 +65,5 @@ export const {
     useAddClassMutation,
     useDeleteClassMutation,
     useUpdateClassMutation,
+    useLazyGetClassesByLessonIdQuery,
 } = classesApi;

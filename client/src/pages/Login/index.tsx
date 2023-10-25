@@ -59,8 +59,7 @@ function Login() {
 	const handlerLogin: SubmitHandler<formType> = data => {
 		data.run = data.run.replace(/[^0-9kK]/g, '').toUpperCase();
 
-		if (!validateRut(String(data.run)))
-			return toast.error(t('invalid_run'));
+		if (!validateRut(String(data.run))) return toast.error(t('invalid_run'));
 
 		data.run = data.run.substring(0, data.run.length - 1);
 
@@ -103,15 +102,11 @@ function Login() {
 						maxLength={25}
 					>
 						<GrFormViewHide
-							className={`grFormViewHide ${
-								!showPassword ? 'show' : 'hide'
-							}`}
+							className={`grFormViewHide ${!showPassword ? 'show' : 'hide'}`}
 							onClick={handlerClickShowPassword}
 						/>
 						<GrFormView
-							className={`grFormView ${
-								showPassword ? 'show' : 'hide'
-							}`}
+							className={`grFormView ${showPassword ? 'show' : 'hide'}`}
 							onClick={handlerClickShowPassword}
 						/>
 					</FloatLabelInput>

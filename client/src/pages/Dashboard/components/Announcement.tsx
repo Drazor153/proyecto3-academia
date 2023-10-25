@@ -1,19 +1,19 @@
 import Avatar from 'react-avatar';
-import { PostType } from '../types';
+import { AnnouncementType } from '../types';
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { t } from 'i18next';
 
-interface PostProps {
-	post: PostType;
+interface AnnouncementProps {
+	announcement: AnnouncementType;
 	index: number;
 	children?: React.ReactNode;
 }
 
-function Post({ post, index }: PostProps) {
-	const [expanded, setExpanded] = useState(index === 6);
+function Announcement({ announcement, index }: AnnouncementProps) {
+	const [expanded, setExpanded] = useState(false);
 
-	const { title, content, author, tags, createdAt, image } = post;
+	const { title, content, author, tags, createdAt, image } = announcement;
 
 	const handlerClick = () => {
 		setExpanded(!expanded);
@@ -21,7 +21,7 @@ function Post({ post, index }: PostProps) {
 
 	return (
 		<article
-			className={`post ${expanded ? 'expanded' : ''}`}
+			className={`announcement ${expanded ? 'expanded' : ''}`}
 			test-n={index}
 		>
 			<header>
@@ -35,7 +35,6 @@ function Post({ post, index }: PostProps) {
 					/>
 					<p>{author}</p>
 				</div>
-				{/* <p className="id">{id}</p> */}
 				<h2 className="title">{title}</h2>
 			</header>
 			<div className={`body ${expanded ? 'expanded' : ''}`}>
@@ -79,4 +78,4 @@ function Post({ post, index }: PostProps) {
 	);
 }
 
-export default Post;
+export default Announcement;

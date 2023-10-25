@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { menuItems, privilegedItems } from '../utils/pages';
+import { menuItems } from '../utils/pages';
 import { FaBars, FaSignOutAlt } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -41,24 +41,28 @@ function Sidebar() {
 						<FaBars onClick={toggleOpen} />
 					</div>
 				</div>
-				{(role == 'ADMIN'
-					? [...menuItems, ...privilegedItems]
-					: menuItems
-				).map((item, index) => (
-					<NavLink
-						to={item.path}
-						key={index}
-						className={({ isActive }) =>
-							isActive ? 'link active' : 'link'
-						}
-						style={{ justifyContent: isOpen ? '' : 'center' }}
-					>
-						<div className="icon">{item.icon}</div>
-						<div className={`link-text ${isOpen ? '' : 'closed'}`}>
-							{item.name}
-						</div>
-					</NavLink>
-				))}
+				{menuItems.map((item, index) => {
+					if (
+						item.type !== 'route' &&
+						(item.only.includes('all') || item.only.includes(role))
+					) {
+						return (
+							<NavLink
+								to={item.path}
+								key={index}
+								className={({ isActive }) =>
+									isActive ? 'link active' : 'link'
+								}
+								style={{ justifyContent: isOpen ? '' : 'center' }}
+							>
+								<div className="icon">{item.icon}</div>
+								<div className={`link-text ${isOpen ? '' : 'closed'}`}>
+									{item.name}
+								</div>
+							</NavLink>
+						);
+					}
+				})}
 				<div
 					data-div="Logout"
 					className="link"
@@ -68,9 +72,7 @@ function Sidebar() {
 					<div className="icon">
 						<FaSignOutAlt />
 					</div>
-					<div className={`link-text ${isOpen ? '' : 'closed'}`}>
-						Logout
-					</div>
+					<div className={`link-text ${isOpen ? '' : 'closed'}`}>Logout</div>
 				</div>
 			</nav>
 			<Logout show={`${showLogout ? 'show' : 'hide'}`} />
