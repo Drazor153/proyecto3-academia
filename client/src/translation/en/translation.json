@@ -68,5 +68,10 @@
 	"invalid_field": "Invalid field",
 	"title": "Title",
 	"year_select": "Select a year",
-	"semester_select": "Select a semester"
+	"semester_select": "Select a semester",
+	"created": "Created",
+	"updated": "Updated",
+	"expires": "Expires",
+	"undefined": "Undefined",
+	"grade": "Grade"
 }

@@ -32,13 +32,19 @@ function Sidebar() {
 		<>
 			<nav className={`sidebar ${isOpen ? '' : 'closed'}`}>
 				<div className="top-section">
-					<img
-						className={`logo ${isOpen ? '' : 'closed'}`}
-						src={logo}
-						alt="logo"
-					/>
-					<div className="bars">
-						<FaBars onClick={toggleOpen} />
+					<div className={`logo-container ${isOpen ? '' : 'closed'}`}>
+						<img
+							className="logo"
+							src={logo}
+							alt="logo"
+						/>
+					</div>
+
+					<div
+						className="bars"
+						onClick={toggleOpen}
+					>
+						<FaBars />
 					</div>
 				</div>
 				{menuItems.map((item, index) => {
@@ -53,9 +59,10 @@ function Sidebar() {
 								className={({ isActive }) =>
 									isActive ? 'link active' : 'link'
 								}
-								style={{ justifyContent: isOpen ? '' : 'center' }}
 							>
-								<div className="icon">{item.icon}</div>
+								<div className={`icon ${isOpen ? '' : 'closed'}`}>
+									{item.icon}
+								</div>
 								<div className={`link-text ${isOpen ? '' : 'closed'}`}>
 									{item.name}
 								</div>
@@ -66,7 +73,6 @@ function Sidebar() {
 				<div
 					data-div="Logout"
 					className="link"
-					style={{ justifyContent: isOpen ? '' : 'center' }}
 					onClick={handlerClickLogout}
 				>
 					<div className="icon">

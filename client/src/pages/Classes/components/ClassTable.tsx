@@ -93,13 +93,13 @@ function TableStudent({ classes }: TableProps) {
 			>
 				<thead>
 					<tr>
-						<td colSpan={5}>{t('class_list')}</td>
+						<th colSpan={5}>{t('class_list')}</th>
 					</tr>
 					<tr className="grid">
-						<td>{t('week')}</td>
-						<td>{t('content')}</td>
-						<td>{t('teacher')}</td>
-						<td>{t('attendance')}</td>
+						<th>{t('week')}</th>
+						<th>{t('content')}</th>
+						<th>{t('teacher')}</th>
+						<th>{t('attendance')}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -221,20 +221,20 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 						user-role={'teachers'}
 					>
 						<thead>
-							<tr>
-								<td colSpan={5}>
-									{t('class_list')}
+							<tr data-title>
+								<th colSpan={4}>
+									<p>{t('class_list')}</p>
 									<BiSolidPlusSquare
 										className="biSolidPlusSquare"
 										onClick={handlerClickNewClass}
 									/>
-								</td>
+								</th>
 							</tr>
 							<tr className="grid">
-								<td>{t('week')}</td>
-								<td>{t('content')}</td>
-								<td>{t('attendance')}</td>
-								<td>{t('actions')}</td>
+								<th>{t('week')}</th>
+								<th>{t('content')}</th>
+								<th>{t('attendance')}</th>
+								<th>{t('actions')}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -460,20 +460,20 @@ function ModalClassList({
 					</div>
 					<table className="table-attendance-list">
 						<thead>
-							<tr>
-								<td colSpan={2}>
+							<tr data-title>
+								<th colSpan={4}>
 									<p>{t('attendance_list')}</p>
-								</td>
+								</th>
 							</tr>
 							<tr>
-								<td>Nº</td>
-								<td>Run</td>
-								<td>
+								<th>Nº</th>
+								<th>Run</th>
+								<th>
 									<p>{t('students')}</p>
-								</td>
-								<td>
+								</th>
+								<th>
 									<p>{t('attendance')}</p>
-								</td>
+								</th>
 							</tr>
 						</thead>
 						<tbody
@@ -494,10 +494,9 @@ function ModalClassList({
 											<td>
 												<p>{student.run}</p>
 											</td>
-											<td>
-												<p data-type="student name">
-													{student.first_surname.toLowerCase()},{' '}
-													{student.name.toLowerCase()}
+											<td data-type="student name">
+												<p>
+													{`${student.first_surname.toLowerCase()}, ${student.name.toLowerCase()}`}
 												</p>
 											</td>
 											<td>

@@ -38,14 +38,20 @@ function App() {
 			}
 		}, [location, user, result]);
 
-		if (isLoading)
+		if (
+			// false &&
+			isLoading
+		)
 			return (
 				<>
 					<h1>Loading...</h1>
 				</>
 			);
 
-		if (isSuccess)
+		if (
+			// true ||
+			isSuccess
+		)
 			return (
 				<>
 					{children}
@@ -62,14 +68,18 @@ function App() {
 	};
 
 	const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
-		if (isLoading)
-			return (
-				<>
-					<h1>Loading...</h1>
-				</>
-			);
+		// if (isLoading)
+		// 	return (
+		// 		<>
+		// 			<h1>Loading...</h1>
+		// 		</>
+		// 	);
 
-		if (isSuccess && result.userData.role === 'ADMIN')
+		if (
+			isSuccess &&
+			result.userData.role === 'ADMIN'
+			// || true
+		)
 			return (
 				<>
 					{children}

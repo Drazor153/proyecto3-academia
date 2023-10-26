@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { User } from '../../utils/types'
+import { ResponseMsg, User } from '../../utils/types'
 
 export const userApi = createApi({
     reducerPath: 'userAPI',
@@ -28,7 +28,7 @@ export const userApi = createApi({
             }),
             providesTags: ['login']
         }),
-        logout: builder.mutation<{ msg: string }, null>({
+        logout: builder.mutation<ResponseMsg, null>({
             query: () => ({
                 url: '/auth/logout',
                 method: 'GET',

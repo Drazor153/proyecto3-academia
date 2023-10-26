@@ -72,5 +72,10 @@
 	"invalid_field": "Campo invalido",
 	"title": "Título",
 	"year_select": "Seleccione un año",
-	"semester_select": "Seleccione un semestre"
+	"semester_select": "Seleccione un semestre",
+	"created": "Creado",
+	"updated": "Actualizado",
+	"expires": "Expira",
+	"undefined": "No definido",
+	"grade": "Nota"
 }

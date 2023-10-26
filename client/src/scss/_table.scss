@@ -1,0 +1,110 @@
+@use 'base';
+@use 'scrollbar';
+
+table {
+	user-select: none;
+	color: white;
+	border-collapse: collapse;
+	font-size: 1.35rem;
+	width: 100%;
+	height: 100%;
+
+	* {
+		box-sizing: border-box;
+	}
+
+	thead {
+		tr {
+			width: calc(100% - scrollbar.$scrollbar-width);
+			th {
+				background-color: base.$brown;
+				border-radius: 5px;
+				text-align: center;
+			}
+			height: 40px;
+
+			&[data-title] {
+				display: flex;
+				// width: 100%;
+				th {
+					// margin-right: 10px;
+					display: grid;
+					place-items: center;
+					width: 100%;
+					// width: calc(100% - scrollbar.$scrollbar-width);
+					// width: 50px;
+					position: relative;
+
+					.biSolidPlusSquare {
+						position: absolute;
+						cursor: pointer;
+						color: rgba(white, 0.75);
+						top: 2.5px;
+						right: 5px;
+						height: 35px;
+						width: 35px;
+						transition: color 0.25s;
+
+						&:hover {
+							color: white;
+						}
+					}
+				}
+			}
+
+			&:last-child {
+				display: grid;
+				gap: 2px;
+				margin-top: 2px;
+
+				th {
+					display: flex;
+					height: 100%;
+					align-items: center;
+					justify-content: center;
+				}
+			}
+		}
+	}
+
+	tbody {
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
+		scrollbar-gutter: stable;
+		width: 100%;
+		height: 100%;
+		tr {
+			color: black;
+			display: grid;
+			gap: 2px;
+			grid-auto-rows: minmax(40px, auto);
+			margin-top: 2px;
+
+			td {
+				display: flex;
+				border-radius: 5px;
+				justify-content: center;
+				align-items: center;
+				padding: 5px;
+
+				&[data-type='student name'] {
+					text-transform: capitalize;
+					justify-content: start;
+				}
+			}
+
+			&:nth-child(odd) {
+				td {
+					background-color: rgba(base.$brown, 0.25);
+				}
+			}
+
+			&:nth-child(even) {
+				td {
+					background-color: rgba(base.$brown, 0.5);
+				}
+			}
+		}
+	}
+}

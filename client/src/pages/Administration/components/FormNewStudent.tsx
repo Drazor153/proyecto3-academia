@@ -175,7 +175,7 @@ function FormNewStudent() {
 
 					<LevelsSelect control={control} />
 				</div>
-				<div className="submit-btn">
+				<div className="btn-section">
 					<button type="submit">{t('register')}</button>
 				</div>
 			</form>

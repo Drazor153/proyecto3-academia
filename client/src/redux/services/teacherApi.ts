@@ -33,5 +33,6 @@ export const teacherApi = createApi({
 export const {
     useGetExamsByYearSemesterLevelQuery,
     useGetGradesByExamIdQuery,
+    useLazyGetGradesByExamIdQuery,
     useUploadGradesMutation
 } = teacherApi;

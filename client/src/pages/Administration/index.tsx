@@ -23,7 +23,6 @@ const menus: Menus = {
 
 function Content({ menu, action }: { menu: string; action: string }) {
 	if (!menu || !action) return null;
-	// console.log(menu, action);
 	return <section className="content">{menus[menu][action]}</section>;
 }
 
@@ -68,11 +67,6 @@ function renderSwitch(
 					setContent={setContent}
 				/>
 			);
-		// case 'announcement':
-		// 	return (() => {
-		// 		setContent('manage');
-		// 		return <></>;
-		// 	})();
 		default:
 			return <></>;
 	}

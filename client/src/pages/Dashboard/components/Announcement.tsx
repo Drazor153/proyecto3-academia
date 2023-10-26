@@ -1,29 +1,34 @@
 import Avatar from 'react-avatar';
-import { AnnouncementType } from '../types';
 import { useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { t } from 'i18next';
+import { AnnouncementType } from '../../../utils/types';
 
 interface AnnouncementProps {
 	announcement: AnnouncementType;
-	index: number;
-	children?: React.ReactNode;
+	// categories: { value: number; label: string }[];
 }
 
-function Announcement({ announcement, index }: AnnouncementProps) {
+function Announcement({ announcement }: AnnouncementProps) {
 	const [expanded, setExpanded] = useState(false);
 
-	const { title, content, author, tags, createdAt, image } = announcement;
+	const {
+		title,
+		content,
+		author,
+		category: { name },
+		createdAt,
+		image,
+	} = announcement;
+
+	// const category = categories.find(category => category.value === value)?.label;
 
 	const handlerClick = () => {
 		setExpanded(!expanded);
 	};
 
 	return (
-		<article
-			className={`announcement ${expanded ? 'expanded' : ''}`}
-			test-n={index}
-		>
+		<article className={`announcement ${expanded ? 'expanded' : ''}`}>
 			<header>
 				<div className="author">
 					<Avatar
@@ -45,7 +50,7 @@ function Announcement({ announcement, index }: AnnouncementProps) {
 				</div>
 				{image && (
 					<img
-						src={image}
+						src={`data:image/jpeg;base64,${image}`}
 						alt={title}
 					/>
 				)}
@@ -55,19 +60,17 @@ function Announcement({ announcement, index }: AnnouncementProps) {
 				<p className="date">
 					{t('date')}
 					{': '}
-					{createdAt.toLocaleDateString('es-CL', {
-						timeZone: 'UTC',
-					})}
+					{createdAt}
 				</p>
-				<p className="tags">
-					{tags.map((tag, index) => (
-						<span
-							key={index}
-							className="tag"
-						>
-							{tag}
-						</span>
-					))}
+				<p className="categories">
+					{/* {categories.map((tag, index) => ( */}
+					<span
+						key={name}
+						className="category"
+					>
+						{name}
+					</span>
+					{/* ))} */}
 				</p>
 				<IoIosArrowDown
 					onClick={handlerClick}

@@ -1,97 +1,90 @@
 @use 'base';
 
 .classes-layout {
-    display: flex;
-    box-sizing: border-box;
-    width: 100%;
-    position: relative;
+	display: flex;
+	box-sizing: border-box;
+	width: 100%;
+	position: relative;
 
+	h2 {
+		background-color: base.$brown;
+		color: white;
+	}
 
-    h2 {
-        background-color: base.$brown;
-        color: white
-    }
+	.class-list {
+		position: initial;
+		border-radius: 5px;
+		width: 100%;
+	}
 
-    .class-list {
-        position: initial;
-        border-radius: 5px;
-        width: 100%;
-    }
-
-    .options-selector {
-        border-radius: 5px;
-        height: max-content;
-        max-height: 100%;
-    }
+	.options-selector {
+		border-radius: 5px;
+		height: max-content;
+		max-height: 100%;
+	}
 }
-
 
 .dropdown {
-    display: grid;
-    grid-auto-rows: max-content;
-    background-color: rgba(base.$brown, .25);
-    max-height: 40px;
-    font-size: 1.35rem;
-    font-weight: bold;
-    gap: 7.5px;
-    overflow: hidden;
-    border-radius: 10px;
-    transition: max-height .5s;
-    user-select: none;
+	display: grid;
+	grid-auto-rows: max-content;
+	background-color: rgba(base.$brown, 0.25);
+	max-height: 40px;
+	font-size: 1.35rem;
+	font-weight: bold;
+	gap: 7.5px;
+	overflow: hidden;
+	border-radius: 10px;
+	transition: max-height 0.5s;
+	user-select: none;
 
+	.flex,
+	.lesson {
+		box-sizing: border-box;
+		display: flex;
+		color: base.$crimsonred;
+		cursor: pointer;
+		background-color: rgba(base.$brown, 0.25);
+		justify-content: space-between;
+		align-items: center;
+		padding-inline: 10px;
+		height: 40px;
+		transition: background-color 0.25s, color 0.25s;
+		min-width: max-content;
 
+		&:hover {
+			color: white;
+			background-color: base.$brown;
+		}
+	}
 
-    .flex,
-    .lesson {
-        box-sizing: border-box;
-        display: flex;
-        color: base.$crimsonred;
-        cursor: pointer;
-        background-color: rgba(base.$brown, .25);
-        justify-content: space-between;
-        align-items: center;
-        padding-inline: 10px;
-        height: 40px;
-        transition: background-color .25s;
-        min-width: max-content;
+	.dropdown,
+	.lesson {
+		border-radius: 0 10px 10px 0;
+		margin: 0 10px 0 0;
+		min-width: max-content;
 
-        &:hover {
-            background-color: base.$brown;
-        }
+		&:last-child {
+			margin-bottom: 7.5px;
+		}
+	}
 
-    }
-
-    .dropdown,
-    .lesson {
-        border-radius: 0 10px 10px 0;
-        margin: 0 10px 0 0;
-        min-width: max-content;
-
-        &:last-child {
-            margin-bottom: 7.5px;
-        }
-    }
-
-    .active {
-        color: white;
-        background-color: base.$brown;
-    }
-
-
+	.active {
+		color: white;
+		background-color: base.$brown;
+	}
 }
 
-
 .expand {
-    max-height: 500px;
-    color: white;
+	max-height: 500px;
+	color: white;
 }
 
 .ioIosArrowDown {
-    transition: transform .25s;
+	transition: transform 0.25s;
 
-    &.rotate {
-        transform: rotate(180deg);
-    }
+	&.rotate {
+		transform: rotate(180deg);
+	}
 }
 
 // .threeDots {
@@ -105,465 +98,307 @@
 .imEyeMinus,
 .hiOutlinePencilSquare,
 .mdOutlineDeleteForever {
-    cursor: pointer;
-    font-size: 1.75rem;
+	cursor: pointer;
+	font-size: 1.75rem;
 }
 
 .imEyePlus:hover {
-    color: base.$orange;
+	color: base.$orange;
 }
 
 .mdOutlineDeleteForever:hover {
-    color: base.$pink;
+	color: base.$pink;
 }
 
 .table-class-list {
-    user-select: none;
-    color: white;
-    border-collapse: collapse;
-    // font-size: 50%;
-    font-size: 1.35rem;
-    width: 100%;
+	tbody {
+		tr {
+			td {
+				gap: 3px;
 
-    * {
-        box-sizing: border-box;
-    }
+				&[datatype='content'],
+				&[datatype='teacher'] {
+					flex-direction: column;
+					align-items: start;
+					user-select: text;
 
+					&[datatype='content'] p {
+						white-space: nowrap;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						max-width: 100%;
 
-    thead {
+						&:before {
+							content: '•';
+							margin-right: 5px;
+						}
+					}
+				}
+			}
+		}
+	}
 
-        tr {
+	&[user-role='teachers'] {
+		.grid {
+			grid-template-columns: 20% calc(35% - 6px) 25% 20%;
+		}
 
-            td {
-                border-radius: 3px;
-                text-align: center;
-                background-color: base.$brown;
-                font-weight: bold;
-            }
+		@media screen and (min-width: 1366px) {
+			.grid {
+				grid-template-columns: 10% auto 15% 10%;
+			}
+		}
+	}
 
-            &:first-child {
-                height: 40px;
+	&[user-role='students'] {
+		.grid {
+			grid-template-columns: 20% calc(40% - 3px) calc(30% - 3px) 20%;
+		}
 
-                td {
-                    position: relative;
-
-                    .biSolidPlusSquare {
-                        position: absolute;
-                        cursor: pointer;
-                        color: rgba(white, .75);
-                        top: 2.5px;
-                        right: 5px;
-                        height: 35px;
-                        width: 35px;
-                        transition: color .25s;
-
-                        &:hover {
-                            color: white;
-                        }
-                    }
-                }
-            }
-
-            &:last-child {
-                display: grid;
-                grid-auto-rows: 30px;
-                gap: 2px;
-                margin-top: 2px;
-
-                td {
-                    display: flex;
-                    height: 100%;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-            }
-        }
-    }
-
-    tbody {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: 72.4vh;
-
-        tr {
-            margin-top: 2px;
-            color: black;
-            display: grid;
-            grid-auto-rows: minmax(30px, auto);
-            gap: 2px;
-
-            td {
-                display: flex;
-                border-radius: 3px;
-                justify-content: center;
-                align-items: center;
-                // text-align: center;
-                height: 100%;
-                padding: 5px;
-                gap: 3px;
-
-                &[datatype="content"],
-                &[datatype="teacher"] {
-                    flex-direction: column;
-                    align-items: start;
-                    user-select: text;
-
-                    &[datatype="content"] p {
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                        max-width: 100%;
-
-                        &:before {
-                            content: "•";
-                            margin-right: 5px;
-                        }
-                    }
-                }
-
-            }
-
-            &:nth-child(odd) {
-                td {
-                    background-color: rgba(base.$brown, .25);
-                }
-            }
-
-            &:nth-child(even) {
-                td {
-                    background-color: rgba(base.$brown, .5);
-                }
-            }
-        }
-    }
-
-    &[user-role="teachers"] {
-        .grid {
-            grid-template-columns: 20% calc(35% - 6px) 25% 20%
-        }
-
-        @media screen and (min-width: 1366px) {
-            .grid {
-                grid-template-columns: 10% auto 15% 10%
-            }
-        }
-    }
-
-    &[user-role="students"] {
-        .grid {
-            grid-template-columns: 20% calc(40% - 3px) calc(30% - 3px) 20%
-        }
-
-        @media screen and (min-width: 1366px) {
-            .grid {
-                grid-template-columns: 10% auto 30% 20%
-            }
-        }
-    }
+		@media screen and (min-width: 1366px) {
+			.grid {
+				grid-template-columns: 10% auto 30% 20%;
+			}
+		}
+	}
 }
 
 .attendance,
 .delete {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 75%;
-    background-color: #CBD1D5;
-    border-radius: 10px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .25s, visibility .25s;
-    font-size: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 75%;
+	height: 75%;
+	background-color: #cbd1d5;
+	border-radius: 10px;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.25s, visibility 0.25s;
+	font-size: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 
-    .ioClose {
-        position: absolute;
-        cursor: pointer;
-        color: white;
-        top: 2.5px;
-        right: 5px;
-        height: 35px;
-        width: 35px;
+	.ioClose {
+		position: absolute;
+		cursor: pointer;
+		color: white;
+		top: 2.5px;
+		right: 5px;
+		height: 35px;
+		width: 35px;
 
-        &:hover {
-            color: base.$pink;
-        }
-    }
+		&:hover {
+			color: base.$pink;
+		}
+	}
 
-    * {
-        box-sizing: border-box;
-    }
+	* {
+		box-sizing: border-box;
+	}
 
-    h2 {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
-        border-radius: 10px 10px 0 0;
-    }
+	h2 {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 40px;
+		border-radius: 10px 10px 0 0;
+	}
 
+	.body {
+		display: flex;
+		flex-direction: column;
+		font-size: 1.5rem;
+		height: 100%;
+		padding: 10px 10px 0 10px;
+		gap: 10px;
 
-    .body {
-        display: flex;
-        flex-direction: column;
-        font-size: 1.5rem;
-        height: 100%;
-        padding: 10px 10px 0 10px;
-        gap: 10px;
+		p {
+			text-align: center;
 
-        p {
-            text-align: center;
+			// &[data-type='student name'] {
+			// 	text-transform: capitalize;
+			// }
+		}
 
-            &[data-type="student name"] {
-                text-transform: capitalize;
-            }
-        }
+		.content {
+			display: grid;
+			grid-template-columns: 20% auto;
+			align-items: center;
 
-        .content {
-            display: grid;
-            grid-template-columns: 20% auto;
-            align-items: center;
+			input[type='text'] {
+				height: 40px;
+				border-radius: 5px;
+				font-size: 1.25rem;
+				border: 2px solid gray;
+				padding-inline: 5px;
+				// width: 95%;
 
+				&:focus {
+					border-radius: 5px;
+					border: 2px solid base.$brown;
+					outline: none;
+				}
+			}
 
-            input[type="text"] {
-                height: 40px;
-                border-radius: 5px;
-                font-size: 1.25rem;
-                border: 2px solid gray;
-                padding-inline: 5px;
-                // width: 95%;
+			@media screen and (min-width: 1366px) {
+				grid-template-columns: 12.5% auto;
+			}
+		}
 
-                &:focus {
-                    border-radius: 5px;
-                    border: 2px solid base.$brown;
-                    outline: none;
-                }
-            }
+		.table-attendance-list {
+			background-color: #cbd1d5;
+			height: 100%;
+			overflow: hidden;
+			place-self: center;
 
-            @media screen and (min-width: 1366px) {
-                grid-template-columns: 12.5% auto;
-            }
-        }
+			@media screen and (min-width: 1366px) {
+				width: 75%;
+			}
 
-        .table-attendance-list {
-            place-self: center;
-            background-color: #CBD1D5;
-            width: 100%;
-            border-radius: 5px;
-            border-collapse: collapse;
-            overflow: hidden;
+			thead {
+				tr {
+					th {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						height: 100%;
+					}
 
-            height: 100%;
+					&:last-child {
+						grid-template-columns: 5% 20% auto 30%;
 
-            @media screen and (min-width: 1366px) {
-                width: 75%;
-            }
+						@media screen and (min-width: 1366px) {
+							grid-template-columns: 5% 20% auto 25%;
+						}
+					}
+				}
+			}
 
-            td {
-                border-radius: 5px;
-            }
+			tbody {
+				@media screen and (max-width: 1366px) {
+					height: 175px;
+				}
 
-            thead {
-                background-color: transparent;
+				tr {
+					grid-template-columns: 5% 20% auto 30%;
 
-                tr {
-                    color: white;
-                    text-align: center;
-                    font-weight: bold;
-                    height: 40px;
+					@media screen and (min-width: 1366px) {
+						grid-template-columns: 5% 20% auto 25%;
+					}
 
-                    td {
-                        background-color: base.$brown;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        height: 100%;
-                    }
+					td {
+						align-items: center;
+						padding: 0 10px;
 
-                    // &:first-child {
-                    //     height: 40px;
-                    // }
+						&:last-child {
+							justify-content: space-evenly;
 
-                    &:last-child {
-                        display: grid;
-                        grid-template-columns: 5% 20% auto 30%;
-                        grid-auto-rows: 40px;
-                        height: 40px;
-                        gap: 2px;
-                        margin-top: 2px;
+							input[type='checkbox'] {
+								display: none;
+								&:checked + .label-attendance {
+									background-color: base.$brown;
+									border-color: base.$brown;
+								}
+							}
 
-                        @media screen and (min-width: 1366px) {
-                            grid-template-columns: 5% 20% auto 25%;
-                        }
-                    }
-                }
-            }
+							.label-attendance {
+								position: relative;
+								cursor: pointer;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								height: 30px;
+								width: 30px;
+								border-radius: 5px;
+								border: 2px solid gray;
+								background-color: white;
+								transition: background-color 0.25s, border-color 0.25s;
 
-            tbody {
-                display: flex;
-                flex-direction: column;
-                overflow: auto;
-                font-size: 1.25rem;
-                height: 100%;
-                background-color: transparent;
+								&::before {
+									position: absolute;
+									content: '';
+									height: 10px;
+									width: 6px;
+									border: 5px solid base.$white;
+									border-top: none;
+									border-left: none;
+									transform: rotate(45deg) translate(-10%, -10%);
+									transition: opacity 0.25s;
+								}
 
-                &::-webkit-scrollbar {
-                    display: none;
+								&:hover {
+									border-color: base.$brown;
+								}
+							}
+						}
+					}
 
-                }
+					&:nth-child(odd) {
+						td {
+							background-color: rgba(base.$brown, 0.25);
+						}
+					}
 
-                @media screen and (max-width: 1366px) {
-                    height: 175px;
-                }
+					&:nth-child(even) {
+						td {
+							background-color: rgba(base.$brown, 0.5);
+						}
+					}
+				}
+			}
+		}
+	}
 
-                tr {
-                    display: grid;
-                    grid-template-columns: 5% 20% auto 30%;
-                    grid-auto-rows: 40px;
-                    height: 40px;
-                    gap: 2px;
+	.footer {
+		display: flex;
+		padding: 10px;
+		justify-content: space-evenly;
 
-                    margin-top: 2px;
+		button {
+			color: white;
+			font-size: 1.5rem;
+			font-weight: bold;
 
-                    @media screen and (min-width: 1366px) {
-                        grid-template-columns: 5% 20% auto 25%;
-                    }
+			&.confirm:hover {
+				background-color: base.$brown;
+				opacity: 1;
+			}
 
-                    td {
-                        display: flex;
-                        align-items: center;
-
-                        padding-inline: 10px;
-
-                        p {
-                            text-align: start;
-                        }
-
-
-                        &:last-child,
-                        &:first-child {
-
-                            justify-content: space-evenly;
-
-                            input[type="checkbox"] {
-                                display: none;
-
-                                // width: 10px;
-                                // height: 10px;
-
-                                &:checked+.label-attendance {
-                                    background-color: base.$brown;
-                                    border-color: base.$brown;
-                                }
-                            }
-
-                            .label-attendance {
-
-                                position: relative;
-                                cursor: pointer;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                height: 30px;
-                                width: 30px;
-                                border-radius: 5px;
-                                border: 2px solid gray;
-                                background-color: white;
-                                transition: background-color .25s, border-color .25s;
-
-
-
-                                &::before {
-                                    position: absolute;
-                                    content: "";
-                                    height: 10px;
-                                    width: 6px;
-                                    border: 5px solid base.$white;
-                                    border-top: none;
-                                    border-left: none;
-                                    transform: rotate(45deg) translate(-10%, -10%);
-                                    transition: opacity .25s;
-                                }
-
-                                &:hover {
-                                    border-color: base.$brown;
-                                }
-                            }
-                        }
-                    }
-
-                    &:nth-child(odd) {
-                        td {
-                            background-color: rgba(base.$brown, .25);
-                        }
-                    }
-
-                    &:nth-child(even) {
-                        td {
-                            background-color: rgba(base.$brown, .5);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .footer {
-        display: flex;
-        padding: 10px;
-        justify-content: space-evenly;
-
-
-        button {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-
-
-            &.confirm:hover {
-                background-color: base.$brown;
-                opacity: 1;
-            }
-
-            &.cancel:hover {
-                background-color: base.$brown;
-                opacity: 1;
-            }
-        }
-    }
+			&.cancel:hover {
+				background-color: base.$brown;
+				opacity: 1;
+			}
+		}
+	}
 }
 
 .delete {
-    width: 25%;
-    height: 25%;
+	width: 25%;
+	height: 25%;
 
-    .body {
-        display: flex;
-        height: fit-content;
-    }
+	.body {
+		display: flex;
+		height: fit-content;
+	}
 }
 
 .background {
-    background-color: rgba(black, .5);
-    height: 100%;
-    position: fixed;
-    left: 0%;
-    top: 0%;
-    width: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity .25s, visibility .25s;
+	background-color: rgba(black, 0.5);
+	height: 100%;
+	position: fixed;
+	left: 0%;
+	top: 0%;
+	width: 100%;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.25s, visibility 0.25s;
 }
 
 .showModalViewClass,
 .showModalDeleteClass {
-    opacity: 1;
-    visibility: visible;
+	opacity: 1;
+	visibility: visible;
 }

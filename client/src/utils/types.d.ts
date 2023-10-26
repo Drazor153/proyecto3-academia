@@ -111,3 +111,26 @@ export type PostClass = {
     attended: boolean;
   }[];
 }
+export type AnnouncementType = {
+  author: string;
+  category: { id: number, name: string };
+  content: string;
+  createdAt: string;
+  expiresAt: string;
+  id: number;
+  image?: string;
+  target: number[];
+  title: string;
+  updatedAt: string;
+};
+
+export type ResponseMsg = {
+  msg: string
+}
+
+export type PostAnnouncement = Omit<
+  AnnouncementType,
+  'author' | 'id' | 'createdAt' | 'updatedAt' | 'category'
+> & {
+  category: number;
+};

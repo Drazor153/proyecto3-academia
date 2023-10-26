@@ -52,11 +52,13 @@ export const reducer = (state: SelectedOption, action: ActionType) => {
                 },
             }
         case TypeKind.LESSON:
+            const [id, lesson] = payload.toString().split(' ');
+
             return {
                 ...state,
                 lesson: {
-                    id: parseInt(payload.toString().split(' ')[0]),
-                    lesson: payload.toString().split(' ')[1],
+                    id: parseInt(id),
+                    lesson
                 },
             }
         default:

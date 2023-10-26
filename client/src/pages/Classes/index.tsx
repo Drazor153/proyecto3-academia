@@ -35,19 +35,21 @@ function Classes() {
 						setSelect={setSelect}
 					/>
 				</section>
-				<section className="class-list">
-					{select.lesson.lesson !== '' && (
-						<ClassTable
-							role={role}
-							select={select}
-						/>
-					)}
-					{select.lesson.lesson === '' && (
-						<div className="empty-list">
-							<p style={{ textAlign: 'center' }}>{t('select_a_lesson')}</p>
-						</div>
-					)}
-				</section>
+				{select.lesson.id !== -1 && (
+					<section className="class-list">
+						{select.lesson.lesson !== '' && (
+							<ClassTable
+								role={role}
+								select={select}
+							/>
+						)}
+						{select.lesson.lesson === '' && (
+							<div className="empty-list">
+								<p style={{ textAlign: 'center' }}>{t('select_a_lesson')}</p>
+							</div>
+						)}
+					</section>
+				)}
 			</main>
 		</>
 	);

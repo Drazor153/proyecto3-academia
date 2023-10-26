@@ -1,52 +1,53 @@
 @use 'base';
 
 .admin-layout {
-    display: grid;
-    grid-template-areas:
-        'menu-selector content'
-        'action-selector content';
-    width: auto;
-    grid-template-columns: min-content 1fr;
-    grid-template-rows: max-content 1fr;
+	display: grid;
+	grid-template-areas:
+		'menu-selector content'
+		'action-selector content';
+	width: auto;
+	grid-template-columns: min-content 1fr;
+	grid-template-rows: max-content 1fr;
 }
 
 .menu-selector {
-    grid-area: menu-selector;
+	grid-area: menu-selector;
 }
 
 .action-selector {
-    grid-area: action-selector;
+	grid-area: action-selector;
 }
 
 .content {
-    grid-area: content;
+	grid-area: content;
 }
 
 form {
-    height: 100%;
-    background-color: rgb(240, 240, 240);
-    padding: 10px 10px;
-    justify-content: center;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: max-content max-content;
-    grid-auto-rows: max-content;
+	height: 100%;
+	background-color: base.$whitegrey;
+	padding: 10px 10px;
+	justify-content: center;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 0.3fr 0.7fr;
+	grid-auto-rows: max-content;
 
-    .input-section {
-        background-color: rgb(219, 219, 219);
-        padding: 5px;
-        border-radius: 5px;
-    }
+	.input-section {
+		background-color: rgb(219, 219, 219);
+		padding: 5px;
+		border-radius: 5px;
+	}
 
-    h3 {
-        padding: 5px;
-        background-color: base.$bluemarine;
-        color: base.$white;
-        margin-bottom: 20px;
-    }
+	h3 {
+		padding: 5px;
+		background-color: base.$crimsonred;
+		color: base.$white;
+		margin-bottom: 20px;
+	}
 
-    .submit-btn {
-        display: flex;
-        justify-content: end;
-    }
+	.btn-section {
+		display: flex;
+		gap: 10px;
+		justify-content: end;
+	}
 }

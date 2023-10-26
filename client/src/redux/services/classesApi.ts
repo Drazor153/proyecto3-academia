@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ClassesStudent, ClassesTeacher, Data, PostClass, Students } from "../../utils/types";
+import { ClassesStudent, ClassesTeacher, Data, PostClass, ResponseMsg, Students } from "../../utils/types";
 
 
 export const classesApi = createApi({
@@ -28,7 +28,7 @@ export const classesApi = createApi({
             },
         }),
 
-        addClass: builder.mutation<{ msg: string }, { body: PostClass }>({
+        addClass: builder.mutation<ResponseMsg, { body: PostClass }>({
             query: ({ body }) => ({
                 url: '/classes',
                 method: "POST",
@@ -37,7 +37,7 @@ export const classesApi = createApi({
             invalidatesTags: ['Classes'],
         }),
 
-        deleteClass: builder.mutation<{ msg: string }, { id: number }>({
+        deleteClass: builder.mutation<ResponseMsg, { id: number }>({
             query: ({ id }) => ({
                 url: `/classes/${id}`,
                 method: "DELETE",
@@ -45,7 +45,7 @@ export const classesApi = createApi({
             invalidatesTags: ['Classes'],
         }),
 
-        updateClass: builder.mutation<{ msg: string }, { id: number, body: Omit<PostClass, 'lessonId' | 'week'> }>({
+        updateClass: builder.mutation<ResponseMsg, { id: number, body: Omit<PostClass, 'lessonId' | 'week'> }>({
             query: ({ id, body }) => {
                 return ({
                     url: `/classes/${id}`,
@@ -60,6 +60,7 @@ export const classesApi = createApi({
 });
 
 export const {
+
     useGetClassesByLessonIdQuery,
     useGetStudentsByLessonQuery,
     useAddClassMutation,
