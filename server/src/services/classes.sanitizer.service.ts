@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   LessonClassesRaw,
   LessonClassesSanitized,
-} from 'src/sanitizers/classes';
+} from 'src/interfaces/classes.sanitizer.interface';
 
 @Injectable()
 export class ClassesSanitizersService {

@@ -19,6 +19,7 @@ async function bootstrap() {
   const port = configService.get('port');
 
   app.useLogger(app.get(Logger));
+
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(cookieParser());
