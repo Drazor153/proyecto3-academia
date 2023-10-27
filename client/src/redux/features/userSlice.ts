@@ -1,25 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "../../utils/types";
 
-const initialState = {
-  run: 87654321,
-  name: "User",
-  role: "SUPERUSER",
+const initialState: User = {
+  run: -1,
+  dv: "",
+  name: "",
+  first_surname: "",
+  email: null,
+  role: "",
+  status: ""
 };
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    swaptype: (state) => {
-      if (state.role === "SUPERUSER") {
-        state.role = "STUDENT";
-        state.run = 12345678;
-      } else {
-        state.role = "SUPERUSER";
-        state.run = 87654321;
-      }
-    }
+    setUser: (_, action) => {
+      return action.payload;
+    },
+    logout: () => initialState,
   },
 });
 
 export default userSlice.reducer;
-export const { swaptype } = userSlice.actions;
+export const { setUser, logout } = userSlice.actions;

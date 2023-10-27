@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  run           Int            @id
+  dv            String         @db.Char(1)
+  name          String
+  first_surname String
+  password      String
+  email         String?
+  role          String
+  status        String
+  date_join     DateTime       @default(now())
+  last_join     DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  refresh_token String?
+  enrols        enrols[]
+  gives         gives[]
+  Lesson        Lesson[]
+  attendance    attendance[]
+  Announcement  Announcement[]
+}
+
+model Level {
+  code    String   @id @db.Char(2)
+  name    String
+  enrols  enrols[]
+  Quiz    Quiz[]
+  teaches Lesson[]
+}
+
+model enrols {
+  level      Level  @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
+  levelCode  String @db.Char(2)
+  student    User   @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  studentRun Int
+  status     String
+  year       Int
+  semester   Int
+
+  @@id([levelCode, studentRun, year, semester])
+}
+
+model Topic {
+  id   Int    @id @default(autoincrement())
+  name String
+  Quiz Quiz[]
+}
+
+model Quiz {
+  id        Int     @id @default(autoincrement())
+  number    Int
+  year      Int
+  semester  Int
+  topic     Topic   @relation(fields: [topicId], references: [id])
+  topicId   Int
+  level     Level   @relation(fields: [levelCode], references: [code])
+  levelCode String  @db.Char(2)
+  gives     gives[]
+}
+
+model gives {
+  quiz       Quiz  @relation(fields: [quizId], references: [id])
+  quizId     Int
+  student    User  @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  studentRun Int
+  grade      Float
+
+  @@id([quizId, studentRun])
+}
+
+model Lesson {
+  teacher    User?   @relation(fields: [teacherRun], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  teacherRun Int?
+  level      Level   @relation(fields: [levelCode], references: [code])
+  levelCode  String  @db.Char(2)
+  id         Int     @id @default(autoincrement())
+  year       Int
+  semester   Int
+  lesson     String  @db.Char(1)
+  Class      Class[]
+}
+
+model Class {
+  id         Int          @id @default(autoincrement())
+  week       Int
+  contents   String
+  lesson     Lesson       @relation(fields: [lessonId], references: [id])
+  lessonId   Int
+  attendance attendance[]
+}
+
+model attendance {
+  class      Class   @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  classId    Int
+  student    User    @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  studentRun Int
+  attended   Boolean @default(false)
+
+  @@id([classId, studentRun])
+}
+
+model Announcement {
+  id         Int      @id @default(autoincrement())
+  user       User?    @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  run        Int?
+  title      String
+  content    String   @db.VarChar(500)
+  image      Bytes?
+  category   Category @relation(fields: [categoryId], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  expires_at DateTime
+  send_to    SendTo[]
+  categoryId Int
+}
+
+model SendTo {
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  announcementId Int
+  target         Target       @relation(fields: [targetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  targetId       Int
+
+  @@id([announcementId, targetId])
+}
+
+model Target {
+  id      Int      @id @default(autoincrement())
+  name    String
+  send_to SendTo[]
+}
+
+model Category {
+  id           Int            @id @default(autoincrement())
+  name         String
+  Announcement Announcement[]
+}

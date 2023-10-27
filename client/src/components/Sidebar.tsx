@@ -1,44 +1,89 @@
-import { useState } from 'react'
-import { menuItems, privilegedItems } from '../utils/pages'
-import { FaBars } from 'react-icons/fa'
-import { NavLink } from 'react-router-dom'
-import { useAppSelector } from '../redux/hooks'
-import logo from '../assets/logo.png'
+import { useState } from 'react';
+import { menuItems } from '../utils/pages';
+import { FaBars, FaSignOutAlt } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { toast } from 'react-toastify';
+import logo from '../assets/hlogo.png';
+import Logout from './Logout';
+import { useLogoutMutation } from '../redux/services/userApi';
+import { logout } from '../redux/features/userSlice';
 
+function Sidebar() {
+	const [isOpen, setIsOpen] = useState(false);
+	const [showLogout, setShowLogout] = useState(false);
+	const toggleOpen = () => setIsOpen(!isOpen);
+	const role = useAppSelector(state => state.userReducer.role);
 
-function Sidebar({ children }: { children: React.ReactNode }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleOpen = () => setIsOpen(!isOpen)
-    const role = useAppSelector(state => state.userReducer.role)
+	const [logoutQuery] = useLogoutMutation();
+	const dispatch = useAppDispatch();
 
-    return (
-        <>
-            <nav className={`sidebar ${isOpen ? "" : "closed"}`}>
-                <div className='top-section'>
-                    <img className={`logo ${isOpen ? "" : "closed"}`} src={logo} alt="logo" />
-                    <div className='bars'>
-                        <FaBars onClick={toggleOpen} />
-                    </div>
-                </div>
-                {
-                    (role == 'SUPERUSER' ? [...menuItems, ...privilegedItems] : menuItems).map((item, index) => (
-                        <NavLink
-                            to={item.path}
-                            key={index}
-                            className={
-                                ({ isActive }) => (isActive ? "link active" : "link")
-                            }
-                            style={{ justifyContent: isOpen ? "" : "center" }}
-                        >
-                            <div className='icon'>{item.icon}</div>
-                            <div className={`link-text ${isOpen ? "" : "closed"}`}>{item.name}</div>
-                        </NavLink>
-                    ))
-                }
-            </nav>
-            {children}
-        </>
-    )
+	const handlerClickLogout = () => {
+		setShowLogout(true);
+		logoutQuery(null)
+			.unwrap()
+			.then(result => {
+				toast.success(result.msg);
+				dispatch(logout());
+			});
+	};
+
+	return (
+		<>
+			<nav className={`sidebar ${isOpen ? '' : 'closed'}`}>
+				<div className="top-section">
+					<div className={`logo-container ${isOpen ? '' : 'closed'}`}>
+						<img
+							className="logo"
+							src={logo}
+							alt="logo"
+						/>
+					</div>
+
+					<div
+						className="bars"
+						onClick={toggleOpen}
+					>
+						<FaBars />
+					</div>
+				</div>
+				{menuItems.map((item, index) => {
+					if (
+						item.type !== 'route' &&
+						(item.only.includes('all') || item.only.includes(role))
+					) {
+						return (
+							<NavLink
+								to={item.path}
+								key={index}
+								className={({ isActive }) =>
+									isActive ? 'link active' : 'link'
+								}
+							>
+								<div className={`icon ${isOpen ? '' : 'closed'}`}>
+									{item.icon}
+								</div>
+								<div className={`link-text ${isOpen ? '' : 'closed'}`}>
+									{item.name}
+								</div>
+							</NavLink>
+						);
+					}
+				})}
+				<div
+					data-div="Logout"
+					className="link"
+					onClick={handlerClickLogout}
+				>
+					<div className="icon">
+						<FaSignOutAlt />
+					</div>
+					<div className={`link-text ${isOpen ? '' : 'closed'}`}>Logout</div>
+				</div>
+			</nav>
+			<Logout show={`${showLogout ? 'show' : 'hide'}`} />
+		</>
+	);
 }
 
-export default Sidebar
+export default Sidebar;

@@ -1,25 +1,34 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/userSlice'
-import classesReducer from './features/classesSlice'
 import { studentsApi } from './services/studentsApi'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { levelsApi } from './services/levelsApi'
 import { teacherApi } from './services/teacherApi'
+import { classesApi } from './services/classesApi'
+import { userApi } from './services/userApi'
+import { announcementsApi } from './services/announcementsApi'
 
 export const store = configureStore({
     reducer: {
         userReducer,
-        classesReducer,
         [studentsApi.reducerPath]: studentsApi.reducer,
         [levelsApi.reducerPath]: levelsApi.reducer,
-        [teacherApi.reducerPath]: teacherApi.reducer
+        [teacherApi.reducerPath]: teacherApi.reducer,
+        [classesApi.reducerPath]: classesApi.reducer,
+        [userApi.reducerPath]: userApi.reducer,
+        [announcementsApi.reducerPath]: announcementsApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat([
             studentsApi.middleware,
             levelsApi.middleware,
-            teacherApi.middleware])
+            teacherApi.middleware,
+            classesApi.middleware,
+            userApi.middleware,
+            announcementsApi.middleware,
+        ])
 })
+
 
 setupListeners(store.dispatch)
 

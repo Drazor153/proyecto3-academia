@@ -3,6 +3,12 @@ import { QuizData } from "../pages/Grades/quizesReducer";
 export type Data<T> = {
   data: T;
 }
+export type Paginate<T> = {
+  data: T;
+  next: boolean;
+  previous: boolean;
+}
+
 export type Level = {
   year: number;
   semesters: {
@@ -11,21 +17,27 @@ export type Level = {
       code: string;
       level: string;
       lessons: {
-        id: string;
+        id: number;
         lesson: string;
       }[];
     }[];
   }[];
 }
 
+export type LevelInfo = {
+  code: string;
+  name: string
+}
+
 export type Student = {
-  run: number | string;
+  run: string | number;
   dv?: string;
   name: string;
   first_surname: string;
-  second_surname: string;
   level: string;
 }
+
+export type Students = Omit<Student, "level">;
 
 export type Grade = {
   id: number;
@@ -44,22 +56,25 @@ export type Grade = {
 }
 
 export type User = {
-  rut: number;
-  name: string;
+  run: number,
+  dv: string,
+  name: string,
+  first_surname: string,
+  email: string | null,
+  role: string,
+  status: string
 }
 
-export type Exam = {
-  topic: string;
+export type GenericExam = {
   quizNumber: number;
+  studentGrade: number;
+  quizId: number;
 }
 
-export type ExamStudent = {
-  studentGrade: number;
-} & Exam
-
-export type ExamTeacher = {
-  quizId: number;
-} & Exam
+export type Exams = {
+  topic: string;
+  quizzes: GenericExam[]
+}
 
 export type Quiz = {
   run: number,
@@ -75,24 +90,57 @@ export type GradesMutator = {
 }
 
 type Class = {
-  id?: number;
+  id: number;
   week: number;
   contents: string;
-  lesson: string;
-  year?: number;
-  semester?: number;
-  level?: string;
-  // topicName: string;
-  // levelName: string;
 }
 
 export type ClassesStudent = {
-  teacher: string;
-  attendance: string;
+  teacher: {
+    name: string;
+    first_surname: string;
+  };
+  attendance: boolean;
 } & Class;
 
 export type ClassesTeacher = {
-  attendees: string[];
-  students: string[];
-  // absent: string[];
+  attendance: (Students & { run: number, attended: boolean })[];
 } & Class;
+
+export type PostClass = {
+  lessonId: number;
+  week: number;
+  contents: string;
+  attendance: {
+    studentRun: number;
+    attended: boolean;
+  }[];
+}
+type Author = { name: string, first_surname: string }
+type Category = { id: number, name: string }
+type Target = { id: number, name: string }
+
+export type AnnouncementType = {
+  author: Author;
+  category: Category;
+  content: string;
+  createdAt: string;
+  expiresAt: string;
+  id: number;
+  image?: string;
+  target: target[];
+  title: string;
+  updatedAt: string;
+};
+
+export type ResponseMsg = {
+  msg: string
+}
+
+export type PostAnnouncement = Omit<
+  AnnouncementType,
+  'author' | 'id' | 'createdAt' | 'updatedAt' | 'category' | 'target'
+> & {
+  category: number;
+  target: number[];
+};

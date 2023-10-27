@@ -1,0 +1,94 @@
+@use 'base';
+
+.logout-overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transition: opacity .5s, visibility .5s;
+}
+
+.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hide {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.logout-container {
+    position: absolute;
+    background-color: base.$white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    text-align: center;
+    gap: 10px;
+    border-radius: 5px;
+    z-index: 2;
+    transition: opacity .5s, visibility .5s;
+}
+
+.logout-icons {
+    color: base.$crimsonred;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    height: 150px;
+
+    .tailspin,
+    .lock {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .tailspin {
+        height: 100px;
+        width: 100px;
+    }
+
+    .lock {
+        height: 50px;
+        width: 50px;
+    }
+}
+
+.logout-text p::after {
+    display: inline-block;
+    animation: dotty steps(1, end) 1s infinite;
+    content: '   ';
+}
+
+@keyframes dotty {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
+}

@@ -1,31 +1,56 @@
-import {AiOutlineClose} from 'react-icons/ai';
+import { AiOutlineClose } from 'react-icons/ai';
 
 interface ModalProps {
-    title: string;
-    children: React.ReactNode
-    footer: React.ReactNode;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    }
-
-function Modal({title, footer, setIsOpen, children}: ModalProps) {
-  
-  return (
-    <>
-    <div className='darkBG' onClick={() => setIsOpen(false)} />
-    <div className="modal">
-      <div className="modal-container">
-        <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
-          <button className="modal-close" onClick={() => setIsOpen(false)}>
-            <AiOutlineClose />
-          </button>
-        </div>
-        <div className="modal-body">{children}</div>
-        <div className="modal-footer">{footer}</div>
-      </div>
-    </div>
-    </>
-  );
+	children: React.ReactNode;
+	footer: React.ReactNode;
+	isOpen: () => boolean;
+	onClick?: () => void;
+	title: string;
+	className?: string;
 }
+
+// {children, footer, setIsOpen, title}: ModalProps
+
+function Modal({
+	children,
+	footer,
+	isOpen,
+	onClick,
+	title,
+	className,
+}: ModalProps) {
+	return (
+		<>
+			<div
+				className={`darkBG ${isOpen() ? 'open' : ''}`}
+				onClick={onClick}
+			/>
+			<div className={`modal ${className} ${isOpen() ? 'open' : ''}`}>
+				<div className="modal-container">
+					<div className="modal-header">
+						<h2 className="modal-title">{title}</h2>
+						<button
+							className="modal-close"
+							onClick={onClick}
+						>
+							<AiOutlineClose />
+						</button>
+					</div>
+					<div className="modal-body">{children}</div>
+					<div className="modal-footer">{footer}</div>
+				</div>
+			</div>
+		</>
+	);
+}
+
+// interface FooterModalProps {
+// 	buttons: { text: string; onClick: () => void }[];
+// 	children?: React.ReactNode;
+// }
+
+// export function FooterModal({ children }: { children: React.ReactNode }) {
+// 	return <div className="modal-footer">{children}</div>;
+// }
 
 export default Modal;

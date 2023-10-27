@@ -6,29 +6,39 @@ $orange: #FF5418;
 $lightorange: #F8B69E;
 $whiteorange: #FFE7D6;
 $white: #FFFFFF;
-$blue: #3C5380;
+$blue: #181639;
 $skyblue: #8AADE1;
 $bluemarine: #2F4858;
-$pink: #EF3164;
-$purple: #765298;
+$lightred: #bf243a;
+$yellow: #ecac3c;
+$crimsonred: #8d2840;
+$brown: #672831;
+$darkbrown: #3f2433;
+$purple: #473465;
 $green: #007200;
 $lightgrey: #c7c7c7;
 $whitegrey: #eeeeee;
+$pink: #da4eda;
 
 
 $colors: (
-    'orange': #FF5418,
-    'lightorange': #F8B69E,
-    'whiteorange': #FFE7D6,
-    'white': #FFFFFF,
-    'blue': #3C5380,
-    'skyblue': #8AADE1,
-    'bluemarine': #2F4858,
-    'pink': #EF3164,
-    'purple': #765298,
-    'green': #007200,
-    'lightgrey': #c7c7c7,
-    'whitegrey': #eeeeee
+    'orange': $orange,
+    'lightorange': $lightorange,
+    'whiteorange': $whiteorange,
+    'white': $white,
+    'blue': $blue,
+    'skyblue': $skyblue,
+    'bluemarine': $bluemarine,
+    'lightred': $lightred,
+    'yellow': $yellow,
+    'crimsonred': $crimsonred,
+    'brown': $brown,
+    'darkbrown': $darkbrown,
+    'purple': $purple,
+    'green': $green,
+    'lightgrey': $lightgrey,
+    'whitegrey': $whitegrey,
+    'pink': $pink
 );
 
 @each $name, $color in $colors {
@@ -37,6 +47,10 @@ $colors: (
     }
 
     .color-#{$name} {
+        color: $color;
+    }
+
+    .border-#{$name} {
         color: $color;
     }
 }
