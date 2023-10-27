@@ -6,18 +6,26 @@ interface ModalProps {
 	isOpen: () => boolean;
 	onClick?: () => void;
 	title: string;
+	className?: string;
 }
 
 // {children, footer, setIsOpen, title}: ModalProps
 
-function Modal({ children, footer, isOpen, onClick, title }: ModalProps) {
+function Modal({
+	children,
+	footer,
+	isOpen,
+	onClick,
+	title,
+	className,
+}: ModalProps) {
 	return (
 		<>
 			<div
 				className={`darkBG ${isOpen() ? 'open' : ''}`}
 				onClick={onClick}
 			/>
-			<div className={`modal ${isOpen() ? 'open' : ''}`}>
+			<div className={`modal ${className} ${isOpen() ? 'open' : ''}`}>
 				<div className="modal-container">
 					<div className="modal-header">
 						<h2 className="modal-title">{title}</h2>

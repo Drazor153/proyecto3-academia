@@ -494,7 +494,7 @@ function ModalClassList({
 											<td>
 												<p>{student.run}</p>
 											</td>
-											<td data-type="student name">
+											<td data-student-name>
 												<p>
 													{`${student.first_surname.toLowerCase()}, ${student.name.toLowerCase()}`}
 												</p>

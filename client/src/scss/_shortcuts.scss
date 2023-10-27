@@ -1,51 +1,47 @@
 @use 'base';
 
 .shortcuts-container {
-    box-shadow: none;
-}
+	box-shadow: none;
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 100px);
-    gap: 5px;
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(4, 100px);
+		gap: 5px;
+	}
 }
 
 .shortcut {
-    background-color: adjust-color($color: base.$crimsonred, $lightness: 50%);
-    color: base.$darkbrown;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    transition: all 0.2s;
-    border-radius: 5px;
-    padding: 5px;
+	background-color: adjust-color($color: base.$crimsonred, $lightness: 50%);
+	color: base.$darkbrown;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	transition: all 0.2s;
+	border-radius: 5px;
+	padding: 5px;
 
+	.icon {
+		font-size: 4rem;
+	}
 
-    .icon {
-        font-size: 4rem;
-    }
+	&:hover {
+		.icon,
+		.name {
+			color: base.$brown;
+		}
+	}
 
-    &:hover {
+	&.privileged {
+		background-color: adjust-color($color: base.$blue, $lightness: 50%);
+		color: base.$blue;
 
-        .icon,
-        .name {
-            color: base.$brown;
-        }
-    }
-
-    &.privileged {
-        background-color: adjust-color($color: base.$blue, $lightness: 50%);
-        color: base.$blue;
-
-        &:hover {
-
-            .icon,
-            .name {
-                color: adjust-color($color: base.$blue, $lightness: 20%);
-                ;
-            }
-        }
-    }
+		&:hover {
+			.icon,
+			.name {
+				color: adjust-color($color: base.$blue, $lightness: 20%);
+			}
+		}
+	}
 }

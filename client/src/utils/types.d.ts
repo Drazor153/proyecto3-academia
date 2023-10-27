@@ -3,6 +3,11 @@ import { QuizData } from "../pages/Grades/quizesReducer";
 export type Data<T> = {
   data: T;
 }
+export type Paginate<T> = {
+  data: T;
+  next: boolean;
+  previous: boolean;
+}
 
 export type Level = {
   year: number;
@@ -25,7 +30,7 @@ export type LevelInfo = {
 }
 
 export type Student = {
-  run: number | string;
+  run: string | number;
   dv?: string;
   name: string;
   first_surname: string;
@@ -111,15 +116,19 @@ export type PostClass = {
     attended: boolean;
   }[];
 }
+type Author = { name: string, first_surname: string }
+type Category = { id: number, name: string }
+type Target = { id: number, name: string }
+
 export type AnnouncementType = {
-  author: string;
-  category: { id: number, name: string };
+  author: Author;
+  category: Category;
   content: string;
   createdAt: string;
   expiresAt: string;
   id: number;
   image?: string;
-  target: number[];
+  target: target[];
   title: string;
   updatedAt: string;
 };
@@ -130,7 +139,8 @@ export type ResponseMsg = {
 
 export type PostAnnouncement = Omit<
   AnnouncementType,
-  'author' | 'id' | 'createdAt' | 'updatedAt' | 'category'
+  'author' | 'id' | 'createdAt' | 'updatedAt' | 'category' | 'target'
 > & {
   category: number;
+  target: number[];
 };

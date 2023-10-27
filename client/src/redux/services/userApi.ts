@@ -4,7 +4,7 @@ import { ResponseMsg, User } from '../../utils/types'
 export const userApi = createApi({
     reducerPath: 'userAPI',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
+        baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/auth`,
         credentials: 'include'
     }),
     tagTypes: ['login'],
@@ -12,7 +12,7 @@ export const userApi = createApi({
 
         authUser: builder.mutation<{ userData: User }, { run: string, password: string }>({
             query: ({ run, password }) => ({
-                url: '/auth/login',
+                url: '/login',
                 method: 'POST',
                 body: {
                     run: parseInt(run),
@@ -23,14 +23,14 @@ export const userApi = createApi({
         }),
         autoLogin: builder.query<{ userData: User }, null>({
             query: () => ({
-                url: '/auth/auto-login',
+                url: '/auto-login',
                 method: 'GET',
             }),
             providesTags: ['login']
         }),
         logout: builder.mutation<ResponseMsg, null>({
             query: () => ({
-                url: '/auth/logout',
+                url: '/logout',
                 method: 'GET',
             }),
             invalidatesTags: ['login']

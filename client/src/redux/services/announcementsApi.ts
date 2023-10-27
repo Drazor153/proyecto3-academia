@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AnnouncementType, Data, PostAnnouncement, ResponseMsg } from '../../utils/types';
+import { AnnouncementType, Category, Data, Paginate, PostAnnouncement, ResponseMsg, Target } from '../../utils/types';
+
+/**
+ *  api/announcements/categories
+ *  api/categories/
+ */
 
 export const announcementsApi = createApi({
     reducerPath: 'announcementsAPI',
@@ -8,13 +13,15 @@ export const announcementsApi = createApi({
         credentials: 'include',
     }),
     refetchOnFocus: true,
+    tagTypes: ['get'],
     endpoints: (builder) => ({
-        getAnnouncements: builder.query<Data<AnnouncementType[]>, {}>({
+        getAnnouncements: builder.query<Data<AnnouncementType[]>, null>({
             query: () =>
                 ('/'),
+            providesTags: ['get'],
         }),
 
-        getAllAnnouncements: builder.query<Data<AnnouncementType[]> & { next: boolean }, { page: number, size: number }>({
+        getAllAnnouncements: builder.query<Paginate<AnnouncementType[]>, { page: number, size: number }>({
             query: ({ page, size }) =>
             ({
                 url: '/all',
@@ -22,7 +29,8 @@ export const announcementsApi = createApi({
                     page,
                     size,
                 },
-            })
+            }),
+            providesTags: ['get'],
         }),
 
         addAnnouncement: builder.mutation<ResponseMsg, { body: PostAnnouncement }>({
@@ -31,6 +39,7 @@ export const announcementsApi = createApi({
                 method: 'POST',
                 body,
             }),
+            invalidatesTags: ['get'],
         }),
 
         deleteAnnouncement: builder.mutation<ResponseMsg, { id: number }>({
@@ -38,6 +47,7 @@ export const announcementsApi = createApi({
                 url: `/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['get'],
         }),
 
         updateAnnouncement: builder.mutation<ResponseMsg, { id: number, body: PostAnnouncement }>({
@@ -46,6 +56,20 @@ export const announcementsApi = createApi({
                 method: 'PUT',
                 body,
             }),
+            invalidatesTags: ['get'],
+        }),
+        getCategoriesTargets: builder.query<{ categories: Category[], targets: Target[] }, null>({
+            query: () =>
+                ('/categories-targets'),
+        })
+        ,
+        getCategories: builder.query<Data<Category[]>, null>({
+            query: () =>
+                ('/categories'),
+        }),
+        getTargets: builder.query<Data<Target[]>, null>({
+            query: () =>
+                ('/targets'),
         }),
     }),
 });
@@ -56,4 +80,7 @@ export const {
     useAddAnnouncementMutation,
     useDeleteAnnouncementMutation,
     useUpdateAnnouncementMutation,
+    useGetCategoriesTargetsQuery,
+    // useGetCategoriesQuery,
+    // useGetTargetsQuery,
 } = announcementsApi;

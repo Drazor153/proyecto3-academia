@@ -1,4 +1,4 @@
-import { announcement, menuItems } from '../../utils/pages';
+import { menuItems } from '../../utils/pages';
 import { privilegedItemsShortcuts } from '../../utils/pages';
 import { useAppSelector } from '../../redux/hooks';
 import Shortcuts, {
@@ -8,9 +8,16 @@ import Shortcuts, {
 import Announcement from './components/Announcement';
 // import { AnnouncementType } from './types';
 import { t } from 'i18next';
+import { useGetAnnouncementsQuery } from '../../redux/services/announcementsApi';
 
 function Dashboard() {
 	const role = useAppSelector(state => state.userReducer.role);
+
+	const {
+		data: announcement,
+		isLoading,
+		isSuccess,
+	} = useGetAnnouncementsQuery(null);
 
 	return (
 		<>
@@ -47,17 +54,10 @@ function Dashboard() {
 					)}
 				</aside>
 				<section className="announcement-container">
-					{announcement
-						.sort((a, b) => {
-							const dateA = new Date(a.createdAt).getTime();
-							const dateB = new Date(b.createdAt).getTime();
-
-							return dateB - dateA;
-						})
-						.map(announcement => (
+					{isSuccess &&
+						announcement.data.map(announcement => (
 							<Announcement
 								key={announcement.title}
-								// categories={[]}
 								announcement={announcement}
 							/>
 						))}

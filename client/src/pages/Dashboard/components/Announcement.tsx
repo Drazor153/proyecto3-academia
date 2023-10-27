@@ -21,8 +21,6 @@ function Announcement({ announcement }: AnnouncementProps) {
 		image,
 	} = announcement;
 
-	// const category = categories.find(category => category.value === value)?.label;
-
 	const handlerClick = () => {
 		setExpanded(!expanded);
 	};
@@ -33,12 +31,12 @@ function Announcement({ announcement }: AnnouncementProps) {
 				<div className="author">
 					<Avatar
 						className="avatar"
-						title={author}
+						title={author.name}
 						round
-						name={author}
-						alt={author}
+						name={author.name}
+						alt={author.name}
 					/>
-					<p>{author}</p>
+					<p>{`${author.name} ${author.first_surname}`}</p>
 				</div>
 				<h2 className="title">{title}</h2>
 			</header>
@@ -58,9 +56,15 @@ function Announcement({ announcement }: AnnouncementProps) {
 			<hr />
 			<footer>
 				<p className="date">
-					{t('date')}
+					{`${t('published')}: ${new Date(createdAt).toLocaleDateString(
+						'es-CL',
+						{
+							timeZone: 'UTC',
+						},
+					)}`}
+					{/* {t('date')}
 					{': '}
-					{createdAt}
+					{createdAt} */}
 				</p>
 				<p className="categories">
 					{/* {categories.map((tag, index) => ( */}
@@ -68,7 +72,7 @@ function Announcement({ announcement }: AnnouncementProps) {
 						key={name}
 						className="category"
 					>
-						{name}
+						{t(name)}
 					</span>
 					{/* ))} */}
 				</p>

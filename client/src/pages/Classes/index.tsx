@@ -7,8 +7,11 @@ import { useAppSelector } from '../../redux/hooks';
 import ClassTable from './components/ClassTable';
 import { reducer } from './reducer/selectedOption';
 import Selector from './components/Selector';
+// import { useTranslation } from 'react-i18next';
 
 function Classes() {
+	// useTranslation();
+
 	const user = useAppSelector(state => state.userReducer);
 
 	const role = user.role === 'STUDENT' ? 'students' : 'teachers';

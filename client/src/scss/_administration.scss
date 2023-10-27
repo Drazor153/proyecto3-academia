@@ -22,7 +22,7 @@
 	grid-area: content;
 }
 
-form {
+.student-register {
 	height: 100%;
 	background-color: base.$whitegrey;
 	padding: 10px 10px;
@@ -49,5 +49,121 @@ form {
 		display: flex;
 		gap: 10px;
 		justify-content: end;
+	}
+}
+
+.students-table {
+	thead,
+	tbody {
+		tr {
+			grid-template-columns: 20% auto 10% 30%;
+		}
+	}
+}
+
+.filters-container {
+	background-color: base.$crimsonred;
+	padding: 10px;
+	border-radius: 5px;
+
+	h3 {
+		color: base.$white;
+	}
+}
+
+.search-student-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	background-color: adjust-color($color: base.$crimsonred, $lightness: -10%);
+	border-radius: 5px;
+
+	.search-container {
+		flex: 1;
+		min-width: 0;
+		background-color: base.$white;
+		border-radius: 5px;
+		height: 100%;
+		padding: 10px;
+
+		.react-select__control {
+			border-radius: 0 5px 5px 5px;
+			border-color: base.$lightgrey;
+		}
+
+		.float-label-field {
+			padding: 0;
+
+			input {
+				border-radius: 0;
+				border: solid 1px base.$lightgrey;
+				border-radius: 0 5px 5px 5px;
+				min-height: 38px;
+				padding: 0 10px;
+
+				&:focus {
+					border-color: base.$crimsonred;
+					box-shadow: inset 0 0 0 1px base.$crimsonred !important;
+				}
+			}
+		}
+
+		label {
+			background-color: adjust-color(
+				$color: base.$crimsonred,
+				$lightness: -15%
+			);
+			color: white;
+			padding: 5px 7px;
+			border-radius: 5px 5px 0 0;
+		}
+	}
+
+	.float-label-field {
+		margin: 0;
+		width: auto;
+	}
+}
+
+.pagination-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+
+	.pagination-btn-container {
+		display: flex;
+		gap: 10px;
+
+		button {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: 1px solid base.$crimsonred;
+			background-color: base.$white;
+			color: base.$crimsonred;
+			font-size: 20px;
+			font-weight: bold;
+
+			* {
+				pointer-events: none;
+			}
+
+			&:hover {
+				background-color: base.$crimsonred;
+				color: base.$white;
+			}
+
+			&:disabled {
+				opacity: 0.5;
+
+				&:hover {
+					background-color: base.$white;
+					color: base.$crimsonred;
+				}
+			}
+		}
 	}
 }

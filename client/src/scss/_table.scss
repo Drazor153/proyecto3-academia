@@ -25,14 +25,10 @@ table {
 
 			&[data-title] {
 				display: flex;
-				// width: 100%;
 				th {
-					// margin-right: 10px;
 					display: grid;
 					place-items: center;
 					width: 100%;
-					// width: calc(100% - scrollbar.$scrollbar-width);
-					// width: 50px;
 					position: relative;
 
 					.biSolidPlusSquare {
@@ -88,7 +84,7 @@ table {
 				align-items: center;
 				padding: 5px;
 
-				&[data-type='student name'] {
+				&[data-student-name] {
 					text-transform: capitalize;
 					justify-content: start;
 				}
@@ -105,6 +101,16 @@ table {
 					background-color: rgba(base.$brown, 0.5);
 				}
 			}
+		}
+
+		.no-results {
+			grid-column: 1/-1;
+			text-align: center;
+			display: grid;
+			place-items: center;
+			height: 100%;
+			width: 100%;
+			font-size: 1.5rem;
 		}
 	}
 }

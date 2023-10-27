@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { setUser } from './redux/features/userSlice.ts';
+import { ResponseMsg } from './utils/types';
 
 function App() {
 	useTranslation();
@@ -31,12 +32,16 @@ function App() {
 
 		useEffect(() => {
 			if (user.run !== -1 && result) {
-				console.log('refresh');
+				// console.log('refresh');
 				fetch(`${import.meta.env.VITE_SERVER_HOST}/api/auth/refresh`, {
 					credentials: 'include',
-				});
+				})
+					.then(res => res.json())
+					.then(({ msg }: ResponseMsg) => {
+						console.log(msg);
+					});
 			}
-		}, [location, user, result]);
+		}, [location]);
 
 		if (
 			// false &&
@@ -99,7 +104,7 @@ function App() {
 		if (result && user.run === -1) {
 			dispatch(setUser(result.userData));
 		}
-	}, [result]);
+	}, [result, dispatch, user.run]);
 
 	return (
 		<div className="layout">

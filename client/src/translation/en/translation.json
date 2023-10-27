@@ -15,6 +15,7 @@
 	"level_input": "Select the student's English level",
 	"register": "Submit",
 	"levels": "Levels",
+	"level": "Level",
 	"beginner": "Beginner",
 	"elementary": "Elementary",
 	"intermediate": "Intermediate",
@@ -73,5 +74,14 @@
 	"updated": "Updated",
 	"expires": "Expires",
 	"undefined": "Undefined",
-	"grade": "Grade"
+	"grade": "Grade",
+	"save": "Save",
+	"view": "View",
+	"search_name": "Search by name",
+	"search_run": "Search by RUN",
+	"search_level": "Search by level",
+	"page": "Page",
+	"delete_announcement_message": "Are you sure you want to delete this announcement?",
+	"filters": "Filters",
+	"no_results": "No results"
 }

@@ -18,6 +18,7 @@
 	"Run already registered": "El RUT ya se encuentra registrado",
 	"Invalid value": "Un campo ingresado no es valido",
 	"levels": "Niveles",
+	"level": "Nivel",
 	"beginner": "Principiante",
 	"elementary": "Elemental",
 	"intermediate": "Intermedio",
@@ -77,5 +78,14 @@
 	"updated": "Actualizado",
 	"expires": "Expira",
 	"undefined": "No definido",
-	"grade": "Nota"
+	"grade": "Nota",
+	"save": "Guardar",
+	"view": "Ver",
+	"search_name": "Buscar por nombre",
+	"search_run": "Buscar por RUN",
+	"search_level": "Buscar por nivel",
+	"page": "Página",
+	"delete_announcement_message": "¿Está seguro que desea eliminar el anuncio?",
+	"filters": "Filtros",
+	"no_results": "No hay resultados"
 }

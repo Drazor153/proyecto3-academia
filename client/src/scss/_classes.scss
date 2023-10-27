@@ -21,13 +21,14 @@
 		border-radius: 5px;
 		height: max-content;
 		max-height: 100%;
+		// max-width: 200px;
 	}
 }
-
 .dropdown {
 	display: grid;
 	grid-auto-rows: max-content;
 	background-color: rgba(base.$brown, 0.25);
+	// max-width: ;
 	max-height: 40px;
 	font-size: 1.35rem;
 	font-weight: bold;
@@ -39,6 +40,7 @@
 
 	.flex,
 	.lesson {
+		gap: 10px;
 		box-sizing: border-box;
 		display: flex;
 		color: base.$crimsonred;
@@ -50,6 +52,12 @@
 		height: 40px;
 		transition: background-color 0.25s, color 0.25s;
 		min-width: max-content;
+
+		p {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
 
 		&:hover {
 			color: white;
@@ -87,12 +95,12 @@
 	}
 }
 
-// .threeDots {
-// position: absolute;
-// top: 50%;
-// left: 50%;
-// transform: translate(-50%, -50%);
-// }
+.threeDots {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
 
 .imEyePlus,
 .imEyeMinus,
@@ -163,8 +171,9 @@
 	}
 }
 
-.attendance,
-.delete {
+.attendance
+// ,.delete
+{
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -217,10 +226,6 @@
 
 		p {
 			text-align: center;
-
-			// &[data-type='student name'] {
-			// 	text-transform: capitalize;
-			// }
 		}
 
 		.content {
@@ -375,15 +380,15 @@
 	}
 }
 
-.delete {
-	width: 25%;
-	height: 25%;
+// .delete {
+// 	width: 25%;
+// 	height: 25%;
 
-	.body {
-		display: flex;
-		height: fit-content;
-	}
-}
+// 	.body {
+// 		display: flex;
+// 		height: fit-content;
+// 	}
+// }
 
 .background {
 	background-color: rgba(black, 0.5);

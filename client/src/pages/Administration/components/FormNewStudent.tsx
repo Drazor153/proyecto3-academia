@@ -46,7 +46,7 @@ function LevelsSelect({ control }: { control: Control<Student> }) {
 	} = useGetLevelsQuery(null);
 
 	if (isLoading || isFetching) {
-		return <ThreeDots fill="#2F4858" />;
+		return <ThreeDots />;
 	}
 
 	if (isError) {

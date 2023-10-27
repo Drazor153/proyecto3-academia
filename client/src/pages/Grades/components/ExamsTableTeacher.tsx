@@ -217,7 +217,7 @@ function QuizRow({
 		<tr>
 			<td>{n}</td>
 			<td>{runFormat}</td>
-			<td data-type="student name">
+			<td data-student-name>
 				<p>{fullName.toLowerCase()}</p>
 			</td>
 			<td>
