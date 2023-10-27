@@ -6,23 +6,31 @@ import {
 } from './dto/teachers.dto';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { TeachersSanitizersService } from 'src/services/teachers.sanitizer.service';
+import { RoleEnum } from 'src/guards/roles.decorator';
+import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class TeachersService {
   constructor(
     private prisma: PrismaService,
     private sanity: TeachersSanitizersService,
-  ) {}
+    private logger: PinoLogger,
+  ) {
+    this.logger.setContext(TeachersService.name);
+  }
 
-  async getTeacherLessons(run: number) {
+  async getTeacherLessons(run: number, role: RoleEnum) {
     const query = await this.prisma.lesson.findMany({
-      where: { teacherRun: +run },
+      where: role === RoleEnum.Admin ? {} : { teacherRun: run },
       include: { level: true },
-      orderBy: {
-        level: {
-          code: 'desc',
+      orderBy: [
+        {
+          level: {
+            code: 'desc',
+          },
         },
-      },
+        { lesson: 'asc' },
+      ],
     });
 
     const teacherLevels = this.sanity.sanitizeTeacherLevels(query);
@@ -126,7 +134,7 @@ export class TeachersService {
       });
     });
 
-    console.log(`${grades.length} notas actualizadas`);
+    this.logger.info(`${grades.length} notas actualizadas`);
 
     return { msg: 'Notas actualizadas!' };
   }

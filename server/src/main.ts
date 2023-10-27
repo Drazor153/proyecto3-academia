@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { json, urlencoded } from 'express';
 
 const httpsOptions = {
   key: fs.readFileSync('./ssl/key.pem', 'utf8'),
@@ -23,6 +24,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(cookieParser());
+  app.use(json({ limit: '5mb' }));
+  app.use(urlencoded({ limit: '5mb', extended: true }));
+
   app.enableCors({
     origin: [
       'https://localhost:5173',

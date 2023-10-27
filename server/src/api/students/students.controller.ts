@@ -10,17 +10,24 @@ import {
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import {
+  PaginatedStudentsQuery,
   CreateNewStudentDto,
   GetStudentGradesParams,
 } from './dto/students.dto';
 import { RoleEnum, Roles } from 'src/guards/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { UserRequest } from 'src/interfaces/request.interface';
+import { PinoLogger } from 'nestjs-pino';
 
 @Controller('api/students')
 @UseGuards(RolesGuard)
 export class StudentsController {
-  constructor(private readonly studentsService: StudentsService) {}
+  constructor(
+    private readonly studentsService: StudentsService,
+    private readonly logger: PinoLogger,
+  ) {
+    this.logger.setContext(StudentsController.name);
+  }
 
   // @Get()
   // @Roles(RoleEnum.Admin)
@@ -30,16 +37,17 @@ export class StudentsController {
 
   @Get()
   @Roles(RoleEnum.Admin)
-  getPaginatedStudents(
-    @Query('size') size: string,
-    @Query('page') page: string,
-  ) {
-    return this.studentsService.getStudents(+size, +page);
+  getPaginatedStudents(@Query() query: PaginatedStudentsQuery) {
+    this.logger.info(
+      `Admin getting students with size: ${query.size} and page: ${query.page}`,
+    );
+    return this.studentsService.getStudents(query);
   }
 
   @Get('levels')
   @Roles(RoleEnum.Student)
   getLevels(@Req() req: UserRequest) {
+    this.logger.info(`Student with run ${req.user.sub} is getting his levels`);
     return this.studentsService.getLevels(req.user.sub);
   }
 
@@ -49,6 +57,9 @@ export class StudentsController {
     @Param() params: GetStudentGradesParams,
     @Req() req: UserRequest,
   ) {
+    this.logger.info(
+      `Student with run ${req.user.sub} is getting his grades from ${params.level}, ${params.year}, ${params.semester}`,
+    );
     return this.studentsService.getStudentGrades({
       ...params,
       run: req.user.sub,

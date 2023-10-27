@@ -1,5 +1,4 @@
 import { AccessTokenGuard } from './accessToken.guard';
-import { RolesGuard } from './roles.guard';
 import { AccessTokenStrategy } from './accessToken.strategy';
 import { RefreshTokenStrategy } from './refreshToken.strategy';
 import { APP_GUARD } from '@nestjs/core';

@@ -1,6 +1,7 @@
 import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { ConfigProps } from 'src/interfaces/config.interface';
+import { UserRequest } from 'src/interfaces/request.interface';
 // import { UserRequest } from 'src/interfaces/request.interface';
 
 export const config = (): ConfigProps => ({
@@ -18,19 +19,23 @@ export const ConfigMiddleware = () =>
     load: [config],
   });
 
-// const loggerCustomProps = (req: UserRequest) => ({
-//   id: req.id,
-//   method: req.method,
-//   url: req.url,
-//   // userRun: req.user?.sub,
-//   // userRole: req.user?.role,
-// });
-
-const loggerReqSerializer = (req: any) => ({
+const loggerCustomProps = (req: UserRequest) => ({
   id: req.id,
   method: req.method,
   url: req.url,
+  userRun: req.user?.sub,
+  userRole: req.user?.role,
+});
+
+const loggerReqSerializer = (req: any) => ({
+  // id: req.id,
+  // method: req.method,
+  // url: req.url,
   remoteAddress: req.remoteAddress.split('f:')[1],
+});
+
+const loggerResSerializer = (res: any) => ({
+  statusCode: res.statusCode,
 });
 
 export const LoggerMiddleware = () =>
@@ -44,12 +49,10 @@ export const LoggerMiddleware = () =>
       },
       messageKey: 'message',
       autoLogging: false,
-      // customProps: loggerCustomProps,
+      customProps: loggerCustomProps,
       serializers: {
         req: loggerReqSerializer,
-        res: (res) => ({
-          statusCode: res.statusCode,
-        }),
+        res: loggerResSerializer,
       },
     },
   });

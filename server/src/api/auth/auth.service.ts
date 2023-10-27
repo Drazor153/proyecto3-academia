@@ -123,24 +123,12 @@ export class AuthService {
     } = config();
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        {
-          sub: run,
-          role,
-        },
-        {
-          secret: access_token_secret,
-          expiresIn: access_token_expires_in,
-        },
+        { sub: run, role },
+        { secret: access_token_secret, expiresIn: access_token_expires_in },
       ),
       this.jwtService.signAsync(
-        {
-          sub: run,
-          role,
-        },
-        {
-          secret: refresh_token_secret,
-          expiresIn: refresh_token_expires_in,
-        },
+        { sub: run, role },
+        { secret: refresh_token_secret, expiresIn: refresh_token_expires_in },
       ),
     ]);
 
@@ -155,17 +143,6 @@ export class AuthService {
       return true;
     } catch (error) {
       return false;
-    }
-  }
-
-  getUserFromRefreshToken(token: string) {
-    try {
-      const { sub, role } = this.jwtService.verify(token, {
-        secret: config().refresh_token_secret,
-      });
-      return { run: sub, role };
-    } catch (error) {
-      throw new BadRequestException({ type: 'msg', message: 'Invalid token' });
     }
   }
 
@@ -196,7 +173,16 @@ export class AuthService {
     const tokens = await this.getTokens(run, user.role as RoleEnum);
 
     // await this.updateRefreshToken(run, tokens.refreshToken);
-
     return tokens;
   }
+  // getUserFromRefreshToken(token: string) {
+  //   try {
+  //     const { sub, role } = this.jwtService.verify(token, {
+  //       secret: config().refresh_token_secret,
+  //     });
+  //     return { run: sub, role };
+  //   } catch (error) {
+  //     throw new BadRequestException({ type: 'msg', message: 'Invalid token' });
+  //   }
+  // }
 }

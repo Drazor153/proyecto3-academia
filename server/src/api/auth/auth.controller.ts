@@ -93,8 +93,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     this.logger.info(`User with run ${req.user.sub} is refreshing tokens.`);
-    const run = req.user.sub;
-    const refreshToken = req.user.refreshToken;
+    const { sub: run, refreshToken } = req.user;
     const tokens = await this.authService.refreshTokens(run, refreshToken);
 
     res.cookie('access-token', tokens.accessToken, COOKIE_OPTIONS);

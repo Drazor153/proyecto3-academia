@@ -2,9 +2,24 @@ import {
   IsNumberString,
   IsString,
   IsNotEmpty,
-  IsInt,
   IsAlphanumeric,
+  IsOptional,
+  IsInt,
 } from 'class-validator';
+
+export class PaginatedStudentsQuery {
+  @IsNumberString()
+  size: string;
+
+  @IsNumberString()
+  page: string;
+
+  @IsOptional()
+  run: string;
+
+  @IsOptional()
+  level: string;
+}
 
 export class GetLevelsParams {
   @IsNumberString()

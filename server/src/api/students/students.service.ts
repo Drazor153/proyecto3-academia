@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateNewStudentDto,
   GetStudentGradesParams,
+  PaginatedStudentsQuery,
 } from './dto/students.dto';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { StudentsSanitizersService } from 'src/services/students.sanitizer.service';
@@ -30,8 +31,10 @@ export class StudentsService {
       },
     });
   }
-  async getStudents(size: number, page: number) {
-    return await this.prisma.user.findMany({
+
+  async getStudents(queryParams: PaginatedStudentsQuery) {
+    const { page, size, run, level } = queryParams;
+    const query = await this.prisma.user.findMany({
       where: {
         role: 'STUDENT',
       },
@@ -40,12 +43,41 @@ export class StudentsService {
         dv: true,
         name: true,
         first_surname: true,
-        // email: true,
-        // status: true,
+        enrols: {
+          select: {
+            levelCode: true,
+          },
+          where: {
+            status: 'Cursando',
+          },
+        },
       },
-      take: size,
-      skip: (page - 1) * size,
     });
+
+    const students = query
+      .filter(
+        (student) =>
+          String(student.run).includes(run) &&
+          student.enrols[0].levelCode.includes(level),
+      )
+      .map((student) => ({
+        run: student.run,
+        dv: student.dv,
+        name: student.name,
+        first_surname: student.first_surname,
+        level: student.enrols[0].levelCode,
+      }));
+
+    // Paginate
+    const start = (+page - 1) * +size;
+    const end = +page * +size;
+    const paginatedStudents = students.slice(start, end);
+    // Check if previous page exists
+    const previous = +page > 1;
+    // Check if next page exists
+    const next = end < students.length;
+
+    return { data: paginatedStudents, next, previous };
   }
 
   async createNewStudent({
