@@ -11,22 +11,23 @@ datasource db {
 }
 
 model User {
-  run           Int          @id
-  dv            String       @db.Char(1)
+  run           Int            @id
+  dv            String         @db.Char(1)
   name          String
   first_surname String
   password      String
   email         String?
   role          String
   status        String
-  date_join     DateTime     @default(now())
-  last_join     DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
+  date_join     DateTime       @default(now())
+  last_join     DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
   refresh_token String?
   enrols        enrols[]
   gives         gives[]
   Lesson        Lesson[]
   attendance    attendance[]
+  Announcement  Announcement[]
 }
 
 model Level {
@@ -106,4 +107,40 @@ model attendance {
   attended   Boolean @default(false)
 
   @@id([classId, studentRun])
+}
+
+model Announcement {
+  id         Int      @id @default(autoincrement())
+  user       User?    @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  run        Int?
+  title      String
+  content    String   @db.VarChar(500)
+  image      Bytes?
+  category   Category @relation(fields: [categoryId], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  expires_at DateTime
+  send_to    SendTo[]
+  categoryId Int
+}
+
+model SendTo {
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  announcementId Int
+  target         Target       @relation(fields: [targetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  targetId       Int
+
+  @@id([announcementId, targetId])
+}
+
+model Target {
+  id      Int      @id @default(autoincrement())
+  name    String
+  send_to SendTo[]
+}
+
+model Category {
+  id           Int            @id @default(autoincrement())
+  name         String
+  Announcement Announcement[]
 }

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { lessonRecords, levels, topics } from './dataseed';
+import { categories, lessonRecords, levels, targets, topics } from './dataseed';
 
 const prisma = new PrismaClient();
 
@@ -12,6 +12,13 @@ async function main() {
   });
   await prisma.lesson.createMany({
     data: lessonRecords,
+  });
+  await prisma.target.createMany({
+    data: targets,
+  });
+
+  await prisma.category.createMany({
+    data: categories,
   });
 }
 

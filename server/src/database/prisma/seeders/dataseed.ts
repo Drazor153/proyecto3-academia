@@ -56,3 +56,19 @@ levels.forEach((level) => {
     });
   });
 });
+
+export const targets = [
+  { name: 'ALL' },
+  { name: 'A1' },
+  { name: 'A2' },
+  { name: 'B1' },
+  { name: 'B2' },
+  { name: 'C1' },
+];
+
+export const categories = [
+  { name: 'classes' },
+  { name: 'academy' },
+  { name: 'events' },
+  { name: 'info' },
+];
