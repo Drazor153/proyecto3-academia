@@ -2,12 +2,34 @@
 
 .grades-layout {
 	display: grid;
-	grid-template-areas:
-		'tselector grades'
-		'options grades';
-	width: auto;
-	grid-template-columns: 200px 1fr;
-	grid-template-rows: min-content auto;
+
+	&.teacher {
+		grid-template-areas:
+			'tselector grades'
+			'options grades';
+		width: auto;
+		grid-template-columns: 200px 1fr;
+		grid-template-rows: min-content auto;
+	}
+
+	&.student {
+		grid-template-areas:
+			'options options'
+			'grades grades';
+		width: auto;
+		grid-template-rows: min-content auto;
+
+		.options-select-container {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			flex: 1;
+
+			>div {
+				flex: 1;
+			}
+		}		
+	}
 }
 
 .topics-selector {
@@ -39,17 +61,6 @@
 	h3 {
 		font-size: 1.3rem;
 		font-weight: bold;
-		color: base.$bluemarine;
-		margin: 0;
-	}
-
-	.average-container,
-	.status-container {
-		padding: 0 50px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: base.$bluemarine;
 		margin: 0;
 	}
 
@@ -119,6 +130,7 @@
 }
 
 .grades-table {
+	color: base.$darkbrown;
 	thead,
 	tbody {
 		tr {
@@ -127,13 +139,89 @@
 	}
 }
 
-.modal-body {
-	.grades-input-table {
-		thead,
-		tbody {
-			tr {
-				grid-template-columns: 10% 20% auto 20%;
-			}
+.grades-input-table {
+	thead,
+	tbody {
+		tr {
+			grid-template-columns: 10% 20% auto 20%;
 		}
 	}
+}
+
+.topics-exams-container {
+	display: grid;
+	height: 100%;
+	grid-template-areas: 'writing reading average' 'listening speaking average';
+	grid-template-columns: 1fr 1fr 0.5fr;
+	grid-template-rows: 1fr 1fr;
+}
+
+.topic-container {
+	background-color: base.$whitegrey;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.writing-exams-container {
+	grid-area: writing;
+}
+
+.reading-exams-container {
+	grid-area: reading;
+}
+
+.listening-exams-container {
+	grid-area: listening;
+}
+
+.speaking-exams-container {
+	grid-area: speaking;
+}
+
+.average-container {
+	grid-area: average;
+}
+
+.noquiz {
+	grid-column: 1/-1;
+}
+
+.average-container {
+	.average-text {
+		font-size: 2em;
+		text-align: center;
+		font-weight: bold;
+		color: base.$darkbrown;
+	}
+}
+
+.moreinfo-container {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	padding: 5px;
+	border-radius: 5px;
+	background-color: base.$crimsonred;
+
+	> div {
+		background-color: base.$whitegrey;
+		padding: 5px;
+		border-radius: 5px;
+	}
+
+	span {
+		font-size: 1.2rem;
+		font-weight: bold;
+		color: base.$darkbrown;
+	}
+
+	.approved {
+		color: base.$green;
+	}
+
+	.failed {
+		color: base.$crimsonred;
+	}
+	
 }

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Data, Student, Exams, Paginate } from "../../utils/types";
+import { Data, Student, Exams, Paginate, StudentCareer } from "../../utils/types";
 
 export const studentsApi = createApi({
     reducerPath: "studentsAPI",
@@ -35,6 +35,11 @@ export const studentsApi = createApi({
                 body: student,
             }),
         }),
+
+        getStudentCareerByRun: builder.query<Data<StudentCareer>, { run: number }>({
+            query: ({ run }) =>
+                `/career/${run}`,
+        }),
     }),
 });
 
@@ -42,5 +47,6 @@ export const {
     useGetStudentsQuery,
     useLazyGetStudentsQuery,
     useAddStudentMutation,
-    useGetStudentsGradesQuery
+    useGetStudentsGradesQuery,
+    useGetStudentCareerByRunQuery,
 } = studentsApi;

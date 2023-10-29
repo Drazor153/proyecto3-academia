@@ -1,5 +1,8 @@
 import { t } from 'i18next';
-import { useLazyGetStudentsQuery } from '../../../redux/services/studentsApi';
+import {
+	useGetStudentCareerByRunQuery,
+	useLazyGetStudentsQuery,
+} from '../../../redux/services/studentsApi';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 
 import { useEffect, useState } from 'react';
@@ -8,6 +11,9 @@ import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 
 import Select from 'react-select';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
+import { Level, Student, StudentCareer } from '../../../utils/types';
+import { IoMdSchool } from 'react-icons/io';
+import Modal from '../../../components/Modal';
 
 export function useDebounce<T>(value: T, delay?: number): T {
 	const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -23,10 +29,46 @@ export function useDebounce<T>(value: T, delay?: number): T {
 	return debouncedValue;
 }
 
+function ShowStudentCareer({ run }: { run: number }) {
+	const { data, isLoading, isFetching, isError } =
+		useGetStudentCareerByRunQuery({ run });
+
+	if (isLoading || isFetching) return <ThreeDots />;
+	if (!data || isError) return <p>{t('no_results')}</p>;
+
+	const career = data.data;
+
+	return (
+		<div className="student-career-container">
+			{career.map(({ year, semesters, level, status }) => (
+				<table key={year}>
+					<thead>
+						<tr>
+							<th colSpan={3}>
+								{t('year')} {year}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{semesters.map(semester => (
+							<tr key={semester}>
+								<td>{`${t('semester')} ${semester}`}</td>
+								<td>{t(level)}</td>
+								<td>{t(status)}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			))}
+		</div>
+	);
+}
+
 function SearchStudent() {
 	const [page, setPage] = useState(1);
 	const [run, setRun] = useState('');
 	const [level, setLevel] = useState('');
+	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 	const debouncedRun = useDebounce<string>(run, 1000);
 	const size = 10;
 
@@ -117,7 +159,7 @@ function SearchStudent() {
 						</div>
 					</div>
 					<div className="search-container">
-						<label htmlFor="level-search">{t('search_level')}</label>
+						<label>{t('search_level')}</label>
 						<div className="input-container">
 							<Select
 								className="react-select-container"
@@ -159,7 +201,7 @@ function SearchStudent() {
 								<td className="no-results">{t('no_results')}</td>
 							</tr>
 						) : (
-							result.data.data.map(student => (
+							result.data.data.map((student: Student) => (
 								<tr key={student.run}>
 									<td>
 										{formatRut(
@@ -173,7 +215,10 @@ function SearchStudent() {
 									</td>
 									<td>{student.level}</td>
 									<td>
-										<button>{t('view')}</button>
+										<button onClick={() => setSelectedStudent(student)}>
+											<IoMdSchool className="icon" />
+											{t('inspect')}
+										</button>
 									</td>
 								</tr>
 							))
@@ -201,6 +246,19 @@ function SearchStudent() {
 					</button>
 				</div>
 			</div>
+			<Modal
+				title={`${t('career_of')} ${selectedStudent?.name} ${
+					selectedStudent?.first_surname
+				}`}
+				isOpen={() => selectedStudent !== null}
+				onClick={() => setSelectedStudent(null)}
+				footer={
+					<button onClick={() => setSelectedStudent(null)}>{t('close')}</button>
+				}
+				className="student-career-modal"
+			>
+				{selectedStudent && <ShowStudentCareer run={selectedStudent.run} />}
+			</Modal>
 		</>
 	);
 }

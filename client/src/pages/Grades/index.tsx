@@ -6,9 +6,9 @@ import {
 	FaSpellCheck,
 } from 'react-icons/fa6';
 import { useAppSelector } from '../../redux/hooks';
-import { TypeKind, reducer } from './selectedOption';
+import { DispatchProps, TypeKind, reducer } from './selectedOption';
 import ExamsTableTeacher from './components/ExamsTableTeacher';
-import ExamsTableStudent from './components/ExamsTableStudent';
+import ExamsTableStudent, { Average } from './components/ExamsTableStudent';
 import { t } from 'i18next';
 import Options from './components/Options';
 
@@ -31,6 +31,123 @@ const topics = [
 	},
 ];
 
+function TopicsButtons({ state, dispatch }: DispatchProps) {
+	return (
+		<section className="topics-selector">
+			<h2>{t('topics')}</h2>
+			<div className="buttons-container">
+				{topics.map((topic, index) => (
+					<button
+						onClick={() =>
+							dispatch({
+								type: TypeKind.TOPIC,
+								payload: topic.name,
+							})
+						}
+						key={index}
+						className={state.topic == topic.name ? 'selected' : ''}
+					>
+						{topic.icon}
+						<span>{t(topic.name)}</span>
+					</button>
+				))}
+			</div>
+		</section>
+	);
+}
+
+function TeacherLayout({ state, dispatch }: DispatchProps) {
+	const isInputFilled = () => {
+		return (
+			state.topic != '' &&
+			state.level != '' &&
+			state.semester != '' &&
+			state.year != ''
+		);
+	};
+
+	return (
+		<main className="grades-layout teacher">
+			<TopicsButtons
+				state={state}
+				dispatch={dispatch}
+			/>
+			<section className="options-container">
+				<h2>{t('options')}</h2>
+				<div className="options-select-container">
+					<Options
+						state={state}
+						dispatch={dispatch}
+					/>
+				</div>
+			</section>
+			<section className="grades">
+				{isInputFilled() && (
+					<>
+						<h2>{t(state.topic)}</h2>
+						<ExamsTableTeacher
+							year={parseInt(state.year)}
+							semester={parseInt(state.semester)}
+							level={state.level}
+							topic={state.topic}
+						/>
+					</>
+				)}
+			</section>
+		</main>
+	);
+}
+
+function StudentLayout({ state, dispatch }: DispatchProps) {
+	const isInputFilled = () => {
+		return state.level != '' && state.semester != '' && state.year != '';
+	};
+
+	return (
+		<main className="grades-layout student">
+			<section className="options-container">
+				<h2>{t('options')}</h2>
+				<div className="options-select-container">
+					<Options
+						state={state}
+						dispatch={dispatch}
+					/>
+				</div>
+			</section>
+			<section className="grades">
+				{isInputFilled() && (
+					<>
+						<h2>{t('grades')}</h2>
+						<div className="topics-exams-container">
+							{topics.map((topic, index) => (
+								<div
+									key={index}
+									className={`${topic.name}-exams-container topic-container`}
+								>
+									<h3>{t(topic.name)}</h3>
+									<ExamsTableStudent
+										year={parseInt(state.year)}
+										semester={parseInt(state.semester)}
+										level={state.level}
+										topic={topic.name}
+									/>
+								</div>
+							))}
+							<div className="average-container topic-container">
+								<Average
+									year={parseInt(state.year)}
+									semester={parseInt(state.semester)}
+									level={state.level}
+								></Average>
+							</div>
+						</div>
+					</>
+				)}
+			</section>
+		</main>
+	);
+}
+
 function Grades() {
 	const role = useAppSelector(state => state.userReducer.role);
 
@@ -41,70 +158,28 @@ function Grades() {
 		semester: '',
 	});
 
-	const examsByRole = () => {
-		if (role == 'STUDENT') {
-			if (!state.topic || !state.year || !state.semester || !state.level)
-				return null;
+	let layout = null;
 
-			return (
-				<ExamsTableStudent
-					year={parseInt(state.year)}
-					semester={parseInt(state.semester)}
-					level={state.level}
-					topic={state.topic}
-				/>
-			);
-		} else {
-			if (!state.topic || !state.year || !state.semester || !state.level)
-				return null;
-
-			return (
-				<ExamsTableTeacher
-					year={parseInt(state.year)}
-					semester={parseInt(state.semester)}
-					level={state.level}
-					topic={state.topic}
-				/>
-			);
-		}
-	};
+	if (role == 'STUDENT') {
+		layout = (
+			<StudentLayout
+				state={state}
+				dispatch={dispatch}
+			/>
+		);
+	} else {
+		layout = (
+			<TeacherLayout
+				state={state}
+				dispatch={dispatch}
+			/>
+		);
+	}
 
 	return (
 		<>
 			<h1>{t('grades')}</h1>
-			<main className="grades-layout">
-				<section className="topics-selector">
-					<h2>{t('topics')}</h2>
-					<div className="buttons-container">
-						{topics.map((topic, index) => (
-							<button
-								onClick={() =>
-									dispatch({
-										type: TypeKind.TOPIC,
-										payload: topic.name,
-									})
-								}
-								key={index}
-								className={
-									state.topic == topic.name ? 'selected' : ''
-								}
-							>
-								{topic.icon}
-								<span>{t(topic.name)}</span>
-							</button>
-						))}
-					</div>
-				</section>
-				{Options({ state, dispatch })}
-				<section className="grades">
-					{state.topic ? (
-						<h2>{t(state.topic)}</h2>
-					) : (
-						<p>{t('topic_select_input')}</p>
-					)}
-					{examsByRole()}
-				</section>
-			</main>
+			{layout}
 		</>
 	);
 }

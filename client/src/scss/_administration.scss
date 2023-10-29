@@ -167,3 +167,24 @@
 		}
 	}
 }
+
+.student-career-container {
+	// display: flex;
+	padding: 5px;
+	table {
+		font-size: 1.2rem;
+		height: max-content;
+		width: 100%;
+		thead {
+			tr {
+				grid-template-columns: 100%;
+			}
+		}
+		tbody {
+			text-wrap: nowrap;
+			tr {
+				grid-template-columns: 50% 20% auto;
+			}
+		}
+	}
+}

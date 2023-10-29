@@ -26,15 +26,19 @@ function LevelOptions({ state, dispatch, data }: OptionsProps) {
 		dispatch({ type: TypeKind.LEVEL, payload: level });
 	};
 
-	if (!state.semester) return null;
+	let levelOptionsFiltered;
 
-	const levelOptionsFiltered = data
-		.find(year => year.year == parseInt(state.year))!
-		.semesters.find(semester => semester.semester == parseInt(state.semester))!
-		.levels.map(level => ({
-			value: level.code,
-			label: t(level.level),
-		}));
+	if (state.semester) {
+		levelOptionsFiltered = data
+			.find(year => year.year == parseInt(state.year))!
+			.semesters.find(
+				semester => semester.semester == parseInt(state.semester),
+			)!
+			.levels.map(level => ({
+				value: level.code,
+				label: t(level.level),
+			}));
+	}
 
 	return (
 		<Select
@@ -43,6 +47,7 @@ function LevelOptions({ state, dispatch, data }: OptionsProps) {
 			placeholder={t('level_select')}
 			options={levelOptionsFiltered}
 			onChange={choice => handleLevelChange(choice?.value)}
+			isDisabled={!state.semester}
 		/>
 	);
 }
@@ -53,14 +58,16 @@ function SemesterOptions({ state, dispatch, data }: OptionsProps) {
 		dispatch({ type: TypeKind.SEMESTER, payload: semester });
 	};
 
-	if (!state.year) return null;
+	let semesterOptionsFiltered;
 
-	const semesterOptionsFiltered = data
-		.find(year => year.year == parseInt(state.year))!
-		.semesters.map(semester => ({
-			value: semester.semester.toString(),
-			label: t('semester') + ' ' + semester.semester,
-		}));
+	if (state.year) {
+		semesterOptionsFiltered = data
+			.find(year => year.year == parseInt(state.year))!
+			.semesters.map(semester => ({
+				value: semester.semester.toString(),
+				label: t('semester') + ' ' + semester.semester,
+			}));
+	}
 
 	return (
 		<Select
@@ -69,6 +76,7 @@ function SemesterOptions({ state, dispatch, data }: OptionsProps) {
 			placeholder={t('semester_select')}
 			options={semesterOptionsFiltered}
 			onChange={choice => handleSemesterChange(choice?.value)}
+			isDisabled={!state.year}
 		/>
 	);
 }
@@ -96,19 +104,17 @@ function YearOptions({ state, dispatch, data }: OptionsProps) {
 }
 
 function Options({ state, dispatch }: DispatchProps) {
-	const levels = GetLevelsData();	
+	const levels = GetLevelsData();
 
 	if (!levels)
 		return (
 			<section className="loading-section">
-				<ThreeDots fill="#8d2840" />
+				<ThreeDots />
 			</section>
 		);
 
 	return (
-		<section className="options-container">
-			<h2>{t('options')}</h2>
-
+		<>
 			<YearOptions
 				dispatch={dispatch}
 				state={state}
@@ -124,7 +130,7 @@ function Options({ state, dispatch }: DispatchProps) {
 				state={state}
 				data={levels}
 			/>
-		</section>
+		</>
 	);
 }
 

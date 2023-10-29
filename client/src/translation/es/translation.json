@@ -81,11 +81,19 @@
 	"grade": "Nota",
 	"save": "Guardar",
 	"view": "Ver",
+	"inspect": "Inspeccionar",
 	"search_name": "Buscar por nombre",
 	"search_run": "Buscar por RUN",
 	"search_level": "Buscar por nivel",
 	"page": "Página",
 	"delete_announcement_message": "¿Está seguro que desea eliminar el anuncio?",
 	"filters": "Filtros",
-	"no_results": "No hay resultados"
+	"no_results": "No hay resultados",
+	"career_of": "Carrera de",
+	"average": "Promedio",
+	"no": "No",
+	"yes": "Sí",
+	"no_exams": "No hay exámenes configurados por el momento",
+	"status" : "Estado",
+	"is_opttest_elegible": "¿Es elegible para prueba optativa?"
 }

@@ -26,11 +26,16 @@
 		font-size: 4rem;
 	}
 
+	.name {
+		font-size: 0.85rem;
+	}
+
 	&:hover {
 		.icon,
 		.name {
 			color: base.$brown;
 		}
+		
 	}
 
 	&.privileged {
