@@ -55,3 +55,26 @@ export interface StudentGradesSanitized {
     studentGrade: number;
   }[];
 }
+
+export interface StudentCareerRaw {
+  run: number;
+  dv: string;
+  name: string;
+  first_surname: string;
+  enrols: {
+    level: {
+      name: string;
+    };
+    status: string;
+    levelCode: string;
+    year: number;
+    semester: number;
+  }[];
+}
+
+export interface StudentCareerSanitized {
+  year: number;
+  semesters: number[];
+  level: string;
+  status: string;
+}

@@ -29,7 +29,10 @@ export class GetClassesParams {
   @IsNumberString()
   lessonId: number;
 }
-
+export class StudentCareerParams {
+  @IsNumberString()
+  run: string;
+}
 export class GetStudentGradesParams {
   @IsNumberString()
   year: number;
