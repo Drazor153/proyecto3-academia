@@ -40,7 +40,7 @@
   "invalid_value": "Un campo ingresado no es valido",
   "invalid_field": "Campo invalido",
   "invalid_run": "RUT inválido",
-  "is_opttest_elegible": "¿Es elegible para prueba optativa?",
+  "is_opttest_elegible": "Prueba optativa",
   "lesson": "Lección",
   "level_input": "Seleccione el nivel de inglés del estudiante",
   "level_select_input": "Seleccione el nivel",
@@ -97,5 +97,14 @@
   "writing": "Escritura",
   "year_select_input": "Seleccione el año",
   "year_select": "Seleccione un año",
-  "yes": "Sí"
+  "yes": "Sí",
+  "pending": "Pendiente",
+  "not_apply": "No aplica",
+  "Close": "Cerrar",
+  "year": "Año",
+  "published": "Publicado",
+  "events": "Events",
+  "academy": "Academy",
+  "info": "Information",
+  "ALL": "Todos"
 }

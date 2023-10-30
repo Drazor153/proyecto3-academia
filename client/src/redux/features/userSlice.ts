@@ -2,12 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { User } from '../../utils/types';
 
 const initialState: User = {
-  run: 0,
+  run: -1,
   dv: '',
   name: '',
   first_surname: '',
   email: null,
-  role: 'ADMIN',
+  role: '',
   status: '',
 };
 

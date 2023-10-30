@@ -40,11 +40,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
       }
       console.log(user);
     }
-  }, [dispatch, isSuccess, user.run]);
+  }, [result?.userData, dispatch, isSuccess, user]);
 
-  useEffect(() => {}, []);
-
-  if ((isLoading || user.run === -1) && false) {
+  if (isLoading) {
     console.log('isLoading');
     return (
       <>
@@ -53,29 +51,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  if (isSuccess || true) {
+  if (isSuccess || user.run !== -1) {
     return (
       <>
-        {/* {location.pathname.split('/').includes('administration') ? (
-          <>
-            {result?.userData.role === 'ADMIN' ? (
-              <>
-                {children}
-                <Outlet />
-              </>
-            ) : (
-              <Navigate
-                to={'/'}
-                replace
-              />
-            )}
-          </>
-        ) : (
-          <>
-            {children}
-            <Outlet />
-          </>
-        )} */}
         {children}
         <Outlet />
       </>

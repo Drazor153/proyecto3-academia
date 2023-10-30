@@ -30,6 +30,15 @@
 			}
 		}		
 	}
+
+	&.teacher {
+		.options-select-container {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+
+		}
+	}
 }
 
 .topics-selector {

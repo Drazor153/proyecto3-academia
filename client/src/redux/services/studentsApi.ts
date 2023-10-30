@@ -8,16 +8,11 @@ export const studentsApi = createApi({
         credentials: 'include',
     }),
     endpoints: (builder) => ({
-        getStudents: builder.query<Paginate<Student[]>, { size: number, page: number, run: string, level: string }>({
-            query: ({ size, page, run, level }) => {
+        getStudents: builder.query<Paginate<Student[]>, { size: number, page: number, run: string, level: string, name: string }>({
+            query: ( params ) => {
                 return {
                     url: '/',
-                    params: {
-                        size,
-                        page,
-                        run,
-                        level
-                    },
+                    params
                 };
             },
 

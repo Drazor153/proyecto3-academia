@@ -168,23 +168,35 @@
 	}
 }
 
-.student-career-container {
-	// display: flex;
-	padding: 5px;
+.student-career-modal {
+	.modal-body {
+		overflow: scroll;
+		overflow-x: hidden;
+		justify-content: center;
+	}
+ .student-career-container {
+	display: grid;
+	gap: 10px;
+	width: 75%;
+	// height: 100%;
 	table {
 		font-size: 1.2rem;
-		height: max-content;
 		width: 100%;
 		thead {
+			width: 100%;
 			tr {
+				width: 100%;
 				grid-template-columns: 100%;
 			}
 		}
 		tbody {
+			scrollbar-gutter: auto;
+			height: max-content;
 			text-wrap: nowrap;
 			tr {
-				grid-template-columns: 50% 20% auto;
+				grid-template-columns: 1fr 1.5fr 1.2fr;
 			}
 		}
 	}
+}
 }

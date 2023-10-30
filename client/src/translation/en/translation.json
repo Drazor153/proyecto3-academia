@@ -40,7 +40,7 @@
   "invalid_value": "Invalid value",
   "invalid_field": "Invalid field",
   "invalid_run": "Invalid RUN",
-  "is_opttest_elegible": "Is elegible for optional recuperative test?",
+  "is_opttest_elegible": "Optional recuperative test",
   "lesson": "Lesson",
   "level_input": "Select the student's English level",
   "level_select_input": "Select a level",
@@ -97,5 +97,15 @@
   "writing": "Writing",
   "year_select_input": "Select a year",
   "year_select": "Select a year",
-  "yes": "Yes"
+  "yes": "Yes",
+  "pending": "Pending",
+  "not_apply": "Not Apply",
+  "Close": "Close",
+  "year": "Year",
+  "published": "Publicado",
+  "events": "Events",
+  "academy": "Academy",
+  "info": "Information",
+  "ALL": "All"
+
 }

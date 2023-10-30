@@ -11,9 +11,10 @@ import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 
 import Select from 'react-select';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
-import { Level, Student, StudentCareer } from '../../../utils/types';
+import { Student } from '../../../utils/types';
 import { IoMdSchool } from 'react-icons/io';
 import Modal from '../../../components/Modal';
+import { useTranslation } from 'react-i18next';
 
 export function useDebounce<T>(value: T, delay?: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -65,15 +66,19 @@ function ShowStudentCareer({ run }: { run: number }) {
 }
 
 function SearchStudent() {
+  useTranslation();
+
   const [page, setPage] = useState(1);
   const [run, setRun] = useState('');
+  const [name, setName] = useState('');
   const [level, setLevel] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const debouncedRun = useDebounce<string>(run, 1000);
+  const debouncedName = useDebounce<string>(name, 1000);
   const size = 10;
 
-  const loadingRun = () => {
-    if (run != debouncedRun) return true;
+  const loadingInput = () => {
+    if (run != debouncedRun || name != debouncedName) return true;
     return false;
   };
 
@@ -97,12 +102,12 @@ function SearchStudent() {
   useEffect(() => {
     const run: string = runWithoutDv(debouncedRun);
     setPage(1);
-    getStudents({ page: 1, size, run, level });
-  }, [debouncedRun, level]);
+    getStudents({ page: 1, size, run, level, name: debouncedName });
+  }, [debouncedRun, level, debouncedName]);
 
   useEffect(() => {
     const run: string = runWithoutDv(debouncedRun);
-    getStudents({ page, size, run, level });
+    getStudents({ page, size, run, level, name });
   }, [page]);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -154,12 +159,13 @@ function SearchStudent() {
                 <input
                   id="name-search"
                   type="text"
+                  onChange={e => setName(e.target.value)}
                 />
               </fieldset>
             </div>
           </div>
           <div className="search-container">
-            <label htmlFor="level-search">{t('search_level')}</label>
+            <label>{t('search_level')}</label>
             <div className="input-container">
               <Select
                 className="react-select-container"
@@ -192,16 +198,17 @@ function SearchStudent() {
           </tr>
         </thead>
         <tbody>
-          {loadingRun() && <ThreeDots />}
+          {loadingInput() && <ThreeDots />}
           {result.isSuccess &&
-            !loadingRun() &&
+            !loadingInput() &&
             !result.isLoading &&
+            // !result.isFetching &&
             (result.data.data.length == 0 ? (
               <tr>
                 <td className="no-results">{t('no_results')}</td>
               </tr>
             ) : (
-              result.data.data.map(student => (
+              result.data.data.map((student: Student) => (
                 <tr key={student.run}>
                   <td>
                     {formatRut(
@@ -215,7 +222,10 @@ function SearchStudent() {
                   </td>
                   <td>{student.level}</td>
                   <td>
-                    <button>{t('view')}</button>
+                    <button onClick={() => setSelectedStudent(student)}>
+                      <IoMdSchool className="icon" />
+                      {t('inspect')}
+                    </button>
                   </td>
                 </tr>
               ))
@@ -243,6 +253,19 @@ function SearchStudent() {
           </button>
         </div>
       </div>
+      <Modal
+        title={`${t('career_of')} ${selectedStudent?.name} ${
+          selectedStudent?.first_surname
+        }`}
+        isOpen={() => selectedStudent !== null}
+        onClick={() => setSelectedStudent(null)}
+        footer={
+          <button onClick={() => setSelectedStudent(null)}>{t('close')}</button>
+        }
+        className="student-career-modal"
+      >
+        {selectedStudent && <ShowStudentCareer run={+selectedStudent.run} />}
+      </Modal>
     </>
   );
 }
