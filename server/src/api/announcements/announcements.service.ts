@@ -87,9 +87,18 @@ export class AnnouncementsService {
       where: {
         send_to: {
           some: {
-            target: {
-              name: levelCode,
-            },
+            OR: [
+              {
+                target: {
+                  name: 'ALL',
+                },
+              },
+              {
+                target: {
+                  name: levelCode,
+                },
+              },
+            ],
           },
         },
       },
@@ -137,11 +146,20 @@ export class AnnouncementsService {
       where: {
         send_to: {
           some: {
-            target: {
-              name: {
-                in: levelCodes,
+            OR: [
+              {
+                target: {
+                  name: 'ALL',
+                },
               },
-            },
+              {
+                target: {
+                  name: {
+                    in: levelCodes,
+                  },
+                },
+              },
+            ],
           },
         },
       },

@@ -19,6 +19,9 @@ export class PaginatedStudentsQuery {
 
   @IsOptional()
   level: string;
+
+  @IsOptional()
+  name: string;
 }
 
 export class GetLevelsParams {

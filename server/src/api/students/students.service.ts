@@ -33,7 +33,7 @@ export class StudentsService {
   // }
 
   async getStudents(queryParams: PaginatedStudentsQuery) {
-    const { page, size, run, level } = queryParams;
+    const { page, size, run, name, level } = queryParams;
     const query = await this.prisma.user.findMany({
       where: {
         role: 'STUDENT',
@@ -57,8 +57,9 @@ export class StudentsService {
     const students = query
       .filter(
         (student) =>
-          String(student.run).includes(run) &&
-          student.enrols[0].levelCode.includes(level),
+          String(student.run).startsWith(run) &&
+          student.enrols[0].levelCode.includes(level) &&
+          student.name.toLowerCase().startsWith(name ? name.toLowerCase() : ''),
       )
       .map((student) => ({
         run: student.run,
