@@ -16,24 +16,24 @@ export class StudentsService {
     private bcrypt: BcryptService,
   ) {}
 
-  async getAllStudents() {
-    return await this.prisma.user.findMany({
-      where: {
-        role: 'STUDENT',
-      },
-      select: {
-        run: true,
-        dv: true,
-        name: true,
-        first_surname: true,
-        email: true,
-        status: true,
-      },
-    });
-  }
+  // async getAllStudents() {
+  //   return await this.prisma.user.findMany({
+  //     where: {
+  //       role: 'STUDENT',
+  //     },
+  //     select: {
+  //       run: true,
+  //       dv: true,
+  //       name: true,
+  //       first_surname: true,
+  //       email: true,
+  //       status: true,
+  //     },
+  //   });
+  // }
 
   async getStudents(queryParams: PaginatedStudentsQuery) {
-    const { page, size, run, level } = queryParams;
+    const { page, size, run, name, level } = queryParams;
     const query = await this.prisma.user.findMany({
       where: {
         role: 'STUDENT',
@@ -57,8 +57,9 @@ export class StudentsService {
     const students = query
       .filter(
         (student) =>
-          String(student.run).includes(run) &&
-          student.enrols[0].levelCode.includes(level),
+          String(student.run).startsWith(run) &&
+          student.enrols[0].levelCode.includes(level) &&
+          student.name.toLowerCase().startsWith(name ? name.toLowerCase() : ''),
       )
       .map((student) => ({
         run: student.run,
@@ -80,6 +81,38 @@ export class StudentsService {
     return { data: paginatedStudents, next, previous };
   }
 
+  async getStudentCareer(run: number) {
+    const studentQuery = await this.prisma.user.findUnique({
+      where: {
+        run,
+        role: 'STUDENT',
+      },
+      select: {
+        run: true,
+        dv: true,
+        name: true,
+        first_surname: true,
+        enrols: {
+          select: {
+            levelCode: true,
+            status: true,
+            year: true,
+            semester: true,
+            level: {
+              select: {
+                name: true,
+              },
+            },
+          },
+          orderBy: [{ year: 'desc' }, { semester: 'asc' }],
+        },
+      },
+    });
+
+    const sanitized = this.sanity.sanitizeStudentCareer(studentQuery);
+
+    return { data: sanitized };
+  }
   async createNewStudent({
     run,
     dv,
@@ -112,7 +145,7 @@ export class StudentsService {
         password: hashedPassword,
         enrols: {
           create: {
-            status: 'Cursando',
+            status: 'active',
             year: new Date().getFullYear(),
             semester: 1,
             level: {

@@ -144,3 +144,10 @@ export type PostAnnouncement = Omit<
   category: number;
   target: number[];
 };
+
+type StudentCareer = {
+	year: number;
+	semesters: number[];
+	level: string;
+	status: string;
+}[];

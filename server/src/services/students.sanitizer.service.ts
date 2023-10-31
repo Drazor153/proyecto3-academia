@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Topic } from '@prisma/client';
 import {
+  StudentCareerRaw,
+  StudentCareerSanitized,
   StudentGradesRaw,
   StudentGradesSanitized,
   StudentLevelRaw,
@@ -110,5 +112,31 @@ export class StudentsSanitizersService {
     });
 
     return dataArray;
+  }
+
+  sanitizeStudentCareer(input: StudentCareerRaw): StudentCareerSanitized[] {
+    const newArray: StudentCareerSanitized[] = [];
+
+    input.enrols.forEach((val) => {
+      const yearExists = newArray.find((year) => year.year === val.year);
+      if (!yearExists) {
+        newArray.push({
+          year: val.year,
+          semesters: [val.semester],
+          level: val.level.name,
+          status: val.status,
+        });
+        return;
+      }
+      const semesterExists = yearExists.semesters.find(
+        (semester) => semester === val.semester,
+      );
+      if (!semesterExists) {
+        yearExists.semesters.push(val.semester);
+        return;
+      }
+    });
+
+    return newArray;
   }
 }

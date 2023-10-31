@@ -13,6 +13,7 @@ import {
   PaginatedStudentsQuery,
   CreateNewStudentDto,
   GetStudentGradesParams,
+  StudentCareerParams,
 } from './dto/students.dto';
 import { RoleEnum, Roles } from 'src/guards/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -43,6 +44,12 @@ export class StudentsController {
     );
     return this.studentsService.getStudents(query);
   }
+  @Get('career/:run')
+  @Roles(RoleEnum.Admin)
+  getStudentCareer(@Param() params: StudentCareerParams) {
+    this.logger.info(`Admin getting student career with run: ${params.run}`);
+    return this.studentsService.getStudentCareer(+params.run);
+  }
 
   @Get('levels')
   @Roles(RoleEnum.Student)
@@ -69,6 +76,9 @@ export class StudentsController {
   @Post()
   @Roles(RoleEnum.Admin)
   createNewStudent(@Body() studentDto: CreateNewStudentDto) {
+    this.logger.info(
+      `Admin creating new student with run: ${studentDto.run} and name: ${studentDto.name}`,
+    );
     return this.studentsService.createNewStudent(studentDto);
   }
 }

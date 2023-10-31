@@ -19,6 +19,9 @@ export class PaginatedStudentsQuery {
 
   @IsOptional()
   level: string;
+
+  @IsOptional()
+  name: string;
 }
 
 export class GetLevelsParams {
@@ -29,7 +32,10 @@ export class GetClassesParams {
   @IsNumberString()
   lessonId: number;
 }
-
+export class StudentCareerParams {
+  @IsNumberString()
+  run: string;
+}
 export class GetStudentGradesParams {
   @IsNumberString()
   year: number;

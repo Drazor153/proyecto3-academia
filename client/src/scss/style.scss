@@ -1,92 +1,99 @@
-@use 'base';
 @use 'administration';
-@use 'dashboard';
-@use 'modals';
-@use 'buttons';
-@use 'inputs';
-@use 'table';
 @use 'announcement';
+@use 'base';
+@use 'buttons';
 @use 'classes';
+@use 'dashboard';
+@use 'fade';
 @use 'grades';
+@use 'inputs';
 @use 'login';
 @use 'logout';
+@use 'modals';
+@use 'profile';
+@use 'scrollbar';
 @use 'shortcuts';
 @use 'sidebar';
+@use 'table';
 @use 'userinfo';
-@use 'scrollbar';
 
 * {
-	margin: 0;
-	padding: 0;
-	text-decoration: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
 }
 
 .layout {
-	display: grid;
-	grid-template-columns: max-content 1fr;
-	grid-template-rows: 100px calc(100vh - 100px);
-	grid-template-areas:
-		'sidebar title lang user'
-		'sidebar content content content';
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: 100px calc(100vh - 100px);
+  grid-template-areas:
+    'sidebar title lang user'
+    'sidebar content content content';
 }
 
 body {
-	font-family: base.$font;
-	background-color: base.$white;
+  font-family: base.$font;
+  background-color: base.$white;
 }
 
 main {
-	padding: 10px 15px;
-	grid-area: content;
-	width: max-content;
+  padding: 10px 15px;
+  grid-area: content;
+  width: max-content;
 
-	h2 {
-		padding: 5px;
-		border-radius: 5px;
-		color: base.$white;
-		background-color: base.$brown;
-	}
+  h2 {
+    padding: 5px;
+    border-radius: 5px;
+    color: base.$white;
+    background-color: base.$brown;
+  }
 }
 
 h1 {
-	font-size: 3.5rem;
-	grid-area: title;
-	font-weight: 900;
-	color: adjust-color($color: base.$crimsonred);
-	margin: 5px 20px;
+  font-size: 3.5rem;
+  grid-area: title;
+  font-weight: 900;
+  color: adjust-color($color: base.$crimsonred);
+  margin: 5px 20px;
 }
 
 h2 {
-	font-weight: 700;
-	color: base.$bluemarine;
+  font-weight: 700;
+  color: base.$darkbrown;
+}
+
+h3,
+h4 {
+  color: base.$darkbrown;
 }
 
 section {
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-	padding: 5px;
-	margin: 5px;
-	box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
 }
 
 .loading-section {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .icon-loading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 
-	* {
-		fill: base.$crimsonred;
-	}
+  * {
+    fill: base.$crimsonred;
+  }
 }
 
 .Toastify__close-button {
-	width: 20%;
+  width: 20%;
 }

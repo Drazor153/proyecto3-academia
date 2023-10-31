@@ -1,18 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../../utils/types";
+import { createSlice } from '@reduxjs/toolkit';
+import { User } from '../../utils/types';
 
 const initialState: User = {
   run: -1,
-  dv: "",
-  name: "",
-  first_surname: "",
+  dv: '',
+  name: '',
+  first_surname: '',
   email: null,
-  role: "",
-  status: ""
+  role: '',
+  status: '',
 };
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setUser: (_, action) => {

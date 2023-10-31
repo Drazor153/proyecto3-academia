@@ -1,117 +1,134 @@
 import FormNewStudent from './components/FormNewStudent';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { t } from 'i18next';
 import SearchStudent from './components/SearchStudent';
 import AnnouncementTable from './components/AnnouncementTable';
+import { administrationItems } from '../../utils/pages';
+import { useTranslation } from 'react-i18next';
 
 type Menus = {
-	[menuName: string]: {
-		[actionName: string]: React.ReactNode;
-	};
+  [menuName: string]: {
+    [actionName: string]: React.ReactNode;
+  };
 };
 
 const menus: Menus = {
-	students: {
-		registration: <FormNewStudent />,
-		search: <SearchStudent />,
-	},
-	announcement: {
-		manage: <AnnouncementTable />,
-	},
+  students: {
+    registration: <FormNewStudent />,
+    search: <SearchStudent />,
+  },
+  announcement: {
+    manage: <AnnouncementTable />,
+  },
 };
 
 function Content({ menu, action }: { menu: string; action: string }) {
-	if (!menu || !action) return null;
-	return <section className="content">{menus[menu][action]}</section>;
+  if (!menu || !action) return null;
+  return <section className="content">{menus[menu][action]}</section>;
 }
 
-function Students({
-	content,
-	setContent,
-}: {
-	content: string;
-	setContent: Dispatch<SetStateAction<string>>;
-}) {
-	const studentsMenu = Object.keys(menus.students);
+function Students({ content }: { content: string }) {
+  const studentsMenu = Object.keys(menus.students);
 
-	return (
-		<section className="action-selector">
-			<h2>{t('students_menu')}</h2>
-			{studentsMenu.map((item, index) => {
-				return (
-					<button
-						key={index}
-						onClick={() => setContent(item)}
-						className={content == item ? 'selected' : ''}
-					>
-						{t(item)}
-					</button>
-				);
-			})}
-		</section>
-	);
+  const navigate = useNavigate();
+
+  return (
+    <section className="action-selector">
+      <h2>{t('students_menu')}</h2>
+      {studentsMenu.map((item, index) => {
+        return (
+          <button
+            key={index}
+            onClick={() => navigate(`/administration/students/${item}`)}
+            className={content == item ? 'selected' : ''}
+          >
+            {t(item)}
+          </button>
+        );
+      })}
+    </section>
+  );
 }
 
-function renderSwitch(
-	menu: string,
-	content: string,
-	setContent: Dispatch<SetStateAction<string>>,
-) {
-	switch (menu) {
-		case 'students':
-			console.log('students');
-			return (
-				<Students
-					content={content}
-					setContent={setContent}
-				/>
-			);
-		default:
-			return <></>;
-	}
+function renderSwitch(menu: string, content: string) {
+  switch (menu) {
+    case 'students':
+      return <Students content={content} />;
+    default:
+      return <></>;
+  }
 }
-
-const administrationItems = ['students', 'announcement'];
 
 function Administration() {
-	const { m, c } = useParams();
-	const [menu, setMenu] = useState(m ?? '');
-	const [content, setContent] = useState(c ?? '');
+  useTranslation();
 
-	return (
-		<>
-			<h1>{t('administration')}</h1>
-			<main className="admin-layout">
-				<section className="menu-selector">
-					<h2>{t('menu')}</h2>
-					{administrationItems.map((item, index) => (
-						<button
-							key={item + index}
-							onClick={() => {
-								setMenu(_ => {
-									if (item === 'announcement') {
-										setContent('manage');
-									} else {
-										setContent('');
-									}
-									return item;
-								});
-							}}
-							className={menu == item ? 'selected' : ''}
-						>
-							{t(item)}
-						</button>
-					))}
-				</section>
-				{renderSwitch(menu, content, setContent)}
-				<Content
-					menu={menu}
-					action={content}
-				/>
-			</main>
-		</>
-	);
+  const navigate = useNavigate();
+  const { menu, content } = useParams();
+
+  const allowedParams: { [menu: string]: string[] }[] = [
+    { undefined: [''] },
+    ...administrationItems.map(({ menu, children }) => {
+      const params = {
+        [menu]: [] as string[],
+      };
+      if (children) {
+        children.map(({ content }) => params[menu].push(content));
+      }
+
+      return params;
+    }),
+  ];
+
+  useEffect(() => {
+    const allowed: { menu: boolean; content: boolean } = {
+      menu: false,
+      content: false,
+    };
+
+    allowedParams.map(param => {
+      console.log(param);
+      if (Object.keys(param).includes(menu ?? 'undefined')) {
+        allowed.menu = true;
+        if (param[menu!].includes(content ?? '')) {
+          allowed.content = true;
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (!(allowed.menu && allowed.content)) {
+      navigate('/administration');
+    }
+  }, [menu, content]);
+
+  return (
+    <>
+      <h1>{t('administration')}</h1>
+      <main className="admin-layout">
+        <section className="menu-selector">
+          <h2>{t('menu')}</h2>
+          {administrationItems.map(({ menu: name, path }, index) => (
+            <button
+              key={name + index}
+              onClick={() => {
+                navigate(path);
+              }}
+              className={menu === name ? 'selected' : ''}
+            >
+              {t(name)}
+            </button>
+          ))}
+        </section>
+        {renderSwitch(menu ?? 'undefined', content ?? '')}
+        <Content
+          menu={menu ?? 'undefined'}
+          action={content ?? ''}
+        />
+      </main>
+    </>
+  );
 }
 
 export default Administration;
