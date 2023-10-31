@@ -57,7 +57,7 @@ function AnnouncementTable(): JSX.Element {
   const [updateAnnouncement] = useUpdateAnnouncementMutation();
   const [deleteAnnouncement] = useDeleteAnnouncementMutation();
 
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
 
   const size = 10;
 
@@ -66,7 +66,8 @@ function AnnouncementTable(): JSX.Element {
     isLoading,
     isSuccess,
   } = useGetAllAnnouncementsQuery({
-    page,
+    // page,
+    page: 1,
     size,
   });
 
