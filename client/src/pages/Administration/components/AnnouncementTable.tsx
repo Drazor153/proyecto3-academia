@@ -1,24 +1,20 @@
 // import { Announcement } from '../types';
 
 import { t } from 'i18next';
-import Modal from '../../../components/Modal';
+import Modal from '@/components/Modal';
 import { ChangeEvent, useState } from 'react';
 import Announcement from '../../Dashboard/components/Announcement';
 import AnnouncementDetails from './AnnouncementDetails';
-import {
-  AnnouncementType,
-  PostAnnouncement,
-  Target,
-} from '../../../utils/types';
+import { AnnouncementType, PostAnnouncement, Target } from '@/utils/types';
 import {
   useAddAnnouncementMutation,
   useDeleteAnnouncementMutation,
   useGetAllAnnouncementsQuery,
   useUpdateAnnouncementMutation,
-} from '../../../redux/services/announcementsApi';
+} from '@/redux/services/announcementsApi';
 import { toast } from 'react-toastify';
 import { BiSolidPlusSquare } from 'react-icons/bi';
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 // import { announcement } from '../../../utils/pages';
 import {
   HiOutlinePencil,
@@ -41,7 +37,7 @@ const initialState: AnnouncementType = {
   expiresAt: '',
   id: -2,
   image: '',
-  target: [-1],
+  target: [''],
   title: '',
   updatedAt: '',
 };
@@ -178,7 +174,7 @@ function AnnouncementTable(): JSX.Element {
 
   const onSave = () => {
     const {
-      category: { id: category },
+      category: { name: category },
       content,
       expiresAt,
       image,
@@ -186,7 +182,7 @@ function AnnouncementTable(): JSX.Element {
       title,
     } = selectedAnnouncement;
 
-    const target = t.map(({ id }: Target) => id);
+    const target = t.map(({ name }: Target) => name);
 
     const body: PostAnnouncement = {
       category,

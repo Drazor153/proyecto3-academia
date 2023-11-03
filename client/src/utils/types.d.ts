@@ -141,8 +141,8 @@ export type PostAnnouncement = Omit<
   AnnouncementType,
   'author' | 'id' | 'createdAt' | 'updatedAt' | 'category' | 'target'
 > & {
-  category: number;
-  target: number[];
+  category: string;
+  target: string[];
 };
 
 type StudentCareer = {
