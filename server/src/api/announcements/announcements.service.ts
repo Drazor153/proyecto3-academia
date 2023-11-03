@@ -35,28 +35,18 @@ export class AnnouncementsService {
     }
   }
 
-  async getAdminAnnouncements() {
+  private async getAdminAnnouncements() {
     const query = await this.prisma.announcement.findMany({
       where: {
         send_to: {
-          some: {
-            target: {
-              name: 'ALL',
-            },
-          },
+          has: 'ALL',
         },
       },
       include: {
-        category: true,
         user: {
           select: {
             name: true,
             first_surname: true,
-          },
-        },
-        send_to: {
-          include: {
-            target: true,
           },
         },
       },
@@ -64,7 +54,7 @@ export class AnnouncementsService {
     return this.sanity.sanitizeAnnouncements(query);
   }
 
-  async getStudentAnnouncements(run: number) {
+  private async getStudentAnnouncements(run: number) {
     const student = await this.prisma.user.findUnique({
       where: {
         run,
@@ -86,33 +76,14 @@ export class AnnouncementsService {
     const query = await this.prisma.announcement.findMany({
       where: {
         send_to: {
-          some: {
-            OR: [
-              {
-                target: {
-                  name: 'ALL',
-                },
-              },
-              {
-                target: {
-                  name: levelCode,
-                },
-              },
-            ],
-          },
+          hasSome: ['ALL', levelCode],
         },
       },
       include: {
-        category: true,
         user: {
           select: {
             name: true,
             first_surname: true,
-          },
-        },
-        send_to: {
-          include: {
-            target: true,
           },
         },
       },
@@ -121,7 +92,7 @@ export class AnnouncementsService {
     return this.sanity.sanitizeAnnouncements(query);
   }
 
-  async getTeacherAnnouncements(run: number) {
+  private async getTeacherAnnouncements(run: number) {
     const fecha_actual = new Date();
     const teacher = await this.prisma.user.findUnique({
       where: {
@@ -145,35 +116,14 @@ export class AnnouncementsService {
     const query = await this.prisma.announcement.findMany({
       where: {
         send_to: {
-          some: {
-            OR: [
-              {
-                target: {
-                  name: 'ALL',
-                },
-              },
-              {
-                target: {
-                  name: {
-                    in: levelCodes,
-                  },
-                },
-              },
-            ],
-          },
+          hasSome: ['ALL', ...levelCodes],
         },
       },
       include: {
-        category: true,
         user: {
           select: {
             name: true,
             first_surname: true,
-          },
-        },
-        send_to: {
-          include: {
-            target: true,
           },
         },
       },
@@ -185,16 +135,10 @@ export class AnnouncementsService {
   async getAllAnnouncements(size: number, page: number) {
     const query = await this.prisma.announcement.findMany({
       include: {
-        category: true,
         user: {
           select: {
             name: true,
             first_surname: true,
-          },
-        },
-        send_to: {
-          include: {
-            target: true,
           },
         },
       },
@@ -208,7 +152,7 @@ export class AnnouncementsService {
     const previous = page > 1;
     const next = end < announcements.length;
 
-    return { data: paginated, next, previous };
+    return { next, previous, data: paginated };
   }
 
   async createAnnouncement(run: number, data: CreateAnnouncementDto) {
@@ -223,20 +167,8 @@ export class AnnouncementsService {
             run,
           },
         },
-        category: {
-          connect: {
-            id: data.category,
-          },
-        },
-        send_to: {
-          create: data.target.map((target) => ({
-            target: {
-              connect: {
-                id: target,
-              },
-            },
-          })),
-        },
+        category: data.category,
+        send_to: data.target,
       },
     });
 
@@ -245,11 +177,11 @@ export class AnnouncementsService {
 
   async updateAnnouncement(id: number, data: CreateAnnouncementDto) {
     // console.log({ id, ...data });
-    await this.prisma.sendTo.deleteMany({
-      where: {
-        announcementId: id,
-      },
-    });
+    // await this.prisma.sendTo.deleteMany({
+    //   where: {
+    //     announcementId: id,
+    //   },
+    // });
     const updated_announcement = await this.prisma.announcement.update({
       where: {
         id,
@@ -259,20 +191,8 @@ export class AnnouncementsService {
         content: data.content,
         image: data.image,
         expires_at: new Date(data.expiresAt),
-        category: {
-          connect: {
-            id: data.category,
-          },
-        },
-        send_to: {
-          create: data.target.map((target) => ({
-            target: {
-              connect: {
-                id: target,
-              },
-            },
-          })),
-        },
+        category: data.category,
+        send_to: data.target,
       },
     });
 

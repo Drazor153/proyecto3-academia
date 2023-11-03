@@ -19,6 +19,10 @@ export const levels = [
     code: 'C1',
     name: 'advanced',
   },
+  {
+    code: 'C2',
+    name: 'proficiency',
+  },
 ];
 
 export const topics = [
@@ -59,11 +63,7 @@ levels.forEach((level) => {
 
 export const targets = [
   { name: 'ALL' },
-  { name: 'A1' },
-  { name: 'A2' },
-  { name: 'B1' },
-  { name: 'B2' },
-  { name: 'C1' },
+  ...levels.map((level) => ({ name: level.code })),
 ];
 
 export const categories = [

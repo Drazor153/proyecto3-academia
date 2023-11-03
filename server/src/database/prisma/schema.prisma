@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -110,37 +110,40 @@ model attendance {
 }
 
 model Announcement {
-  id         Int      @id @default(autoincrement())
-  user       User?    @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
-  run        Int?
-  title      String
-  content    String   @db.VarChar(500)
-  image      Bytes?
-  category   Category @relation(fields: [categoryId], references: [id])
+  id       Int      @id @default(autoincrement())
+  run      Int?
+  title    String
+  content  String   @db.VarChar(500)
+  image    Bytes?
+  // send_to    SendTo[]
+  send_to  String[]
+  category String
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   expires_at DateTime
-  send_to    SendTo[]
-  categoryId Int
+
+  user User? @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  // category Category @relation(fields: [categoryId], references: [id])
 }
 
-model SendTo {
-  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  announcementId Int
-  target         Target       @relation(fields: [targetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  targetId       Int
+// model SendTo {
+//   announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   announcementId Int
+//   target         Target       @relation(fields: [targetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   targetId       Int
 
-  @@id([announcementId, targetId])
-}
+//   @@id([announcementId, targetId])
+// }
 
 model Target {
-  id      Int      @id @default(autoincrement())
-  name    String
-  send_to SendTo[]
+  id   Int    @id @default(autoincrement())
+  name String
+  // send_to SendTo[]
 }
 
 model Category {
-  id           Int            @id @default(autoincrement())
-  name         String
-  Announcement Announcement[]
+  id   Int    @id @default(autoincrement())
+  name String
+  // Announcement Announcement[]
 }

@@ -7,7 +7,6 @@ import {
   IsBase64,
   ArrayNotEmpty,
   IsDateString,
-  IsNumber,
 } from 'class-validator';
 export class AnnouncementParams {
   @IsNumberString()
@@ -36,8 +35,8 @@ export class CreateAnnouncementDto {
   image?: Buffer;
 
   @IsNotEmpty()
-  @IsNumber()
-  category: number;
+  @IsString()
+  category: string;
 
   @IsNotEmpty()
   @IsDateString()
@@ -45,7 +44,7 @@ export class CreateAnnouncementDto {
 
   @IsArray()
   @ArrayNotEmpty()
-  target: number[];
+  target: string[];
 }
 
 export class UpdateAnnouncementDto extends CreateAnnouncementDto {}
