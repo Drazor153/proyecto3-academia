@@ -4,19 +4,21 @@ import { CreateAnnouncementDto } from './dto/announcement.dto';
 import { UserPayload } from 'src/interfaces/request.interface';
 import { RoleEnum } from 'src/guards/roles.decorator';
 import { AnnouncementsSanitizersService } from 'src/services/announcements.sanitizer.service';
+import { AnnouncementsRepository } from './repository/announcements.repository';
+import { hasNextPage, paginate } from '../../common/paginate';
 
 @Injectable()
 export class AnnouncementsService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly annRepository: AnnouncementsRepository,
     private readonly sanity: AnnouncementsSanitizersService,
   ) {}
 
   async getCategoriesTargets() {
-    const categories = await this.prisma.category.findMany({});
-    const targets = await this.prisma.target.findMany({});
+    const res = await this.annRepository.getCategoriesTargets();
 
-    return { categories, targets };
+    return res;
   }
 
   async getAnnouncements(userReq: UserPayload) {
@@ -36,21 +38,12 @@ export class AnnouncementsService {
   }
 
   private async getAdminAnnouncements() {
-    const query = await this.prisma.announcement.findMany({
-      where: {
-        send_to: {
-          has: 'ALL',
-        },
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            first_surname: true,
-          },
-        },
+    const query = await this.annRepository.allPerRole({
+      send_to: {
+        has: 'ALL',
       },
     });
+
     return this.sanity.sanitizeAnnouncements(query);
   }
 
@@ -73,19 +66,9 @@ export class AnnouncementsService {
 
     const levelCode = student.enrols[0].levelCode;
 
-    const query = await this.prisma.announcement.findMany({
-      where: {
-        send_to: {
-          hasSome: ['ALL', levelCode],
-        },
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            first_surname: true,
-          },
-        },
+    const query = await this.annRepository.allPerRole({
+      send_to: {
+        hasSome: ['ALL', levelCode],
       },
     });
 
@@ -113,19 +96,9 @@ export class AnnouncementsService {
 
     const levelCodes = teacher.Lesson.map((lesson) => lesson.levelCode);
 
-    const query = await this.prisma.announcement.findMany({
-      where: {
-        send_to: {
-          hasSome: ['ALL', ...levelCodes],
-        },
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            first_surname: true,
-          },
-        },
+    const query = await this.annRepository.allPerRole({
+      send_to: {
+        hasSome: ['ALL', ...levelCodes],
       },
     });
 
@@ -133,78 +106,31 @@ export class AnnouncementsService {
   }
 
   async getAllAnnouncements(size: number, page: number) {
-    const query = await this.prisma.announcement.findMany({
-      include: {
-        user: {
-          select: {
-            name: true,
-            first_surname: true,
-          },
-        },
-      },
-    });
+    const annQuery = await this.annRepository.all();
 
-    const announcements = this.sanity.sanitizeAnnouncements(query);
+    const announcements = this.sanity.sanitizeAnnouncements(annQuery);
 
-    const start = (page - 1) * size;
-    const end = start + size;
-    const paginated = announcements.slice(start, end);
+    const paginated = paginate(announcements, page, size);
     const previous = page > 1;
-    const next = end < announcements.length;
+    const next = hasNextPage(announcements, page, size);
 
     return { next, previous, data: paginated };
   }
 
   async createAnnouncement(run: number, data: CreateAnnouncementDto) {
-    const new_announcement = await this.prisma.announcement.create({
-      data: {
-        title: data.title,
-        content: data.content,
-        image: data.image,
-        expires_at: new Date(data.expiresAt),
-        user: {
-          connect: {
-            run,
-          },
-        },
-        category: data.category,
-        send_to: data.target,
-      },
-    });
+    const new_announcement = await this.annRepository.create(run, data);
 
     return new_announcement;
   }
 
   async updateAnnouncement(id: number, data: CreateAnnouncementDto) {
-    // console.log({ id, ...data });
-    // await this.prisma.sendTo.deleteMany({
-    //   where: {
-    //     announcementId: id,
-    //   },
-    // });
-    const updated_announcement = await this.prisma.announcement.update({
-      where: {
-        id,
-      },
-      data: {
-        title: data.title,
-        content: data.content,
-        image: data.image,
-        expires_at: new Date(data.expiresAt),
-        category: data.category,
-        send_to: data.target,
-      },
-    });
+    const updated_announcement = await this.annRepository.update(id, data);
 
     return updated_announcement;
   }
 
   async deleteAnnouncement(id: number) {
-    const announcement = await this.prisma.announcement.delete({
-      where: {
-        id,
-      },
-    });
+    const announcement = await this.annRepository.delete(id);
 
     return announcement;
   }

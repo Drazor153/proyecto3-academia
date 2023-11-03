@@ -4,55 +4,31 @@ import {
   CreateClassDto,
   UpdateClassDto,
 } from 'src/api/classes/dto/classes.dto';
-import { PrismaService } from 'src/database/prisma/prisma.service';
+import { ClassesRepository } from './repository/classes.repository';
 
 @Injectable()
 export class ClassesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private classesRepo: ClassesRepository) {}
 
-  async createClass({ lessonId, week, contents, attendance }: CreateClassDto) {
-    const query = await this.prisma.class.create({
-      data: {
-        lessonId,
-        week,
-        contents,
-        attendance: {
-          createMany: {
-            data: attendance,
-          },
-        },
-      },
-    });
+  async createClass(data: CreateClassDto) {
+    const query = await this.classesRepo.create(data);
+
     console.log(query);
 
     return { msg: 'Clase creada!' };
   }
-  async updateClass(
-    { classId }: ClassParams,
-    { contents, attendance }: UpdateClassDto,
-  ) {
-    const query = await this.prisma.class.update({
-      where: { id: +classId },
-      data: {
-        contents,
-        attendance: {
-          updateMany: attendance.map((val) => ({
-            where: { classId: +classId, studentRun: val.studentRun },
-            data: { attended: val.attended },
-          })),
-        },
-      },
-    });
+  async updateClass({ classId }: ClassParams, dto: UpdateClassDto) {
+    const query = await this.classesRepo.update(+classId, dto);
+
     console.log(`Updated class: ${query}`);
 
     return { msg: 'Clase actualizada!' };
   }
   async deleteClass({ classId }: ClassParams) {
-    const query = await this.prisma.class.delete({
-      where: { id: +classId },
-    });
+    const query = await this.classesRepo.delete(+classId);
 
     console.log(`Deleted class: ${query}`);
+
     return { msg: 'Clase eliminada!' };
   }
 }

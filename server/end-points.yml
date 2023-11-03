@@ -1,0 +1,33 @@
+api:
+  announcements:
+    - GET     /
+    - GET     /categories-targets
+    - GET     /all
+    - POST    /
+    - PUT     /:id
+    - DELETE  /:id
+  auth:
+    - POST    /login
+    - GET     /auto-login
+    - GET     /logout
+    - GET     /refresh
+  classes:
+    - POST    /
+    - PUT     /:id
+    - DELETE  /:id
+  lesson:
+    - GET     /:lessonId/students
+    - GET     /:lessonId/classes
+  levels:
+    - GET     /
+  students:
+    - GET     /
+    - GET     /career/:run
+    - GET     /levels
+    - GET     /grades/:year/:semester/:level
+    - POST    /
+  teachers:
+    - GET     /levels
+    - GET     /grades/:year/:semester/:level
+    - GET     /grades/quizzes/:quizId
+    - POST    /grades/quizzes

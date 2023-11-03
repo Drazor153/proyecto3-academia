@@ -7,6 +7,7 @@ import {
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { StudentsSanitizersService } from 'src/services/students.sanitizer.service';
 import { BcryptService } from 'src/services/bcrypt.service';
+import { hasNextPage, paginate } from '../../common/paginate';
 
 @Injectable()
 export class StudentsService {
@@ -48,7 +49,7 @@ export class StudentsService {
             levelCode: true,
           },
           where: {
-            status: 'Cursando',
+            status: 'active',
           },
         },
       },
@@ -69,14 +70,9 @@ export class StudentsService {
         level: student.enrols[0].levelCode,
       }));
 
-    // Paginate
-    const start = (+page - 1) * +size;
-    const end = +page * +size;
-    const paginatedStudents = students.slice(start, end);
-    // Check if previous page exists
+    const paginatedStudents = paginate(students, +page, +size);
     const previous = +page > 1;
-    // Check if next page exists
-    const next = end < students.length;
+    const next = hasNextPage(students, +page, +size);
 
     return { data: paginatedStudents, next, previous };
   }
