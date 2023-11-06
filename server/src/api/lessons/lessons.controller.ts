@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
-import { LessonParams } from 'src/api/classes/dto/classes.dto';
+import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { LessonsService } from './lessons.service';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { RoleEnum, Roles } from 'src/guards/roles.decorator';
-import { UserRequest } from 'src/interfaces/request.interface';
+import { RolesGuard } from '@/guards/roles.guard';
+import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
 
 @Controller('api/lesson')
@@ -26,7 +26,7 @@ export class LessonsController {
   @Get(':lessonId/classes')
   @Roles(RoleEnum.Teacher, RoleEnum.Admin, RoleEnum.Student)
   getClasses(@Req() req: UserRequest, @Param() params: LessonParams) {
-    this.logger.info(`Teacher getting classes from lesson ${params.lessonId}`);
+    this.logger.info(`User getting classes from lesson ${params.lessonId}`);
     return this.lessonsService.getClasses(req, params);
   }
 }

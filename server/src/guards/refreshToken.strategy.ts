@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { config } from 'src/config/config';
+import { config } from '@/config/config';
 import { Request } from 'express';
 
 function cookieExtractor(req: Request) {

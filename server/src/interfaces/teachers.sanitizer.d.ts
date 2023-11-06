@@ -26,10 +26,6 @@ export interface TeacherLevelsSanitizied {
   }[];
 }
 
-export interface Topic {
-  id: number;
-  name: string;
-}
 export interface TopicQuizRaw {
   id: number;
   number: number;

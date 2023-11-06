@@ -1,33 +1,75 @@
 api:
   announcements:
-    - GET     /
-    - GET     /categories-targets
-    - GET     /all
-    - POST    /
-    - PUT     /:id
-    - DELETE  /:id
+    category, target, announcement
+    1 GET     /?page=&size=
+    2 GET     /categories-targets
+    3 GET     /all
+    4 POST    /
+    5 PUT     /:id
+    6 DELETE  /:id
   auth:
-    - POST    /login
-    - GET     /auto-login
-    - GET     /logout
-    - GET     /refresh
+    user
+    7 POST    /login
+    8 GET     /auto-login
+    9 GET     /logout
+    10 GET     /refresh
   classes:
-    - POST    /
-    - PUT     /:id
-    - DELETE  /:id
+    class
+    11 POST    /
+    12 PUT     /:id
+    13 DELETE  /:id
   lesson:
-    - GET     /:lessonId/students
-    - GET     /:lessonId/classes
+    lesson, user, class
+    14 GET     /:lessonId/students
+    15 GET     /:lessonId/classes
   levels:
-    - GET     /
+    level
+    16 GET     /
   students:
-    - GET     /
-    - GET     /career/:run
-    - GET     /levels
-    - GET     /grades/:year/:semester/:level
-    - POST    /
+    user, enrols, topic, quiz
+    17 GET     /?page=&size=
+    18 GET     /career/:run
+    19 GET     /levels
+    20 GET     /grades/:year/:semester/:level
+    21 POST    /
   teachers:
-    - GET     /levels
-    - GET     /grades/:year/:semester/:level
-    - GET     /grades/quizzes/:quizId
-    - POST    /grades/quizzes
+    lesson, topic, quiz, user, gives
+    22 GET     /levels
+    23 GET     /grades/:year/:semester/:level
+    24 GET     /grades/quizzes/:quizId
+    25 POST    /grades/quizzes
+
+new:
+  announcements:
+    1 GET     /?page=&size=
+    3 GET     /all
+    4 POST    /
+    5 PUT     /:id
+    6 DELETE  /:id
+  auth:
+    7 POST    /login
+    8 GET     /auto-login
+    9 GET     /logout
+    10 GET     /refresh
+  classes:
+    11 POST    /
+    12 PUT     /:id
+    13 DELETE  /:id
+  lessons:
+    19 22 GET     /
+    14 GET     /:lessonId/students
+    15 GET     /:lessonId/classes
+  profile:
+    18 GET      /:run
+  quizzes: 
+    20 GET     /:year/:semester/:level/student
+    23 GET     /:year/:semester/:level/teacher
+    24 GET     /:quizId/grades
+    26 POST    / *
+    25 POST    /grades
+  students:
+    17 GET     /?page=&size=
+    21 POST    /
+  utils:
+    16 GET     /levels
+    2 GET     /categories-targets

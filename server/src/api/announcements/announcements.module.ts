@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, ModuleMetadata } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { AnnouncementsController } from './announcements.controller';
-import { PrismaModule } from 'src/database/prisma/prisma.module';
-import { AnnouncementsSanitizersService } from 'src/services/announcements.sanitizer.service';
-import { AnnouncementsRepository } from './repository/announcements.repository';
+import { PrismaModule } from '@/database/prisma.module';
+import { AnnouncementsSanitizersService } from '@/services/announcements.sanitizer.service';
+import { AnnouncementsRepository } from './repository/announcements';
 
-@Module({
+export const moduleMetadata: ModuleMetadata = {
   imports: [PrismaModule],
   controllers: [AnnouncementsController],
   providers: [
@@ -13,5 +13,6 @@ import { AnnouncementsRepository } from './repository/announcements.repository';
     AnnouncementsSanitizersService,
     AnnouncementsRepository,
   ],
-})
+};
+@Module(moduleMetadata)
 export class AnnouncementsModule {}

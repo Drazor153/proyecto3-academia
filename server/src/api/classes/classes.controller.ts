@@ -12,9 +12,9 @@ import {
   ClassParams,
   CreateClassDto,
   UpdateClassDto,
-} from 'src/api/classes/dto/classes.dto';
-import { RoleEnum, Roles } from 'src/guards/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+} from '@/api/classes/dto/classes.dto';
+import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import { RolesGuard } from '@/guards/roles.guard';
 import { PinoLogger } from 'nestjs-pino';
 
 @Controller('api/classes')

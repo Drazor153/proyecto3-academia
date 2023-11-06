@@ -5,35 +5,20 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/database/prisma/prisma.service';
-import { RoleEnum } from '../../guards/roles.decorator';
-import { BcryptService } from 'src/services/bcrypt.service';
-import { config } from 'src/config/config';
+import { RoleEnum } from '@/guards/roles.decorator';
+import { config } from '@/config/config';
+import { comparePassword, hashPassword } from '@/common/bcrypt';
+import { UsersRepository } from './repository/users';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
     private jwtService: JwtService,
-    private bcrypt: BcryptService,
+    private usersRepo: UsersRepository,
   ) {}
 
   async login(run: number, password: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        run,
-      },
-      select: {
-        run: true,
-        dv: true,
-        name: true,
-        first_surname: true,
-        email: true,
-        role: true,
-        status: true,
-        password: true,
-      },
-    });
+    const user = await this.usersRepo.findOne(run);
 
     if (!user) {
       throw new BadRequestException({ type: 'msg', message: 'User not found' });
@@ -41,7 +26,7 @@ export class AuthService {
 
     const { password: userPassword, ...userData } = user;
 
-    const result = await this.bcrypt.comparePassword(password, userPassword);
+    const result = await comparePassword(password, userPassword);
 
     if (!result) {
       throw new BadRequestException({
@@ -52,38 +37,19 @@ export class AuthService {
 
     const tokens = await this.getTokens(run, user.role as RoleEnum);
 
-    this.prisma.user.update({
-      where: {
-        run,
-      },
-      data: {
-        last_join: new Date(),
-      },
-    });
-    this.updateRefreshToken(run, tokens.refreshToken);
+    await this.usersRepo.update(run, { last_join: new Date() });
+    await this.updateRefreshToken(run, tokens.refreshToken);
 
     return { tokens, userData };
   }
 
-  async autologin(run: number, role: RoleEnum) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        run,
-        role,
-      },
-      select: {
-        run: true,
-        dv: true,
-        name: true,
-        first_surname: true,
-        email: true,
-        role: true,
-        status: true,
-      },
-    });
-    if (!user) {
+  async autologin(run: number) {
+    const queryUser = await this.usersRepo.findOne(run);
+    if (!queryUser) {
       throw new BadRequestException({ type: 'msg', message: 'User not found' });
     }
+    const { password: _, ...user } = queryUser;
+
     const tokens = await this.getTokens(run, user.role as RoleEnum);
 
     await this.updateRefreshToken(run, tokens.refreshToken);
@@ -92,26 +58,12 @@ export class AuthService {
   }
 
   async logout(run: number) {
-    return this.prisma.user.update({
-      where: {
-        run,
-      },
-      data: {
-        refresh_token: null,
-      },
-    });
+    return this.usersRepo.update(run, { refresh_token: null });
   }
 
   async updateRefreshToken(run: number, refreshToken: string) {
-    const hashedRefreshToken = await this.bcrypt.hashPassword(refreshToken);
-    await this.prisma.user.update({
-      where: {
-        run,
-      },
-      data: {
-        refresh_token: hashedRefreshToken,
-      },
-    });
+    const hashedRefreshToken = await hashPassword(refreshToken);
+    await this.usersRepo.update(run, { refresh_token: hashedRefreshToken });
   }
 
   async getTokens(run: number, role: RoleEnum) {
@@ -147,21 +99,13 @@ export class AuthService {
   }
 
   async refreshTokens(run: number, refreshToken: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        run,
-      },
-      select: {
-        role: true,
-        refresh_token: true,
-      },
-    });
+    const user = await this.usersRepo.findOneWithRefreshToken(run);
 
     if (!user || !user.refresh_token) {
       throw new ForbiddenException('Access Denied');
     }
 
-    const refreshTokenMatches = await this.bcrypt.comparePassword(
+    const refreshTokenMatches = await comparePassword(
       refreshToken,
       user.refresh_token,
     );
@@ -175,6 +119,7 @@ export class AuthService {
     // await this.updateRefreshToken(run, tokens.refreshToken);
     return tokens;
   }
+
   // getUserFromRefreshToken(token: string) {
   //   try {
   //     const { sub, role } = this.jwtService.verify(token, {

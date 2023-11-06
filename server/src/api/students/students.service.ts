@@ -4,17 +4,16 @@ import {
   GetStudentGradesParams,
   PaginatedStudentsQuery,
 } from './dto/students.dto';
-import { PrismaService } from 'src/database/prisma/prisma.service';
-import { StudentsSanitizersService } from 'src/services/students.sanitizer.service';
-import { BcryptService } from 'src/services/bcrypt.service';
-import { hasNextPage, paginate } from '../../common/paginate';
+import { PrismaService } from '@/database/prisma.service';
+import { StudentsSanitizersService } from '@/services/students.sanitizer.service';
+import { hasNextPage, paginate } from '@/common/paginate';
+import { hashPassword } from '@/common/bcrypt';
 
 @Injectable()
 export class StudentsService {
   constructor(
     private prisma: PrismaService,
     private sanity: StudentsSanitizersService,
-    private bcrypt: BcryptService,
   ) {}
 
   // async getAllStudents() {
@@ -127,7 +126,7 @@ export class StudentsService {
       return { error: 'El estudiante ya existe' };
     }
 
-    const hashedPassword = await this.bcrypt.hashPassword(
+    const hashedPassword = await hashPassword(
       `${run}_${first_surname.toUpperCase()}`,
     );
     const student = await this.prisma.user.create({

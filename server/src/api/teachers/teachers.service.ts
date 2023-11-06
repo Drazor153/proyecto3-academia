@@ -4,10 +4,10 @@ import {
   GetQuizGradesParams,
   PostQuizzesGradesBody,
 } from './dto/teachers.dto';
-import { PrismaService } from 'src/database/prisma/prisma.service';
-import { TeachersSanitizersService } from 'src/services/teachers.sanitizer.service';
-import { RoleEnum } from 'src/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
+import { PrismaService } from '@/database/prisma.service';
+import { TeachersSanitizersService } from '@/services/teachers.sanitizer.service';
+import { RoleEnum } from '@/guards/roles.decorator';
 
 @Injectable()
 export class TeachersService {

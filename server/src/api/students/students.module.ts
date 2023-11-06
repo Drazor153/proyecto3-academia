@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Module, ModuleMetadata } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { StudentsController } from './students.controller';
-import { PrismaModule } from 'src/database/prisma/prisma.module';
-import { BcryptService } from 'src/services/bcrypt.service';
-import { StudentsSanitizersService } from 'src/services/students.sanitizer.service';
+import { PrismaModule } from '@/database/prisma.module';
+import { StudentsSanitizersService } from '@/services/students.sanitizer.service';
 
-@Module({
+export const moduleMetadata: ModuleMetadata = {
   imports: [PrismaModule],
   controllers: [StudentsController],
-  providers: [StudentsService, BcryptService, StudentsSanitizersService],
-})
+  providers: [StudentsService, StudentsSanitizersService],
+};
+@Module(moduleMetadata)
 export class StudentsModule {}

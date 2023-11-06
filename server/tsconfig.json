@@ -17,6 +17,10 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node", "@types/jest"],
   }
 }

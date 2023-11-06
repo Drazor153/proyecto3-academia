@@ -7,7 +7,7 @@ import {
   StudentGradesSanitized,
   StudentLevelRaw,
   StudentLevelSanitized,
-} from 'src/interfaces/students.sanitizer.interface';
+} from '@/interfaces/students.sanitizer';
 
 @Injectable()
 export class StudentsSanitizersService {

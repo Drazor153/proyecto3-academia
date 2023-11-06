@@ -10,8 +10,8 @@ import {
 import { AuthService } from './auth.service';
 import { CookieOptions, Response } from 'express';
 import { LoginFormDto } from './dto/auth.dto';
-import { UserRequest } from 'src/interfaces/request.interface';
-import { NoAccess, NoRefresh } from '../../guards/roles.decorator';
+import { UserRequest } from '@/interfaces/request.interface';
+import { NoAccess, NoRefresh } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
 
 const COOKIE_OPTIONS: CookieOptions = {
@@ -58,10 +58,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     this.logger.info(`User with run ${req.user.sub} is autologging in.`);
-    const { tokens, user } = await this.authService.autologin(
-      req.user.sub,
-      req.user.role,
-    );
+    const { tokens, user } = await this.authService.autologin(req.user.sub);
 
     res.cookie('access-token', tokens.accessToken, COOKIE_OPTIONS);
     // res.cookie('refresh-token', tokens.refreshToken, COOKIE_OPTIONS);

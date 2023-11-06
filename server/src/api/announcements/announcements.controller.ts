@@ -11,8 +11,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
-import { RoleEnum, Roles } from 'src/guards/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import { RolesGuard } from '@/guards/roles.guard';
 import {
   AnnouncementQuery,
   CreateAnnouncementDto,
@@ -20,7 +20,7 @@ import {
   UpdateAnnouncementDto,
 } from './dto/announcement.dto';
 import { PinoLogger } from 'nestjs-pino';
-import { UserRequest } from 'src/interfaces/request.interface';
+import { UserRequest } from '@/interfaces/request.interface';
 
 @Controller('api/announcements')
 @UseGuards(RolesGuard)

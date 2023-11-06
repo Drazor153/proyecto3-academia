@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { LessonParams } from 'src/api/classes/dto/classes.dto';
-import { UserRequest } from 'src/interfaces/request.interface';
-import { PrismaService } from 'src/database/prisma/prisma.service';
-import { ClassesSanitizersService } from 'src/services/classes.sanitizer.service';
+import { LessonParams } from '@/api/classes/dto/classes.dto';
+import { UserRequest } from '@/interfaces/request.interface';
+import { PrismaService } from '@/database/prisma.service';
+import { ClassesSanitizersService } from '@/services/classes.sanitizer.service';
 
 @Injectable()
 export class LessonsService {
@@ -38,7 +38,7 @@ export class LessonsService {
             levelCode: level.level.code,
             year: level.year,
             semester: level.semester,
-            status: 'Cursando',
+            status: 'active',
           },
         },
       },

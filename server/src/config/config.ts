@@ -5,7 +5,7 @@ import { UserRequest } from 'src/interfaces/request.interface';
 // import { UserRequest } from 'src/interfaces/request.interface';
 
 export const config = (): ConfigProps => ({
-  port: parseInt(process.env.PORT, 10) || 3000,
+  port: parseInt(process.env.PORT || '3000', 10),
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
   access_token_expires_in: process.env.ACCESS_TOKEN_EXPIRES_IN,
   refresh_token_secret: process.env.REFRESH_TOKEN_SECRET,

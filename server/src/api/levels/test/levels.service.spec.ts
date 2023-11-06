@@ -1,13 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LevelsService } from './levels.service';
+import { LevelsService } from '../levels.service';
+import { getModuleMetadata } from '@/common/moduleMetadata';
+import { moduleMetadata } from '../levels.module';
 
 describe('LevelsService', () => {
   let service: LevelsService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [LevelsService],
-    }).compile();
+    const module: TestingModule = await Test.createTestingModule(
+      getModuleMetadata(moduleMetadata),
+    ).compile();
 
     service = module.get<LevelsService>(LevelsService);
   });

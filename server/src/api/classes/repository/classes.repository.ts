@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma/prisma.service';
+import { PrismaService } from '@/database/prisma.service';
 import { CreateClassDto, UpdateClassDto } from '../dto/classes.dto';
 
 @Injectable()
@@ -8,6 +8,7 @@ export class ClassesRepository {
 
   async create(data: CreateClassDto) {
     const { attendance, contents, lessonId, week } = data;
+
     return this.prisma.class.create({
       data: {
         lessonId,

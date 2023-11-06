@@ -5,7 +5,7 @@ import {
   TeacherLevelsSanitizied,
   TopicQuizRaw,
   TopicQuizSanitizied,
-} from 'src/interfaces/teachers.sanitizer.interface';
+} from '@/interfaces/teachers.sanitizer';
 
 @Injectable()
 export class TeachersSanitizersService {

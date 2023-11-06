@@ -3,7 +3,7 @@ import {
   ClassParams,
   CreateClassDto,
   UpdateClassDto,
-} from 'src/api/classes/dto/classes.dto';
+} from '@/api/classes/dto/classes.dto';
 import { ClassesRepository } from './repository/classes.repository';
 
 @Injectable()
