@@ -106,6 +106,13 @@
   "events": "Events",
   "academy": "Academy",
   "info": "Information",
-  "ALL": "All"
-
+  "ALL": "All",
+  "student_info_input": "Insert the student's information",
+  "free_enrollment": "Free Enrollment",
+  "justifications": "Justifications",
+  "search_status": "Search by status",
+  "status_select": "Select a status",
+  "rejected": "Rejected",
+  "reject": "Reject",
+  "approve": "Approve"
 }

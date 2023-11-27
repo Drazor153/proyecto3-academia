@@ -2,13 +2,13 @@
 
 $font: 'Lato Flex', sans-serif;
 
-$orange: #FF5418;
-$lightorange: #F8B69E;
-$whiteorange: #FFE7D6;
-$white: #FFFFFF;
+$orange: #ff5418;
+$lightorange: #f8b69e;
+$whiteorange: #ffe7d6;
+$white: #ffffff;
 $blue: #181639;
-$skyblue: #8AADE1;
-$bluemarine: #2F4858;
+$skyblue: #8aade1;
+$bluemarine: #2f4858;
 $lightred: #bf243a;
 $yellow: #ecac3c;
 $crimsonred: #8d2840;
@@ -20,37 +20,36 @@ $lightgrey: #c7c7c7;
 $whitegrey: #eeeeee;
 $pink: #da4eda;
 
-
 $colors: (
-    'orange': $orange,
-    'lightorange': $lightorange,
-    'whiteorange': $whiteorange,
-    'white': $white,
-    'blue': $blue,
-    'skyblue': $skyblue,
-    'bluemarine': $bluemarine,
-    'lightred': $lightred,
-    'yellow': $yellow,
-    'crimsonred': $crimsonred,
-    'brown': $brown,
-    'darkbrown': $darkbrown,
-    'purple': $purple,
-    'green': $green,
-    'lightgrey': $lightgrey,
-    'whitegrey': $whitegrey,
-    'pink': $pink
+  'orange': $orange,
+  'lightorange': $lightorange,
+  'whiteorange': $whiteorange,
+  'white': $white,
+  'blue': $blue,
+  'skyblue': $skyblue,
+  'bluemarine': $bluemarine,
+  'lightred': $lightred,
+  'yellow': $yellow,
+  'crimsonred': $crimsonred,
+  'brown': $brown,
+  'darkbrown': $darkbrown,
+  'purple': $purple,
+  'green': $green,
+  'lightgrey': $lightgrey,
+  'whitegrey': $whitegrey,
+  'pink': $pink,
 );
 
 @each $name, $color in $colors {
-    .bg-#{$name} {
-        background-color: $color;
-    }
+  .bg-#{$name} {
+    background-color: $color;
+  }
 
-    .color-#{$name} {
-        color: $color;
-    }
+  .color-#{$name} {
+    color: $color;
+  }
 
-    .border-#{$name} {
-        color: $color;
-    }
+  .border-#{$name} {
+    color: $color;
+  }
 }

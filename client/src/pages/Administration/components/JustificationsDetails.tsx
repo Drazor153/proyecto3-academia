@@ -12,7 +12,7 @@ import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import Select from 'react-select';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 import { Student } from '../../../utils/types';
-import { IoMdSchool } from 'react-icons/io';
+import { TiCancel, TiDocumentText, TiTick } from 'react-icons/ti';
 import Modal from '../../../components/Modal';
 import { useTranslation } from 'react-i18next';
 import { handleRUNChange, useDebounce } from '@/utils/functions';
@@ -55,6 +55,12 @@ function ShowStudentCareer({ run }: { run: number }) {
 function SearchStudent() {
   useTranslation();
 
+  const statusOptions = [
+    { value: 'pending', label: t('pending') },
+    { value: 'approved', label: t('approved') },
+    { value: 'rejected', label: t('rejected') },
+  ];
+
   const [page, setPage] = useState(1);
   const [run, setRun] = useState('');
   const [name, setName] = useState('');
@@ -70,8 +76,6 @@ function SearchStudent() {
   };
 
   const [getStudents, result] = useLazyGetStudentsQuery();
-
-  const { data: levels, isLoading: isLevelsLoading } = useGetLevelsQuery(null);
 
   const runWithoutDv = (run: string) => {
     const { digits } = deconstructRut(run);
@@ -145,24 +149,17 @@ function SearchStudent() {
             </div>
           </div>
           <div className="search-container">
-            <label>{t('search_level')}</label>
+            <label>{t('search_status')}</label>
             <div className="input-container">
               <Select
                 className="react-select-container"
                 classNamePrefix={'react-select'}
-                placeholder={t('level_select')}
-                onChange={option => setLevel(option?.value ? option.value : '')}
-                options={
-                  levels && levels.data.length > 0
-                    ? levels.data.map(({ code, name }) => ({
-                        value: code,
-                        label: t(name),
-                      }))
-                    : []
-                }
+                placeholder={t('status_select')}
+                options={statusOptions}
+                defaultValue={statusOptions[0]}
                 isClearable
+                isMulti
                 isSearchable={false}
-                isLoading={isLevelsLoading}
               />
             </div>
           </div>
@@ -173,7 +170,7 @@ function SearchStudent() {
           <tr>
             <th>{t('run')}</th>
             <th>{t('name')}</th>
-            <th>{t('level')}</th>
+            <th>{t('status')}</th>
             <th>{t('actions')}</th>
           </tr>
         </thead>
@@ -202,10 +199,21 @@ function SearchStudent() {
                   </td>
                   <td>{student.level}</td>
                   <td>
-                    <button onClick={() => setSelectedStudent(student)}>
-                      <IoMdSchool className="icon" />
-                      {t('inspect')}
-                    </button>
+                    <div className="action-buttons">
+                      <button>
+                        <TiDocumentText className="icon" />
+                        <span>{t('view')}</span>
+                      </button>
+
+                      <button>
+                        <TiCancel className="icon" />
+                        <span>{t('reject')}</span>
+                      </button>
+                      <button>
+                        <TiTick className="icon" />
+                        <span>{t('approve')}</span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

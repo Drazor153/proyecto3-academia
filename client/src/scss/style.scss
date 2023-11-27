@@ -1,21 +1,20 @@
-@use 'administration';
-@use 'announcement';
-@use 'base';
-@use 'buttons';
-@use 'classes';
-@use 'dashboard';
-@use 'fade';
-@use 'grades';
-@use 'inputs';
-@use 'login';
-@use 'logout';
-@use 'modals';
-@use 'profile';
-@use 'scrollbar';
-@use 'shortcuts';
-@use 'sidebar';
-@use 'table';
-@use 'userinfo';
+@import 'administration';
+@import 'announcement';
+@import 'base';
+@import 'buttons';
+@import 'classes';
+@import 'dashboard';
+@import 'grades';
+@import 'inputs';
+@import 'login';
+@import 'logout';
+@import 'modals';
+@import 'profile';
+@import 'scrollbar';
+@import 'shortcuts';
+@import 'sidebar';
+@import 'table';
+@import 'userinfo';
 
 * {
   margin: 0;
@@ -33,8 +32,8 @@
 }
 
 body {
-  font-family: base.$font;
-  background-color: base.$white;
+  font-family: $font;
+  background-color: $white;
 }
 
 main {
@@ -45,8 +44,8 @@ main {
   h2 {
     padding: 5px;
     border-radius: 5px;
-    color: base.$white;
-    background-color: base.$brown;
+    color: $white;
+    background-color: $brown;
   }
 }
 
@@ -54,18 +53,18 @@ h1 {
   font-size: 3.5rem;
   grid-area: title;
   font-weight: 900;
-  color: adjust-color($color: base.$crimsonred);
+  color: adjust-color($color: $crimsonred);
   margin: 5px 20px;
 }
 
 h2 {
   font-weight: 700;
-  color: base.$darkbrown;
+  color: $darkbrown;
 }
 
 h3,
 h4 {
-  color: base.$darkbrown;
+  color: $darkbrown;
 }
 
 section {
@@ -90,7 +89,7 @@ section {
   left: 50%;
 
   * {
-    fill: base.$crimsonred;
+    fill: $crimsonred;
   }
 }
 

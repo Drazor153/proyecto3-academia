@@ -106,5 +106,14 @@
   "events": "Events",
   "academy": "Academy",
   "info": "Information",
-  "ALL": "Todos"
+  "ALL": "Todos",
+  "student_info_input": "Ingrese la información del estudiante",
+  "free_enrollment": "Matrícula gratuita",
+  "justifications": "Justificaciones",
+  "search_status": "Buscar por estado",
+  "status_select": "Seleccione un estado",
+  "rejected": "Rechazado",
+  "No options": "Sin opciones",
+  "reject": "Rechazar",
+  "approve": "Aprobar"
 }

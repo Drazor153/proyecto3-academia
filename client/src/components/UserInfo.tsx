@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import { useAppSelector } from '../redux/hooks';
 import { BiSolidUserRectangle } from 'react-icons/bi';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 function UserInfo() {
   const user = useAppSelector(state => state.userReducer);
@@ -9,8 +9,15 @@ function UserInfo() {
   // const navigate = useNavigate();
 
   return (
-    <div
+    <NavLink
       className="user-info-container"
+      to={`/profile`}
+      // style={({ isActive }) => ({
+      //   opacity: isActive ? 1 : 0.7,
+      // })}
+      // onMouseEnter={e => {
+      //   e.currentTarget.style.opacity = '1';
+      // }}
       // onClick={() => navigate('/profile')}
     >
       <div className="user-icon">
@@ -22,7 +29,7 @@ function UserInfo() {
         </b>
         <small className="user-role">{t(user.role.toLowerCase())}</small>
       </div>
-    </div>
+    </NavLink>
   );
 }
 

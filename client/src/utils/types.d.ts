@@ -1,13 +1,13 @@
-import { QuizData } from "../pages/Grades/quizesReducer";
+import { QuizData } from '../pages/Grades/quizesReducer';
 
 export type Data<T> = {
   data: T;
-}
+};
 export type Paginate<T> = {
   data: T;
   next: boolean;
   previous: boolean;
-}
+};
 
 export type Level = {
   year: number;
@@ -22,12 +22,12 @@ export type Level = {
       }[];
     }[];
   }[];
-}
+};
 
 export type LevelInfo = {
   code: string;
-  name: string
-}
+  name: string;
+};
 
 export type Student = {
   run: string | number;
@@ -35,9 +35,10 @@ export type Student = {
   name: string;
   first_surname: string;
   level: string;
-}
+  payment: boolean;
+};
 
-export type Students = Omit<Student, "level">;
+export type Students = Omit<Student, 'level'>;
 
 export type Grade = {
   id: number;
@@ -49,51 +50,51 @@ export type Grade = {
     studentId: number;
     grade: number;
   }[];
-  classgroup: {
+  classGroup: {
     teacherId: number;
     group: { letter: string; topic: string };
   };
-}
+};
 
 export type User = {
-  run: number,
-  dv: string,
-  name: string,
-  first_surname: string,
-  email: string | null,
-  role: string,
-  status: string
-}
+  run: number;
+  dv: string;
+  name: string;
+  first_surname: string;
+  email: string | null;
+  role: string;
+  status: string;
+};
 
 export type GenericExam = {
   quizNumber: number;
   studentGrade: number;
   quizId: number;
-}
+};
 
 export type Exams = {
   topic: string;
-  quizzes: GenericExam[]
-}
+  quizzes: GenericExam[];
+};
 
 export type Quiz = {
-  run: number,
-  name: string,
-  first_surname: string,
-  grade: number,
-  dv: string
-}
+  run: number;
+  name: string;
+  first_surname: string;
+  grade: number;
+  dv: string;
+};
 
 export type GradesMutator = {
   quizId: number;
   grades: QuizData[];
-}
+};
 
 type Class = {
   id: number;
   week: number;
   contents: string;
-}
+};
 
 export type ClassesStudent = {
   teacher: {
@@ -104,7 +105,7 @@ export type ClassesStudent = {
 } & Class;
 
 export type ClassesTeacher = {
-  attendance: (Students & { run: number, attended: boolean })[];
+  attendance: (Students & { run: number; attended: boolean })[];
 } & Class;
 
 export type PostClass = {
@@ -115,39 +116,38 @@ export type PostClass = {
     studentRun: number;
     attended: boolean;
   }[];
-}
-type Author = { name: string, first_surname: string }
-type Category = { id: number, name: string }
-type Target = { id: number, name: string }
+};
+type Author = { name: string; first_surname: string };
+type Category = { id: number; name: string };
+type Target = { id: number; name: string };
 
 export type AnnouncementType = {
   author: Author;
-  category: Category;
+  category: string;
   content: string;
   createdAt: string;
   expiresAt: string;
   id: number;
   image?: string;
-  target: target[];
+  target: Target[];
   title: string;
   updatedAt: string;
 };
 
 export type ResponseMsg = {
-  msg: string
-}
+  msg: string;
+};
 
 export type PostAnnouncement = Omit<
   AnnouncementType,
-  'author' | 'id' | 'createdAt' | 'updatedAt' | 'category' | 'target'
+  'author' | 'id' | 'createdAt' | 'updatedAt' | 'target'
 > & {
-  category: string;
   target: string[];
 };
 
 type StudentCareer = {
-	year: number;
-	semesters: number[];
-	level: string;
-	status: string;
+  year: number;
+  semesters: number[];
+  level: string;
+  status: string;
 }[];

@@ -394,10 +394,10 @@ function ModalClassList({
       return s === student;
     });
     attendanceList[index].attendance = e.target.checked ? 'present' : 'absent';
-    console.log({
-      ...selectedClass,
-      attendanceList: attendanceList,
-    });
+    // console.log({
+    //   ...selectedClass,
+    //   attendanceList: attendanceList,
+    // });
     setSelectedClass({
       ...selectedClass,
       attendanceList: attendanceList,
@@ -503,18 +503,18 @@ function ModalClassList({
                         <p>{t('present')}</p>
                         <input
                           type="checkbox"
-                          name={`attendance ${student.name}`}
-                          id={`attendance ${student.name}`}
+                          name={`attendance ${student.run}`}
+                          id={`attendance ${student.run}`}
                           checked={attendance === 'present'}
                           onChange={e => {
-                            console.log(e);
+                            // console.log(e);
                             handlerOnChangeAttendance(e, student);
                           }}
                         />
                         <label
                           tabIndex={0}
                           className="label-attendance"
-                          htmlFor={`attendance ${student.name}`}
+                          htmlFor={`attendance ${student.run}`}
                           onKeyDown={e => handlerLabelKeyDown(e, student)}
                           ref={labelRef}
                         ></label>

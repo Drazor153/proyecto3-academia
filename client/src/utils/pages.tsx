@@ -10,6 +10,7 @@ import UserInfo from '../components/UserInfo';
 import LanguageSwap from '../components/LanguageSwap';
 import Sidebar from '../components/Sidebar';
 import Login from '../pages/Login';
+import Profile from '@/pages/Profile';
 
 export const sidebarItems = [
   {
@@ -112,6 +113,10 @@ export const administrationItems = [
         path: '/administration/students/search',
         content: 'search',
       },
+      {
+        path: '/administration/students/justifications',
+        content: 'justifications',
+      },
     ],
   },
   {
@@ -142,14 +147,14 @@ export const routes = createBrowserRouter(
           index: true,
           element: <Dashboard />,
         },
-        // {
-        //   path: 'profile',
-        //   element: <Profile />,
-        // },
-        // {
-        //   path: 'profile/:tab',
-        //   element: <Profile />,
-        // },
+        {
+          path: 'profile',
+          element: <Profile />,
+        },
+        {
+          path: 'profile/:tab',
+          element: <Profile />,
+        },
         {
           path: 'grades',
           element: <Grades />,

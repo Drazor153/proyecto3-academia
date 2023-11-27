@@ -28,6 +28,7 @@ const formSchema: ZodType<Student> = z.object({
   name: z.string().min(1),
   first_surname: z.string().min(1),
   level: z.string().min(2).max(2),
+  payment: z.boolean(),
 });
 
 type formType = z.infer<typeof formSchema>;
@@ -159,7 +160,7 @@ function FormNewStudent() {
           </div>
         </div>
         <div className="input-section">
-          <h3>{t('names_input')}</h3>
+          <h3>{t('student_info_input')}</h3>
           <div className="name-input-container">
             <FloatLabelInput
               name="name"
@@ -171,6 +172,14 @@ function FormNewStudent() {
               type="text"
               register={register}
             />
+            <fieldset className="payment-checkbox">
+              <input
+                type="checkbox"
+                id="payment"
+                {...register('payment')}
+              />
+              <label htmlFor="payment">{t('free_enrollment')}</label>
+            </fieldset>
           </div>
         </div>
         <div className="input-section">
