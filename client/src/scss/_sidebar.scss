@@ -1,4 +1,4 @@
-@use 'base';
+@import 'base';
 
 $sidebar-open-width: 230px;
 $sidebar-closed-width: 45px;
@@ -6,8 +6,8 @@ $sidebar-closed-width: 45px;
 .sidebar {
 	display: flex;
 	flex-direction: column;
-	background-color: adjust-color($color: base.$crimsonred, $lightness: 60%);
-	height: 100vh;
+	background-color: adjust-color($color: $crimsonred, $lightness: 60%);
+	height: 100%;
 	box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
 	width: $sidebar-open-width;
 	grid-area: sidebar;
@@ -19,11 +19,11 @@ $sidebar-closed-width: 45px;
 }
 
 .top-section {
-	background-color: base.$crimsonred;
+	background-color: $crimsonred;
 	display: flex;
 	align-items: center;
 	padding: 20px 10px;
-	color: base.$darkbrown;
+	color: $darkbrown;
 	height: 70px;
 	position: relative;
 }
@@ -62,14 +62,15 @@ a {
 }
 
 .link {
+	cursor: pointer;
 	position: relative;
-	background-color: adjust-color($color: base.$crimsonred, $lightness: 45%);
+	background-color: adjust-color($color: $crimsonred, $lightness: 45%);
 	margin: 5px;
 	border-radius: 5px;
 	padding: 5px 7px;
 	gap: 15px;
 	transition: all 0.2s;
-	color: base.$darkbrown;
+	color: $darkbrown;
 	font-size: 1.1rem;
 	height: 20px;
 	text-align: center;
@@ -77,8 +78,8 @@ a {
 
 	&:hover,
 	&.active {
-		background-color: base.$crimsonred;
-		color: base.$white;
+		background-color: $crimsonred;
+		color: $white;
 	}
 
 	.icon {
