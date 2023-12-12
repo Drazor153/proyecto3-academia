@@ -1,10 +1,12 @@
 import { t } from 'i18next';
 import { useAppSelector } from '../redux/hooks';
 import { BiSolidUserRectangle } from 'react-icons/bi';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function UserInfo() {
   const user = useAppSelector(state => state.userReducer);
+  useTranslation();
 
   // const navigate = useNavigate();
 

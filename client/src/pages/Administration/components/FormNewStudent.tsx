@@ -151,6 +151,7 @@ function FormNewStudent() {
             <fieldset className="float-label-field">
               <input
                 type="text"
+                autoComplete="off"
                 {...register('run')}
                 onChange={handleRUNChange}
                 value={run}
@@ -165,11 +166,13 @@ function FormNewStudent() {
             <FloatLabelInput
               name="name"
               type="text"
+              autocomplete="off"
               register={register}
             />
             <FloatLabelInput
               name="first_surname"
               type="text"
+              autocomplete="off"
               register={register}
             />
             <fieldset className="payment-checkbox">
