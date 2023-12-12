@@ -1,4 +1,4 @@
-@use 'base';
+@import 'base';
 
 .justifications-layout {
 	flex: 1;
@@ -21,6 +21,12 @@
 	tbody {
 		tr {
 			grid-template-columns: 10% auto 10% 10% 10%;
+
+			td {
+				&:nth-child(2) {
+					justify-content: start;
+				}
+			}
 		}
 	}
 }
@@ -46,7 +52,7 @@
 
 		input,
 		textarea {
-			border: 1px solid base.$darkbrown;
+			border: 1px solid $darkbrown;
 			border-radius: 3px;
 			padding: 5px;
 		}
@@ -60,13 +66,13 @@
 			height: 2rem;
 			align-items: center;
 			justify-content: center;
-			border: 1px solid base.$darkbrown;
-			color: base.$darkbrown;
+			border: 1px solid $darkbrown;
+			color: $darkbrown;
 
 			&:hover {
 				cursor: pointer;
-				background-color: rgba($color: base.$darkbrown, $alpha: 0.8);
-				color: base.$white;
+				background-color: rgba($color: $darkbrown, $alpha: 0.8);
+				color: $white;
 			}
 
 			font-size: 1.3rem;
@@ -77,7 +83,7 @@
 		}
 		.additional-info {
 			font-size: 0.7rem;
-			color: base.$darkbrown;
+			color: $darkbrown;
 		}
 	}
 }
@@ -93,6 +99,6 @@
 		height: 100%;
 		display: grid;
 		place-items: center;
-		border: 1px solid base.$darkbrown;
+		border: 1px solid $darkbrown;
 	}
 }

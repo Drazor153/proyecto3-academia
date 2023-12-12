@@ -12,9 +12,9 @@ import { useTranslation } from 'react-i18next';
 function Classes() {
   useTranslation();
 
-  const user = useAppSelector(state => state.userReducer);
+  const role = useAppSelector(state => state.userReducer).role === 'STUDENT' ? 'students' : 'teachers';
 
-  const role = user.role === 'STUDENT' ? 'students' : 'teachers';
+  // const role = user.role;
 
   const [select, setSelect] = useReducer(reducer, {
     year: 0,
@@ -23,9 +23,9 @@ function Classes() {
     lesson: { id: -1, lesson: '' },
   });
 
-  if (user.role === '') {
-    return <></>;
-  }
+  // if (role === '') {
+  //   return <></>;
+  // }
 
   return (
     <>

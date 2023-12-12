@@ -91,7 +91,7 @@
 	"topics": "Topics",
 	"undefined": "Undefined",
 	"updated": "Updated",
-	"upper_intermediate": "Intermediate Superior",
+	"upper_intermediate": "Upper intermediate",
 	"view": "View",
 	"week": "Week",
 	"writing": "Writing",
@@ -133,5 +133,14 @@
 	"create_justification": "Create Justification",
 	"active": "Active",
 	"email": "Email",
-	"no_information": "No information"
+	"no_information": "No information",
+	"paid_enrollment": "Paid Enrolment",
+	"enrollment": "Enrolment",
+	"free": "Free",
+	"paid": "Paid",
+	"calendar": "Calendar",
+
+	"calendar_menu": "Calendar Menu",
+	"exams": "Exams",
+	"academic": "Academic"
 }
