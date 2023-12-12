@@ -114,7 +114,7 @@ export class StudentsSanitizersService {
     return dataArray;
   }
 
-  sanitizeStudentCareer(input: StudentCareerRaw): StudentCareerSanitized[] {
+  sanitizeStudentCareer(input: StudentCareerRaw) {
     const newArray: StudentCareerSanitized[] = [];
 
     input.enrols.forEach((val) => {

@@ -6,7 +6,7 @@ import { RoleEnum } from '@/guards/roles.decorator';
 import { AnnouncementsSanitizersService } from '@/services/announcements.sanitizer.service';
 import { AnnouncementsRepository } from './repository/announcements';
 import { hasNextPage, paginate } from '@/common/paginate';
-
+import { AnnTargets, EnrolsStatus } from '@common/consts';
 @Injectable()
 export class AnnouncementsService {
   constructor(
@@ -40,7 +40,7 @@ export class AnnouncementsService {
   private async getAdminAnnouncements() {
     const query = await this.annRepository.allPerRole({
       send_to: {
-        has: 'ALL',
+        has: AnnTargets.ALL,
       },
     });
 
@@ -55,7 +55,7 @@ export class AnnouncementsService {
       select: {
         enrols: {
           where: {
-            status: 'Cursando',
+            status: EnrolsStatus.Active,
           },
           select: {
             levelCode: true,
@@ -68,7 +68,7 @@ export class AnnouncementsService {
 
     const query = await this.annRepository.allPerRole({
       send_to: {
-        hasSome: ['ALL', levelCode],
+        hasSome: [AnnTargets.ALL, levelCode],
       },
     });
 
@@ -98,7 +98,7 @@ export class AnnouncementsService {
 
     const query = await this.annRepository.allPerRole({
       send_to: {
-        hasSome: ['ALL', ...levelCodes],
+        hasSome: [AnnTargets.ALL, ...levelCodes],
       },
     });
 

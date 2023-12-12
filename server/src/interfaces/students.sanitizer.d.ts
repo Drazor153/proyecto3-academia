@@ -65,6 +65,7 @@ export interface StudentCareerRaw {
     level: {
       name: string;
     };
+    paid: boolean;
     status: string;
     levelCode: string;
     year: number;

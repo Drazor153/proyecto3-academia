@@ -45,7 +45,7 @@ export class StudentsController {
     return this.studentsService.getStudents(query);
   }
   @Get('career/:run')
-  @Roles(RoleEnum.Admin)
+  @Roles(RoleEnum.Admin, RoleEnum.Student)
   getStudentCareer(@Param() params: StudentCareerParams) {
     this.logger.info(`Admin getting student career with run: ${params.run}`);
     return this.studentsService.getStudentCareer(+params.run);

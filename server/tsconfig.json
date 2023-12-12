@@ -19,8 +19,9 @@
     "noFallthroughCasesInSwitch": false,
     "alwaysStrict": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@common/*": ["src/common/*"],
     },
-    "types": ["node", "@types/jest"],
+    "types": ["node", "@types/jest"]
   }
 }

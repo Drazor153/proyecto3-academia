@@ -93,16 +93,21 @@ export class StudentsService {
             status: true,
             year: true,
             semester: true,
+            paid: true,
             level: {
               select: {
                 name: true,
               },
             },
           },
-          orderBy: [{ year: 'desc' }, { semester: 'asc' }],
+          orderBy: [{ year: 'desc' }, { semester: 'desc' }],
         },
       },
     });
+
+    if (!studentQuery) {
+      return { error: 'El estudiante no existe' };
+    } 
 
     const sanitized = this.sanity.sanitizeStudentCareer(studentQuery);
 

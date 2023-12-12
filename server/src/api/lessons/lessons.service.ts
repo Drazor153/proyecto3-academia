@@ -3,12 +3,13 @@ import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PrismaService } from '@/database/prisma.service';
 import { ClassesSanitizersService } from '@/services/classes.sanitizer.service';
+import { EnrolsStatus } from '../../common/consts';
 
 @Injectable()
 export class LessonsService {
   constructor(
     private prisma: PrismaService,
-    private sanity: ClassesSanitizersService,
+    private sanity: ClassesSanitizersService
   ) {}
 
   async getStudents({ lessonId }: LessonParams) {
@@ -38,7 +39,7 @@ export class LessonsService {
             levelCode: level.level.code,
             year: level.year,
             semester: level.semester,
-            status: 'active',
+            status: EnrolsStatus.Active,
           },
         },
       },
@@ -95,38 +96,37 @@ export class LessonsService {
       }));
 
       return { data: classes };
-    } else {
-      const query = await this.prisma.class.findMany({
-        where: { lessonId: +lessonId },
-        include: {
-          attendance: {
-            include: {
-              student: {
-                select: {
-                  run: true,
-                  name: true,
-                  first_surname: true,
-                  dv: true,
-                },
+    }
+    const query = await this.prisma.class.findMany({
+      where: { lessonId: +lessonId },
+      include: {
+        attendance: {
+          include: {
+            student: {
+              select: {
+                run: true,
+                name: true,
+                first_surname: true,
+                dv: true,
               },
             },
           },
         },
-        orderBy: {
-          week: 'desc',
-        },
+      },
+      orderBy: {
+        week: 'desc',
+      },
+    });
+
+    if (!query) {
+      throw new NotFoundException({
+        errorType: 'msg',
+        errorMsg: 'Lesson not found',
       });
-
-      if (!query) {
-        throw new NotFoundException({
-          errorType: 'msg',
-          errorMsg: 'Lesson not found',
-        });
-      }
-
-      const sanitizied = this.sanity.sanitizeLessonClasses(query);
-
-      return { data: sanitizied };
     }
+
+    const sanitizied = this.sanity.sanitizeLessonClasses(query);
+
+    return { data: sanitizied };
   }
 }

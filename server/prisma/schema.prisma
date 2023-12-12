@@ -39,10 +39,11 @@ model Level {
 }
 
 model enrols {
-  level      Level  @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
-  levelCode  String @db.Char(2)
-  student    User   @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  level      Level   @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
+  levelCode  String  @db.Char(2)
+  student    User    @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
+  paid       Boolean @default(false)
   status     String
   year       Int
   semester   Int
@@ -92,7 +93,7 @@ model Lesson {
 
 model Class {
   id         Int          @id @default(autoincrement())
-  week       Int
+  date       DateTime
   contents   String
   lesson     Lesson       @relation(fields: [lessonId], references: [id])
   lessonId   Int
@@ -115,7 +116,6 @@ model Announcement {
   title    String
   content  String   @db.VarChar(500)
   image    Bytes?
-  // send_to    SendTo[]
   send_to  String[]
   category String
 
@@ -124,26 +124,14 @@ model Announcement {
   expires_at DateTime
 
   user User? @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
-  // category Category @relation(fields: [categoryId], references: [id])
 }
-
-// model SendTo {
-//   announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   announcementId Int
-//   target         Target       @relation(fields: [targetId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   targetId       Int
-
-//   @@id([announcementId, targetId])
-// }
 
 model Target {
   id   Int    @id @default(autoincrement())
   name String
-  // send_to SendTo[]
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
   name String
-  // Announcement Announcement[]
 }

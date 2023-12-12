@@ -6,7 +6,7 @@ import { PinoLogger } from 'nestjs-pino';
 
 @Controller('api/levels')
 @UseGuards(RolesGuard)
-@Roles(RoleEnum.Admin)
+@Roles(RoleEnum.Admin, RoleEnum.Student)
 export class LevelsController {
   constructor(
     private readonly levelsService: LevelsService,
@@ -16,7 +16,7 @@ export class LevelsController {
   }
 
   @Get('/')
-  async getLevels() {
+  async getAllLevels() {
     this.logger.info('Admin getting all academic levels');
     const levels = await this.levelsService.getAllLevels();
     return { data: levels };
