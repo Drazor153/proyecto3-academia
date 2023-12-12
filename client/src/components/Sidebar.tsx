@@ -4,7 +4,6 @@ import { FaBars, FaSignOutAlt } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { toast } from 'react-toastify';
-import logo from '../assets/hlogo.png';
 import Logout from './Logout';
 import { useLogoutMutation } from '../redux/services/userApi';
 import { logout } from '../redux/features/userSlice';
@@ -39,7 +38,7 @@ function Sidebar() {
           <div className={`logo-container ${isOpen ? '' : 'closed'}`}>
             <img
               className="logo"
-              src={logo}
+              src={'/images/hlogo.png'}
               alt="logo"
             />
           </div>

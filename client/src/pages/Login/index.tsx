@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/hooks';
 import { t } from 'i18next';
-import EALogo from '../../assets/EnglishAcademyLogoVertical.png';
 import FloatLabelInput from '../../components/FloatLabelInput';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -76,7 +75,7 @@ function Login() {
 		<main id='login-page'>
 			<div id='login-form'>
 				<img
-					src={EALogo}
+					src={'/images/EnglishAcademyLogoVertical.png'}
 					alt='English Academy Logo'
 				/>
 				<form onSubmit={handleSubmit(handlerLogin)}>

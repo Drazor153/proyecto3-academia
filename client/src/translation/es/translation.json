@@ -135,5 +135,13 @@
 	"create_justification": "Crear justificación",
 	"active": "Activo",
 	"email": "Correo electrónico",
-	"no_information": "Sin información"
+	"no_information": "Sin información",
+	"paid_enrollment": "Matrícula pagada",
+	"enrollment": "Matrícula",
+	"free": "Gratuito",
+	"paid": "Pagado",
+	"calendar": "Calendario",
+	"calendar_menu": "Menú de calendario",
+	"exams": "Examenes",
+	"academic": "Academico"
 }

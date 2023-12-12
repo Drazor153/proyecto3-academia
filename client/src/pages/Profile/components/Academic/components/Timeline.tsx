@@ -46,11 +46,12 @@ export default function Timeline() {
 										{academic.data.map(
 											({ level, semesters: s, status, year }, i) => {
 												if (level === name) {
+													// s.sort()
 													const semesters: (string | number)[] = [];
-													s.map((n, i) => {
+													Array.from(s).sort().map((n, i) => {
 														semesters.push(n);
 														semesters.push(
-															status === 'failed' && i + 1 !== semesters.length
+															status === 'failed' && i === 0
 																? 'approved'
 																: status,
 														);

@@ -1,10 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import ukFlag from '../assets/uk.jpg';
-import esFlag from '../assets/es.png';
 
 function LanguageSwap() {
   const { i18n } = useTranslation();
-  const languageFlag = i18n.language == 'es' ? esFlag : ukFlag;
+  const languageFlag = i18n.language == 'es' ? '/images/es.png' : '/images/uk.jpg';
   const changeLanguageHandler = () => {
     const languageValue = i18n.language == 'es' ? 'en' : 'es';
 

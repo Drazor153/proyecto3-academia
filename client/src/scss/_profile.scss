@@ -120,7 +120,6 @@
 		& > section {
 			width: 100%;
 			max-width: 100%;
-
 			background-color: #faedf0;
 			margin: 0;
 			padding: 0;
@@ -161,7 +160,7 @@
 
 						& > ul {
 							display: flex;
-							flex-direction: column;
+							flex-direction: column-reverse;
 							height: max-content;
 
 							li {
@@ -171,10 +170,6 @@
 								flex-direction: column;
 								justify-content: center;
 								padding-left: 20px;
-
-								&.year {
-									order: 1;
-								}
 
 								&::before {
 									content: '';
@@ -207,27 +202,12 @@
 							flex-direction: column;
 
 							& > ul {
+								flex-direction: column;
 								li {
-									&.year {
-										order: 0;
-									}
-
 									&::before {
 										top: 0;
 										border-bottom: 2px solid $crimsonred;
 										border-top: none;
-									}
-
-									&.semester {
-										&::after {
-											content: '';
-											top: 0;
-											left: -20px;
-											position: absolute;
-											width: 2;
-											height: 100%;
-											border-left: 2px solid $crimsonred;
-										}
 									}
 								}
 							}
