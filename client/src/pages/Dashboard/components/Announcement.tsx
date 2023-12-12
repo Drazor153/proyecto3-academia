@@ -12,14 +12,7 @@ interface AnnouncementProps {
 function Announcement({ announcement }: AnnouncementProps) {
   const [expanded, setExpanded] = useState(false);
 
-  const {
-    title,
-    content,
-    author,
-    category: { name },
-    createdAt,
-    image,
-  } = announcement;
+  const { title, content, author, category, createdAt, image } = announcement;
 
   const handlerClick = () => {
     setExpanded(!expanded);
@@ -33,10 +26,11 @@ function Announcement({ announcement }: AnnouncementProps) {
         <div className="author">
           <Avatar
             className="avatar"
-            title={author.name}
+            title={`${author.name} ${author.first_surname}`}
             round
-            name={author.name}
-            alt={author.name}
+            name={`${author.name} ${author.first_surname}`}
+            alt={`${author.name} ${author.first_surname}`}
+            // textSizeRatio={3}
           />
           <p>{`${author.name} ${author.first_surname}`}</p>
         </div>
@@ -69,14 +63,12 @@ function Announcement({ announcement }: AnnouncementProps) {
 					{createdAt} */}
         </p>
         <p className="categories">
-          {/* {categories.map((tag, index) => ( */}
           <span
-            key={name}
+            key={`${title}-${category}`}
             className="category"
           >
-            {t(name)}
+            {t(category)}
           </span>
-          {/* ))} */}
         </p>
         <IoIosArrowDown
           onClick={handlerClick}

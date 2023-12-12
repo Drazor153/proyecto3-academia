@@ -1,11 +1,11 @@
-import { t } from 'i18next';
-import { Mesh } from './components';
+import { useTranslation } from 'react-i18next';
+import { AcademicInfo, Timeline } from './components';
 
 export default function Academic() {
-  return (
-    <>
-      <h2>{t('academic_information')}</h2>
-      <Mesh />
-    </>
-  );
+	return (
+		<section className='profile-academic-info'>
+			<Timeline />
+			<AcademicInfo />
+		</section>
+	);
 }

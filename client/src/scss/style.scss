@@ -1,99 +1,116 @@
-@use 'administration';
-@use 'announcement';
-@use 'base';
-@use 'buttons';
-@use 'classes';
-@use 'dashboard';
-@use 'fade';
-@use 'grades';
-@use 'inputs';
-@use 'login';
-@use 'logout';
-@use 'modals';
-@use 'profile';
-@use 'scrollbar';
-@use 'shortcuts';
-@use 'sidebar';
-@use 'table';
-@use 'userinfo';
+@import 'administration';
+@import 'announcement';
+@import 'base';
+@import 'buttons';
+@import 'classes';
+@import 'dashboard';
+@import 'grades';
+@import 'inputs';
+@import 'login';
+@import 'logout';
+@import 'modals';
+@import 'profile';
+@import 'scrollbar';
+@import 'shortcuts';
+@import 'sidebar';
+@import 'table';
+@import 'userinfo';
+@import 'justifications';
+
+html,
+body,
+#root {
+	width: 100vw;
+	height: 100vh;
+}
+
+// @media (max-width: 1366px) {
+// 	html,
+// 	body,
+// 	#root {
+// 		// width: calc(100vw - 10px);
+// 	}
+// }
 
 * {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: max-content 1fr 150px max-content;
-  grid-template-rows: 100px calc(100vh - 100px);
-  grid-template-areas:
-    'sidebar title lang user'
-    'sidebar content content content';
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: max-content 1fr 150px minmax(auto, max-content);
+	grid-template-rows: 100px 1fr;
+	grid-template-areas:
+		'sidebar title lang user'
+		'sidebar content content content';
 }
 
 body {
-  font-family: base.$font;
-  background-color: base.$white;
+	font-family: $font;
+	background-color: $white;
 }
 
 main {
-  padding: 10px 15px;
-  grid-area: content;
-  width: max-content;
+	padding: 10px 15px;
+	grid-area: content;
+	width: max-content;
 
-  h2 {
-    padding: 5px;
-    border-radius: 5px;
-    color: base.$white;
-    background-color: base.$brown;
-  }
+	h2 {
+		padding: 5px;
+		border-radius: 5px;
+		color: $white;
+		background-color: $brown;
+	}
 }
 
 h1 {
-  font-size: 3.5rem;
-  grid-area: title;
-  font-weight: 900;
-  color: adjust-color($color: base.$crimsonred);
-  margin: 5px 20px;
+	font-size: 3.5rem;
+	grid-area: title;
+	font-weight: 900;
+	color: adjust-color($color: $crimsonred);
+	margin: 5px 20px;
 }
 
 h2 {
-  font-weight: 700;
-  color: base.$darkbrown;
+	font-weight: 700;
+	color: $darkbrown;
 }
 
 h3,
 h4 {
-  color: base.$darkbrown;
+	color: $darkbrown;
 }
 
 section {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px;
-  margin: 5px;
-  box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	padding: 5px;
+	margin: 5px;
+	box-shadow: 0px 0px 10px rgb(0 0 0 / 0.2);
 }
 
 .loading-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
 }
 
 .icon-loading {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
 
-  * {
-    fill: base.$crimsonred;
-  }
+	* {
+		fill: $crimsonred;
+	}
 }
 
 .Toastify__close-button {
-  width: 20%;
+	width: 20%;
 }

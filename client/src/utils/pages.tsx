@@ -1,4 +1,4 @@
-import { FaTh, FaBookOpen, FaRegCalendarAlt } from 'react-icons/fa';
+import { FaTh, FaBookOpen, FaRegCalendarAlt, FaFileAlt } from 'react-icons/fa';
 import Dashboard from '../pages/Dashboard';
 import Grades from '../pages/Grades';
 import Classes from '../pages/Classes';
@@ -10,6 +10,8 @@ import UserInfo from '../components/UserInfo';
 import LanguageSwap from '../components/LanguageSwap';
 import Sidebar from '../components/Sidebar';
 import Login from '../pages/Login';
+import Profile from '@/pages/Profile';
+import Justifications from '@/pages/Justifications';
 
 export const sidebarItems = [
   {
@@ -29,6 +31,12 @@ export const sidebarItems = [
     name: 'Classes',
     icon: <FaRegCalendarAlt />,
     only: ['ALL'],
+  },
+  {
+    path: '/justifications',
+    name: 'Justifications',
+    icon: <FaFileAlt />,
+    only: ['STUDENT'],
   },
   {
     path: '/administration',
@@ -53,6 +61,11 @@ export const shortcutsItems = [
     path: '/classes',
     name: 'Classes',
     icon: <FaRegCalendarAlt />,
+  },
+  {
+    path: '/justifications',
+    name: 'Justifications',
+    icon: <FaFileAlt />,
   },
 ];
 
@@ -112,6 +125,10 @@ export const administrationItems = [
         path: '/administration/students/search',
         content: 'search',
       },
+      {
+        path: '/administration/students/justifications',
+        content: 'justifications',
+      },
     ],
   },
   {
@@ -142,14 +159,14 @@ export const routes = createBrowserRouter(
           index: true,
           element: <Dashboard />,
         },
-        // {
-        //   path: 'profile',
-        //   element: <Profile />,
-        // },
-        // {
-        //   path: 'profile/:tab',
-        //   element: <Profile />,
-        // },
+        {
+          path: 'profile',
+          element: <Profile />,
+        },
+        {
+          path: 'profile/:tab',
+          element: <Profile />,
+        },
         {
           path: 'grades',
           element: <Grades />,
@@ -157,6 +174,10 @@ export const routes = createBrowserRouter(
         {
           path: 'classes',
           element: <Classes />,
+        },
+        {
+          path: 'justifications',
+          element: <Justifications />,
         },
         {
           path: 'administration',

@@ -1,105 +1,111 @@
 @use 'base';
 
 #login-page {
-  background: linear-gradient(
-    to top right,
-    rgba(24, 22, 57, 1),
-    rgba(63, 36, 51, 1),
-    rgba(71, 52, 101, 1),
-    rgba(141, 40, 64, 1),
-    rgba(191, 36, 58, 1)
-  );
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-sizing: border-box;
-  grid-area: initial;
-  width: 100vw;
-  height: 100vh;
+	background: linear-gradient(
+		to top right,
+		rgba(24, 22, 57, 1),
+		rgba(63, 36, 51, 1),
+		rgba(71, 52, 101, 1),
+		rgba(141, 40, 64, 1),
+		rgba(191, 36, 58, 1)
+	);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	box-sizing: border-box;
+	grid-area: initial;
+	width: 100vw;
+	height: 100vh;
 
-  * {
-    user-select: none;
-    box-sizing: border-box;
-  }
+	* {
+		user-select: none;
+		box-sizing: border-box;
+	}
 
-  #login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 70%;
-    width: min(40%, 400px);
-    background: white;
-    border-radius: 10px;
-    border: 1px solid white;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
+	#login-form {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-evenly;
+		height: 70%;
+		width: min(40%, 400px);
+		background: white;
+		border-radius: 10px;
+		border: 1px solid white;
+		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
 
-    img {
-      width: 50%;
-      margin: 20px 0px;
-    }
+		img {
+			width: 50%;
+			margin: 20px 0px;
+		}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-evenly;
-      padding: 20px 20px 10px 20px;
-      // gap: 20px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
-      width: 60%;
-      height: 50%;
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-evenly;
+			padding: 20px 20px 10px 20px;
+			// gap: 20px;
+			background: white;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.25);
+			width: 60%;
+			height: 50%;
 
-      .float-label-field {
-        position: relative;
-        padding-right: 40px;
-        border-radius: 5px;
-        margin: 0;
-        border: 1px solid #ccc;
+			.float-label-field {
+				position: relative;
+				padding-right: 40px;
+				border-radius: 5px;
+				margin: 0;
+				border: 1px solid #ccc;
 
-        .biSolidUserRectangle,
-        .grFormViewHide,
-        .grFormView {
-          position: absolute;
-          top: 5px;
-          right: 5px;
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          border: 0;
-        }
+				.biSolidUserRectangle,
+				.grFormViewHide,
+				.grFormView {
+					position: absolute;
+					color: base.$darkbrown;
+					stroke: base.$darkbrown;
+					top: 5px;
+					right: 5px;
+					width: 30px;
+					height: 30px;
+					border-radius: 50%;
+					border: 0;
 
-        .grFormViewHide,
-        .grFormView {
-          cursor: pointer;
-          transition: opacity 0.2s, visibility 0.2s;
-        }
+					path {
+						stroke: base.$darkbrown;
+					}
+				}
 
-        .hide {
-          opacity: 0;
-          visibility: hidden;
-        }
+				.grFormViewHide,
+				.grFormView {
+					cursor: pointer;
+					transition: opacity 0.2s, visibility 0.2s;
+				}
 
-        .show {
-          opacity: 1;
-          visibility: visible;
-        }
+				.hide {
+					opacity: 0;
+					visibility: hidden;
+				}
 
-        input {
-          background: white;
-          height: 40px;
-          width: 100%;
-          border-radius: 5px;
-          padding: 3px 3px 3px 3px;
-          border: none;
-          margin: 0;
-        }
-      }
-    }
-  }
+				.show {
+					opacity: 1;
+					visibility: visible;
+				}
+
+				input {
+					background: white;
+					height: 40px;
+					width: 100%;
+					border-radius: 5px;
+					padding: 3px 3px 3px 3px;
+					border: none;
+					margin: 0;
+				}
+			}
+		}
+	}
 }

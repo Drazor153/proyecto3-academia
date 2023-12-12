@@ -1,188 +1,298 @@
-@use 'base';
+@import 'base';
 
 .profile {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: auto calc(80% - 2rem);
-  height: 100%;
-  padding: 1rem;
-  width: 100%;
+	display: grid;
+	grid-template-columns: 20% calc(80% - 10px);
+	gap: 10px;
+	margin: 10px;
+	padding: 10px;
+	overflow-y: auto;
+	width: auto;
 
-  h2 {
-    background-color: base.$crimsonred;
-    border-radius: 0.5rem 0.5rem 0 0;
-  }
-  &,
-  * {
-    box-sizing: border-box;
-  }
-  .profile-container {
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 1rem rgba(black, 0.3);
-    display: grid;
-    grid-template-rows: 40px 200px auto;
-    height: max-content;
-    width: 100%;
+	@media (max-width: 768px) {
+		grid-template-columns: 100%;
+		grid-template-rows: max-content max-content;
+		padding-block: 0;
+		margin-block: 0;
+	}
 
-    .faUser {
-      height: 100%;
-      width: 100%;
-      margin: auto;
-      padding: 1rem;
-      color: grey;
-    }
+	&,
+	* {
+		box-sizing: border-box;
+	}
 
-    .profile-options {
-      border-radius: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      height: 100%;
-      padding-bottom: 0.75rem;
-      padding: 1rem 0.75rem;
-      width: 100%;
+	& > section {
+		padding: 0;
+		margin: 0;
+	}
 
-      .profile-option {
-        align-items: center;
-        background-color: rgba($color: base.$crimsonred, $alpha: 0.7);
-        color: white;
-        display: flex;
-        font-size: 1.5rem;
-        height: 40px;
-        margin: 0;
-        padding: 5px 10px;
-        transition: all 0.3s ease-in-out;
-        width: 100%;
+	h2 {
+		width: 100%;
+	}
 
-        &:hover,
-        &.active {
-          background-color: base.$crimsonred;
-        }
+	&-personal-info {
+		align-items: center;
+		background-color: #faedf0;
+		border-radius: 15px;
+		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
 
-        .profile-option-icon {
-          color: grey;
-          font-size: 3rem;
-        }
+		.faUser {
+			background-color: $crimsonred;
+			color: $white;
+			padding: 20px;
+			border-radius: 50%;
+			width: 70%;
+			height: auto;
+			aspect-ratio: 1;
 
-        .profile-option-title {
-          color: black;
-          font-size: 1.5rem;
-          font-weight: 500;
-          margin-top: 1rem;
-        }
-      }
-    }
-  }
+			@media (max-width: 1366px) {
+				width: 50%;
+			}
 
-  .profile-basic-content,
-  .profile-academic-content {
-    background-color: white;
-    box-shadow: 0 0 1rem rgba(black, 0.3);
-    margin: 0;
-    padding: 0;
-  }
+			@media (max-width: 768px) {
+				width: 25%;
+			}
+		}
 
-  .profile-basic-content {
-    .profile-form {
-      display: grid;
-      grid-template-columns: repeat(2, auto);
-      gap: 2rem;
-      padding: 1rem;
-      margin: 1rem auto;
-      width: 50%;
+		.info {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 20px;
+			width: 100%;
+			overflow: auto;
+			flex: 1;
 
-      .profile-form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+			&-item {
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 1.5rem;
+				width: 80%;
 
-        .profile-form-label {
-          font-size: 1.5rem;
-          font-weight: 500;
-          // box-shadow: 0 0.5rem 1rem rgba(black, 0.3);
-        }
+				@media (max-width: 1366px) {
+					width: 100%;
+				}
 
-        .profile-form-input {
-          background-color: white;
-          border-radius: 0.5rem;
-          border: 0;
-          // border-bottom: 1px solid grey;
-          box-shadow: 0 0.5rem 1rem rgba(black, 0.3);
-          font-size: 1.5rem;
-          height: 40px;
-          padding: 0.5rem;
-          width: 100%;
-        }
+				&-label {
+					font-weight: bold;
+					width: 100%;
+					margin-bottom: 10px;
+				}
 
-        .profile-form-input:focus {
-          outline: none;
-        }
+				&-value {
+					padding: 0 10px;
+					display: flex;
+					align-items: center;
+					background-color: $white;
+					width: 100%;
+					height: 40px;
+					border-radius: 5px;
+					box-shadow: 0 1.5px 5px 0 rgba(0, 0, 0, 0.3);
+					overflow: hidden;
+					text-wrap: nowrap;
+				}
+			}
 
-        .profile-form-input::placeholder {
-          color: grey;
-        }
-      }
-    }
-  }
+			@media (max-width: 1366px) {
+				padding: 0 10px 10px 10px;
+			}
+		}
 
-  .profile-academic-content {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 40px max-content auto;
+		@media (max-width: 768px) {
+			height: max-content;
+		}
+	}
 
-    .academic-mesh-section {
-      border: none;
-      box-shadow: none;
-      margin: 0;
-      padding: 1rem;
-      height: max-content;
+	&-academic-info {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		gap: 10px;
+		height: 100%;
+		box-shadow: none;
 
-      .mesh-container {
-        // display: flex;
-        display: grid;
-        background-color: #faedf0;
-        // background-color: rgba($color: #ccffff, $alpha: 0.7);
-        grid-template-columns: repeat(10, 150px);
-        gap: 0.5rem;
-        border-radius: 0.5rem;
-        // border: 2px solid grey;
-        padding: 0.5rem;
-        margin: 0.5rem;
-        // width: 100%;
-        // width: max-content;
-        box-shadow: 0 0 1rem rgba(black, 0.4);
-        overflow-x: scroll;
-        .mesh-item {
-          height: 130px;
-          width: 130px;
-          text-align: center;
-          display: grid;
-          place-items: center;
-          border-radius: 0.5rem;
-          border: 1px solid grey;
+		& > section {
+			width: 100%;
+			max-width: 100%;
 
-          &[data-state='approved'] {
-            // background-color: #aff3b8;
-            background-color: rgba($color: yellowgreen, $alpha: 0.5);
-          }
+			background-color: #faedf0;
+			margin: 0;
+			padding: 0;
+			border-radius: 15px;
+			box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+		}
 
-          &[data-state='course'] {
-            // background-color: #f5f5a3;
-            background-color: rgba($color: yellow, $alpha: 0.25);
-          }
+		.timeline {
+			gap: 0;
+			// flex: 1;
+			height: 75%;
 
-          &[data-state='failed'] {
-            // background-color: #ff6c6c;
-            background-color: rgba($color: red, $alpha: 0.5);
-          }
+			h3 {
+				margin-left: 10px;
+			}
 
-          &[data-state='pending'] {
-            // background-color: #f5f5a3;
-            background-color: white;
-          }
-        }
-      }
-    }
-  }
+			.container {
+				flex: 1;
+				padding: 10px;
+				display: flex;
+				height: 0;
+				overflow-x: auto;
+
+				section {
+					flex: 1;
+					height: 100%;
+					margin: 0;
+					padding: 0;
+					box-shadow: none;
+					gap: 0;
+
+					.content {
+						height: calc((100% - 100px) / 2);
+						display: flex;
+						flex-direction: column-reverse;
+						justify-content: end;
+						overflow-y: scroll;
+
+						& > ul {
+							display: flex;
+							flex-direction: column;
+							height: max-content;
+
+							li {
+								list-style: none;
+								position: relative;
+								display: flex;
+								flex-direction: column;
+								justify-content: center;
+								padding-left: 20px;
+
+								&.year {
+									order: 1;
+								}
+
+								&::before {
+									content: '';
+									bottom: 0;
+									left: 0;
+									position: absolute;
+									width: 15px;
+									height: 50%;
+									border-left: 2px solid $crimsonred;
+									border-top: 2px solid $crimsonred;
+								}
+
+								&.semester {
+									margin-left: 20px;
+								}
+
+								&.status {
+									margin-left: 40px;
+								}
+							}
+						}
+					}
+
+					&:nth-child(even) {
+						justify-content: end;
+						flex-direction: column-reverse;
+
+						.content {
+							justify-content: start;
+							flex-direction: column;
+
+							& > ul {
+								li {
+									&.year {
+										order: 0;
+									}
+
+									&::before {
+										top: 0;
+										border-bottom: 2px solid $crimsonred;
+										border-top: none;
+									}
+
+									&.semester {
+										&::after {
+											content: '';
+											top: 0;
+											left: -20px;
+											position: absolute;
+											width: 2;
+											height: 100%;
+											border-left: 2px solid $crimsonred;
+										}
+									}
+								}
+							}
+						}
+					}
+
+					.right-chevron {
+						width: 100%;
+						height: 100px;
+						clip-path: polygon(
+							75% 0%,
+							100% 50%,
+							75% 100%,
+							0% 100%,
+							25% 50%,
+							0% 0%
+						);
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+
+						h3 {
+							height: 100%;
+							width: 100%;
+							color: $white;
+							margin: 0;
+							overflow: hidden;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							justify-content: space-between;
+
+							span {
+								width: min-content;
+								height: 50%;
+								display: flex;
+
+								&:first-child {
+									align-items: end;
+								}
+
+								&:last-child {
+									align-items: start;
+								}
+
+								@media (max-width: 1366px) {
+									height: 100%;
+
+									&:first-child {
+										align-items: center;
+									}
+
+									&:last-child {
+										display: none;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.info {
+			flex: 1;
+		}
+	}
 }

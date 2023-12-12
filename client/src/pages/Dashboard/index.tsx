@@ -15,11 +15,7 @@ function Dashboard() {
 
   const role = useAppSelector(state => state.userReducer.role);
 
-  const {
-    data: announcement,
-    // isLoading,
-    isSuccess,
-  } = useGetAnnouncementsQuery(null);
+  const { data: announcement, isSuccess } = useGetAnnouncementsQuery(null);
 
   return (
     <>

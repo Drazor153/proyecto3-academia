@@ -14,6 +14,7 @@ interface InputComponentProps {
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	value?: string;
 	maxLength?: number;
+	autocomplete?: string;
 }
 
 function FloatLabelInput({
@@ -24,6 +25,7 @@ function FloatLabelInput({
 	onChange,
 	value,
 	maxLength,
+	autocomplete
 }: InputComponentProps) {
 	const [isFocused, setIsFocused] = useState(false);
 	const [hasValue, setHasValue] = useState(false);
@@ -61,6 +63,7 @@ function FloatLabelInput({
 				onBlur={handleBlur}
 				value={value}
 				maxLength={maxLength}
+				autoComplete={autocomplete ?? 'on'}
 			/>
 			{children}
 		</fieldset>

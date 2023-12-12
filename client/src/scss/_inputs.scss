@@ -20,6 +20,15 @@
 	width: 100%;
 	font-size: 18px;
 	border-bottom: solid 1px base.$lightgrey;
+
+	&:-webkit-autofill,
+	&:-webkit-autofill:hover,
+	&:-webkit-autofill:focus,
+	&:-webkit-autofill:active {
+		-webkit-background-clip: text;
+		transition: background-color 5000s ease-in-out 0s;
+		background-color: transparent !important;
+	}
 }
 
 .float-label-field label {
@@ -35,11 +44,11 @@
 }
 
 .float-label-field.focus label {
-	color: base.$bluemarine;
+	color: base.$crimsonred;
 }
 
 .float-label-field.focus input {
-	border-bottom: solid 1px base.$bluemarine;
+	border-bottom: solid 1px base.$darkbrown;
 }
 
 .float-label-field.float label {
@@ -83,6 +92,15 @@ input[type='number'] {
 
 		&--is-focused {
 			background-color: base.$crimsonred !important;
+			color: white !important;
+		}
+	}
+
+	&__multi-value {
+		background-color: rgba($color: base.$crimsonred, $alpha: 0.7) !important;
+		color: white !important;
+
+		&__label {
 			color: white !important;
 		}
 	}

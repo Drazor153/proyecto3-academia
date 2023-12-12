@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { t } from 'i18next';
 import SearchStudent from './components/SearchStudent';
 import AnnouncementTable from './components/AnnouncementTable';
+import JustificationDetails from './components/JustificationsDetails';
 import { administrationItems } from '../../utils/pages';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +18,7 @@ const menus: Menus = {
   students: {
     registration: <FormNewStudent />,
     search: <SearchStudent />,
+    justifications: <JustificationDetails />,
   },
   announcement: {
     manage: <AnnouncementTable />,

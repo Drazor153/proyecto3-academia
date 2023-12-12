@@ -15,20 +15,7 @@ import { Student } from '../../../utils/types';
 import { IoMdSchool } from 'react-icons/io';
 import Modal from '../../../components/Modal';
 import { useTranslation } from 'react-i18next';
-
-export function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import { handleRUNChange, useDebounce } from '@/utils/functions';
 
 function ShowStudentCareer({ run }: { run: number }) {
   const { data, isLoading, isFetching, isError } =
@@ -92,13 +79,6 @@ function SearchStudent() {
     return digits;
   };
 
-  const handleRUNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newRUN = event.target.value;
-    if (newRUN.length > 12) return;
-    const cleanRUN = newRUN.replace(/[^0-9kK]/g, '').toUpperCase();
-    setRun(formatRut(cleanRUN, RutFormat.DOTS_DASH));
-  };
-
   useEffect(() => {
     const run: string = runWithoutDv(debouncedRun);
     setPage(1);
@@ -146,7 +126,7 @@ function SearchStudent() {
                 <input
                   id="run-search"
                   type="text"
-                  onChange={handleRUNChange}
+                  onChange={e => handleRUNChange(e, setRun)}
                   value={run}
                 />
               </fieldset>
