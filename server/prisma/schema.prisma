@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -26,7 +27,8 @@ model User {
   enrols        enrols[]
   gives         gives[]
   Lesson        Lesson[]
-  attendance    attendance[]
+  Attendance    Attendance[]
+  Justification Justification[]
   Announcement  Announcement[]
 }
 
@@ -96,17 +98,38 @@ model Class {
   contents   String
   lesson     Lesson       @relation(fields: [lessonId], references: [id])
   lessonId   Int
-  attendance attendance[]
+  attendance Attendance[]
 }
 
-model attendance {
-  class      Class   @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  classId    Int
-  student    User    @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
-  studentRun Int
-  attended   Boolean @default(false)
+//this is now a whole entity!
+model Attendance {
+  class             Class          @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  classId           Int
+  student           User           @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+  studentRun        Int
+
+  //added this to refer to justification model ;d
+  justification     Justification? @relation(fields: [justificationId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  justificationId   Int?
+
+  attended          Boolean        @default(false)
+
 
   @@id([classId, studentRun])
+}
+
+//Justification entity
+model Justification{
+  id               Int             @id @default(autoincrement())
+  init_ausencia    DateTime        @default(now())
+  end_ausencia     DateTime        @default(now())
+  num_inasistente  Int             //<-- I got doubts about this, is this a composite for (end_ausencia - init_ausencia)?
+  reason           String
+  file             String
+  approved         String               //Boolean?
+  Attendance       Attendance[]
+  student          User           @relation(fields: [studentRun],references: [run],onDelete: Cascade,onUpdate: Cascade)
+  studentRun       Int
 }
 
 model Announcement {
@@ -123,7 +146,7 @@ model Announcement {
   updated_at DateTime @updatedAt
   expires_at DateTime
 
-  user User? @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  user       User?    @relation(fields: [run], references: [run], onDelete: SetNull, onUpdate: Cascade)
   // category Category @relation(fields: [categoryId], references: [id])
 }
 
