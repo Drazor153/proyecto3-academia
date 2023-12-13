@@ -6,6 +6,8 @@ import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { json, urlencoded } from 'express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 const httpsOptions = {
   key: fs.readFileSync('./ssl/key.pem', 'utf8'),
@@ -13,11 +15,22 @@ const httpsOptions = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions,
   });
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+
   const configService = app.get(ConfigService);
   const port = configService.get('port');
+
+  const config = new DocumentBuilder()
+    .setTitle('Enacad API')
+    .setDescription('Enacad API description')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   app.useLogger(app.get(Logger));
 

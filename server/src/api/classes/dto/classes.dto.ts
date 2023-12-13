@@ -1,11 +1,12 @@
 import { Type } from 'class-transformer';
 import {
-  IsNumberString,
-  IsNotEmpty,
-  IsInt,
-  IsString,
   IsArray,
   IsBoolean,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsNumberString,
+  IsString,
   ValidateNested,
 } from 'class-validator';
 export class LessonParams {
@@ -29,8 +30,8 @@ export class CreateClassDto {
   lessonId: number;
 
   @IsNotEmpty()
-  @IsInt()
-  week: number;
+  @IsDate()
+  date: Date;
 
   @IsNotEmpty()
   @IsString()

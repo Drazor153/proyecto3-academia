@@ -1,10 +1,10 @@
 import {
-  IsNumberString,
-  IsString,
-  IsNotEmpty,
   IsAlphanumeric,
-  IsOptional,
   IsInt,
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
 } from 'class-validator';
 
 export class PaginatedStudentsQuery {

@@ -13,7 +13,7 @@ import { hashPassword } from '@/common/bcrypt';
 export class StudentsService {
   constructor(
     private prisma: PrismaService,
-    private sanity: StudentsSanitizersService,
+    private sanity: StudentsSanitizersService
   ) {}
 
   // async getAllStudents() {
@@ -59,7 +59,7 @@ export class StudentsService {
         (student) =>
           String(student.run).startsWith(run) &&
           student.enrols[0].levelCode.includes(level) &&
-          student.name.toLowerCase().startsWith(name ? name.toLowerCase() : ''),
+          student.name.toLowerCase().startsWith(name ? name.toLowerCase() : '')
       )
       .map((student) => ({
         run: student.run,
@@ -107,7 +107,7 @@ export class StudentsService {
 
     if (!studentQuery) {
       return { error: 'El estudiante no existe' };
-    } 
+    }
 
     const sanitized = this.sanity.sanitizeStudentCareer(studentQuery);
 
@@ -132,7 +132,7 @@ export class StudentsService {
     }
 
     const hashedPassword = await hashPassword(
-      `${run}_${first_surname.toUpperCase()}`,
+      `${run}_${first_surname.toUpperCase()}`
     );
     const student = await this.prisma.user.create({
       data: {

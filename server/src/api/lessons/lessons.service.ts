@@ -80,13 +80,13 @@ export class LessonsService {
           },
         },
         orderBy: {
-          week: 'desc',
+          date: 'desc',
         },
       });
 
       const classes = query.map((val) => ({
         id: val.id,
-        week: val.week,
+        date: val.date,
         contents: val.contents,
         teacher: {
           name: val.lesson.teacher?.name,
@@ -114,7 +114,7 @@ export class LessonsService {
         },
       },
       orderBy: {
-        week: 'desc',
+        date: 'desc',
       },
     });
 

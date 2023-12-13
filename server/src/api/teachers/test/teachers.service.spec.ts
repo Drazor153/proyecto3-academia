@@ -8,7 +8,7 @@ describe('TeachersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule(
-      getModuleMetadata(moduleMetadata),
+      getModuleMetadata(moduleMetadata)
     ).compile();
 
     service = module.get<TeachersService>(TeachersService);

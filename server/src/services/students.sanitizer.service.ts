@@ -38,7 +38,7 @@ export class StudentsSanitizersService {
         return;
       }
       const semesterExists = yearExists.semesters.find(
-        (semester) => semester.semester === val.semester,
+        (semester) => semester.semester === val.semester
       );
       if (!semesterExists) {
         yearExists.semesters.push({
@@ -57,7 +57,7 @@ export class StudentsSanitizersService {
         return;
       }
       const levelExists = semesterExists.levels.find(
-        (level) => level.code === val.level.code,
+        (level) => level.code === val.level.code
       );
       if (!levelExists) {
         semesterExists.levels.push({
@@ -76,7 +76,7 @@ export class StudentsSanitizersService {
   }
   sanitizeStudentGrades(
     topics: Topic[],
-    input: StudentGradesRaw[],
+    input: StudentGradesRaw[]
   ): StudentGradesSanitized[] {
     const dataArray: StudentGradesSanitized[] = topics.map((topic) => ({
       topic: topic.name,
@@ -85,7 +85,7 @@ export class StudentsSanitizersService {
 
     input.forEach((val) => {
       const topicExists = dataArray.find(
-        (topic) => topic.topic === val.topic.name,
+        (topic) => topic.topic === val.topic.name
       );
       if (!topicExists) {
         dataArray.push({
@@ -100,7 +100,7 @@ export class StudentsSanitizersService {
         return;
       }
       const quizExists = topicExists.quizzes.find(
-        (quiz) => quiz.quizNumber === val.number,
+        (quiz) => quiz.quizNumber === val.number
       );
       if (!quizExists) {
         topicExists.quizzes.push({
@@ -129,7 +129,7 @@ export class StudentsSanitizersService {
         return;
       }
       const semesterExists = yearExists.semesters.find(
-        (semester) => semester === val.semester,
+        (semester) => semester === val.semester
       );
       if (!semesterExists) {
         yearExists.semesters.push(val.semester);

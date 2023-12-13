@@ -8,7 +8,7 @@ describe('AnnouncementsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule(
-      getModuleMetadata(moduleMetadata),
+      getModuleMetadata(moduleMetadata)
     ).compile();
 
     controller = module.get<AnnouncementsController>(AnnouncementsController);

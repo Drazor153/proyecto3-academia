@@ -7,12 +7,12 @@ export class ClassesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateClassDto) {
-    const { attendance, contents, lessonId, week } = data;
+    const { attendance, contents, lessonId, date } = data;
 
     return this.prisma.class.create({
       data: {
         lessonId,
-        week,
+        date,
         contents,
         attendance: {
           createMany: {

@@ -12,7 +12,7 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isNoAccess = this.reflector.get<boolean>(
       ACCESS_KEY,
-      context.getHandler(),
+      context.getHandler()
     );
     if (isNoAccess) {
       return true;

@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -95,7 +95,7 @@ model Lesson {
 
 model Class {
   id         Int          @id @default(autoincrement())
-  date       DateTime
+  date       DateTime     @default(now())
   contents   String
   lesson     Lesson       @relation(fields: [lessonId], references: [id])
   lessonId   Int

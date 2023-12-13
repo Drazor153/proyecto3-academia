@@ -1,14 +1,14 @@
 import {
-  Controller,
-  UseGuards,
-  Get,
-  Post,
   Body,
-  Query,
+  Controller,
   Delete,
+  Get,
   Param,
-  Req,
+  Post,
   Put,
+  Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { RoleEnum, Roles } from '@/guards/roles.decorator';
@@ -21,13 +21,15 @@ import {
 } from './dto/announcement.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { UserRequest } from '@/interfaces/request.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Announcements')
 @Controller('api/announcements')
 @UseGuards(RolesGuard)
 export class AnnouncementsController {
   constructor(
     private readonly announcementsService: AnnouncementsService,
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     this.logger.setContext(AnnouncementsController.name);
   }
@@ -49,11 +51,11 @@ export class AnnouncementsController {
   @Roles(RoleEnum.Admin)
   getAllAnnouncements(@Query() query: AnnouncementQuery) {
     this.logger.info(
-      `Admin getting students with size: ${query.size} and page: ${query.page}`,
+      `Admin getting students with size: ${query.size} and page: ${query.page}`
     );
     return this.announcementsService.getAllAnnouncements(
       +query.size,
-      +query.page,
+      +query.page
     );
   }
 
@@ -61,12 +63,12 @@ export class AnnouncementsController {
   @Roles(RoleEnum.Admin)
   async createAnnouncement(
     @Req() req: UserRequest,
-    @Body() data: CreateAnnouncementDto,
+    @Body() data: CreateAnnouncementDto
   ) {
     this.logger.info(`Admin creating announcement with data: ${data}`);
     const announcement = await this.announcementsService.createAnnouncement(
       req.user.sub,
-      data,
+      data
     );
     return { msg: 'Announcement created successfully', data: announcement.id };
   }
@@ -75,7 +77,7 @@ export class AnnouncementsController {
   @Roles(RoleEnum.Admin)
   async updateAnnouncement(
     @Param() params: DeleteAnnouncementParams,
-    @Body() data: UpdateAnnouncementDto,
+    @Body() data: UpdateAnnouncementDto
   ) {
     this.logger.info(`Admin updating announcement with id: ${params.id}`);
     await this.announcementsService.updateAnnouncement(+params.id, data);

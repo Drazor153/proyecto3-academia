@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
-import { AttendanceDto, CreateNewJustificationDto, GetJustificationsDto } from './dto/justification.dto';
+import {
+  AttendanceDto,
+  CreateNewJustificationDto,
+  GetJustificationsDto,
+} from './dto/justification.dto';
 
 @Injectable()
 export class JustificationService {
-  constructor(
-    private prisma: PrismaService
-  ){}
+  constructor(private prisma: PrismaService) {}
 
   //gettear todas las justificaciones (opcionalmente dar rut y estado de approved para filtrar)
-  async getJustifications(queryParams: GetJustificationsDto){
-    const {name,run,approved} = queryParams //<- name sin usar btw ;-;
+  async getJustifications(queryParams: GetJustificationsDto) {
+    const { name, run, approved } = queryParams; //<- name sin usar btw ;-;
     const query = await this.prisma.justification.findMany({
-      select:{
+      select: {
         id: true,
         studentRun: true,
         init_ausencia: true,
@@ -21,9 +23,9 @@ export class JustificationService {
         reason: true,
         file: true,
         approved: true,
-        Attendance: true
-      }
-    })
+        Attendance: true,
+      },
+    });
 
     //filtro penquita que chamuye acá ;-; (no utiliza el nombre btw pq no tenia mucha idea de como hacer un join)
     const justifications = query
@@ -32,7 +34,7 @@ export class JustificationService {
           String(justification.studentRun).startsWith(String(run)) &&
           justification.approved.startsWith(approved)
       )
-      .map((justification) =>({
+      .map((justification) => ({
         id: justification.id,
         studentRun: justification.studentRun,
         init_ausencia: justification.init_ausencia,
@@ -41,12 +43,10 @@ export class JustificationService {
         reason: justification.reason,
         file: justification.file,
         approved: justification.approved,
-        Attendance: justification.Attendance
-
-      }))
+        Attendance: justification.Attendance,
+      }));
     return justifications;
   }
-
 
   /*
   {
@@ -69,8 +69,8 @@ export class JustificationService {
     reason_i,
     file_i,
     approved_i,
-    attendance
-  }: CreateNewJustificationDto){
+    attendance,
+  }: CreateNewJustificationDto) {
     const justif = await this.prisma.justification.create({
       data: {
         studentRun: run,
@@ -79,9 +79,9 @@ export class JustificationService {
         num_inasistente: numInasistente,
         reason: reason_i,
         file: file_i,
-        approved: approved_i
+        approved: approved_i,
       },
-      select:{
+      select: {
         id: true,
         studentRun: true,
         init_ausencia: true,
@@ -89,26 +89,24 @@ export class JustificationService {
         num_inasistente: true,
         reason: true,
         file: true,
-      }
-    })
-    const id = justif.id
+      },
+    });
+    const id = justif.id;
 
     //no podia asignar las ids del Attendance, asi que se me ocurrió esto.
     return await this.prisma.justification.update({
-      where: {id},
-      data:{
+      where: { id },
+      data: {
         Attendance: {
           updateMany: attendance.map((val) => ({
             where: { classId: val.classId, studentRun: val.studentRun },
             data: { justificationId: id },
-          }))
-        }
-      }
-    })
-    
+          })),
+        },
+      },
+    });
   }
 
-  
   // create(createJustificationDto: CreateJustificationDto) {
   //   return 'This action adds a new justification';
   // }

@@ -1,11 +1,11 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
   Param,
-  Body,
-  UseGuards,
+  Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import {
@@ -17,14 +17,16 @@ import { PinoLogger } from 'nestjs-pino';
 import { RolesGuard } from '@/guards/roles.guard';
 import { RoleEnum, Roles } from '@/guards/roles.decorator';
 import { UserRequest } from '@/interfaces/request.interface';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Teachers')
 @Controller('api/teachers')
 @UseGuards(RolesGuard)
 @Roles(RoleEnum.Teacher, RoleEnum.Admin)
 export class TeachersController {
   constructor(
     private readonly teachersService: TeachersService,
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     this.logger.setContext(TeachersController.name);
   }
@@ -38,7 +40,7 @@ export class TeachersController {
   @Get('grades/:year/:semester/:level')
   getLevelsQuizzes(@Param() params: GetLevelsQuizzesParams) {
     this.logger.info(
-      `Teacher is getting quizzes from ${params.level}, ${params.year}, ${params.semester}`,
+      `Teacher is getting quizzes from ${params.level}, ${params.year}, ${params.semester}`
     );
     return this.teachersService.getLevelsQuizzes(params);
   }

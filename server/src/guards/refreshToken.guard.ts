@@ -11,7 +11,7 @@ export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isNoRefresh = this.reflector.get<boolean>(
       'refresh',
-      context.getHandler(),
+      context.getHandler()
     );
     if (isNoRefresh) {
       return true;

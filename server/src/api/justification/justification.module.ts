@@ -7,7 +7,7 @@ export const moduleMetadata: ModuleMetadata = {
   imports: [PrismaModule],
   controllers: [JustificationController],
   providers: [JustificationService],
-}
+};
 
 @Module(moduleMetadata)
 export class JustificationModule {}

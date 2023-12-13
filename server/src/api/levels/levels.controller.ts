@@ -3,14 +3,16 @@ import { LevelsService } from './levels.service';
 import { RolesGuard } from '@/guards/roles.guard';
 import { RoleEnum, Roles } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Levels')
 @Controller('api/levels')
 @UseGuards(RolesGuard)
 @Roles(RoleEnum.Admin, RoleEnum.Student)
 export class LevelsController {
   constructor(
     private readonly levelsService: LevelsService,
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     this.logger.setContext(LevelsController.name);
   }

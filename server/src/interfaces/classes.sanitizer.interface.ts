@@ -1,6 +1,6 @@
 export interface LessonClassesRaw {
   id: number;
-  week: number;
+  date: Date;
   contents: string;
   lessonId: number;
   attendance: ({
@@ -19,7 +19,7 @@ export interface LessonClassesRaw {
 
 export interface LessonClassesSanitized {
   id: number;
-  week: number;
+  date: Date;
   contents: string;
   attendance: {
     run: number;

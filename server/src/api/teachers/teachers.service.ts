@@ -15,7 +15,7 @@ export class TeachersService {
   constructor(
     private prisma: PrismaService,
     private sanity: TeachersSanitizersService,
-    private logger: PinoLogger,
+    private logger: PinoLogger
   ) {
     this.logger.setContext(TeachersService.name);
   }
@@ -58,7 +58,7 @@ export class TeachersService {
 
     const topicQuizzesSanitizied = this.sanity.sanitizeTopicQuizzes(
       topics,
-      topicQuizzesQuery,
+      topicQuizzesQuery
     );
 
     return {

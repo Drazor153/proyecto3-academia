@@ -1,10 +1,10 @@
 import {
+  Body,
   Controller,
+  Delete,
+  Param,
   Post,
   Put,
-  Delete,
-  Body,
-  Param,
   UseGuards,
 } from '@nestjs/common';
 import { ClassesService } from './classes.service';
@@ -16,14 +16,16 @@ import {
 import { RoleEnum, Roles } from '@/guards/roles.decorator';
 import { RolesGuard } from '@/guards/roles.guard';
 import { PinoLogger } from 'nestjs-pino';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Classes')
 @Controller('api/classes')
 @UseGuards(RolesGuard)
 @Roles(RoleEnum.Teacher, RoleEnum.Admin)
 export class ClassesController {
   constructor(
     private readonly classesService: ClassesService,
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     this.logger.setContext(ClassesController.name);
   }

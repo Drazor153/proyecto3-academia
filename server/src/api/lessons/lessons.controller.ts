@@ -5,13 +5,15 @@ import { RolesGuard } from '@/guards/roles.guard';
 import { RoleEnum, Roles } from '@/guards/roles.decorator';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Lessons')
 @Controller('api/lesson')
 @UseGuards(RolesGuard)
 export class LessonsController {
   constructor(
     private readonly lessonsService: LessonsService,
-    private readonly logger: PinoLogger,
+    private readonly logger: PinoLogger
   ) {
     this.logger.setContext(LessonsController.name);
   }

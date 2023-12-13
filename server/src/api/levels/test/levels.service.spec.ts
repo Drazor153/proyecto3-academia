@@ -8,7 +8,7 @@ describe('LevelsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule(
-      getModuleMetadata(moduleMetadata),
+      getModuleMetadata(moduleMetadata)
     ).compile();
 
     service = module.get<LevelsService>(LevelsService);

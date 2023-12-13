@@ -1,11 +1,11 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY, RoleEnum } from './roles.decorator';
+import { RoleEnum, ROLES_KEY } from './roles.decorator';
 import { UserRequest } from 'src/interfaces/request.interface';
 
 @Injectable()

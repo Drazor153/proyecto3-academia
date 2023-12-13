@@ -12,7 +12,7 @@ export class AnnouncementsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly annRepository: AnnouncementsRepository,
-    private readonly sanity: AnnouncementsSanitizersService,
+    private readonly sanity: AnnouncementsSanitizersService
   ) {}
 
   async getCategoriesTargets() {
