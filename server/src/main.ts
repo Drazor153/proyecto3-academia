@@ -45,6 +45,7 @@ async function bootstrap() {
       'https://localhost:5173',
       'https://10.242.212.120:5173',
       'https://10.242.251.119:5173',
+      'https://10.242.233.30:5173',
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

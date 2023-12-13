@@ -22,6 +22,6 @@
       "@/*": ["src/*"],
       "@common/*": ["src/common/*"],
     },
-    "types": ["node", "@types/jest", "Multer"]
+    "types": ["node", "@types/jest", "multer"]
   }
 }
