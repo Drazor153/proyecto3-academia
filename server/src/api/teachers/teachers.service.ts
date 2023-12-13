@@ -5,12 +5,13 @@ import {
   PostQuizzesGradesBody,
 } from './dto/teachers.dto';
 import { PinoLogger } from 'nestjs-pino';
+1;
 import { PrismaService } from '@/database/prisma.service';
-import { EnrolsStatus, RoleEnum } from '@/common/consts';
+import { EnrolsStatus, RoleEnum } from '@common/consts';
 import {
   sanitizeTeacherLevels,
   sanitizeTopicQuizzes,
-} from '../../sanitizers/teachers';
+} from '@/sanitizers/teachers';
 
 @Injectable()
 export class TeachersService {

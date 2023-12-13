@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma.service';
 import { EnrolsStatus, RoleEnum, UserStatus } from '../../common/consts';
 
 @Injectable()
-export class StudentsRepo {
+export default class StudentsRepo {
   constructor(private prisma: PrismaService) {}
 
   getActiveStudents() {

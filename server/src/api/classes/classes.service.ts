@@ -4,11 +4,11 @@ import {
   CreateClassDto,
   UpdateClassDto,
 } from '@/api/classes/dto/classes.dto';
-import { ClassesRepository } from './repository/classes';
+import { ClassesRepo } from '@repos';
 
 @Injectable()
 export class ClassesService {
-  constructor(private classesRepo: ClassesRepository) {}
+  constructor(private classesRepo: ClassesRepo) {}
 
   async createClass(data: CreateClassDto) {
     const query = await this.classesRepo.create(data);

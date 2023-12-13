@@ -1,20 +1,19 @@
 import {
   BadRequestException,
   ForbiddenException,
-  // ForbiddenException,
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { config } from '@/config/config';
 import { comparePassword, hashPassword } from '@/common/bcrypt';
-import { UsersRepository } from './repository/users';
-import { RoleEnum } from '../../common/consts';
+import { UsersRepo } from '@repos';
+import { RoleEnum } from '@/common/consts';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private usersRepo: UsersRepository
+    private usersRepo: UsersRepo
   ) {}
 
   async login(run: number, password: string) {

@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@common/*": ["src/common/*"],
+      "@repos": ["src/database/repositories/"],
     },
     "types": ["node", "@types/jest", "multer"]
   }

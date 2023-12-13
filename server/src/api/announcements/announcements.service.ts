@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { CreateAnnouncementDto } from './dto/announcement.dto';
 import { UserPayload } from '@/interfaces/request.interface';
-import { AnnouncementsRepository } from './repository/announcements';
+import { AnnouncementsRepo } from '@repos';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { AnnTargets, EnrolsStatus, RoleEnum } from '@common/consts';
 import { sanitizeAnnouncements } from '../../sanitizers/announcements';
@@ -10,7 +10,7 @@ import { sanitizeAnnouncements } from '../../sanitizers/announcements';
 export class AnnouncementsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly annRepository: AnnouncementsRepository
+    private readonly annRepository: AnnouncementsRepo
   ) {}
 
   async getCategoriesTargets() {

@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { PrismaModule } from '@/database/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { config } from '@/config/config';
-import { UsersRepository } from './repository/users';
 
 export const moduleMetadata: ModuleMetadata = {
   imports: [
@@ -17,7 +16,7 @@ export const moduleMetadata: ModuleMetadata = {
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersRepository],
+  providers: [AuthService],
 };
 @Module(moduleMetadata)
 export class AuthModule {}

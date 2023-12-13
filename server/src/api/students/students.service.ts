@@ -11,8 +11,8 @@ import {
   sanitizeStudentCareer,
   sanitizeStudentGrades,
   sanitizeStudentLevels,
-} from '../../sanitizers/students';
-import { StudentsRepo } from '../../database/repositories/student';
+} from '@/sanitizers/students';
+import { StudentsRepo } from '@repos';
 
 @Injectable()
 export class StudentsService {

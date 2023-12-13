@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
-export class UsersRepository {
+export default class UsersRepo {
   constructor(private prisma: PrismaService) {}
 
   findOne(run: number) {

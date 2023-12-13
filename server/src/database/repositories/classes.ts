@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
-import { CreateClassDto, UpdateClassDto } from '../dto/classes.dto';
+import {
+  CreateClassDto,
+  UpdateClassDto,
+} from '../../api/classes/dto/classes.dto';
 
 @Injectable()
-export class ClassesRepository {
+export default class ClassesRepo {
   constructor(private readonly prisma: PrismaService) {}
 
   create(data: CreateClassDto) {
