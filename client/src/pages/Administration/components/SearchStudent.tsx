@@ -2,18 +2,18 @@ import { t } from 'i18next';
 import {
 	useGetStudentCareerByRunQuery,
 	useLazyGetStudentsQuery,
-} from '../../../redux/services/studentsApi';
+} from '@/redux/services/studentsApi';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 
 import { useEffect, useState } from 'react';
 import { ThreeDots } from 'react-loading-icons';
-import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
+import { useGetLevelsQuery } from '@/redux/services/levelsApi';
 
 import Select from 'react-select';
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
-import { Student } from '../../../utils/types';
+import { Student } from '@/utils/types';
 import { IoMdSchool } from 'react-icons/io';
-import Modal from '../../../components/Modal';
+import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
 import { handleRUNChange, useDebounce } from '@/utils/functions';
 
@@ -202,7 +202,7 @@ function SearchStudent() {
 										? levels.data.map(({ code, name }) => ({
 												value: code,
 												label: t(name),
-										  }))
+											}))
 										: []
 								}
 								isClearable

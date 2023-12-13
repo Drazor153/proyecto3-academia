@@ -1,9 +1,9 @@
 import { t } from 'i18next';
 import { ChangeEvent } from 'react';
-import { AnnouncementType } from '../../../utils/types';
-import { compressImage } from '../../../utils/functions';
+import { AnnouncementType } from '@/utils/types';
+import { compressImage } from '@/utils/functions';
 import Select from 'react-select';
-import { useGetCategoriesTargetsQuery } from '../../../redux/services/announcementsApi';
+import { useGetCategoriesTargetsQuery } from '@/redux/services/announcementsApi';
 
 interface AnnouncementDetailsProps {
 	announcement: AnnouncementType;
@@ -73,12 +73,12 @@ function AnnouncementDetails({
 							className="react-select-container"
 							classNamePrefix="react-select"
 							value={{
-								value: announcement.category.id,
-								label: t(announcement.category.name),
+								value: announcement.category,
+								label: t(announcement.category),
 							}}
 							options={response.categories.map(
 								({ id: value, name: label }: { id: number; name: string }) => ({
-									value,
+									value: String(value),
 									label: t(label),
 								}),
 							)}
@@ -121,11 +121,11 @@ function AnnouncementDetails({
 							classNamePrefix="react-select"
 							value={{
 								value: announcement.target[0],
-								label: t(announcement.target[0].name),
+								label: t(announcement.target[0]),
 							}}
 							options={response.targets.map(
 								({ id: value, name: label }: { id: number; name: string }) => ({
-									value,
+									value: String(value),
 									label: t(label),
 								}),
 							)}

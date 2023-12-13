@@ -138,7 +138,7 @@ export class JustificationService {
       data: { approved },
     });
     console.log(res);
-    
+
     return { msg: 'justification_approved' };
   }
 

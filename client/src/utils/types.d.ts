@@ -129,7 +129,7 @@ export type AnnouncementType = {
 	expiresAt: string;
 	id: number;
 	image?: string;
-	target: Target[];
+	target: string[];
 	title: string;
 	updatedAt: string;
 };

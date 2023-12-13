@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { Academic, Personal } from './components';
-import { AcademicInfo, Timeline } from './components/academic/components';
+// import { AcademicInfo, Timeline } from './components/academic/components';
 
 export default function Profile() {
 	return (
