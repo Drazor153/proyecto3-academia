@@ -145,9 +145,34 @@ export type PostAnnouncement = Omit<
 	target: string[];
 };
 
-type StudentCareer = {
+export type StudentCareer = {
 	year: number;
-	semesters: number[];
+	semesters: {
+		semester: number;
+		paid: boolean;
+	}[];
 	level: string;
 	status: string;
 }[];
+
+export type Justification = {
+	id?: number;
+	name?: string;
+	first_surname?: string;
+	run: number;
+	dv?: string;
+	initAusencia: Date | string;
+	endAusencia: Date | string;
+	numInasistente: number;
+	reason: string;
+	file: File | string;
+	approved: string;
+	attendance: {
+		studentRun: number;
+		attended: boolean;
+	}[];
+};
+
+export type PostJustification = Omit<
+	Justification,
+	'attendance' | 'approved' | 'run' | 'numInasistente'>

@@ -60,3 +60,8 @@ export function useDebounce<T>(value: T, delay?: number): T {
 
   return debouncedValue;
 }
+
+export const getYYYYMMDD = (date: string) => {
+  const [day, month, year] = date.split('-');
+  return `${day}/${month}/${year.split('T')[0]}`;
+}

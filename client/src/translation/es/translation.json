@@ -117,6 +117,7 @@
 	"reject": "Rechazar",
 	"approve": "Aprobar",
 	"file": "Archivo",
+	"view_file": "Ver archivo",
 	"proficiency": "Proficiencia",
 	"description": "Descripción",
 	"justification_list": "Lista de justificaciones",
@@ -143,5 +144,11 @@
 	"calendar": "Calendario",
 	"calendar_menu": "Menú de calendario",
 	"exams": "Examenes",
-	"academic": "Academico"
+	"academic": "Academico",
+	"justification_created": "Justificación creada exitosamente",
+	"creating_justification": "Creando justificación",
+	"delete": "Eliminar",
+	"profile": "Perfil",
+	"personal_info": "Información personal",
+	"academic_timeline": "Historial académico"
 }
