@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import {
-  AttendanceDto,
   CreateNewJustificationDto,
   GetJustificationsDto,
 } from './dto/justification.dto';
 import { savePdf } from '../../common/storage';
+import { hasNextPage, paginate } from '../../common/paginate';
 
 @Injectable()
 export class JustificationService {
@@ -13,19 +13,9 @@ export class JustificationService {
 
   //gettear todas las justificaciones (opcionalmente dar rut y estado de approved para filtrar)
   async getAllJustifications(queryParams: GetJustificationsDto) {
-    const { name, run, approved } = queryParams; //<- name sin usar btw ;-;
+    const { page, size, name, run, approved } = queryParams; //<- name sin usar btw ;-;
     const query = await this.prisma.justification.findMany({
-      select: {
-        id: true,
-        studentRun: true,
-        init_ausencia: true,
-        end_ausencia: true,
-        num_inasistente: true,
-        reason: true,
-        file: true,
-        approved: true,
-        Attendance: true,
-      },
+      include: { student: true, Attendance: true },
     });
 
     //filtro penquita que chamuye acá ;-; (no utiliza el nombre btw pq no tenia mucha idea de como hacer un join)
@@ -33,20 +23,34 @@ export class JustificationService {
       .filter(
         (justification) =>
           String(justification.studentRun).startsWith(String(run)) &&
-          justification.approved.startsWith(approved)
+          justification.approved
+            .toLowerCase()
+            .startsWith(approved.toLowerCase()) &&
+          justification.student.name
+            .toLowerCase()
+            .startsWith(name.toLowerCase())
       )
       .map((justification) => ({
         id: justification.id,
         studentRun: justification.studentRun,
-        init_ausencia: justification.init_ausencia,
-        end_ausencia: justification.end_ausencia,
-        num_inasistente: justification.num_inasistente,
+        initAusencia: justification.init_ausencia,
+        endAusencia: justification.end_ausencia,
+        numInasistente: justification.num_inasistente,
         reason: justification.reason,
         file: justification.file,
         approved: justification.approved,
         Attendance: justification.Attendance,
+        name: justification.student.name,
+        first_surname: justification.student.first_surname,
+        run: justification.student.run,
+        dv: justification.student.dv,
       }));
-    return justifications;
+
+    const paginatedJustifications = paginate(justifications, +page, +size);
+    const previous = +page > 1;
+    const next = hasNextPage(justifications, +page, +size);
+
+    return { data: paginatedJustifications, next, previous };
   }
 
   /*
@@ -68,9 +72,9 @@ export class JustificationService {
     });
     const justifications = query.map((justification) => ({
       id: justification.id,
-      init_ausencia: justification.init_ausencia,
-      end_ausencia: justification.end_ausencia,
-      num_inasistente: justification.num_inasistente,
+      initAusencia: justification.init_ausencia,
+      endAusencia: justification.end_ausencia,
+      numInasistente: justification.num_inasistente,
       reason: justification.reason,
       file: `${justification.id}_${justification.file}.pdf`,
       approved: justification.approved,
@@ -126,6 +130,16 @@ export class JustificationService {
     //     },
     //   },
     // });
+  }
+
+  async setJustificationApproved(id: number, approved: string) {
+    const res = await this.prisma.justification.update({
+      where: { id },
+      data: { approved },
+    });
+    console.log(res);
+    
+    return { msg: 'justification_approved' };
   }
 
   // create(createJustificationDto: CreateJustificationDto) {

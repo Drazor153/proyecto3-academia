@@ -1,7 +1,7 @@
-import { writeFile } from "fs/promises";
+import { writeFile } from 'fs/promises';
 
 export const savePdf = (name: string, file: Express.Multer.File) => {
   const extension = file.originalname.split('.').pop();
   const newFilename = `${name}.${extension}`;
-  return writeFile(`./public/${newFilename}`, file.buffer);
-}
+  return writeFile(`./public/pdf/${newFilename}`, file.buffer);
+};

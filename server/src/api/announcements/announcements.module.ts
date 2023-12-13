@@ -7,10 +7,7 @@ import { AnnouncementsRepository } from './repository/announcements';
 export const moduleMetadata: ModuleMetadata = {
   imports: [PrismaModule],
   controllers: [AnnouncementsController],
-  providers: [
-    AnnouncementsService,
-    AnnouncementsRepository,
-  ],
+  providers: [AnnouncementsService, AnnouncementsRepository],
 };
 @Module(moduleMetadata)
 export class AnnouncementsModule {}

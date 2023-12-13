@@ -10,7 +10,7 @@ import { sanitizeAnnouncements } from '../../sanitizers/announcements';
 export class AnnouncementsService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly annRepository: AnnouncementsRepository,
+    private readonly annRepository: AnnouncementsRepository
   ) {}
 
   async getCategoriesTargets() {

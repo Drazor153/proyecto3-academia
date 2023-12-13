@@ -7,7 +7,10 @@ import {
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaService } from '@/database/prisma.service';
 import { EnrolsStatus, RoleEnum } from '@/common/consts';
-import { sanitizeTeacherLevels, sanitizeTopicQuizzes } from '../../sanitizers/teachers';
+import {
+  sanitizeTeacherLevels,
+  sanitizeTopicQuizzes,
+} from '../../sanitizers/teachers';
 
 @Injectable()
 export class TeachersService {

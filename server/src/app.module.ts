@@ -7,10 +7,16 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 @Module({
-  imports: [ConfigMiddleware(), LoggerMiddleware(), PrismaModule, ApiModule, ServeStaticModule.forRoot({
-    rootPath: join(process.cwd(), 'public/pdf'),
-    serveRoot: '/pdf',
-  })],
+  imports: [
+    ConfigMiddleware(),
+    LoggerMiddleware(),
+    PrismaModule,
+    ApiModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public/pdf'),
+      serveRoot: '/pdf',
+    }),
+  ],
   controllers: [],
   providers: [...AccessTokenMiddleware(), ...RefreshTokenMiddleware()],
 })

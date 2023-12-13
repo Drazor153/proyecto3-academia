@@ -1,17 +1,11 @@
 import {
-  IsAlphanumeric,
-  IsArray,
-  IsBoolean,
-  IsDate,
   IsDateString,
   IsInt,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class AttendanceDto {
   @IsNotEmpty()
@@ -30,17 +24,14 @@ export class GetJustificationsDto {
   @IsNumberString()
   page: string;
 
+  @IsOptional()
+  name?: string;
 
   @IsOptional()
-  name: string;
+  run?: number;
 
   @IsOptional()
-  @IsNumberString()
-  run: number;
-
-  @IsOptional()
-  @IsString()
-  approved: string;
+  approved?: string;
 }
 
 export class CreateNewJustificationDto {

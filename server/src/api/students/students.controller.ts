@@ -70,10 +70,7 @@ export class StudentsController {
     this.logger.info(
       `Student with run ${req.user.sub} is getting his grades from ${params.level}, ${params.year}, ${params.semester}`
     );
-    return this.studentsService.getStudentGrades({
-      ...params,
-      run: req.user.sub,
-    });
+    return this.studentsService.getStudentGrades(req.user.sub, params);
   }
 
   @Post()

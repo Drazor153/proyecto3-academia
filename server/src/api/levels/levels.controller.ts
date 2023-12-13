@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { RolesGuard } from '@/guards/roles.guard';
-import {  Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../../common/consts';

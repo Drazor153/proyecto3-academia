@@ -7,13 +7,18 @@ import {
 import { PrismaService } from '@/database/prisma.service';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { hashPassword } from '@/common/bcrypt';
-import { EnrolsStatus, RoleEnum, UserStatus } from '@/common/consts';
-import { sanitizeStudentCareer, sanitizeStudentGrades, sanitizeStudentLevels } from '../../sanitizers/students';
+import {
+  sanitizeStudentCareer,
+  sanitizeStudentGrades,
+  sanitizeStudentLevels,
+} from '../../sanitizers/students';
+import { StudentsRepo } from '../../database/repositories/student';
 
 @Injectable()
 export class StudentsService {
   constructor(
     private prisma: PrismaService,
+    private studentRepo: StudentsRepo
   ) {}
 
   // async getAllStudents() {
@@ -34,27 +39,8 @@ export class StudentsService {
 
   async getStudents(queryParams: PaginatedStudentsQuery) {
     const { page, size, run, name, level } = queryParams;
-    
-    const query = await this.prisma.user.findMany({
-      where: {
-        role: RoleEnum.Student,
-      },
-      select: {
-        run: true,
-        dv: true,
-        name: true,
-        first_surname: true,
-        enrols: {
-          select: {
-            paid: true,
-            levelCode: true,
-          },
-          where: {
-            status: EnrolsStatus.Active,
-          },
-        },
-      },
-    });
+
+    const query = await this.studentRepo.getActiveStudents();
 
     const students = query
       .filter(
@@ -80,33 +66,7 @@ export class StudentsService {
   }
 
   async getStudentCareer(run: number) {
-    const studentQuery = await this.prisma.user.findUnique({
-      where: {
-        run,
-        role: RoleEnum.Student,
-      },
-      select: {
-        run: true,
-        dv: true,
-        name: true,
-        first_surname: true,
-        enrols: {
-          select: {
-            levelCode: true,
-            status: true,
-            year: true,
-            semester: true,
-            paid: true,
-            level: {
-              select: {
-                name: true,
-              },
-            },
-          },
-          orderBy: [{ year: 'desc' }, { semester: 'desc' }],
-        },
-      },
-    });
+    const studentQuery = await this.studentRepo.getStudentCareerByRun(run);
 
     if (!studentQuery) {
       return { error: 'El estudiante no existe' };
@@ -116,19 +76,9 @@ export class StudentsService {
 
     return { data: sanitized };
   }
-  async createNewStudent({
-    run,
-    dv,
-    name,
-    first_surname,
-    level,
-  }: CreateNewStudentDto) {
-    const studentExist = await this.prisma.user.findUnique({
-      where: {
-        run,
-        role: RoleEnum.Student,
-      },
-    });
+  async createNewStudent(params: CreateNewStudentDto) {
+    const { run, first_surname } = params;
+    const studentExist = await this.studentRepo.getStudentByRun(run);
 
     if (studentExist !== null) {
       return { error: 'El estudiante ya existe' };
@@ -137,89 +87,26 @@ export class StudentsService {
     const hashedPassword = await hashPassword(
       `${run}_${first_surname.toUpperCase()}`
     );
-    const student = await this.prisma.user.create({
-      data: {
-        run,
-        dv,
-        name: name.toUpperCase(),
-        first_surname: first_surname.toUpperCase(),
-        role: RoleEnum.Student,
-        status: UserStatus.Enabled,
-        password: hashedPassword,
-        enrols: {
-          create: {
-            status: EnrolsStatus.Active,
-            year: new Date().getFullYear(),
-            semester: 1,
-            level: {
-              connect: {
-                code: level,
-              },
-            },
-          },
-        },
-      },
-      select: {
-        run: true,
-        name: true,
-        first_surname: true,
-      },
+    const student = await this.studentRepo.createNewActiveStudent({
+      ...params,
+      hashedPassword,
     });
 
     return { message: 'Usuario creado correctamente!', student };
   }
 
   async getLevels(run: number) {
-    const query = await this.prisma.enrols.findMany({
-      where: {
-        studentRun: run,
-      },
-      orderBy: {
-        year: 'desc',
-      },
-      include: {
-        level: {
-          include: {
-            teaches: true,
-          },
-        },
-      },
-    });
+    const query = await this.studentRepo.getStudentLevels(run);
 
     const studentLevels = sanitizeStudentLevels(query);
 
     return { data: studentLevels };
   }
 
-  async getStudentGrades({
-    year,
-    semester,
-    level,
-    run,
-  }: GetStudentGradesParams & { run: number }) {
+  async getStudentGrades(run: number, params: GetStudentGradesParams) {
     const topics = await this.prisma.topic.findMany();
 
-    const query = await this.prisma.quiz.findMany({
-      where: {
-        year: +year,
-        semester: +semester,
-        levelCode: level,
-      },
-      include: {
-        gives: {
-          where: {
-            studentRun: run,
-          },
-          select: {
-            grade: true,
-          },
-        },
-        topic: true,
-      },
-      orderBy: {
-        id: 'asc',
-      },
-    });
+    const query = await this.studentRepo.getStudentGrades(run, params);
 
     const sanitiziedQuery = sanitizeStudentGrades(topics, query);
 

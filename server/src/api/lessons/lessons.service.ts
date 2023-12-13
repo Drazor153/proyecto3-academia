@@ -7,9 +7,7 @@ import { EnrolsStatus, RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class LessonsService {
-  constructor(
-    private prisma: PrismaService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async getStudents({ lessonId }: LessonParams) {
     const level = await this.prisma.lesson.findUnique({

@@ -1,10 +1,10 @@
 export enum AnnTargets {
   ALL = 'ALL',
-};
+}
 
 export enum EnrolsStatus {
   Active = 'active',
-};
+}
 
 export enum RoleEnum {
   Student = 'STUDENT',
