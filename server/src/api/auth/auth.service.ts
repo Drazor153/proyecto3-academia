@@ -5,10 +5,10 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RoleEnum } from '@/guards/roles.decorator';
 import { config } from '@/config/config';
 import { comparePassword, hashPassword } from '@/common/bcrypt';
 import { UsersRepository } from './repository/users';
+import { RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class AuthService {

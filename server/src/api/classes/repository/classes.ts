@@ -6,7 +6,7 @@ import { CreateClassDto, UpdateClassDto } from '../dto/classes.dto';
 export class ClassesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: CreateClassDto) {
+  create(data: CreateClassDto) {
     const { attendance, contents, lessonId, date } = data;
 
     return this.prisma.class.create({
@@ -23,7 +23,7 @@ export class ClassesRepository {
     });
   }
 
-  async update(id: number, data: UpdateClassDto) {
+  update(id: number, data: UpdateClassDto) {
     const { attendance, contents } = data;
     return this.prisma.class.update({
       where: { id },
@@ -39,7 +39,7 @@ export class ClassesRepository {
     });
   }
 
-  async delete(id: number) {
+  delete(id: number) {
     return this.prisma.class.delete({
       where: { id },
     });

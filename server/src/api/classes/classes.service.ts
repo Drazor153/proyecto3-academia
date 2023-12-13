@@ -4,7 +4,7 @@ import {
   CreateClassDto,
   UpdateClassDto,
 } from '@/api/classes/dto/classes.dto';
-import { ClassesRepository } from './repository/classes.repository';
+import { ClassesRepository } from './repository/classes';
 
 @Injectable()
 export class ClassesService {

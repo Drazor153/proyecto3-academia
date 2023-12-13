@@ -13,10 +13,11 @@ import {
   CreateClassDto,
   UpdateClassDto,
 } from '@/api/classes/dto/classes.dto';
-import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import {  Roles } from '@/guards/roles.decorator';
 import { RolesGuard } from '@/guards/roles.guard';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleEnum } from '../../common/consts';
 
 @ApiTags('Classes')
 @Controller('api/classes')

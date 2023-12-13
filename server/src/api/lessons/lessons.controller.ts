@@ -2,10 +2,11 @@ import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { LessonsService } from './lessons.service';
 import { RolesGuard } from '@/guards/roles.guard';
-import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/guards/roles.decorator';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleEnum } from '../../common/consts';
 
 @ApiTags('Lessons')
 @Controller('api/lesson')

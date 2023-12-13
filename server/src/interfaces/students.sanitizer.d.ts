@@ -75,7 +75,10 @@ export interface StudentCareerRaw {
 
 export interface StudentCareerSanitized {
   year: number;
-  semesters: number[];
+  semesters: {
+    semester: number;
+    paid: boolean;
+  }[];
   level: string;
   status: string;
 }

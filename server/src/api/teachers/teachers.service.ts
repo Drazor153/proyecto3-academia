@@ -7,8 +7,7 @@ import {
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaService } from '@/database/prisma.service';
 import { TeachersSanitizersService } from '@/services/teachers.sanitizer.service';
-import { RoleEnum } from '@/guards/roles.decorator';
-import { EnrolsStatus } from '@/common/consts';
+import { EnrolsStatus, RoleEnum } from '@/common/consts';
 
 @Injectable()
 export class TeachersService {
@@ -79,7 +78,7 @@ export class TeachersService {
 
     const query = await this.prisma.user.findMany({
       where: {
-        role: 'STUDENT',
+        role: RoleEnum.Student,
         enrols: {
           some: {
             levelCode: quiz.levelCode,

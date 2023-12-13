@@ -15,13 +15,13 @@ export class PaginatedStudentsQuery {
   page: string;
 
   @IsOptional()
-  run: string;
+  run?: string;
 
   @IsOptional()
-  level: string;
+  level?: string;
 
   @IsOptional()
-  name: string;
+  name?: string;
 }
 
 export class GetLevelsParams {

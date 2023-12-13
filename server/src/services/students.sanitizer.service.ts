@@ -122,17 +122,17 @@ export class StudentsSanitizersService {
       if (!yearExists) {
         newArray.push({
           year: val.year,
-          semesters: [val.semester],
+          semesters: [{semester: val.semester, paid: val.paid}],
           level: val.level.name,
           status: val.status,
         });
         return;
       }
       const semesterExists = yearExists.semesters.find(
-        (semester) => semester === val.semester
+        ({semester}) => semester === val.semester
       );
       if (!semesterExists) {
-        yearExists.semesters.push(val.semester);
+        yearExists.semesters.push({semester: val.semester, paid: val.paid});
         return;
       }
     });

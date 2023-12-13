@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { CreateAnnouncementDto } from './dto/announcement.dto';
 import { UserPayload } from '@/interfaces/request.interface';
-import { RoleEnum } from '@/guards/roles.decorator';
 import { AnnouncementsSanitizersService } from '@/services/announcements.sanitizer.service';
 import { AnnouncementsRepository } from './repository/announcements';
 import { hasNextPage, paginate } from '@/common/paginate';
-import { AnnTargets, EnrolsStatus } from '@common/consts';
+import { AnnTargets, EnrolsStatus, RoleEnum } from '@common/consts';
 @Injectable()
 export class AnnouncementsService {
   constructor(

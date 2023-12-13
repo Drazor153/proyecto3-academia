@@ -15,9 +15,10 @@ import {
 } from './dto/teachers.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { RolesGuard } from '@/guards/roles.guard';
-import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/guards/roles.decorator';
 import { UserRequest } from '@/interfaces/request.interface';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleEnum } from '@/common/consts';
 
 @ApiTags('Teachers')
 @Controller('api/teachers')

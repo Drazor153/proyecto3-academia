@@ -1,9 +1,10 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { RolesGuard } from '@/guards/roles.guard';
-import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import {  Roles } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleEnum } from '../../common/consts';
 
 @ApiTags('Levels')
 @Controller('api/levels')

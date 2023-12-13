@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { RoleEnum } from 'src/guards/roles.decorator';
+import { RoleEnum } from '../common/consts';
 export interface UserPayload {
   sub: number;
   role: RoleEnum;

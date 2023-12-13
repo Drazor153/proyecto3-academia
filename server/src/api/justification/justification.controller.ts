@@ -11,13 +11,14 @@ import {
 } from '@nestjs/common';
 import { JustificationService } from './justification.service';
 import { PinoLogger } from 'nestjs-pino';
-import { RoleEnum, Roles } from '@/guards/roles.decorator';
+import {  Roles } from '@/guards/roles.decorator';
 import { RolesGuard } from '@/guards/roles.guard';
 import {
   CreateNewJustificationDto,
   GetJustificationsDto,
 } from './dto/justification.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { RoleEnum } from '../../common/consts';
 
 @ApiTags('Justification')
 @Controller('api/justification')

@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client';
 export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(run: number) {
+  findOne(run: number) {
     return this.prisma.user.findUnique({
       where: {
         run,
@@ -24,7 +24,7 @@ export class UsersRepository {
     });
   }
 
-  async findOneWithRefreshToken(run: number) {
+  findOneWithRefreshToken(run: number) {
     return this.prisma.user.findUnique({
       where: {
         run,
@@ -36,7 +36,7 @@ export class UsersRepository {
     });
   }
 
-  async update(run: number, data: Prisma.UserUpdateInput) {
+  update(run: number, data: Prisma.UserUpdateInput) {
     return this.prisma.user.update({ where: { run }, data });
   }
 }

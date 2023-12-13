@@ -3,7 +3,7 @@ import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PrismaService } from '@/database/prisma.service';
 import { ClassesSanitizersService } from '@/services/classes.sanitizer.service';
-import { EnrolsStatus } from '../../common/consts';
+import { EnrolsStatus, RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class LessonsService {
@@ -33,7 +33,7 @@ export class LessonsService {
 
     const studentsInLevel = await this.prisma.user.findMany({
       where: {
-        role: 'STUDENT',
+        role: RoleEnum.Student,
         enrols: {
           some: {
             levelCode: level.level.code,
@@ -57,7 +57,7 @@ export class LessonsService {
     return { data: studentsInLevel };
   }
   async getClasses(req: UserRequest, { lessonId }: LessonParams) {
-    if (req.user.role === 'STUDENT') {
+    if (req.user.role === RoleEnum.Student) {
       const query = await this.prisma.class.findMany({
         where: {
           lessonId: +lessonId,

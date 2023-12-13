@@ -8,6 +8,7 @@ import { PrismaService } from '@/database/prisma.service';
 import { StudentsSanitizersService } from '@/services/students.sanitizer.service';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { hashPassword } from '@/common/bcrypt';
+import { EnrolsStatus, RoleEnum, UserStatus } from '@/common/consts';
 
 @Injectable()
 export class StudentsService {
@@ -19,7 +20,7 @@ export class StudentsService {
   // async getAllStudents() {
   //   return await this.prisma.user.findMany({
   //     where: {
-  //       role: 'STUDENT',
+  //       role: RoleEnum.Student,
   //     },
   //     select: {
   //       run: true,
@@ -34,9 +35,10 @@ export class StudentsService {
 
   async getStudents(queryParams: PaginatedStudentsQuery) {
     const { page, size, run, name, level } = queryParams;
+    
     const query = await this.prisma.user.findMany({
       where: {
-        role: 'STUDENT',
+        role: RoleEnum.Student,
       },
       select: {
         run: true,
@@ -45,10 +47,11 @@ export class StudentsService {
         first_surname: true,
         enrols: {
           select: {
+            paid: true,
             levelCode: true,
           },
           where: {
-            status: 'active',
+            status: EnrolsStatus.Active,
           },
         },
       },
@@ -67,6 +70,7 @@ export class StudentsService {
         name: student.name,
         first_surname: student.first_surname,
         level: student.enrols[0].levelCode,
+        paid: student.enrols[0].paid,
       }));
 
     const paginatedStudents = paginate(students, +page, +size);
@@ -80,7 +84,7 @@ export class StudentsService {
     const studentQuery = await this.prisma.user.findUnique({
       where: {
         run,
-        role: 'STUDENT',
+        role: RoleEnum.Student,
       },
       select: {
         run: true,
@@ -123,7 +127,7 @@ export class StudentsService {
     const studentExist = await this.prisma.user.findUnique({
       where: {
         run,
-        role: 'STUDENT',
+        role: RoleEnum.Student,
       },
     });
 
@@ -140,12 +144,12 @@ export class StudentsService {
         dv,
         name: name.toUpperCase(),
         first_surname: first_surname.toUpperCase(),
-        role: 'STUDENT',
-        status: 'ENABLED',
+        role: RoleEnum.Student,
+        status: UserStatus.Enabled,
         password: hashedPassword,
         enrols: {
           create: {
-            status: 'active',
+            status: EnrolsStatus.Active,
             year: new Date().getFullYear(),
             semester: 1,
             level: {
