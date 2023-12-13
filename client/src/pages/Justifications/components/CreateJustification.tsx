@@ -5,6 +5,8 @@ import { useRef, useState } from 'react';
 import { Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { MdFileUpload } from 'react-icons/md';
+import { useCreateJustificationMutation } from '@/redux/services/justificationApi';
+import { toast } from 'react-toastify';
 
 function CreateJustificationFooter({
 	submitHandler,
@@ -34,17 +36,43 @@ export function CreateJustification({
 	const [initialDate, setInitialDate] = useState('');
 	const [pdfFile, setPdfFile] = useState<File | null>(null);
 	const formRef = useRef<HTMLFormElement>(null);
+	const [CreateJustification] = useCreateJustificationMutation();
 
 	const handleSubmit = (form: HTMLFormElement) => {
 		if (!form) return;
 		const formData = new FormData(form);
-		const description = formData.get('justification');
-		const initialDate = formData.get('initial-date');
-		const finalDate = formData.get('final-date');
-		const file = formData.get('file');
-		console.log(description, initialDate, finalDate, file);
-		// formData.append('file', pdfFile as Blob);
-		// console.log(formData.get('file'));
+		const description = formData.get('reason') as string;
+		const initialDate = formData.get('initAusencia') as string;
+		const finalDate = formData.get('endAusencia') as string;
+		const file = formData.get('file') as File;
+		if (!description || !initialDate || !finalDate || !file) {
+			toast.error(t('empty_fields'), { toastId: 'empty_fields' });
+			return;
+		}
+
+		const loadingToast = toast.loading(t('creating_justification'));
+
+		CreateJustification({
+			body: formData,
+		})
+			.unwrap()
+			.then(payload => {
+				toast.update(loadingToast, {
+					isLoading: false,
+					type: 'success',
+					render: t(payload.msg),
+					autoClose: 1000,
+				});
+				closeModal();
+			})
+			.catch(error =>
+				toast.update(loadingToast, {
+					isLoading: false,
+					type: 'error',
+					render: t(error.message),
+					autoClose: 1000,
+				}),
+			);
 	};
 
 	const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +82,17 @@ export function CreateJustification({
 		}
 	};
 
+	const closeModal = () => {
+		formRef.current?.reset();
+		setOpen(false);
+		setPdfFile(null);
+	};
+
 	return (
 		<Modal
 			title={t('create_justification')}
 			isOpen={() => open}
-			onClick={() => setOpen(false)}
+			onClick={closeModal}
 			footer={
 				<CreateJustificationFooter
 					submitHandler={() => handleSubmit(formRef.current as HTMLFormElement)}
@@ -77,7 +111,7 @@ export function CreateJustification({
 						<textarea
 							className='form-control'
 							id='justification-description'
-							name='justification'
+							name='reason'
 							rows={10}
 							placeholder={t('justification_detail')}
 						/>
@@ -88,7 +122,7 @@ export function CreateJustification({
 							type='date'
 							className='form-control'
 							id='initial-date'
-							name='initial-date'
+							name='initAusencia'
 							onChange={e => setInitialDate(e.target.value)}
 							placeholder={t('initial_date')}
 						/>
@@ -97,7 +131,7 @@ export function CreateJustification({
 							type='date'
 							className='form-control'
 							id='final-date'
-							name='final-date'
+							name='endAusencia'
 							min={initialDate}
 							placeholder={t('final_date')}
 						/>

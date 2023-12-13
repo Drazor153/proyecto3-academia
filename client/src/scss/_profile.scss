@@ -130,7 +130,7 @@
 		.timeline {
 			gap: 0;
 			// flex: 1;
-			height: 75%;
+			height: 100%;
 
 			h3 {
 				margin-left: 10px;
@@ -180,6 +180,7 @@
 									height: 50%;
 									border-left: 2px solid $crimsonred;
 									border-top: 2px solid $crimsonred;
+									border-bottom: none;
 								}
 
 								&.semester {

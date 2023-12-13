@@ -7,6 +7,7 @@ import { teacherApi } from './services/teacherApi'
 import { classesApi } from './services/classesApi'
 import { userApi } from './services/userApi'
 import { announcementsApi } from './services/announcementsApi'
+import { justificationApi } from './services/justificationApi'
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         [classesApi.reducerPath]: classesApi.reducer,
         [userApi.reducerPath]: userApi.reducer,
         [announcementsApi.reducerPath]: announcementsApi.reducer,
+        [justificationApi.reducerPath]: justificationApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat([
@@ -26,6 +28,7 @@ export const store = configureStore({
             classesApi.middleware,
             userApi.middleware,
             announcementsApi.middleware,
+            justificationApi.middleware,
         ])
 })
 

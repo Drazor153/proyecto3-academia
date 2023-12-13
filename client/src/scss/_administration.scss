@@ -209,7 +209,7 @@
 
 .student-career-modal {
 	width: auto !important;
-	min-width: 50vw;
+	min-width: 60vw;
 	.modal-body {
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -225,18 +225,20 @@
 			font-size: 1.2rem;
 			width: 100%;
 			thead {
-				width: 100%;
-				tr {
-					width: 100%;
-					grid-template-columns: 100%;
+				tr {grid-template-columns: 10% 20% 40% 15% 15%;
 				}
 			}
 			tbody {
-				scrollbar-gutter: auto;
-				height: max-content;
+				height: 100%;
 				text-wrap: nowrap;
+        gap: 5px;
+        width: 100%;
 				tr {
-					grid-template-columns: 1fr 1.5fr 1.2fr;
+          .year {
+              grid-row: 1/ span 2;
+            }
+
+          grid-template-columns: 10% 20% 40% 15% 15%;
 				}
 			}
 		}

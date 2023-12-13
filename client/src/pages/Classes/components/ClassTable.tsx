@@ -30,6 +30,7 @@ import {
 import { Select } from '../types';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
+import { getYYYYMMDD } from '@/utils/functions';
 
 // TODO: ver el date de to
 
@@ -117,7 +118,7 @@ function TableStudent({ classes }: TableProps) {
 									key={date.toLocaleString()}
 									className='grid'
 								>
-									<td>{date.toLocaleString()}</td>
+									<td>{getYYYYMMDD(date.toString())}</td>
 									<td datatype='content'>
 										{contentsList.map(content => (
 											<p key={content.trim()}>{content.trim()}</p>

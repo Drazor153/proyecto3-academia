@@ -48,14 +48,16 @@ export default function Timeline() {
 												if (level === name) {
 													// s.sort()
 													const semesters: (string | number)[] = [];
-													Array.from(s).sort().map((n, i) => {
-														semesters.push(n);
-														semesters.push(
-															status === 'failed' && i === 0
-																? 'approved'
-																: status,
-														);
-													});
+													Array.from(s)
+														.sort()
+														.map(({ semester }, i) => {
+															semesters.push(semester);
+															semesters.push(
+																status === 'failed' && i === 0
+																	? 'approved'
+																	: status,
+															);
+														});
 													return (
 														<ul
 															key={`${name}-${year}`}

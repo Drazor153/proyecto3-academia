@@ -116,6 +116,7 @@
 	"reject": "Reject",
 	"approve": "Approve",
 	"file": "File",
+	"view_file": "View File",
 	"proficiency": "Proficiency",
 	"description": "Description",
 	"justification_list": "Justification List",
@@ -139,8 +140,13 @@
 	"free": "Free",
 	"paid": "Paid",
 	"calendar": "Calendar",
-
 	"calendar_menu": "Calendar Menu",
 	"exams": "Exams",
-	"academic": "Academic"
+	"academic": "Academic",
+	"justification_created": "Justification created successfully",
+	"creating_justification": "Creating Justification",
+	"delete": "Delete",
+	"profile": "Profile",
+	"personal_info": "Personal Information",
+	"academic_timeline": "Academic Timeline"
 }

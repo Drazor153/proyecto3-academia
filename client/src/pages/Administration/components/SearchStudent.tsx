@@ -26,28 +26,73 @@ function ShowStudentCareer({ run }: { run: number }) {
 
 	const career = data.data;
 
+	// return (
+	// 	<div className='student-career-container'>
+	// 		{career.map(({ year, semesters, level, status }) => (
+	// 			<table key={year}>
+	// 				<thead>
+	// 					<tr>
+	// 						<th colSpan={3}>
+	// 							{t('year')} {year}
+	// 						</th>
+	// 					</tr>
+	// 				</thead>
+	// 				<tbody>
+	// 					{semesters.map(({ semester: number, paid }) => (
+	// 						<tr key={number}>
+	// 							<td>{`${t('semester')} ${number}`}</td>
+	// 							<td>{t(level)}</td>
+	// 							<td>{t(status)}</td>
+	// 							<td>{paid ? t('paid') : t('free')}</td>
+	// 						</tr>
+	// 					))}
+	// 				</tbody>
+	// 			</table>
+	// 		))}
+	// 	</div>
+	// );
+
 	return (
 		<div className='student-career-container'>
-			{career.map(({ year, semesters, level, status }) => (
-				<table key={year}>
-					<thead>
-						<tr>
-							<th colSpan={3}>
-								{t('year')} {year}
-							</th>
+			<table>
+				<thead>
+					<tr>
+						<th>{t('year')}</th>
+						<th>{t('semester')}</th>
+						<th>{t('level')}</th>
+						<th>{t('status')}</th>
+						<th>{t('enrollment')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{career.map(({ year, semesters, level, status }) => (
+						<tr key={year}>
+							<td className='year'>{year}</td>
+							{semesters.map(({ semester: number, paid }) => {
+								return (
+									<>
+										<td>
+											{t('semester')} {number}
+										</td>
+										<td>{t(level)}</td>
+										<td>{t(status)}</td>
+										<td>{paid ? t('paid') : t('free')}</td>
+									</>
+								);
+							})}
+							{/* Add empty row if semester 1 or 2 doesn't exist */}
+							{semesters.length < 2 && (
+								<>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</>
+							)}
 						</tr>
-					</thead>
-					<tbody>
-						{semesters.map(semester => (
-							<tr key={semester}>
-								<td>{`${t('semester')} ${semester}`}</td>
-								<td>{t(level)}</td>
-								<td>{t(status)}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			))}
+					))}
+				</tbody>
+			</table>
 		</div>
 	);
 }

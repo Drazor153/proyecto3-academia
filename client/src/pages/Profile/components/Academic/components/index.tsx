@@ -1,2 +1,2 @@
-export { default as Timeline } from './timeline';
-export { default as AcademicInfo } from './AcademicInfo';
+export { default as Timeline } from './Timeline';
+// export { default as AcademicInfo } from './AcademicInfo';
