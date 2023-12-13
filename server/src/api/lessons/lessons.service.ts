@@ -2,14 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PrismaService } from '@/database/prisma.service';
-import { ClassesSanitizersService } from '@/services/classes.sanitizer.service';
-import { EnrolsStatus } from '../../common/consts';
+import { sanitizeLessonClasses } from '@/sanitizers/classes';
+import { EnrolsStatus, RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class LessonsService {
   constructor(
     private prisma: PrismaService,
-    private sanity: ClassesSanitizersService
   ) {}
 
   async getStudents({ lessonId }: LessonParams) {
@@ -33,7 +32,7 @@ export class LessonsService {
 
     const studentsInLevel = await this.prisma.user.findMany({
       where: {
-        role: 'STUDENT',
+        role: RoleEnum.Student,
         enrols: {
           some: {
             levelCode: level.level.code,
@@ -57,7 +56,7 @@ export class LessonsService {
     return { data: studentsInLevel };
   }
   async getClasses(req: UserRequest, { lessonId }: LessonParams) {
-    if (req.user.role === 'STUDENT') {
+    if (req.user.role === RoleEnum.Student) {
       const query = await this.prisma.class.findMany({
         where: {
           lessonId: +lessonId,
@@ -80,13 +79,13 @@ export class LessonsService {
           },
         },
         orderBy: {
-          week: 'desc',
+          date: 'desc',
         },
       });
 
       const classes = query.map((val) => ({
         id: val.id,
-        week: val.week,
+        date: val.date,
         contents: val.contents,
         teacher: {
           name: val.lesson.teacher?.name,
@@ -114,7 +113,7 @@ export class LessonsService {
         },
       },
       orderBy: {
-        week: 'desc',
+        date: 'desc',
       },
     });
 
@@ -125,7 +124,7 @@ export class LessonsService {
       });
     }
 
-    const sanitizied = this.sanity.sanitizeLessonClasses(query);
+    const sanitizied = sanitizeLessonClasses(query);
 
     return { data: sanitizied };
   }

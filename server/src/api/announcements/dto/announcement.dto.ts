@@ -1,12 +1,12 @@
 import {
+  ArrayNotEmpty,
+  IsArray,
+  IsBase64,
+  IsDateString,
+  IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
-  IsNumberString,
-  IsArray,
-  IsNotEmpty,
-  IsBase64,
-  ArrayNotEmpty,
-  IsDateString,
 } from 'class-validator';
 export class AnnouncementParams {
   @IsNumberString()

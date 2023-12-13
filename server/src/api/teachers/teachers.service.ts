@@ -6,16 +6,14 @@ import {
 } from './dto/teachers.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { PrismaService } from '@/database/prisma.service';
-import { TeachersSanitizersService } from '@/services/teachers.sanitizer.service';
-import { RoleEnum } from '@/guards/roles.decorator';
-import { EnrolsStatus } from '@/common/consts';
+import { EnrolsStatus, RoleEnum } from '@/common/consts';
+import { sanitizeTeacherLevels, sanitizeTopicQuizzes } from '../../sanitizers/teachers';
 
 @Injectable()
 export class TeachersService {
   constructor(
     private prisma: PrismaService,
-    private sanity: TeachersSanitizersService,
-    private logger: PinoLogger,
+    private logger: PinoLogger
   ) {
     this.logger.setContext(TeachersService.name);
   }
@@ -34,7 +32,7 @@ export class TeachersService {
       ],
     });
 
-    const teacherLevels = this.sanity.sanitizeTeacherLevels(query);
+    const teacherLevels = sanitizeTeacherLevels(query);
 
     return { data: teacherLevels };
   }
@@ -56,9 +54,9 @@ export class TeachersService {
       },
     });
 
-    const topicQuizzesSanitizied = this.sanity.sanitizeTopicQuizzes(
+    const topicQuizzesSanitizied = sanitizeTopicQuizzes(
       topics,
-      topicQuizzesQuery,
+      topicQuizzesQuery
     );
 
     return {
@@ -79,7 +77,7 @@ export class TeachersService {
 
     const query = await this.prisma.user.findMany({
       where: {
-        role: 'STUDENT',
+        role: RoleEnum.Student,
         enrols: {
           some: {
             levelCode: quiz.levelCode,

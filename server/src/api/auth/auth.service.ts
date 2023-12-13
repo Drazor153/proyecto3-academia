@@ -5,16 +5,16 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RoleEnum } from '@/guards/roles.decorator';
 import { config } from '@/config/config';
 import { comparePassword, hashPassword } from '@/common/bcrypt';
 import { UsersRepository } from './repository/users';
+import { RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private usersRepo: UsersRepository,
+    private usersRepo: UsersRepository
   ) {}
 
   async login(run: number, password: string) {
@@ -76,11 +76,11 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         { sub: run, role },
-        { secret: access_token_secret, expiresIn: access_token_expires_in },
+        { secret: access_token_secret, expiresIn: access_token_expires_in }
       ),
       this.jwtService.signAsync(
         { sub: run, role },
-        { secret: refresh_token_secret, expiresIn: refresh_token_expires_in },
+        { secret: refresh_token_secret, expiresIn: refresh_token_expires_in }
       ),
     ]);
 
@@ -107,7 +107,7 @@ export class AuthService {
 
     const refreshTokenMatches = await comparePassword(
       refreshToken,
-      user.refresh_token,
+      user.refresh_token
     );
 
     if (!refreshTokenMatches) {

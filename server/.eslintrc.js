@@ -25,6 +25,16 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', {
       'argsIgnorePattern': '^_',
       'varsIgnorePattern': '^_'
-    }]
+    }],
+    'sort-imports': [
+      'error',
+      {
+        'ignoreCase': true,
+        'ignoreDeclarationSort': true,
+        'ignoreMemberSort': false,
+        'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
+        'allowSeparatedGroups': true
+      }
+    ]
   },
 };

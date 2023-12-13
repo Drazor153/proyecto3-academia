@@ -12,7 +12,7 @@ function cookieExtractor(req: Request) {
 
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
-  'jwt-refresh',
+  'jwt-refresh'
 ) {
   constructor() {
     super({

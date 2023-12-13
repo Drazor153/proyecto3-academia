@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { config } from '@/config/config';
+import { UserPayload } from '../interfaces/request.interface';
 
 function cookieExtractor(req: Request) {
   if (req && req.cookies) {
@@ -20,7 +21,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  validate(payload: any) {
+  validate(payload: UserPayload) {
     return payload;
   }
 }
