@@ -2,16 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { CreateAnnouncementDto } from './dto/announcement.dto';
 import { UserPayload } from '@/interfaces/request.interface';
-import { AnnouncementsSanitizersService } from '@/services/announcements.sanitizer.service';
 import { AnnouncementsRepository } from './repository/announcements';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { AnnTargets, EnrolsStatus, RoleEnum } from '@common/consts';
+import { sanitizeAnnouncements } from '../../sanitizers/announcements';
 @Injectable()
 export class AnnouncementsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly annRepository: AnnouncementsRepository,
-    private readonly sanity: AnnouncementsSanitizersService
   ) {}
 
   async getCategoriesTargets() {
@@ -43,7 +42,7 @@ export class AnnouncementsService {
       },
     });
 
-    return this.sanity.sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query);
   }
 
   private async getStudentAnnouncements(run: number) {
@@ -71,7 +70,7 @@ export class AnnouncementsService {
       },
     });
 
-    return this.sanity.sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query);
   }
 
   private async getTeacherAnnouncements(run: number) {
@@ -101,13 +100,13 @@ export class AnnouncementsService {
       },
     });
 
-    return this.sanity.sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query);
   }
 
   async getAllAnnouncements(size: number, page: number) {
     const annQuery = await this.annRepository.all();
 
-    const announcements = this.sanity.sanitizeAnnouncements(annQuery);
+    const announcements = sanitizeAnnouncements(annQuery);
 
     const paginated = paginate(announcements, page, size);
     const previous = page > 1;

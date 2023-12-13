@@ -3,6 +3,7 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsDateString,
   IsInt,
   IsNotEmpty,
   IsNumberString,
@@ -23,6 +24,13 @@ export class AttendanceDto {
 }
 
 export class GetJustificationsDto {
+  @IsNumberString()
+  size: string;
+
+  @IsNumberString()
+  page: string;
+
+
   @IsOptional()
   name: string;
 
@@ -36,37 +44,36 @@ export class GetJustificationsDto {
 }
 
 export class CreateNewJustificationDto {
-  @IsNotEmpty()
-  @IsInt()
-  run: number;
+  // @IsNotEmpty()
+  // @IsInt()
+  // run: number;
 
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   initAusencia: Date;
 
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   endAusencia: Date;
 
-  @IsNotEmpty()
-  @IsInt()
-  numInasistente: number;
+  // @IsNotEmpty()
+  // @IsInt()
+  // numInasistente: number;
 
   @IsNotEmpty()
   @IsString()
-  reason_i: string;
+  reason: string;
 
-  @IsNotEmpty()
-  @IsString()
-  file_i: string;
+  // @IsNotEmpty()
+  // file: string;
 
-  @IsNotEmpty()
-  @IsString()
-  approved_i: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // approved: string;
 
-  @IsNotEmpty()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => AttendanceDto)
-  attendance: AttendanceDto[];
+  // @IsNotEmpty()
+  // @IsArray()
+  // @ValidateNested({ each: true })
+  // @Type(() => AttendanceDto)
+  // attendance: AttendanceDto[];
 }

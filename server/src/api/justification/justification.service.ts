@@ -5,13 +5,14 @@ import {
   CreateNewJustificationDto,
   GetJustificationsDto,
 } from './dto/justification.dto';
+import { savePdf } from '../../common/storage';
 
 @Injectable()
 export class JustificationService {
   constructor(private prisma: PrismaService) {}
 
   //gettear todas las justificaciones (opcionalmente dar rut y estado de approved para filtrar)
-  async getJustifications(queryParams: GetJustificationsDto) {
+  async getAllJustifications(queryParams: GetJustificationsDto) {
     const { name, run, approved } = queryParams; //<- name sin usar btw ;-;
     const query = await this.prisma.justification.findMany({
       select: {
@@ -60,51 +61,71 @@ export class JustificationService {
   }
   */
 
+  async getOwnJustifications(run: number) {
+    const query = await this.prisma.justification.findMany({
+      where: { studentRun: run },
+      include: { Attendance: true },
+    });
+    const justifications = query.map((justification) => ({
+      id: justification.id,
+      init_ausencia: justification.init_ausencia,
+      end_ausencia: justification.end_ausencia,
+      num_inasistente: justification.num_inasistente,
+      reason: justification.reason,
+      file: `${justification.id}_${justification.file}.pdf`,
+      approved: justification.approved,
+      Attendance: justification.Attendance,
+    }));
+
+    return { data: justifications };
+  }
+
   //Create para las justificaciones
-  async createNewJustification({
-    run,
-    initAusencia,
-    endAusencia,
-    numInasistente,
-    reason_i,
-    file_i,
-    approved_i,
-    attendance,
-  }: CreateNewJustificationDto) {
+  async createNewJustification(
+    run: number,
+    file: Express.Multer.File,
+    dto: CreateNewJustificationDto
+  ) {
+    console.log(dto);
+
+    const { initAusencia, endAusencia, reason } = dto;
+
+    const init_ausencia = new Date(initAusencia);
+    const end_ausencia = new Date(endAusencia);
+
+    const filename = `${run.toString()}_${
+      init_ausencia.toISOString().split('T')[0]
+    }`;
     const justif = await this.prisma.justification.create({
       data: {
         studentRun: run,
-        init_ausencia: initAusencia,
-        end_ausencia: endAusencia,
-        num_inasistente: numInasistente,
-        reason: reason_i,
-        file: file_i,
-        approved: approved_i,
-      },
-      select: {
-        id: true,
-        studentRun: true,
-        init_ausencia: true,
-        end_ausencia: true,
-        num_inasistente: true,
-        reason: true,
-        file: true,
+        init_ausencia,
+        end_ausencia,
+        // num_inasistente: numInasist1ente, //<- no se que es esto, pero no lo pide el DTO
+        num_inasistente: 1,
+        reason: reason,
+        file: filename,
+        approved: 'pending',
       },
     });
-    const id = justif.id;
+    console.log('justif: ', justif);
 
-    //no podia asignar las ids del Attendance, asi que se me ocurrió esto.
-    return await this.prisma.justification.update({
-      where: { id },
-      data: {
-        Attendance: {
-          updateMany: attendance.map((val) => ({
-            where: { classId: val.classId, studentRun: val.studentRun },
-            data: { justificationId: id },
-          })),
-        },
-      },
-    });
+    await savePdf(`${justif.id}_${filename}`, file);
+    return { msg: 'justification_created' };
+    // const id = justif.id;
+
+    // //no podia asignar las ids del Attendance, asi que se me ocurrió esto.
+    // return await this.prisma.justification.update({
+    //   where: { id },
+    //   data: {
+    //     Attendance: {
+    //       updateMany: attendance.map((val) => ({
+    //         where: { classId: val.classId, studentRun: val.studentRun },
+    //         data: { justificationId: id },
+    //       })),
+    //     },
+    //   },
+    // });
   }
 
   // create(createJustificationDto: CreateJustificationDto) {

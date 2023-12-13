@@ -1,13 +1,13 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
   Query,
+  Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { JustificationService } from './justification.service';
 import { PinoLogger } from 'nestjs-pino';
@@ -19,6 +19,8 @@ import {
 } from './dto/justification.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../../common/consts';
+import { UserRequest } from '../../interfaces/request.interface';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Justification')
 @Controller('api/justification')
@@ -31,23 +33,31 @@ export class JustificationController {
     this.logger.setContext(JustificationController.name);
   }
 
-  @Get()
-  @Roles(RoleEnum.Admin)
-  getAllJustifications(@Query() query: GetJustificationsDto) {
-    this.logger.info(`Getting all justifications`);
-    return this.justificationService.getJustifications(query);
-  }
+  // @Get()
+  // @Roles(RoleEnum.Admin)
+  // getAllJustifications(@Query() query: GetJustificationsDto) {
+  //   this.logger.info(`Getting all justifications`);
+  //   return this.justificationService.getAllJustifications(query);
+  // }
   /*
   20.345.543-7
   19.678.876-K
   
   */
+  @Get()
+  @Roles(RoleEnum.Student)
+  getOwnJustifications(@Req() req: UserRequest) {
+    this.logger.info(`Stundent with run: ${req.user.sub} is getting his justifications`);
+    return this.justificationService.getOwnJustifications(req.user.sub);
+  }
+
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   @Roles(RoleEnum.Student, RoleEnum.Admin)
-  createNewJustification(@Body() justificationDto: CreateNewJustificationDto) {
+  createNewJustification(@Req() req: UserRequest, @Body() justificationDto: CreateNewJustificationDto, @UploadedFile() file: Express.Multer.File) {
     this.logger.info(
-      `Student with run: ${justificationDto.run} is creating a justification`
-    );
-    return this.justificationService.createNewJustification(justificationDto);
+      `Student with run: ${req.user.sub} is creating a justification`
+    );    
+    return this.justificationService.createNewJustification(req.user.sub, file, justificationDto);
   }
 }

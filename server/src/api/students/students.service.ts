@@ -5,16 +5,15 @@ import {
   PaginatedStudentsQuery,
 } from './dto/students.dto';
 import { PrismaService } from '@/database/prisma.service';
-import { StudentsSanitizersService } from '@/services/students.sanitizer.service';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { hashPassword } from '@/common/bcrypt';
 import { EnrolsStatus, RoleEnum, UserStatus } from '@/common/consts';
+import { sanitizeStudentCareer, sanitizeStudentGrades, sanitizeStudentLevels } from '../../sanitizers/students';
 
 @Injectable()
 export class StudentsService {
   constructor(
     private prisma: PrismaService,
-    private sanity: StudentsSanitizersService
   ) {}
 
   // async getAllStudents() {
@@ -113,7 +112,7 @@ export class StudentsService {
       return { error: 'El estudiante no existe' };
     }
 
-    const sanitized = this.sanity.sanitizeStudentCareer(studentQuery);
+    const sanitized = sanitizeStudentCareer(studentQuery);
 
     return { data: sanitized };
   }
@@ -187,7 +186,7 @@ export class StudentsService {
       },
     });
 
-    const studentLevels = this.sanity.sanitizeStudentLevels(query);
+    const studentLevels = sanitizeStudentLevels(query);
 
     return { data: studentLevels };
   }
@@ -222,7 +221,7 @@ export class StudentsService {
       },
     });
 
-    const sanitiziedQuery = this.sanity.sanitizeStudentGrades(topics, query);
+    const sanitiziedQuery = sanitizeStudentGrades(topics, query);
 
     return { data: sanitiziedQuery };
   }

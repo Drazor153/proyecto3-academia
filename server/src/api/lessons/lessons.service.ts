@@ -2,14 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { LessonParams } from '@/api/classes/dto/classes.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PrismaService } from '@/database/prisma.service';
-import { ClassesSanitizersService } from '@/services/classes.sanitizer.service';
+import { sanitizeLessonClasses } from '@/sanitizers/classes';
 import { EnrolsStatus, RoleEnum } from '../../common/consts';
 
 @Injectable()
 export class LessonsService {
   constructor(
     private prisma: PrismaService,
-    private sanity: ClassesSanitizersService
   ) {}
 
   async getStudents({ lessonId }: LessonParams) {
@@ -125,7 +124,7 @@ export class LessonsService {
       });
     }
 
-    const sanitizied = this.sanity.sanitizeLessonClasses(query);
+    const sanitizied = sanitizeLessonClasses(query);
 
     return { data: sanitizied };
   }
