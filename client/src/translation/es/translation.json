@@ -150,5 +150,11 @@
 	"delete": "Eliminar",
 	"profile": "Perfil",
 	"personal_info": "Información personal",
-	"academic_timeline": "Historial académico"
+	"academic_timeline": "Historial académico",
+	"enrolment-type-search": "Buscar por matrícula",
+	"enrolment-type-select": "Seleccione una matrícula",
+	"exams_calendar_management": "Administración de calendario de exámenes",
+	"period": "Periodo",
+	"quizzes": "Quizzes",
+	"quizzes_select": "Seleccione un quiz"
 }

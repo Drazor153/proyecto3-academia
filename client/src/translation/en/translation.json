@@ -148,5 +148,11 @@
 	"delete": "Delete",
 	"profile": "Profile",
 	"personal_info": "Personal Information",
-	"academic_timeline": "Academic Timeline"
+	"academic_timeline": "Academic Timeline",
+	"enrolment-type-search": "Search by enrolment type",
+	"enrolment-type-select": "Select an enrolment type",
+	"exams_calendar_management": "Exams Calendar Management",
+	"period": "Period",
+	"quizzes": "Quizzes",
+	"quizzes_select": "Select a quiz"
 }

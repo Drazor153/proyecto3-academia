@@ -26,32 +26,6 @@ function ShowStudentCareer({ run }: { run: number }) {
 
 	const career = data.data;
 
-	// return (
-	// 	<div className='student-career-container'>
-	// 		{career.map(({ year, semesters, level, status }) => (
-	// 			<table key={year}>
-	// 				<thead>
-	// 					<tr>
-	// 						<th colSpan={3}>
-	// 							{t('year')} {year}
-	// 						</th>
-	// 					</tr>
-	// 				</thead>
-	// 				<tbody>
-	// 					{semesters.map(({ semester: number, paid }) => (
-	// 						<tr key={number}>
-	// 							<td>{`${t('semester')} ${number}`}</td>
-	// 							<td>{t(level)}</td>
-	// 							<td>{t(status)}</td>
-	// 							<td>{paid ? t('paid') : t('free')}</td>
-	// 						</tr>
-	// 					))}
-	// 				</tbody>
-	// 			</table>
-	// 		))}
-	// 	</div>
-	// );
-
 	return (
 		<div className='student-career-container'>
 			<table>
@@ -104,6 +78,7 @@ function SearchStudent() {
 	const [run, setRun] = useState('');
 	const [name, setName] = useState('');
 	const [level, setLevel] = useState('');
+	const [enrolType, setEnrolType] = useState('');
 	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 	const debouncedRun = useDebounce<string>(run, 1000);
 	const debouncedName = useDebounce<string>(name, 1000);
@@ -117,6 +92,10 @@ function SearchStudent() {
 	const [getStudents, result] = useLazyGetStudentsQuery();
 
 	const { data: levels, isLoading: isLevelsLoading } = useGetLevelsQuery(null);
+	const enrollmentTypes = [
+		{ value: 'paid', label: t('paid') },
+		{ value: 'free', label: t('free') },
+	];
 
 	const runWithoutDv = (run: string) => {
 		const { digits } = deconstructRut(run);
@@ -190,6 +169,21 @@ function SearchStudent() {
 						</div>
 					</div>
 					<div className='search-container'>
+						<label htmlFor='enrolment-type-search'>{t('enrolment-type-search')}</label>
+						<div className='input-container'>
+							<Select
+								className='react-select-container'
+								classNamePrefix={'react-select'}
+								placeholder={t('enrolment-type-select')}
+								onChange={option => setEnrolType(option?.value ? option.value : '')}
+								options={enrollmentTypes}
+								isClearable
+								isSearchable={false}
+								isLoading={isLevelsLoading}
+							/>
+						</div>
+					</div>
+					<div className='search-container'>
 						<label>{t('search_level')}</label>
 						<div className='input-container'>
 							<Select
@@ -200,9 +194,9 @@ function SearchStudent() {
 								options={
 									levels && levels.data.length > 0
 										? levels.data.map(({ code, name }) => ({
-												value: code,
-												label: t(name),
-											}))
+											value: code,
+											label: t(name),
+										}))
 										: []
 								}
 								isClearable
@@ -249,27 +243,14 @@ function SearchStudent() {
 									<td>{student.level}</td>
 									<td>{student.paid ? t('paid') : t('free')}</td>
 									<td>
-										<div
-											style={{
-												width: '100%',
-												display: 'grid',
-												gridTemplateColumns: '1fr 1fr',
-												gap: '5px',
-											}}
-										>
-											<button
-												onClick={() => setSelectedStudent(student)}
-												style={{ width: '100%' }}
-											>
+										<div className='action-buttons'>
+											<button onClick={() => setSelectedStudent(student)}>
 												<IoMdSchool className='icon' />
-												{t('inspect')}
+												<span>{t('inspect')}</span>
 											</button>
-											<button
-												onClick={() => setSelectedStudent(student)}
-												style={{ width: '100%' }}
-											>
+											<button onClick={() => setSelectedStudent(student)}>
 												<IoMdSchool className='icon' />
-												{t('edit')}
+												<span>{t('edit')}</span>
 											</button>
 										</div>
 									</td>
@@ -300,9 +281,8 @@ function SearchStudent() {
 				</div>
 			</div>
 			<Modal
-				title={`${t('career_of')} ${selectedStudent?.name} ${
-					selectedStudent?.first_surname
-				}`}
+				title={`${t('career_of')} ${selectedStudent?.name} ${selectedStudent?.first_surname
+					}`}
 				isOpen={() => selectedStudent !== null}
 				onClick={() => setSelectedStudent(null)}
 				footer={

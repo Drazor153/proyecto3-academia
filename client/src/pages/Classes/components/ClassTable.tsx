@@ -31,6 +31,7 @@ import { Select } from '../types';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
 import { getYYYYMMDD } from '@/utils/functions';
+import { ThreeDots } from 'react-loading-icons';
 
 // TODO: ver el date de to
 
@@ -69,7 +70,7 @@ function ClassesTable({ role, select }: ClassTableProps) {
 
 	return (
 		<>
-			{isLoadingClasses && <div>Loading...</div>}
+			{isLoadingClasses && <ThreeDots />}
 			{isErrorClasses && <div>{t('error_getting_classes')}</div>}
 			{classes && (
 				<>
@@ -219,7 +220,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 
 	return (
 		<>
-			{isLoadingStudents && <div>Loading...</div>}
+			{isLoadingStudents && <ThreeDots />}
 			{students && (
 				<>
 					<table

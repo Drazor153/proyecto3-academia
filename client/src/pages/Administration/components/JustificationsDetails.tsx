@@ -10,6 +10,8 @@ import { TiCancel, TiDocumentText, TiTick } from 'react-icons/ti';
 import { useTranslation } from 'react-i18next';
 import { handleRUNChange, useDebounce } from '@/utils/functions';
 import { useLazyGetJustificationQuery } from '@/redux/services/justificationApi';
+import JustificationViewer from '@/components/JustificationViewer';
+import { Justification } from '@/utils/types';
 
 function JustificationsDetails() {
 	useTranslation();
@@ -24,6 +26,8 @@ function JustificationsDetails() {
 	const [run, setRun] = useState('');
 	const [name, setName] = useState('');
 	const [status, setStatus] = useState(statusOptions[0].value);
+	const [selectedJustification, setSelectedJustification] =
+		useState<Justification>();
 	const debouncedRun = useDebounce<string>(run, 1000);
 	const debouncedName = useDebounce<string>(name, 1000);
 	const size = 10;
@@ -129,7 +133,7 @@ function JustificationsDetails() {
 					</div>
 				</div>
 			</div>
-			<table className='students-table'>
+			<table className='justifications-table'>
 				<thead>
 					<tr>
 						<th>{t('run')}</th>
@@ -164,7 +168,9 @@ function JustificationsDetails() {
 									<td>{justification.approved}</td>
 									<td>
 										<div className='action-buttons'>
-											<button>
+											<button
+												onClick={() => setSelectedJustification(justification)}
+											>
 												<TiDocumentText className='icon' />
 												<span>{t('view')}</span>
 											</button>
@@ -205,6 +211,10 @@ function JustificationsDetails() {
 					</button>
 				</div>
 			</div>
+			<JustificationViewer
+				fileName={(selectedJustification?.file as string) ?? ''}
+				onClose={() => setSelectedJustification(undefined)}
+			/>
 		</>
 	);
 }
