@@ -6,12 +6,15 @@ interface JustificationViewerProps {
 	onClose: () => void;
 }
 
-export default function fileName({
+export default function JustificationViewer({
 	fileName,
 	onClose,
 }: JustificationViewerProps) {
 	if (!fileName) return null;
-	const url = import.meta.env.VITE_SERVER_HOST + '/pdf/' + fileName;
+	const url =
+		import.meta.env.VITE_SERVER_HOST +
+		'/pdf/' +
+		(fileName.endsWith('.pdf') ? fileName : fileName + '.pdf');
 
 	return (
 		<Modal

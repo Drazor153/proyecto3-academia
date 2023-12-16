@@ -72,16 +72,16 @@
 	thead,
 	tbody {
 		tr {
-			grid-template-columns: 20% auto 10% 30%;
+			grid-template-columns: 20% auto 10% 15% 20%;
 		}
 	}
+}
 
-	&.search {
-		thead,
-		tbody {
-			tr {
-				grid-template-columns: 20% auto 10% 15% 30%;
-			}
+.justifications-table {
+	thead,
+	tbody {
+		tr {
+			grid-template-columns: 20% auto 10% 30%;
 		}
 	}
 }
@@ -151,7 +151,7 @@
 .action-buttons {
 	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
 	gap: 10px;
 
 	button {
@@ -244,3 +244,76 @@
 		}
 	}
 }
+
+.exams-by-period-container {
+	grid-column: 1/span 2;
+	display: grid;
+	gap: 10px;
+	width: 100%;
+	height: 100%;
+	table {
+		font-size: 1.2rem;
+		width: 100%;
+		thead,
+		tbody {
+			tr {
+				grid-template-columns: 70% 30%;
+			}
+		}
+		tbody {
+			height: 100%;
+			text-wrap: nowrap;
+		}
+	}
+}
+
+.exams-management-layout {
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	grid-template-rows: max-content 1fr max-content;
+	gap: 10px;
+	height: 100%;
+
+	button {
+		place-self: end;
+		grid-column: 2;
+	}
+}
+
+.period-select-container,
+.quizzes-select-container {
+	background-color: $darkbrown;
+	padding: 10px;
+	border-radius: 5px;
+	display: grid;
+
+	h3 {
+		font-size: 1.4rem;
+		color: $white;
+		background-color: $crimsonred;
+		padding-inline-start: 5px;
+		border-radius: 5px 5px 0 0;
+	}
+	
+	.select-container {
+		background-color: $crimsonred;
+		border-radius: 0px 5px 5px 5px;
+		padding: 5px;
+		grid-column: 1 / span 2;
+		display: flex;
+		gap: 5px;
+
+		.react-select-container {
+			flex: 1;
+		}
+	}
+}
+
+.period-select-container {
+	grid-template-columns: 1fr 1fr;
+
+	button {
+		height: 100%;
+	}
+}
+
