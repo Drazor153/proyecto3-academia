@@ -1,11 +1,13 @@
 import {
   IsDateString,
+  IsEnum,
   IsInt,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { JustificationStatus } from '@/common/constants';
 
 export class AttendanceDto {
   @IsNotEmpty()
@@ -35,10 +37,6 @@ export class GetJustificationsDto {
 }
 
 export class CreateNewJustificationDto {
-  // @IsNotEmpty()
-  // @IsInt()
-  // run: number;
-
   @IsNotEmpty()
   @IsDateString()
   initAusencia: Date;
@@ -47,24 +45,18 @@ export class CreateNewJustificationDto {
   @IsDateString()
   endAusencia: Date;
 
-  // @IsNotEmpty()
-  // @IsInt()
-  // numInasistente: number;
-
   @IsNotEmpty()
   @IsString()
   reason: string;
+}
 
-  // @IsNotEmpty()
-  // file: string;
+export class SetJustificationStatusParams {
+  @IsNumberString()
+  id: number;
+}
 
-  // @IsNotEmpty()
-  // @IsString()
-  // approved: string;
-
-  // @IsNotEmpty()
-  // @IsArray()
-  // @ValidateNested({ each: true })
-  // @Type(() => AttendanceDto)
-  // attendance: AttendanceDto[];
+export class SetJustificationStatusDto {
+  @IsNotEmpty()
+  @IsEnum(JustificationStatus)
+  status: JustificationStatus;
 }

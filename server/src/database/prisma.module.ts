@@ -7,6 +7,7 @@ import {
   StudentsRepo,
   UsersRepo,
 } from './repositories';
+import JustificationsRepo from './repositories/justifications';
 
 const services = [
   PrismaService,
@@ -14,7 +15,8 @@ const services = [
   AnnouncementsRepo,
   UsersRepo,
   ClassesRepo,
-  LessonsRepo
+  LessonsRepo,
+  JustificationsRepo,
 ];
 @Module({
   providers: services,

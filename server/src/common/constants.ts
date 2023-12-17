@@ -15,3 +15,9 @@ export const enum RoleEnum {
 export const enum UserStatus {
   Enabled = 'ENABLED',
 }
+
+export enum JustificationStatus {
+  Approved = 'approved',
+  Rejected = 'rejected',
+  Pending = 'pending',
+}

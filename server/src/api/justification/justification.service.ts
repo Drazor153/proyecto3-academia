@@ -4,47 +4,42 @@ import {
   CreateNewJustificationDto,
   GetJustificationsDto,
 } from './justification.dto';
-import { savePdf } from '../../common/storage';
-import { hasNextPage, paginate } from '../../common/paginate';
+import { savePdf } from '@/common/storage';
+import { hasNextPage, paginate } from '@/common/paginate';
+import { JustificationStatus } from '@/common/constants';
+import { JustificationsRepo } from '@repos';
+import { filterJustifications } from '@/sanitizers/justifications';
 
 @Injectable()
 export class JustificationService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private justificationsRepo: JustificationsRepo
+  ) {}
 
-  //gettear todas las justificaciones (opcionalmente dar rut y estado de approved para filtrar)
   async getAllJustifications(queryParams: GetJustificationsDto) {
-    const { page, size, name, run, approved } = queryParams; //<- name sin usar btw ;-;
-    const query = await this.prisma.justification.findMany({
-      include: { student: true, Attendance: true },
-    });
+    const { page, size, name, run, approved } = queryParams;
+    const query = await this.justificationsRepo.getAllJustifications();
 
-    //filtro penquita que chamuye acá ;-; (no utiliza el nombre btw pq no tenia mucha idea de como hacer un join)
-    const justifications = query
-      .filter(
-        (justification) =>
-          String(justification.studentRun).startsWith(String(run)) &&
-          justification.approved
-            .toLowerCase()
-            .startsWith(approved.toLowerCase()) &&
-          justification.student.name
-            .toLowerCase()
-            .startsWith(name.toLowerCase())
-      )
-      .map((justification) => ({
-        id: justification.id,
-        studentRun: justification.studentRun,
-        initAusencia: justification.init_ausencia,
-        endAusencia: justification.end_ausencia,
-        numInasistente: justification.num_inasistente,
-        reason: justification.reason,
-        file: justification.file,
-        approved: justification.approved,
-        Attendance: justification.Attendance,
-        name: justification.student.name,
-        first_surname: justification.student.first_surname,
-        run: justification.student.run,
-        dv: justification.student.dv,
-      }));
+    const justifications = filterJustifications(query, {
+      name,
+      run,
+      status: approved,
+    }).map((justification) => ({
+      id: justification.id,
+      studentRun: justification.studentRun,
+      initAusencia: justification.init_ausencia,
+      endAusencia: justification.end_ausencia,
+      numInasistente: justification.num_inasistente,
+      reason: justification.reason,
+      file: justification.file,
+      approved: justification.approved,
+      Attendance: justification.Attendance,
+      name: justification.student.name,
+      first_surname: justification.student.first_surname,
+      run: justification.student.run,
+      dv: justification.student.dv,
+    }));
 
     const paginatedJustifications = paginate(justifications, +page, +size);
     const previous = +page > 1;
@@ -66,10 +61,7 @@ export class JustificationService {
   */
 
   async getOwnJustifications(run: number) {
-    const query = await this.prisma.justification.findMany({
-      where: { studentRun: run },
-      include: { Attendance: true },
-    });
+    const query = await this.justificationsRepo.getJustificationsByRun(run);
     const justifications = query.map((justification) => ({
       id: justification.id,
       initAusencia: justification.init_ausencia,
@@ -84,7 +76,6 @@ export class JustificationService {
     return { data: justifications };
   }
 
-  //Create para las justificaciones
   async createNewJustification(
     run: number,
     file: Express.Multer.File,
@@ -100,21 +91,20 @@ export class JustificationService {
     const filename = `${run.toString()}_${
       init_ausencia.toISOString().split('T')[0]
     }`;
-    const justif = await this.prisma.justification.create({
+    const justification = await this.prisma.justification.create({
       data: {
         studentRun: run,
         init_ausencia,
         end_ausencia,
-        // num_inasistente: numInasist1ente, //<- no se que es esto, pero no lo pide el DTO
         num_inasistente: 1,
         reason: reason,
         file: filename,
-        approved: 'pending',
+        approved: JustificationStatus.Pending,
       },
     });
-    console.log('justif: ', justif);
+    console.log('justification: ', justification);
 
-    await savePdf(`${justif.id}_${filename}`, file);
+    await savePdf(`${justification.id}_${filename}`, file);
     return { msg: 'justification_created' };
     // const id = justif.id;
 
@@ -132,11 +122,8 @@ export class JustificationService {
     // });
   }
 
-  async setJustificationApproved(id: number, approved: string) {
-    const res = await this.prisma.justification.update({
-      where: { id },
-      data: { approved },
-    });
+  async setJustificationApproved(id: number, approved: JustificationStatus) {
+    const res = await this.justificationsRepo.updateStatus(id, approved);
     console.log(res);
 
     return { msg: 'justification_approved' };

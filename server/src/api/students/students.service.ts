@@ -38,13 +38,16 @@ export class StudentsService {
   // }
 
   async getStudents(queryParams: PaginatedStudentsQuery) {
-    const { page, size, run, name, level } = queryParams;
+    const { page, size, run, name, level, paid: paidString } = queryParams;
+
+    const paid = paidString === 'true';
 
     const query = await this.studentRepo.getActiveStudents();
 
     const students = query
       .filter(
         (student) =>
+          student.enrols[0].paid === paid &&
           String(student.run).startsWith(run) &&
           student.enrols[0].levelCode.includes(level) &&
           student.name.toLowerCase().startsWith(name ? name.toLowerCase() : '')

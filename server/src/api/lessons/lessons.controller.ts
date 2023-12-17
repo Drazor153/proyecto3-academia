@@ -36,8 +36,8 @@ export class LessonsController {
 
   @Post('')
   @Roles(RoleEnum.Admin)
-  createLessons(@Body() data: CreateLessonsDto){
+  createLessons(@Body() createLessonDto: CreateLessonsDto){
     this.logger.info(`Admin creating lessons`);
-    return this.lessonsService.createLessons(data);
+    return this.lessonsService.createLessons(createLessonDto);
   }
 }

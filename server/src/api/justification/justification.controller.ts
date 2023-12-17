@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -16,6 +18,8 @@ import { RolesGuard } from '@/guards/roles.guard';
 import {
   CreateNewJustificationDto,
   GetJustificationsDto,
+  SetJustificationStatusDto,
+  SetJustificationStatusParams,
 } from './justification.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { RoleEnum } from '../../common/constants';
@@ -48,7 +52,7 @@ export class JustificationController {
   @Roles(RoleEnum.Student)
   getOwnJustifications(@Req() req: UserRequest) {
     this.logger.info(
-      `Stundent with run: ${req.user.sub} is getting his justifications`
+      `Student with run: ${req.user.sub} is getting his justifications`
     );
     return this.justificationService.getOwnJustifications(req.user.sub);
   }
@@ -68,6 +72,19 @@ export class JustificationController {
       req.user.sub,
       file,
       justificationDto
+    );
+  }
+
+  @Patch('/:id')
+  @Roles(RoleEnum.Admin)
+  setJustificationStatus(
+    @Param() params: SetJustificationStatusParams,
+    @Body() justificationDto: SetJustificationStatusDto
+  ) {
+    this.logger.info(`Updating justification with id: ${params.id}`);
+    return this.justificationService.setJustificationApproved(
+      +params.id,
+      justificationDto.status
     );
   }
 }
