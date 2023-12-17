@@ -3,6 +3,7 @@ import { PrismaService } from './prisma.service';
 import {
   AnnouncementsRepo,
   ClassesRepo,
+  LessonsRepo,
   StudentsRepo,
   UsersRepo,
 } from './repositories';
@@ -13,6 +14,7 @@ const services = [
   AnnouncementsRepo,
   UsersRepo,
   ClassesRepo,
+  LessonsRepo
 ];
 @Module({
   providers: services,

@@ -1,25 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { LessonParams } from '@/api/classes/dto/classes.dto';
+import { LessonParams } from '@/api/classes/classes.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PrismaService } from '@/database/prisma.service';
 import { sanitizeLessonClasses } from '@/sanitizers/classes';
-import { EnrolsStatus, RoleEnum } from '../../common/consts';
+import { EnrolsStatus, RoleEnum } from '../../common/constants';
+import { LessonsRepo } from '../../database/repositories';
+import { CreateLessonsDto } from './lessons.dto';
 
 @Injectable()
 export class LessonsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,private lessonsRepo: LessonsRepo) {}
 
   async getStudents({ lessonId }: LessonParams) {
-    const level = await this.prisma.lesson.findUnique({
-      where: {
-        id: +lessonId,
-      },
-      select: {
-        level: true,
-        year: true,
-        semester: true,
-      },
-    });
+    const level = await this.lessonsRepo.findById(+lessonId);
 
     if (!level) {
       throw new NotFoundException({
@@ -122,8 +115,14 @@ export class LessonsService {
       });
     }
 
-    const sanitizied = sanitizeLessonClasses(query);
+    const sanitized = sanitizeLessonClasses(query);
 
-    return { data: sanitizied };
+    return { data: sanitized };
+  }
+
+  async createLessons(data: CreateLessonsDto){
+    const {year, semester, lessons} = data;
+    console.log(data);
+    this.lessonsRepo.createMany(year, semester, lessons);
   }
 }

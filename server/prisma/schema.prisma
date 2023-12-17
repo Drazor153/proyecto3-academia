@@ -12,18 +12,19 @@ datasource db {
 }
 
 model User {
-  run           Int             @id
-  dv            String          @db.Char(1)
+  run           Int      @id
+  dv            String   @db.Char(1)
   name          String
   first_surname String
   password      String
   email         String?
   role          String
   status        String
-  date_join     DateTime        @default(now())
-  last_join     DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
+  date_join     DateTime @default(now())
+  last_join     DateTime @default(now())
+  updated_at    DateTime @updatedAt
   refresh_token String?
+
   enrols        enrols[]
   gives         gives[]
   Lesson        Lesson[]
@@ -33,22 +34,24 @@ model User {
 }
 
 model Level {
-  code    String   @id @db.Char(2)
-  name    String
+  code String @id @db.Char(2)
+  name String
+
   enrols  enrols[]
   Quiz    Quiz[]
   teaches Lesson[]
 }
 
 model enrols {
-  level      Level   @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
-  levelCode  String  @db.Char(2)
-  student    User    @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
-  paid       Boolean @default(false)
-  status     String
+  levelCode  String  @db.Char(2)
   year       Int
   semester   Int
+  paid       Boolean @default(false)
+  status     String
+
+  level   Level @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
+  student User  @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([levelCode, studentRun, year, semester])
 }
@@ -56,49 +59,54 @@ model enrols {
 model Topic {
   id   Int    @id @default(autoincrement())
   name String
+
   Quiz Quiz[]
 }
 
 model Quiz {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   number    Int
   year      Int
   semester  Int
-  topic     Topic   @relation(fields: [topicId], references: [id])
   topicId   Int
-  level     Level   @relation(fields: [levelCode], references: [code])
-  levelCode String  @db.Char(2)
-  gives     gives[]
+  levelCode String @db.Char(2)
+
+  gives gives[]
+  topic Topic   @relation(fields: [topicId], references: [id])
+  level Level   @relation(fields: [levelCode], references: [code])
 }
 
 model gives {
-  quiz       Quiz  @relation(fields: [quizId], references: [id])
   quizId     Int
-  student    User  @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun Int
   grade      Float
+
+  quiz    Quiz @relation(fields: [quizId], references: [id])
+  student User @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([quizId, studentRun])
 }
 
 model Lesson {
-  teacher    User?   @relation(fields: [teacherRun], references: [run], onDelete: SetNull, onUpdate: Cascade)
-  teacherRun Int?
-  level      Level   @relation(fields: [levelCode], references: [code])
-  levelCode  String  @db.Char(2)
-  id         Int     @id @default(autoincrement())
+  id         Int    @id @default(autoincrement())
+  levelCode  String @db.Char(2)
   year       Int
   semester   Int
-  lesson     String  @db.Char(1)
-  Class      Class[]
+  teacherRun Int?
+  lesson     String @db.Char(1)
+
+  Class   Class[]
+  level   Level   @relation(fields: [levelCode], references: [code])
+  teacher User?   @relation(fields: [teacherRun], references: [run], onDelete: SetNull, onUpdate: Cascade)
 }
 
 model Class {
-  id         Int          @id @default(autoincrement())
-  date       DateTime     @default(now())
-  contents   String
+  id       Int      @id @default(autoincrement())
+  date     DateTime @default(now())
+  contents String
+  lessonId Int
+
   lesson     Lesson       @relation(fields: [lessonId], references: [id])
-  lessonId   Int
   attendance Attendance[]
 }
 
@@ -120,16 +128,17 @@ model Attendance {
 
 //Justification entity
 model Justification {
-  id              Int          @id @default(autoincrement())
-  init_ausencia   DateTime     @default(now())
-  end_ausencia    DateTime     @default(now())
+  id              Int      @id @default(autoincrement())
+  init_ausencia   DateTime @default(now())
+  end_ausencia    DateTime @default(now())
   num_inasistente Int //<-- I got doubts about this, is this a composite for (end_ausencia - init_ausencia)?
   reason          String
   file            String
   approved        String //Boolean?
-  Attendance      Attendance[]
-  student         User         @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
   studentRun      Int
+
+  Attendance Attendance[]
+  student    User         @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Announcement {
