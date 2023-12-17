@@ -1,17 +1,17 @@
-export enum AnnTargets {
+export const enum AnnTargets {
   ALL = 'ALL',
 }
 
-export enum EnrolsStatus {
+export const enum EnrolsStatus {
   Active = 'active',
 }
 
-export enum RoleEnum {
+export const enum RoleEnum {
   Student = 'STUDENT',
   Teacher = 'TEACHER',
   Admin = 'ADMIN',
 }
 
-export enum UserStatus {
+export const enum UserStatus {
   Enabled = 'ENABLED',
 }

@@ -4,7 +4,7 @@ import { RolesGuard } from '@/guards/roles.guard';
 import { Roles } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '../../common/consts';
+import { RoleEnum } from '../../common/constants';
 
 @ApiTags('Levels')
 @Controller('api/levels')

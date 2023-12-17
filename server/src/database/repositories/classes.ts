@@ -3,7 +3,7 @@ import { PrismaService } from '@/database/prisma.service';
 import {
   CreateClassDto,
   UpdateClassDto,
-} from '../../api/classes/dto/classes.dto';
+} from '../../api/classes/classes.dto';
 
 @Injectable()
 export default class ClassesRepo {

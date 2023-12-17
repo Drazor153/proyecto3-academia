@@ -3,7 +3,7 @@ import {
   CreateNewStudentDto,
   GetStudentGradesParams,
   PaginatedStudentsQuery,
-} from './dto/students.dto';
+} from './students.dto';
 import { PrismaService } from '@/database/prisma.service';
 import { hasNextPage, paginate } from '@/common/paginate';
 import { hashPassword } from '@/common/bcrypt';

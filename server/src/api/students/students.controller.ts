@@ -14,13 +14,13 @@ import {
   GetStudentGradesParams,
   PaginatedStudentsQuery,
   StudentCareerParams,
-} from './dto/students.dto';
+} from './students.dto';
 import { Roles } from '@/guards/roles.decorator';
 import { RolesGuard } from '@/guards/roles.guard';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '../../common/consts';
+import { RoleEnum } from '../../common/constants';
 
 @ApiTags('Students')
 @Controller('api/students')

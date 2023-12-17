@@ -3,11 +3,11 @@ import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
   PostQuizzesGradesBody,
-} from './dto/teachers.dto';
+} from './teachers.dto';
 import { PinoLogger } from 'nestjs-pino';
 1;
 import { PrismaService } from '@/database/prisma.service';
-import { EnrolsStatus, RoleEnum } from '@common/consts';
+import { EnrolsStatus, RoleEnum } from '@/common/constants';
 import {
   sanitizeTeacherLevels,
   sanitizeTopicQuizzes,

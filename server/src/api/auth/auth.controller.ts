@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CookieOptions, Response } from 'express';
-import { LoginFormDto } from './dto/auth.dto';
+import { LoginFormDto } from './auth.dto';
 import { UserRequest } from '@/interfaces/request.interface';
 import { NoAccess, NoRefresh } from '@/guards/roles.decorator';
 import { PinoLogger } from 'nestjs-pino';

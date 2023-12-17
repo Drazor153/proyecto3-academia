@@ -12,13 +12,13 @@ import {
   GetLevelsQuizzesParams,
   GetQuizGradesParams,
   PostQuizzesGradesBody,
-} from './dto/teachers.dto';
+} from './teachers.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { RolesGuard } from '@/guards/roles.guard';
 import { Roles } from '@/guards/roles.decorator';
 import { UserRequest } from '@/interfaces/request.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '@/common/consts';
+import { RoleEnum } from '@/common/constants';
 
 @ApiTags('Teachers')
 @Controller('api/teachers')

@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { config } from '@/config/config';
 import { comparePassword, hashPassword } from '@/common/bcrypt';
 import { UsersRepo } from '@repos';
-import { RoleEnum } from '@/common/consts';
+import { RoleEnum } from '@/common/constants';
 
 @Injectable()
 export class AuthService {

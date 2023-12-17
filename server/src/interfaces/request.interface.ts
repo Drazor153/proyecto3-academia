@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { RoleEnum } from '../common/consts';
+import { RoleEnum } from '../common/constants';
 export interface UserPayload {
   sub: number;
   role: RoleEnum;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { EnrolsStatus, RoleEnum, UserStatus } from '../../common/consts';
+import { EnrolsStatus, RoleEnum, UserStatus } from '../../common/constants';
 
 @Injectable()
 export default class StudentsRepo {

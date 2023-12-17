@@ -16,9 +16,9 @@ import { RolesGuard } from '@/guards/roles.guard';
 import {
   CreateNewJustificationDto,
   GetJustificationsDto,
-} from './dto/justification.dto';
+} from './justification.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '../../common/consts';
+import { RoleEnum } from '../../common/constants';
 import { UserRequest } from '../../interfaces/request.interface';
 import { FileInterceptor } from '@nestjs/platform-express';
 

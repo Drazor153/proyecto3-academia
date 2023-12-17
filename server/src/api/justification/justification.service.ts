@@ -3,7 +3,7 @@ import { PrismaService } from '@/database/prisma.service';
 import {
   CreateNewJustificationDto,
   GetJustificationsDto,
-} from './dto/justification.dto';
+} from './justification.dto';
 import { savePdf } from '../../common/storage';
 import { hasNextPage, paginate } from '../../common/paginate';
 
