@@ -5,7 +5,7 @@ import Modal from '@/components/Modal';
 import { ChangeEvent, useState } from 'react';
 import Announcement from '../../Dashboard/components/Announcement';
 import AnnouncementDetails from './AnnouncementDetails';
-import { AnnouncementType, PostAnnouncement, Target } from '@/utils/types';
+import { AnnouncementType, PostAnnouncement } from '@/utils/types';
 import {
 	useAddAnnouncementMutation,
 	useDeleteAnnouncementMutation,
@@ -22,6 +22,8 @@ import {
 	HiPencil,
 	HiTrash,
 } from 'react-icons/hi2';
+import { ThreeDots } from 'react-loading-icons';
+import { useTranslation } from 'react-i18next';
 
 const initialState: AnnouncementType = {
 	author: {
@@ -34,7 +36,7 @@ const initialState: AnnouncementType = {
 	expiresAt: '',
 	id: -2,
 	image: '',
-	target: [{ id: -1, name: '' }],
+	target: [],
 	title: '',
 	updatedAt: '',
 };
@@ -46,6 +48,8 @@ enum Type {
 }
 
 function AnnouncementTable(): JSX.Element {
+	useTranslation();
+
 	const [addAnnouncement] = useAddAnnouncementMutation();
 	const [updateAnnouncement] = useUpdateAnnouncementMutation();
 	const [deleteAnnouncement] = useDeleteAnnouncementMutation();
@@ -141,23 +145,13 @@ function AnnouncementTable(): JSX.Element {
 					return { ...prevState, expiresAt };
 				}
 				case 'target': {
-					const { value, label } = JSON.parse(e.target.value);
-					const target = [
-						{
-							id: value,
-							name: label,
-						},
-					];
-					// const target = e.target.value.split(', ');
-					// if (target.length === 1 && target[0] === '') {
-					// 	return { ...prevState, target: [] };
-					// }
+					const { label } = JSON.parse(e.target.value);
+					const target = [label];
 					return { ...prevState, target };
 				}
 				case 'category': {
 					const { label } = JSON.parse(e.target.value);
 					const category = label;
-					// console.log(category);
 					return { ...prevState, category };
 				}
 				default:
@@ -167,16 +161,8 @@ function AnnouncementTable(): JSX.Element {
 	};
 
 	const onSave = () => {
-		const {
-			category,
-			content,
-			expiresAt,
-			image,
-			target: t,
-			title,
-		} = selectedAnnouncement;
-
-		const target = t.map(({ name }: Target) => name);
+		const { category, content, expiresAt, image, target, title } =
+			selectedAnnouncement;
 
 		const body: PostAnnouncement = {
 			category,
@@ -242,7 +228,7 @@ function AnnouncementTable(): JSX.Element {
 		<>
 			{isLoading && (
 				<>
-					<h1>Loading...</h1>
+					<ThreeDots />
 				</>
 			)}
 			{isSuccess && (

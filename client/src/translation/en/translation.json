@@ -154,5 +154,7 @@
 	"exams_calendar_management": "Exams Calendar Management",
 	"period": "Period",
 	"quizzes": "Quizzes",
-	"quizzes_select": "Select a quiz"
+	"quizzes_select": "Select a quiz",
+	"topic": "Topic",
+	"edit": "Edit"
 }

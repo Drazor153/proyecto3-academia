@@ -155,6 +155,8 @@
 	"enrolment-type-select": "Seleccione una matrícula",
 	"exams_calendar_management": "Administración de calendario de exámenes",
 	"period": "Periodo",
-	"quizzes": "Quizzes",
-	"quizzes_select": "Seleccione un quiz"
+	"quizzes": "Examenes",
+	"quizzes_select": "Seleccione un quiz",
+	"topic": "Tópico",
+	"edit": "Editar"
 }

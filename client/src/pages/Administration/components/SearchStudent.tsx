@@ -78,7 +78,7 @@ function SearchStudent() {
 	const [run, setRun] = useState('');
 	const [name, setName] = useState('');
 	const [level, setLevel] = useState('');
-	const [enrolType, setEnrolType] = useState('');
+	const [paid, setPaid] = useState<boolean>();
 	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 	const debouncedRun = useDebounce<string>(run, 1000);
 	const debouncedName = useDebounce<string>(name, 1000);
@@ -93,8 +93,8 @@ function SearchStudent() {
 
 	const { data: levels, isLoading: isLevelsLoading } = useGetLevelsQuery(null);
 	const enrollmentTypes = [
-		{ value: 'paid', label: t('paid') },
-		{ value: 'free', label: t('free') },
+		{ value: true, label: t('paid') },
+		{ value: false, label: t('free') },
 	];
 
 	const runWithoutDv = (run: string) => {
@@ -106,12 +106,19 @@ function SearchStudent() {
 	useEffect(() => {
 		const run: string = runWithoutDv(debouncedRun);
 		setPage(1);
-		getStudents({ page: 1, size, run, level, name: debouncedName });
-	}, [debouncedRun, level, debouncedName]);
+		getStudents({
+			page: 1,
+			size,
+			run,
+			level,
+			name: debouncedName,
+			paid,
+		});
+	}, [debouncedRun, level, debouncedName, paid]);
 
 	useEffect(() => {
 		const run: string = runWithoutDv(debouncedRun);
-		getStudents({ page, size, run, level, name });
+		getStudents({ page, size, run, level, name, paid });
 	}, [page]);
 
 	const handleChangePage = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -169,17 +176,18 @@ function SearchStudent() {
 						</div>
 					</div>
 					<div className='search-container'>
-						<label htmlFor='enrolment-type-search'>{t('enrolment-type-search')}</label>
+						<label htmlFor='enrolment-type-search'>
+							{t('enrolment-type-search')}
+						</label>
 						<div className='input-container'>
 							<Select
 								className='react-select-container'
 								classNamePrefix={'react-select'}
 								placeholder={t('enrolment-type-select')}
-								onChange={option => setEnrolType(option?.value ? option.value : '')}
+								onChange={option => setPaid(option?.value)}
 								options={enrollmentTypes}
 								isClearable
 								isSearchable={false}
-								isLoading={isLevelsLoading}
 							/>
 						</div>
 					</div>
@@ -194,9 +202,9 @@ function SearchStudent() {
 								options={
 									levels && levels.data.length > 0
 										? levels.data.map(({ code, name }) => ({
-											value: code,
-											label: t(name),
-										}))
+												value: code,
+												label: t(name),
+										  }))
 										: []
 								}
 								isClearable
@@ -281,8 +289,9 @@ function SearchStudent() {
 				</div>
 			</div>
 			<Modal
-				title={`${t('career_of')} ${selectedStudent?.name} ${selectedStudent?.first_surname
-					}`}
+				title={`${t('career_of')} ${selectedStudent?.name} ${
+					selectedStudent?.first_surname
+				}`}
 				isOpen={() => selectedStudent !== null}
 				onClick={() => setSelectedStudent(null)}
 				footer={

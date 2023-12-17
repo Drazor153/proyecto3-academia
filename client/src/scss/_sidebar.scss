@@ -52,13 +52,26 @@ $sidebar-closed-width: 45px;
 	margin: auto 0;
 }
 
-a {
-	&[href='/'],
-	&[href='/Dashboard'] {
-		order: 0;
+.sidebar-logo-uta {
+	height: 250px;
+	overflow: hidden;
+	margin: auto;
+	transition-property: opacity;
+	transition-duration: 0.5s;
+	transition-delay: 0s;
+	opacity: 0.25;
+	pointer-events: none;
+	user-select: none;
+
+	&.open {
+		opacity: 0.25;
+		transition-delay: 0.25s;
 	}
 
-	order: 1;
+	&.closed {
+		opacity: 0;
+		transition-duration: 0.2s;
+	}
 }
 
 .link {
@@ -91,7 +104,6 @@ a {
 	}
 
 	&[data-div='Logout'] {
-		margin-top: auto;
 		order: 2;
 	}
 }

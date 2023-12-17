@@ -175,4 +175,5 @@ export type Justification = {
 
 export type PostJustification = Omit<
 	Justification,
-	'attendance' | 'approved' | 'run' | 'numInasistente'>
+	'attendance' | 'approved' | 'run' | 'numInasistente'
+>;

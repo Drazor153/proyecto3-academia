@@ -105,18 +105,31 @@ input[type='number'] {
 	}
 }
 
+.react-select--is-disabled {
+	opacity: 0.8;
+}
+
 .react-select {
 	z-index: 2;
 
 	&__option {
+		margin-block: 2px;
 		&--is-selected {
 			background-color: base.$crimsonred !important;
+			border-radius: 5px !important;
 		}
 
 		&--is-focused {
 			background-color: base.$crimsonred !important;
+			border-radius: 5px !important;
 			color: white !important;
 		}
+	}
+
+	&__menu {
+		display: block !important;
+		padding-inline: 5px;
+		gap: 1px;
 	}
 
 	&__multi-value {
@@ -126,6 +139,11 @@ input[type='number'] {
 		&__label {
 			color: white !important;
 		}
+	}
+
+	&__placeholder {
+		overflow: hidden;
+		text-wrap: nowrap;
 	}
 
 	&__control {

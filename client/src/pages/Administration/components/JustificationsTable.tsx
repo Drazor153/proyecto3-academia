@@ -9,12 +9,17 @@ import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
 import { TiCancel, TiDocumentText, TiTick } from 'react-icons/ti';
 import { useTranslation } from 'react-i18next';
 import { handleRUNChange, useDebounce } from '@/utils/functions';
-import { useLazyGetJustificationQuery } from '@/redux/services/justificationApi';
+import {
+	useLazyGetJustificationQuery,
+	useSendJustificationStatusMutation,
+} from '@/redux/services/justificationApi';
 import JustificationViewer from '@/components/JustificationViewer';
 import { Justification } from '@/utils/types';
 
 function JustificationsDetails() {
 	useTranslation();
+
+	const [sendJustificationStatus] = useSendJustificationStatusMutation();
 
 	const statusOptions = [
 		{ value: 'pending', label: t('pending') },
@@ -55,7 +60,7 @@ function JustificationsDetails() {
 			name: debouncedName,
 			approved: status,
 		});
-	}, [debouncedRun, debouncedName]);
+	}, [debouncedRun, debouncedName, status]);
 
 	useEffect(() => {
 		const run: string = runWithoutDv(debouncedRun);
@@ -126,7 +131,6 @@ function JustificationsDetails() {
 								defaultValue={statusOptions[0]}
 								onChange={e => setStatus(e?.value ?? statusOptions[0].value)}
 								options={statusOptions}
-								isClearable
 								isSearchable={false}
 							/>
 						</div>
@@ -136,6 +140,7 @@ function JustificationsDetails() {
 			<table className='justifications-table'>
 				<thead>
 					<tr>
+						<th>{t('date')}</th>
 						<th>{t('run')}</th>
 						<th>{t('name')}</th>
 						<th>{t('status')}</th>
@@ -156,6 +161,9 @@ function JustificationsDetails() {
 							result.data.data.map(justification => (
 								<tr key={justification.id}>
 									<td>
+										{new Date(justification.initAusencia).toLocaleDateString()}
+									</td>
+									<td>
 										{formatRut(
 											`${justification.run}-${justification.dv}`,
 											RutFormat.DOTS_DASH,
@@ -174,12 +182,25 @@ function JustificationsDetails() {
 												<TiDocumentText className='icon' />
 												<span>{t('view')}</span>
 											</button>
-
-											<button>
+											<button
+												onClick={() =>
+													sendJustificationStatus({
+														id: justification.id!.toString(),
+														status: 'rejected',
+													})
+												}
+											>
 												<TiCancel className='icon' />
 												<span>{t('reject')}</span>
 											</button>
-											<button>
+											<button
+												onClick={() =>
+													sendJustificationStatus({
+														id: justification.id!.toString(),
+														status: 'approved',
+													})
+												}
+											>
 												<TiTick className='icon' />
 												<span>{t('approve')}</span>
 											</button>

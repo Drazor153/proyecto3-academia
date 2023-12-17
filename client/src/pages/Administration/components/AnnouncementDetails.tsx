@@ -4,6 +4,7 @@ import { AnnouncementType } from '@/utils/types';
 import { compressImage } from '@/utils/functions';
 import Select from 'react-select';
 import { useGetCategoriesTargetsQuery } from '@/redux/services/announcementsApi';
+import { ThreeDots } from 'react-loading-icons';
 
 interface AnnouncementDetailsProps {
 	announcement: AnnouncementType;
@@ -43,35 +44,35 @@ function AnnouncementDetails({
 
 	return (
 		<>
-			{isLoading && <h1>Loading...</h1>}
+			{isLoading && <ThreeDots />}
 			{isSuccess && (
 				<section>
 					<form>
-						<label htmlFor="title">{t('title')}</label>
+						<label htmlFor='title'>{t('title')}</label>
 						<input
-							type="text"
-							name="title"
-							id="title"
+							type='text'
+							name='title'
+							id='title'
 							placeholder={t('title')}
 							value={announcement.title}
 							onChange={onChange}
 							required
 						/>
-						<label htmlFor="content">{t('content')}</label>
+						<label htmlFor='content'>{t('content')}</label>
 						<textarea
-							name="content"
-							id="content"
+							name='content'
+							id='content'
 							placeholder={t('content')}
 							value={announcement.content}
 							onChange={onChange}
 							required
 						/>
-						<label htmlFor="category">{t('category')}</label>
+						<label htmlFor='category'>{t('category')}</label>
 						<Select
-							name="category"
+							name='category'
 							placeholder={t('category')}
-							className="react-select-container"
-							classNamePrefix="react-select"
+							className='react-select-container'
+							classNamePrefix='react-select'
 							value={{
 								value: announcement.category,
 								label: t(announcement.category),
@@ -99,9 +100,9 @@ function AnnouncementDetails({
 				/> */}
 						<label>{t('expires')}</label>
 						<input
-							type="date"
-							name="expiresAt"
-							id="expiresAt"
+							type='date'
+							name='expiresAt'
+							id='expiresAt'
 							min={new Date().toISOString().split('T')[0]}
 							max={
 								new Date(new Date().setMonth(new Date().getMonth() + 1))
@@ -113,12 +114,12 @@ function AnnouncementDetails({
 							required
 						/>
 
-						<label htmlFor="target">{t('target')}</label>
+						<label htmlFor='target'>{t('target')}</label>
 						<Select
-							name="target"
+							name='target'
 							placeholder={t('target')}
-							className="react-select-container"
-							classNamePrefix="react-select"
+							className='react-select-container'
+							classNamePrefix='react-select'
 							value={{
 								value: announcement.target[0],
 								label: t(announcement.target[0]),
@@ -137,12 +138,12 @@ function AnnouncementDetails({
 							required
 						/>
 
-						<label htmlFor="image">{t('image')}</label>
+						<label htmlFor='image'>{t('image')}</label>
 						<input
-							type="file"
-							name="image"
-							id="image"
-							accept="image/*"
+							type='file'
+							name='image'
+							id='image'
+							accept='image/*'
 							onChange={onChangeImage}
 						/>
 					</form>

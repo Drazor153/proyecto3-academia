@@ -1,7 +1,7 @@
 export default function Loading() {
 	return (
 		<img
-			src='images/loading.png'
+			src='/images/loading.png'
 			alt='loading-logo'
 			width={200}
 			height={200}

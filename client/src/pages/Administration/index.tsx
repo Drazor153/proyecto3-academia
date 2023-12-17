@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { t } from 'i18next';
 import SearchStudent from './components/SearchStudent';
 import AnnouncementTable from './components/AnnouncementTable';
-import JustificationDetails from './components/JustificationsDetails';
+import JustificationTable from './components/JustificationsTable';
 import ExamsCalendarManagement from './components/ExamsCalendarManagement';
 import AcademicCalendarManagement from './components/AcademicCalendarManagement';
 import { administrationItems } from '../../utils/pages';
@@ -20,7 +20,7 @@ const menus: Menus = {
 	students: {
 		registration: <FormNewStudent />,
 		search: <SearchStudent />,
-		justifications: <JustificationDetails />,
+		justifications: <JustificationTable />,
 	},
 	announcement: {
 		manage: <AnnouncementTable />,

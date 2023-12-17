@@ -84,7 +84,7 @@ function Login() {
 	};
 
 	useEffect(() => {
-		if (imgRef.current) {
+		if (!animPlayed && imgRef.current) {
 			const { y, width, height } = imgRef.current.getBoundingClientRect();
 			console.log(y, width, height);
 			setAnimate({
@@ -92,8 +92,8 @@ function Login() {
 				width,
 				height,
 			});
+			localStorage.setItem('animPlayed', 'true');
 		}
-		localStorage.setItem('animPlayed', 'true');
 	}, []);
 
 	return (
@@ -102,7 +102,7 @@ function Login() {
 				{!animPlayed && (
 					<motion.img
 						key='entry'
-						src='images/entry.png'
+						src='/images/entry.png'
 						style={{
 							marginBlock: '20px',
 							position: 'absolute',

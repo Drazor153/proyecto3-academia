@@ -1,0 +1,76 @@
+@import 'base';
+
+.academic-calendar-actions {
+	display: grid;
+	grid-template-columns:
+		repeat(2, calc(25% - 3.75px)) repeat(2, 1fr)
+		max-content;
+	grid-template-rows: max-content;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+	box-shadow: none;
+
+	&,
+	* {
+		box-sizing: border-box;
+	}
+
+	h3 {
+		font-size: 1.4rem;
+		color: $white;
+		background-color: $crimsonred;
+		padding-inline: 5px;
+		border-radius: 5px 5px 0 0;
+		width: max-content;
+	}
+
+	section {
+		background-color: $darkbrown;
+		padding: 10px;
+		border-radius: 5px;
+		margin: 0;
+		height: 100%;
+		gap: 0;
+		transition: opacity 0.25s;
+
+		.react-select-container,
+		.date-picker-container {
+			padding: 5px;
+			background-color: $crimsonred;
+			border-radius: 0px 5px 5px 5px;
+		}
+		.date-picker-container {
+			height: 100%;
+		}
+
+		.datepicker-input {
+			background-color: white;
+			height: 100%;
+		}
+	}
+	button {
+		height: 100%;
+		width: auto;
+		aspect-ratio: 1/2;
+
+		span {
+			width: 100%;
+			height: 100%;
+
+			.biSolidPlusSquare {
+				width: 75%;
+				height: 100%;
+			}
+		}
+	}
+
+	.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+
+		.react-select-container {
+			opacity: 1;
+		}
+	}
+}

@@ -1,5 +1,4 @@
-// import { useTranslation } from 'react-i18next';
-import { Timeline } from './components';
+import Timeline from './Timeline';
 
 export default function Academic() {
 	return (
