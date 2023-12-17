@@ -24,8 +24,14 @@ export class TeachersService {
 
   async getTeacherLessons(run: number, role: RoleEnum) {
     const query = await this.prisma.lesson.findMany({
-      where: role === RoleEnum.Admin ? {} : { teacherRun: run },
-      include: { level: true },
+      where:
+        role === RoleEnum.Admin
+          ? {}
+          : { lesson_teacher: { every: { teacherRun: run } } },
+      include: {
+        level: true,
+        lesson_teacher: { select: { teacherRun: true } },
+      },
       orderBy: [
         {
           level: {

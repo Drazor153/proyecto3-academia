@@ -60,12 +60,16 @@ export class LessonsService {
           },
           lesson: {
             include: {
-              teacher: {
+              lesson_teacher: {
                 select: {
-                  name: true,
-                  first_surname: true,
-                },
-              },
+                  teacher: {
+                    select: {
+                      name: true,
+                      first_surname: true,
+                    },
+                  },
+                }
+              }
             },
           },
         },
@@ -79,8 +83,8 @@ export class LessonsService {
         date: val.date,
         contents: val.contents,
         teacher: {
-          name: val.lesson.teacher?.name,
-          first_surname: val.lesson.teacher?.first_surname,
+          name: val.lesson.lesson_teacher[0].teacher.name,
+          first_surname: val.lesson.lesson_teacher[0].teacher.first_surname,
         },
         attendance: val.attendance[0]?.attended,
       }));

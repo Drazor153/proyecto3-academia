@@ -8,7 +8,6 @@ export interface StudentLevelRaw {
     code: string;
     name: string;
     teaches: {
-      teacherRun: number | null;
       levelCode: string;
       id: number;
       year: number;

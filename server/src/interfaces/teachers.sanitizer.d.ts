@@ -1,5 +1,7 @@
 export interface TeacherLevelsRaw {
-  teacherRun: number | null;
+  lesson_teacher: {
+    teacherRun: number;
+  }[];
   levelCode: string;
   id: number;
   year: number;

@@ -25,12 +25,12 @@ model User {
   updated_at    DateTime @updatedAt
   refresh_token String?
 
-  enrols        enrols[]
-  gives         gives[]
-  Lesson        Lesson[]
-  Attendance    Attendance[]
-  Justification Justification[]
-  Announcement  Announcement[]
+  enrols         enrols[]
+  gives          gives[]
+  Attendance     Attendance[]
+  Justification  Justification[]
+  Announcement   Announcement[]
+  lesson_teacher lesson_teacher[]
 }
 
 model Level {
@@ -88,16 +88,25 @@ model gives {
 }
 
 model Lesson {
-  id         Int    @id @default(autoincrement())
-  levelCode  String @db.Char(2)
-  year       Int
-  semester   Int
-  teacherRun Int?
-  lesson     String @db.Char(1)
+  id        Int    @id @default(autoincrement())
+  levelCode String @db.Char(2)
+  year      Int
+  semester  Int
+  lesson    String @db.Char(1)
 
-  Class   Class[]
-  level   Level   @relation(fields: [levelCode], references: [code])
-  teacher User?   @relation(fields: [teacherRun], references: [run], onDelete: SetNull, onUpdate: Cascade)
+  Class          Class[]
+  level          Level            @relation(fields: [levelCode], references: [code])
+  lesson_teacher lesson_teacher[]
+}
+
+model lesson_teacher {
+  lessonId   Int
+  teacherRun Int
+
+  lesson  Lesson @relation(fields: [lessonId], references: [id])
+  teacher User   @relation(fields: [teacherRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([lessonId, teacherRun])
 }
 
 model Class {
@@ -110,7 +119,6 @@ model Class {
   attendance Attendance[]
 }
 
-//this is now a whole entity!
 model Attendance {
   class      Class @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   classId    Int

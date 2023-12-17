@@ -74,25 +74,40 @@ export class AnnouncementsService {
   }
 
   private async getTeacherAnnouncements(run: number) {
-    const fecha_actual = new Date();
+    const currentDate = new Date();
     const teacher = await this.prisma.user.findUnique({
       where: {
         run,
       },
       select: {
-        Lesson: {
+        lesson_teacher: {
           where: {
-            year: fecha_actual.getFullYear(),
-            semester: fecha_actual.getMonth() < 6 ? 1 : 2,
+            lesson: {
+              year: currentDate.getFullYear(),
+              semester: currentDate.getMonth() < 6 ? 1 : 2,
+            }
           },
           select: {
-            levelCode: true,
-          },
-        },
+            lesson: {
+              select: {
+                levelCode: true,
+              }
+            }
+          }
+        }
+        // Lesson: {
+        //   where: {
+        //     year: currentDate.getFullYear(),
+        //     semester: currentDate.getMonth() < 6 ? 1 : 2,
+        //   },
+        //   select: {
+        //     levelCode: true,
+        //   },
+        // },
       },
     });
 
-    const levelCodes = teacher.Lesson.map((lesson) => lesson.levelCode);
+    const levelCodes = teacher.lesson_teacher.map(({lesson}) => lesson.levelCode);
 
     const query = await this.annRepository.allPerRole({
       send_to: {
