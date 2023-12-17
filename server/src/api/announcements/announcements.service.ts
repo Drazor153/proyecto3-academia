@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
-import { CreateAnnouncementDto } from './dto/announcement.dto';
+import { CreateAnnouncementDto } from './announcements.dto';
 import { UserPayload } from '@/interfaces/request.interface';
 import { AnnouncementsRepo } from '@repos';
 import { hasNextPage, paginate } from '@/common/paginate';
-import { AnnTargets, EnrolsStatus, RoleEnum } from '@common/consts';
-import { sanitizeAnnouncements } from '../../sanitizers/announcements';
+import { AnnTargets, EnrolsStatus, RoleEnum } from '@/common/constants';
+import { sanitizeAnnouncements } from '@/sanitizers/announcements';
 @Injectable()
 export class AnnouncementsService {
   constructor(
@@ -42,7 +42,7 @@ export class AnnouncementsService {
       },
     });
 
-    return sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query, true);
   }
 
   private async getStudentAnnouncements(run: number) {
@@ -70,7 +70,7 @@ export class AnnouncementsService {
       },
     });
 
-    return sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query, true);
   }
 
   private async getTeacherAnnouncements(run: number) {
@@ -100,7 +100,7 @@ export class AnnouncementsService {
       },
     });
 
-    return sanitizeAnnouncements(query);
+    return sanitizeAnnouncements(query, true);
   }
 
   async getAllAnnouncements(size: number, page: number) {

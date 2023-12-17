@@ -18,11 +18,11 @@ import {
   CreateAnnouncementDto,
   DeleteAnnouncementParams,
   UpdateAnnouncementDto,
-} from './dto/announcement.dto';
+} from './announcements.dto';
 import { PinoLogger } from 'nestjs-pino';
 import { UserRequest } from '@/interfaces/request.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { RoleEnum } from '@/common/consts';
+import { RoleEnum } from '@/common/constants';
 
 @ApiTags('Announcements')
 @Controller('api/announcements')
