@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 type CreateLesson = {
   lesson: string;
   levelCode: string;
-  teacherRun: number;
+  teachersRun: number[];
 };
 
 @Injectable()
@@ -25,6 +25,21 @@ export default class AnnouncementsRepo {
   }
 
   createMany(year: number, semester: number, lessons: CreateLesson[]) {
+    lessons.forEach(async ({ lesson, levelCode, teachersRun }) => {
+      await this.prisma.lesson.create({
+        data: {
+          levelCode,
+          year,
+          semester,
+          lesson,
+          lesson_teacher: {
+            create: teachersRun.map((run) => ({
+              teacherRun: run,
+            })),
+          },
+        },
+      });
+    });
     return this.prisma.lesson.createMany({
       // data: [{
       //   levelCode: 'A1',
@@ -37,7 +52,7 @@ export default class AnnouncementsRepo {
         levelCode: lesson.levelCode,
         year,
         semester,
-        teacherRun: lesson.teacherRun,
+        teacherRun: lesson.teachersRun,
         lesson: lesson.lesson,
       })),
     });
