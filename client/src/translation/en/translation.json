@@ -1,6 +1,7 @@
 {
 	"&": "&",
 	"absent": "Absent",
+	"action": "Action",
 	"actions": "Actions",
 	"administration_shortcuts": "Administration Shortcuts",
 	"administration": "Administration",
@@ -153,6 +154,8 @@
 	"enrolment-type-select": "Select an enrolment type",
 	"exams_calendar_management": "Exams Calendar Management",
 	"period": "Period",
+	"quiz": "Quiz",
+	"score": "Score",
 	"quizzes": "Quizzes",
 	"quizzes_select": "Select a quiz",
 	"topic": "Topic",

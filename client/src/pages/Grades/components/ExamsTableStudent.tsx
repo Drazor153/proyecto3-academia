@@ -126,8 +126,8 @@ function ExamsTable({
       <table className="grades-table">
         <thead>
           <tr>
-            <th>Test</th>
-            <th>Score</th>
+            <th>{t('quiz')}</th>
+            <th>{t('score')}</th>
           </tr>
         </thead>
         <tbody>

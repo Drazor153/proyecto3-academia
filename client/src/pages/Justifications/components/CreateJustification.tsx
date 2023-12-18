@@ -120,7 +120,7 @@ export function CreateJustification({
 						<label htmlFor='initial-date'>{t('initial_date')}</label>
 						<input
 							type='date'
-							className='form-control'
+							className='datepicker-input'
 							id='initial-date'
 							name='initAusencia'
 							onChange={e => setInitialDate(e.target.value)}
@@ -129,7 +129,7 @@ export function CreateJustification({
 						<label htmlFor='final-date'>{t('final_date')}</label>
 						<input
 							type='date'
-							className='form-control'
+							className='datepicker-input'
 							id='final-date'
 							name='endAusencia'
 							min={initialDate}

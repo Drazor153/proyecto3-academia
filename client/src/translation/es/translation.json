@@ -1,6 +1,7 @@
 {
 	"&": "y",
 	"absent": "Ausente",
+	"action": "Acción",
 	"actions": "Acciones",
 	"administration_shortcuts": "Atajos de administración",
 	"administration": "Administración",
@@ -155,7 +156,9 @@
 	"enrolment-type-select": "Seleccione una matrícula",
 	"exams_calendar_management": "Administración de calendario de exámenes",
 	"period": "Periodo",
-	"quizzes": "Examenes",
+	"quiz": "Quiz",
+	"score": "Nota",
+	"quizzes": "Quizzes",
 	"quizzes_select": "Seleccione un quiz",
 	"topic": "Tópico",
 	"edit": "Editar"

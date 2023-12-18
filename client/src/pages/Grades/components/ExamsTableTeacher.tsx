@@ -84,8 +84,8 @@ function ExamsTableTeacher({
       <table className="grades-table">
         <thead>
           <tr>
-            <th>Test</th>
-            <th>Action</th>
+            <th>{t('quiz')}</th>
+            <th>{t('action')}</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>

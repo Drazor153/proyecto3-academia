@@ -45,6 +45,10 @@
     align-items: center;
     font-size: 2rem;
     height: 150px;
+    
+    .icon-loading * {
+            fill: transparent ;
+        }
 
     .tailspin,
     .lock {
