@@ -83,8 +83,8 @@ export class LessonsService {
         date: val.date,
         contents: val.contents,
         teacher: {
-          name: val.lesson.lesson_teacher[0].teacher.name,
-          first_surname: val.lesson.lesson_teacher[0].teacher.first_surname,
+          name: val.lesson.lesson_teacher[0]?.teacher.name,
+          first_surname: val.lesson.lesson_teacher[0]?.teacher.first_surname,
         },
         attendance: val.attendance[0]?.attended,
       }));
@@ -125,8 +125,9 @@ export class LessonsService {
   }
 
   async createLessons(data: CreateLessonsDto){
-    const {year, semester, lessons} = data;
+    // const {period, lessons} = data;
     console.log(data);
-    this.lessonsRepo.createMany(year, semester, lessons);
+    return {msg: 'lessons_created'}
+    // this.lessonsRepo.createMany(year, semester, lessons);
   }
 }

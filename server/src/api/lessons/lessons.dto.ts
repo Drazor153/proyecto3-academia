@@ -44,10 +44,7 @@ class QuizDto {
 
 export class CreateLessonsDto {
   @IsPositive()
-  year: number;
-
-  @IsPositive()
-  semester: number;
+  period: number
 
   @IsArray()
   @ValidateNested({ each: true })
