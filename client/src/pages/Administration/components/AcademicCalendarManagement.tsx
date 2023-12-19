@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BiSolidPlusSquare } from 'react-icons/bi';
 import Select, { SingleValue } from 'react-select';
+import Period from './Period';
 
 type Option = SingleValue<{
 	value: string | number;
@@ -45,6 +46,8 @@ const { years, semesters, startDates, endDates } = {
 
 export default function AcademicCalendarManagement() {
 	useTranslation();
+
+	const [viewPeriod, setViewPeriod] = useState(false);
 
 	const [{ year, semester, startDate, endDate }, setAcademicCalendar] =
 		useState<AcademicCalendar>(initialState);
@@ -135,6 +138,7 @@ export default function AcademicCalendarManagement() {
 					</span>
 				</button>
 			</section>
+			{!viewPeriod && <Period semesterID={0} />}
 		</>
 	);
 }

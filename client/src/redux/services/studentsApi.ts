@@ -5,14 +5,16 @@ import {
 	Exams,
 	Paginate,
 	StudentCareer,
+	ResponseMsg,
 } from '../../utils/types';
 
 export const studentsApi = createApi({
 	reducerPath: 'studentsAPI',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/students`,
+		baseUrl: `${import.meta.env.VITE_API_URL}/api/students`,
 		credentials: 'include',
 	}),
+	tagTypes: ['Students'],
 	endpoints: builder => ({
 		getStudents: builder.query<
 			Paginate<Student[]>,
@@ -31,6 +33,7 @@ export const studentsApi = createApi({
 					params,
 				};
 			},
+			providesTags: ['Students'],
 		}),
 
 		getStudentsGrades: builder.query<
@@ -52,6 +55,20 @@ export const studentsApi = createApi({
 		getStudentCareerByRun: builder.query<Data<StudentCareer>, { run: number }>({
 			query: ({ run }) => `/career/${run}`,
 		}),
+
+		changeStudentInfo: builder.mutation<ResponseMsg, Student>({
+			query: body => ({
+				url: `/${body.run}`,
+				method: 'PATCH',
+				body: {
+					name: body.name,
+					first_surname: body.first_surname,
+					level: body.level,
+					paid: body.paid,
+				},
+			}),
+			invalidatesTags: ['Students'],
+		}),
 	}),
 });
 
@@ -61,4 +78,5 @@ export const {
 	useAddStudentMutation,
 	useGetStudentsGradesQuery,
 	useGetStudentCareerByRunQuery,
+	useChangeStudentInfoMutation,
 } = studentsApi;

@@ -30,7 +30,6 @@ import {
 import { Select } from '../types';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
-import { getYYYYMMDD } from '@/utils/functions';
 import { ThreeDots } from 'react-loading-icons';
 
 // TODO: ver el date de to
@@ -119,7 +118,7 @@ function TableStudent({ classes }: TableProps) {
 									key={date.toLocaleString()}
 									className='grid'
 								>
-									<td>{getYYYYMMDD(date.toString())}</td>
+									<td>{new Date(date).toLocaleString()}</td>
 									<td datatype='content'>
 										{contentsList.map(content => (
 											<p key={content.trim()}>{content.trim()}</p>
@@ -257,7 +256,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 											key={date.toLocaleString()}
 											className='grid'
 										>
-											<td>{date.toLocaleString()}</td>
+											<td>{new Date(date).toLocaleString()}</td>
 											<td datatype='content'>
 												{contentsList.map(content => (
 													<p key={content.trim()}>{content.trim()}</p>
@@ -339,7 +338,7 @@ function ModalClassList({
 	};
 
 	const handlerClickConfirm = () => {
-		console.log(selectedClass.id);
+		console.log(selectedClass);
 		const body: PostClass = {
 			lessonId: selectedClass.lesson.id,
 			date: selectedClass.date,

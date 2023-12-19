@@ -9,12 +9,13 @@ type Register = UseFormRegister<FieldValues>;
 interface InputComponentProps {
 	name: string;
 	type: inputType;
-	register: Register;
+	register?: Register;
 	children?: React.ReactNode;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	value?: string;
 	maxLength?: number;
 	autocomplete?: string;
+	defaultValue?: string;
 }
 
 function FloatLabelInput({
@@ -25,10 +26,11 @@ function FloatLabelInput({
 	onChange,
 	value,
 	maxLength,
-	autocomplete
+	autocomplete,
+	defaultValue,
 }: InputComponentProps) {
 	const [isFocused, setIsFocused] = useState(false);
-	const [hasValue, setHasValue] = useState(false);
+	const [hasValue, setHasValue] = useState(value ? true : false);
 
 	const handleFocus = () => {
 		setIsFocused(true);
@@ -45,7 +47,7 @@ function FloatLabelInput({
 	return (
 		<fieldset
 			className={`float-label-field ${
-				isFocused || hasValue ? 'float focus' : ''
+				isFocused || hasValue || defaultValue ? 'float focus' : ''
 			}`}
 		>
 			<label htmlFor={`${name}Input`}>{t(name)}</label>
@@ -53,17 +55,21 @@ function FloatLabelInput({
 				id={`${name}Input`}
 				type={type}
 				onFocus={handleFocus}
-				{...register(name)}
+				{...register?.(name)}
 				onChange={e => {
-					register(name).onChange(e);
+					if (register) {
+						register(name).onChange(e);
+					}
 					if (onChange) {
 						onChange(e);
 					}
 				}}
 				onBlur={handleBlur}
 				value={value}
+				name={name}
 				maxLength={maxLength}
 				autoComplete={autocomplete ?? 'on'}
+				defaultValue={defaultValue}
 			/>
 			{children}
 		</fieldset>

@@ -12,7 +12,7 @@ export default function JustificationViewer({
 }: JustificationViewerProps) {
 	if (!fileName) return null;
 	const url =
-		import.meta.env.VITE_SERVER_HOST +
+		import.meta.env.VITE_API_URL +
 		'/pdf/' +
 		(fileName.endsWith('.pdf') ? fileName : fileName + '.pdf');
 

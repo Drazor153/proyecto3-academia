@@ -20,7 +20,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
 	useEffect(() => {
 		if (user.run !== -1) {
-			fetch(`${import.meta.env.VITE_SERVER_HOST}/api/auth/refresh`, {
+			fetch(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {
 				credentials: 'include',
 			})
 				.then(res => res.json())

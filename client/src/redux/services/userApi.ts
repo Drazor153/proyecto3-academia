@@ -4,7 +4,7 @@ import { ResponseMsg, User } from '../../utils/types';
 export const userApi = createApi({
 	reducerPath: 'userAPI',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/auth`,
+		baseUrl: `${import.meta.env.VITE_API_URL}/api/auth`,
 		credentials: 'include',
 	}),
 	tagTypes: ['login'],
@@ -34,6 +34,25 @@ export const userApi = createApi({
 				method: 'GET',
 			}),
 		}),
+		resetPassword: builder.mutation<ResponseMsg, { run: User['run'] }>({
+			query: ({ run }) => ({
+				url: `/reset-password/${run}`,
+				method: 'PATCH',
+			}),
+		}),
+		changePassword: builder.mutation<
+			ResponseMsg,
+			{ oldPassword: string; newPassword: string }
+		>({
+			query: ({ oldPassword, newPassword }) => ({
+				url: '/change-password',
+				method: 'PATCH',
+				body: {
+					oldPassword,
+					newPassword,
+				},
+			}),
+		}),
 	}),
 });
 
@@ -42,4 +61,5 @@ export const {
 	useAutoLoginQuery,
 	useLazyAutoLoginQuery,
 	useLogoutMutation,
+	useResetPasswordMutation,
 } = userApi;

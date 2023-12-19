@@ -1,11 +1,12 @@
 import { t } from 'i18next';
 import {
+	useChangeStudentInfoMutation,
 	useGetStudentCareerByRunQuery,
 	useLazyGetStudentsQuery,
 } from '@/redux/services/studentsApi';
 import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
 
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { ThreeDots } from 'react-loading-icons';
 import { useGetLevelsQuery } from '@/redux/services/levelsApi';
 
@@ -16,6 +17,126 @@ import { IoMdSchool } from 'react-icons/io';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
 import { handleRUNChange, useDebounce } from '@/utils/functions';
+import { HiPencil } from 'react-icons/hi2';
+import FloatLabelInput from '@/components/FloatLabelInput';
+import { useResetPasswordMutation } from '@/redux/services/userApi';
+import { toast } from 'react-toastify';
+import { MdLockReset } from 'react-icons/md';
+
+function EditStudent({
+	studentInfo,
+	formRef,
+}: {
+	studentInfo: Student;
+	formRef: React.RefObject<HTMLFormElement>;
+}) {
+	// const { data: levels, isLoading: isLevelsLoading } = useGetLevelsQuery(null);
+
+	const [resetPassword] = useResetPasswordMutation();
+
+	const handleResetPasswordBtn = () => {
+		toast.loading(t('resetting_password'), { toastId: 'reset-password' });
+
+		resetPassword({
+			run: studentInfo.run as number,
+		})
+			.unwrap()
+			.then(payload =>
+				toast.update('reset-password', {
+					type: 'success',
+					render: t(payload.msg),
+					autoClose: 2000,
+					isLoading: false,
+				}),
+			)
+			.catch(error =>
+				toast.update('reset-password', {
+					type: 'error',
+					render: t(error.message),
+					autoClose: 2000,
+					isLoading: false,
+				}),
+			);
+	};
+
+	return (
+		<form
+			className='student-edit'
+			ref={formRef}
+		>
+			<div className='input-section'>
+				<h3>{t('student_info')}</h3>
+				<div className='name-input-container'>
+					<FloatLabelInput
+						name='name'
+						type='text'
+						autocomplete='off'
+						defaultValue={studentInfo.name}
+					/>
+					<FloatLabelInput
+						name='first_surname'
+						type='text'
+						autocomplete='off'
+						defaultValue={studentInfo.first_surname}
+					/>
+					{/* <fieldset className='float-label-field float focus'>
+						<label htmlFor='level'>{t('level')}</label>
+						<Select
+							name='level'
+							className='react-select-container'
+							classNamePrefix={'react-select'}
+							placeholder={t('level_select')}
+							onChange={option =>
+								setStudentInfo({
+									...studentInfo,
+									level: option?.value ? option.value : '',
+								})
+							}
+							options={
+								levels &&
+								levels.data.map(({ code, name }) => ({
+									value: code,
+									label: t(name),
+								}))
+								// : []
+							}
+							defaultValue={{
+								value: studentInfo.level,
+								label: t(
+									levels?.data.find(level => level.code == studentInfo.level)
+										?.name || '',
+								),
+							}}
+							isSearchable={false}
+							isLoading={isLevelsLoading}
+						/>
+					</fieldset> */}
+					<fieldset className='payment-checkbox'>
+						<input
+							type='checkbox'
+							id='payment'
+							name='paid'
+							defaultChecked={studentInfo.paid}
+						/>
+						<label htmlFor='payment'>
+							{t('paid_enrollment')}
+							<span>({t('last_semester')})</span>
+						</label>
+					</fieldset>
+				</div>
+			</div>
+			<div className='btn-section'>
+				<button
+					type='button'
+					onClick={handleResetPasswordBtn}
+				>
+					<MdLockReset className='icon' />
+					{t('reset_password')}
+				</button>
+			</div>
+		</form>
+	);
+}
 
 function ShowStudentCareer({ run }: { run: number }) {
 	const { data, isLoading, isFetching, isError } =
@@ -44,14 +165,14 @@ function ShowStudentCareer({ run }: { run: number }) {
 							<td className='year'>{year}</td>
 							{semesters.map(({ semester: number, paid }) => {
 								return (
-									<>
+									<Fragment key={year + number}>
 										<td>
 											{t('semester')} {number}
 										</td>
 										<td>{t(level)}</td>
 										<td>{t(status)}</td>
 										<td>{paid ? t('paid') : t('free')}</td>
-									</>
+									</Fragment>
 								);
 							})}
 							{/* Add empty row if semester 1 or 2 doesn't exist */}
@@ -80,6 +201,9 @@ function SearchStudent() {
 	const [level, setLevel] = useState('');
 	const [paid, setPaid] = useState<boolean>();
 	const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+	const [isEditing, setIsEditing] = useState(false);
+	const [submitEditStudent] = useChangeStudentInfoMutation();
+	const editStudentForm = useRef<HTMLFormElement>(null);
 	const debouncedRun = useDebounce<string>(run, 1000);
 	const debouncedName = useDebounce<string>(name, 1000);
 	const size = 10;
@@ -87,6 +211,48 @@ function SearchStudent() {
 	const loadingInput = () => {
 		if (run != debouncedRun || name != debouncedName) return true;
 		return false;
+	};
+
+	const handleEditStudentBtn = () => {
+		if (!selectedStudent) return;
+
+		const data = new FormData(editStudentForm.current as HTMLFormElement);
+		const name = data.get('name') as string;
+		const first_surname = data.get('first_surname') as string;
+		const paid = data.get('paid') == 'on' ? true : false;
+
+		if (name == '' || first_surname == '') {
+			toast.error(t('empty_fields'));
+			return;
+		}
+
+		toast.loading(t('saving'), { toastId: 'edit-student' });
+		submitEditStudent({
+			run: selectedStudent.run as number,
+			name: data.get('name') as string,
+			first_surname: data.get('first_surname') as string,
+			level: selectedStudent.level,
+			paid: data.get('paid') == 'on' ? true : false,
+		})
+			.unwrap()
+			.then(payload => {
+				toast.update('edit-student', {
+					type: 'success',
+					render: t(payload.msg),
+					autoClose: 2000,
+					isLoading: false,
+				});
+				setIsEditing(false);
+				setSelectedStudent(null);
+			})
+			.catch(error =>
+				toast.update('edit-student', {
+					type: 'error',
+					render: t(error.message),
+					autoClose: 2000,
+					isLoading: false,
+				}),
+			);
 	};
 
 	const [getStudents, result] = useLazyGetStudentsQuery();
@@ -226,7 +392,13 @@ function SearchStudent() {
 					</tr>
 				</thead>
 				<tbody>
-					{loadingInput() && <ThreeDots />}
+					{loadingInput() && (
+						<tr className='loading'>
+							<td>
+								<ThreeDots />
+							</td>
+						</tr>
+					)}
 					{result.isSuccess &&
 						!loadingInput() &&
 						!result.isLoading &&
@@ -254,10 +426,15 @@ function SearchStudent() {
 										<div className='action-buttons'>
 											<button onClick={() => setSelectedStudent(student)}>
 												<IoMdSchool className='icon' />
-												<span>{t('inspect')}</span>
+												<span>{t('career')}</span>
 											</button>
-											<button onClick={() => setSelectedStudent(student)}>
-												<IoMdSchool className='icon' />
+											<button
+												onClick={() => {
+													setIsEditing(true);
+													setSelectedStudent(student);
+												}}
+											>
+												<HiPencil className='icon' />
 												<span>{t('edit')}</span>
 											</button>
 										</div>
@@ -292,14 +469,45 @@ function SearchStudent() {
 				title={`${t('career_of')} ${selectedStudent?.name} ${
 					selectedStudent?.first_surname
 				}`}
-				isOpen={() => selectedStudent !== null}
+				isOpen={() => selectedStudent !== null && !isEditing}
 				onClick={() => setSelectedStudent(null)}
 				footer={
 					<button onClick={() => setSelectedStudent(null)}>{t('close')}</button>
 				}
-				className='student-career-modal'
+				className='student-modal'
 			>
 				{selectedStudent && <ShowStudentCareer run={+selectedStudent.run} />}
+			</Modal>
+			<Modal
+				title={`${t('editing')} ${selectedStudent?.name} ${
+					selectedStudent?.first_surname
+				}`}
+				isOpen={() => selectedStudent !== null && isEditing}
+				onClick={() => {
+					setIsEditing(false);
+					setSelectedStudent(null);
+				}}
+				footer={
+					<>
+						<button
+							onClick={() => {
+								setIsEditing(false);
+								setSelectedStudent(null);
+							}}
+						>
+							{t('close')}
+						</button>
+						<button onClick={() => handleEditStudentBtn()}>{t('save')}</button>
+					</>
+				}
+				className='student-modal'
+			>
+				{selectedStudent && (
+					<EditStudent
+						studentInfo={selectedStudent}
+						formRef={editStudentForm}
+					/>
+				)}
 			</Modal>
 		</>
 	);

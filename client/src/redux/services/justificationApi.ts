@@ -4,7 +4,7 @@ import { Data, Justification, Paginate, ResponseMsg } from '../../utils/types';
 export const justificationApi = createApi({
 	reducerPath: 'justificationAPI',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api/justification`,
+		baseUrl: `${import.meta.env.VITE_API_URL}/api/justification`,
 		credentials: 'include',
 	}),
 	tagTypes: ['Justification'],

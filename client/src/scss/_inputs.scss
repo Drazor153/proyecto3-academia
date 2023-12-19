@@ -120,7 +120,7 @@ input[type='number'] {
 		}
 
 		&--is-focused {
-			background-color: base.$crimsonred !important;
+			background-color: rgba($color: base.$crimsonred, $alpha: 0.7) !important;
 			border-radius: 5px !important;
 			color: white !important;
 		}
@@ -152,4 +152,29 @@ input[type='number'] {
 			box-shadow: inset 0 0 0 1px base.$crimsonred !important;
 		}
 	}
+}
+
+input[type='file'] {
+	display: none;
+}
+
+.file-upload {
+	display: flex;
+	height: 2rem;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid $darkbrown;
+	color: $darkbrown;
+
+	&:hover {
+		cursor: pointer;
+		background-color: rgba($color: $darkbrown, $alpha: 0.8);
+		color: $white;
+	}
+
+	font-size: 1.3rem;
+	gap: 0.5rem;
+	border-radius: 3px;
+	padding: 5px;
+	cursor: pointer;
 }

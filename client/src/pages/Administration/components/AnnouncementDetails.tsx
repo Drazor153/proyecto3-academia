@@ -45,7 +45,7 @@ function AnnouncementDetails({
 	return (
 		<>
 			{isLoading && <ThreeDots />}
-			{isSuccess && (
+			{isSuccess && response && (
 				<section>
 					<form>
 						<label htmlFor='title'>{t('title')}</label>
@@ -73,14 +73,16 @@ function AnnouncementDetails({
 							placeholder={t('category')}
 							className='react-select-container'
 							classNamePrefix='react-select'
-							value={{
-								value: announcement.category,
-								label: t(announcement.category),
-							}}
+							value={
+								announcement.category && {
+									value: announcement.category,
+									label: t(announcement.category),
+								}
+							}
 							options={response.categories.map(
-								({ id: value, name: label }: { id: number; name: string }) => ({
-									value: String(value),
-									label: t(label),
+								({ name }: { name: string }) => ({
+									value: name,
+									label: t(name),
 								}),
 							)}
 							onChange={choice => {
@@ -89,15 +91,8 @@ function AnnouncementDetails({
 								} as ChangeEvent<HTMLInputElement>);
 							}}
 							required
+							menuPlacement='top'
 						/>
-						{/* <input
-					type="text"
-					name="category"
-					id="category"
-					placeholder={t('category')}
-					value={announcement.category}
-					onChange={onChange}
-				/> */}
 						<label>{t('expires')}</label>
 						<input
 							type='date'
@@ -109,7 +104,10 @@ function AnnouncementDetails({
 									.toISOString()
 									.split('T')[0]
 							}
-							value={announcement.expiresAt.split('T')[0]}
+							value={new Date(announcement.expiresAt).toLocaleDateString(
+								'en-CA',
+								{},
+							)}
 							onChange={onChange}
 							required
 						/>
@@ -120,30 +118,42 @@ function AnnouncementDetails({
 							placeholder={t('target')}
 							className='react-select-container'
 							classNamePrefix='react-select'
-							value={{
-								value: announcement.target[0],
-								label: t(announcement.target[0]),
-							}}
-							options={response.targets.map(
-								({ id: value, name: label }: { id: number; name: string }) => ({
-									value: String(value),
-									label: t(label),
-								}),
-							)}
+							value={announcement.target.map(name => ({
+								value: name,
+								label: t(name),
+							}))}
+							options={response.targets.map(({ name }) => {
+								return {
+									value: name,
+									label: t(name),
+								};
+							})}
 							onChange={choice => {
 								onChange({
 									target: { name: 'target', value: JSON.stringify(choice) },
 								} as ChangeEvent<HTMLInputElement>);
 							}}
 							required
+							isMulti
+							menuPlacement='top'
+							closeMenuOnSelect={false}
+							// hideSelectedOptions
+							// isSearchable
 						/>
 
-						<label htmlFor='image'>{t('image')}</label>
+						<span>{t('image')}</span>
+						<label
+							htmlFor='image'
+							className='file-upload'
+						>
+							{t('upload_image')}
+						</label>
 						<input
 							type='file'
 							name='image'
 							id='image'
 							accept='image/*'
+							className='form-control-file'
 							onChange={onChangeImage}
 						/>
 					</form>

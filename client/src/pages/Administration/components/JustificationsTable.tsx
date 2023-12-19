@@ -148,7 +148,13 @@ function JustificationsDetails() {
 					</tr>
 				</thead>
 				<tbody>
-					{loadingInput() && <ThreeDots />}
+					{loadingInput() && (
+						<tr className='loading'>
+							<td>
+								<ThreeDots />
+							</td>
+						</tr>
+					)}
 					{result.isSuccess &&
 						!loadingInput() &&
 						!result.isLoading &&

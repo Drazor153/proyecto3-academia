@@ -24,6 +24,8 @@ import {
 } from 'react-icons/hi2';
 import { ThreeDots } from 'react-loading-icons';
 import { useTranslation } from 'react-i18next';
+import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from 'react-icons/ai';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const initialState: AnnouncementType = {
 	author: {
@@ -54,17 +56,17 @@ function AnnouncementTable(): JSX.Element {
 	const [updateAnnouncement] = useUpdateAnnouncementMutation();
 	const [deleteAnnouncement] = useDeleteAnnouncementMutation();
 
-	// const [page, setPage] = useState(1);
+	const [page, setPage] = useState(1);
 
-	const size = 10;
+	const size = 15;
 
 	const {
 		data: announcement,
 		isLoading,
 		isSuccess,
+		isFetching,
 	} = useGetAllAnnouncementsQuery({
-		// page,
-		page: 1,
+		page,
 		size,
 	});
 
@@ -145,13 +147,15 @@ function AnnouncementTable(): JSX.Element {
 					return { ...prevState, expiresAt };
 				}
 				case 'target': {
-					const { label } = JSON.parse(e.target.value);
-					const target = [label];
+					const array = JSON.parse(e.target.value);
+					const target: string[] = [];
+					array.map(
+						({ value }: any) => target.includes(value) || target.push(value),
+					);
 					return { ...prevState, target };
 				}
 				case 'category': {
-					const { label } = JSON.parse(e.target.value);
-					const category = label;
+					const { value: category } = JSON.parse(e.target.value);
 					return { ...prevState, category };
 				}
 				default:
@@ -219,91 +223,151 @@ function AnnouncementTable(): JSX.Element {
 			});
 	};
 
-	// useEffect(() => {
-	// 	if (isSuccess && announcement.data.length >= 1)
-	// 		setSelectedAnnouncement(announcement.data[0]);
-	// }, [announcement]);
+	const handleChangePage = (event: React.MouseEvent<HTMLButtonElement>) => {
+		if (isSuccess) {
+			let nextPage = page;
+			const { name } = event.target as HTMLButtonElement;
+
+			switch (name) {
+				case 'next': {
+					if (announcement.next) {
+						nextPage++;
+					}
+					break;
+				}
+				case 'previous': {
+					if (announcement.previous) {
+						nextPage--;
+					}
+					break;
+				}
+			}
+			setPage(nextPage);
+		}
+	};
 
 	return (
 		<>
-			{isLoading && (
+			{isLoading && <ThreeDots />}
+			{isSuccess && (
 				<>
-					<ThreeDots />
+					<table className='table-announcement-list'>
+						<thead>
+							<tr data-title>
+								<th>
+									<p>{t('announcement')}</p>
+									<BiSolidPlusSquare
+										className='biSolidPlusSquare'
+										onClick={newAnnouncement}
+									/>
+								</th>
+							</tr>
+							<tr className='grid'>
+								<th>ID</th>
+								<th>{t('title')}</th>
+								<th>{t('created')}</th>
+								<th>{t('updated')}</th>
+								<th>{t('expires')}</th>
+								<th>{t('actions')}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{announcement.data.map(announcement => {
+								const {
+									id,
+									title,
+									createdAt: cAt,
+									updatedAt: uAt,
+									expiresAt: eAt,
+								} = announcement;
+
+								const createdAt = new Date(cAt).toLocaleDateString();
+								const updatedAt = new Date(uAt).toLocaleDateString();
+								const expiresAt = new Date(eAt).toLocaleDateString();
+
+								return (
+									<tr
+										key={id}
+										className='grid'
+									>
+										<td>{id}</td>
+										<td>{title}</td>
+										<td>{createdAt}</td>
+										<td>{updatedAt}</td>
+										<td>{expiresAt}</td>
+										<td>
+											<div
+												className='actions'
+												onClick={() => detailsModal({ announcement })}
+											>
+												<HiPencil className='hiPencil' />
+												<HiOutlinePencil className='hiOutlinePencil' />
+											</div>
+											<div
+												className='actions'
+												onClick={() => deleteModal({ announcement })}
+											>
+												<HiTrash className='hiTrash' />
+												<HiOutlineTrash className='hiOutlineTrash' />
+											</div>
+										</td>
+									</tr>
+								);
+							})}
+							<AnimatePresence>
+								{isFetching && (
+									<motion.tr
+										initial={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										exit={{ opacity: 0 }}
+										style={{
+											position: 'absolute',
+											top: 0,
+											left: 0,
+											width: '100%',
+											height: '100%',
+											margin: 0,
+										}}
+									>
+										<td
+											style={{
+												backgroundColor: 'rgba(255, 255, 255, .5)',
+											}}
+										>
+											<ThreeDots />
+										</td>
+									</motion.tr>
+								)}
+							</AnimatePresence>
+						</tbody>
+					</table>
+					<div
+						className='pagination-container'
+						style={{ marginTop: '5px' }}
+					>
+						<p>
+							{t('page')} {page}
+						</p>
+						<div className='pagination-btn-container'>
+							<button
+								disabled={page == 1 || isFetching}
+								name={'previous'}
+								onClick={handleChangePage}
+							>
+								<AiOutlineDoubleLeft />
+							</button>
+							<button
+								disabled={!announcement?.next || isFetching}
+								name={'next'}
+								onClick={handleChangePage}
+							>
+								<AiOutlineDoubleRight />
+							</button>
+						</div>
+					</div>
 				</>
 			)}
-			{isSuccess && (
-				<table className='table-announcement-list'>
-					<thead>
-						<tr data-title>
-							<th>
-								<p>{t('announcement')}</p>
-								<BiSolidPlusSquare
-									className='biSolidPlusSquare'
-									onClick={newAnnouncement}
-								/>
-							</th>
-						</tr>
-						<tr className='grid'>
-							<th>Nº</th>
-							<th>{t('title')}</th>
-							<th>{t('created')}</th>
-							<th>{t('updated')}</th>
-							<th>{t('expires')}</th>
-							<th>{t('actions')}</th>
-						</tr>
-					</thead>
-					<tbody>
-						{announcement.data.map((announcement, index) => {
-							const {
-								id,
-								title,
-								createdAt: cAt,
-								updatedAt: uAt,
-								expiresAt: eAt,
-							} = announcement;
 
-							const createdAt = new Date(cAt).toLocaleDateString('es-CL', {
-								timeZone: 'UTC',
-							});
-							const updatedAt = new Date(uAt).toLocaleDateString('es-CL', {
-								timeZone: 'UTC',
-							});
-							const expiresAt = new Date(eAt).toLocaleDateString('es-CL', {
-								timeZone: 'UTC',
-							});
-
-							return (
-								<tr
-									key={id}
-									className='grid'
-								>
-									<td>{index + 1}</td>
-									<td>{title}</td>
-									<td>{createdAt}</td>
-									<td>{updatedAt}</td>
-									<td>{expiresAt}</td>
-									<td>
-										<div
-											className='actions'
-											onClick={() => detailsModal({ announcement })}
-										>
-											<HiPencil className='hiPencil' />
-											<HiOutlinePencil className='hiOutlinePencil' />
-										</div>
-										<div
-											className='actions'
-											onClick={() => deleteModal({ announcement })}
-										>
-											<HiTrash className='hiTrash' />
-											<HiOutlineTrash className='hiOutlineTrash' />
-										</div>
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			)}
 			<Modal
 				className='details'
 				isOpen={openDetailsModal}

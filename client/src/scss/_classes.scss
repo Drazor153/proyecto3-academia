@@ -5,6 +5,7 @@
 	box-sizing: border-box;
 	width: 100%;
 	position: relative;
+	overflow: hidden;
 
 	h2 {
 		background-color: $brown;
@@ -20,15 +21,12 @@
 	.options-selector {
 		border-radius: 5px;
 		height: max-content;
-		max-height: 100%;
-		// max-width: 200px;
 	}
 }
 .dropdown {
 	display: grid;
 	grid-auto-rows: max-content;
 	background-color: rgba($brown, 0.25);
-	// max-width: ;
 	max-height: 40px;
 	font-size: 1.35rem;
 	font-weight: bold;
@@ -43,7 +41,7 @@
 		gap: 10px;
 		box-sizing: border-box;
 		display: flex;
-		color: $crimsonred;
+		color: $brown;
 		cursor: pointer;
 		background-color: rgba($brown, 0.25);
 		justify-content: space-between;
@@ -67,6 +65,7 @@
 
 	.dropdown,
 	.lesson {
+		overflow: hidden;
 		border-radius: 0 10px 10px 0;
 		margin: 0 10px 0 0;
 		min-width: max-content;
@@ -83,6 +82,7 @@
 }
 
 .expand {
+	overflow-y: auto;
 	max-height: 695px;
 	color: white;
 }

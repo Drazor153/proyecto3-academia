@@ -11,7 +11,7 @@ import {
 export const classesApi = createApi({
 	reducerPath: 'classesAPI',
 	baseQuery: fetchBaseQuery({
-		baseUrl: `${import.meta.env.VITE_SERVER_HOST}/api`,
+		baseUrl: `${import.meta.env.VITE_API_URL}/api`,
 		credentials: 'include',
 	}),
 	tagTypes: ['Classes', 'Students'],

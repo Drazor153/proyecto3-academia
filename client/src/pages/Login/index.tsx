@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ZodType, z } from 'zod';
 import { BiSolidUserCircle } from 'react-icons/bi';
 import { GrFormViewHide, GrFormView } from 'react-icons/gr';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { RutFormat, formatRut, validateRut } from '@fdograph/rut-utilities';
 import { toast } from 'react-toastify';
 import { useAuthUserMutation } from '../../redux/services/userApi';
@@ -53,7 +53,7 @@ function Login() {
 		height?: number;
 	}>({ x: 0, y: 0 });
 
-	const animPlayed = localStorage.getItem('animPlayed');
+	const animPlayed = sessionStorage.getItem('animPlayed');
 
 	const handlerRUNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const newRUN = event.target.value;
@@ -83,19 +83,6 @@ function Login() {
 		setShowPassword(!showPassword);
 	};
 
-	useEffect(() => {
-		if (!animPlayed && imgRef.current) {
-			const { y, width, height } = imgRef.current.getBoundingClientRect();
-			console.log(y, width, height);
-			setAnimate({
-				y: -y + 30,
-				width,
-				height,
-			});
-			localStorage.setItem('animPlayed', 'true');
-		}
-	}, []);
-
 	return (
 		<main id='login-page'>
 			<AnimatePresence>
@@ -109,6 +96,7 @@ function Login() {
 							transform: 'translate(-50%, -50%)',
 							zIndex: 2,
 							filter: 'drop-shadow(0px 0px 10px #000000)',
+							MozWindowDragging: 'no-drag',
 						}}
 						alt='English Academy Logo'
 						animate={{
@@ -118,6 +106,9 @@ function Login() {
 						transition={{
 							delay: 2,
 							ease: 'anticipate',
+						}}
+						onAnimationComplete={() => {
+							sessionStorage.setItem('animPlayed', 'true');
 						}}
 					/>
 				)}
@@ -136,7 +127,23 @@ function Login() {
 							height: '150px',
 							opacity: animPlayed ? 1 : 0,
 							visibility: animPlayed ? 'visible' : 'hidden',
-							filter: 'drop-shadow(0px 0px 5px #000000)',
+							filter: 'drop-shadow(0px 0px 5px black)',
+						}}
+						draggable={false}
+						onLoad={img => {
+							if (!animPlayed) {
+								const {
+									y: imgY,
+									width,
+									height,
+								} = img.currentTarget.getBoundingClientRect();
+								const y = window.innerHeight / 2 - height / 2 - imgY;
+								setAnimate({
+									y: -y,
+									width,
+									height,
+								});
+							}
 						}}
 					/>
 					<form onSubmit={handleSubmit(handlerLogin)}>
