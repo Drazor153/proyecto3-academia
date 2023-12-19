@@ -7,8 +7,11 @@ import { toast } from 'react-toastify';
 import Logout from './Logout';
 import { useLogoutMutation } from '../redux/services/userApi';
 import { logout } from '../redux/features/userSlice';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 function Sidebar() {
+	useTranslation();
 	const [isOpen, setIsOpen] = useState(
 		localStorage.getItem('sidebar') === 'true' ? true : false,
 	);
@@ -70,7 +73,7 @@ function Sidebar() {
 									{item.icon}
 								</div>
 								<div className={`link-text ${isOpen ? '' : 'closed'}`}>
-									{item.name}
+									{t(item.name)}
 								</div>
 							</NavLink>
 						);
@@ -89,7 +92,9 @@ function Sidebar() {
 					<div className='icon'>
 						<FaSignOutAlt />
 					</div>
-					<div className={`link-text ${isOpen ? '' : 'closed'}`}>Logout</div>
+					<div className={`link-text ${isOpen ? '' : 'closed'}`}>
+						{t('logout')}
+					</div>
 				</div>
 			</nav>
 			<Logout show={`${showLogout ? 'show' : 'hide'}`} />

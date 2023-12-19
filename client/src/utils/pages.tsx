@@ -12,35 +12,37 @@ import Sidebar from '../components/Sidebar';
 import Login from '../pages/Login';
 import Profile from '@/pages/Profile';
 import Justifications from '@/pages/Justifications';
+import { Suspense, lazy } from 'react';
+import LazyLoading from '@/components/LazyLoading';
 
 export const sidebarItems = [
 	{
 		path: '/',
-		name: 'Dashboard',
+		name: 'dashboard',
 		icon: <FaTh />,
 		only: ['ALL'],
 	},
 	{
 		path: '/grades',
-		name: 'Grades',
+		name: 'grades',
 		icon: <FaBookOpen />,
 		only: ['ALL'],
 	},
 	{
 		path: '/classes',
-		name: 'Classes',
+		name: 'classes',
 		icon: <FaRegCalendarAlt />,
 		only: ['ALL'],
 	},
 	{
 		path: '/justifications',
-		name: 'Justifications',
+		name: 'justifications',
 		icon: <FaFileAlt />,
 		only: ['STUDENT'],
 	},
 	{
 		path: '/administration',
-		name: 'Administration',
+		name: 'administration',
 		icon: <MdManageAccounts />,
 		only: ['ADMIN'],
 	},
@@ -161,68 +163,115 @@ export const administrationItems = [
 	},
 ];
 
-export const routes = createBrowserRouter(
-	[
-		{
-			path: '/',
-			element: (
-				<ProtectedRoute>
-					<UserInfo />
-					<LanguageSwap />
-					<Sidebar />
-				</ProtectedRoute>
-			),
-			children: [
-				{
-					index: true,
-					element: <Dashboard />,
-				},
-				{
-					path: 'profile',
-					element: <Profile />,
-				},
-				{
-					path: 'profile/:tab',
-					element: <Profile />,
-				},
-				{
-					path: 'grades',
-					element: <Grades />,
-				},
-				{
-					path: 'classes',
-					element: <Classes />,
-				},
-				{
-					path: 'justifications',
-					element: <Justifications />,
-				},
-				{
-					path: 'administration',
-					element: <Administration />,
-				},
-				{
-					path: 'administration/:menu',
-					element: <Administration />,
-				},
-				{
-					path: 'administration/:menu/:content',
-					element: <Administration />,
-				},
-			],
-		},
-		{
-			path: '/login',
-			element: <Login />,
-		},
-		{
-			path: '*',
-			element: <Navigate to={'/'} />,
-		},
-	],
+const LazyDashboard = lazy(() => import('../pages/Dashboard'));
+
+const LazyProfile = lazy(() => import('../pages/Profile'));
+
+const LazyGrades = lazy(() => import('../pages/Grades'));
+
+const LazyClasses = lazy(() => import('../pages/Classes'));
+
+const LazyJustifications = lazy(() => import('../pages/Justifications'));
+
+const LazyAdministration = lazy(() => import('../pages/Administration'));
+
+const LazyLogin = lazy(() => import('../pages/Login'));
+
+export const routes = createBrowserRouter([
 	{
-		future: {
-			v7_normalizeFormMethod: true,
-		},
+		path: '/',
+		element: (
+			<ProtectedRoute>
+				<UserInfo />
+				<LanguageSwap />
+				<Sidebar />
+			</ProtectedRoute>
+		),
+		children: [
+			{
+				index: true,
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyDashboard />
+					</Suspense>
+				),
+			},
+			{
+				path: 'profile',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyProfile />
+					</Suspense>
+				),
+			},
+			{
+				path: 'profile/:tab',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyProfile />
+					</Suspense>
+				),
+			},
+			{
+				path: 'grades',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyGrades />
+					</Suspense>
+				),
+			},
+			{
+				path: 'classes',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyClasses />
+					</Suspense>
+				),
+			},
+			{
+				path: 'justifications',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyJustifications />
+					</Suspense>
+				),
+			},
+			{
+				path: 'administration',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyAdministration />
+					</Suspense>
+				),
+			},
+			{
+				path: 'administration/:menu',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyAdministration />
+					</Suspense>
+				),
+			},
+			{
+				path: 'administration/:menu/:content',
+				element: (
+					<Suspense fallback={<LazyLoading />}>
+						<LazyAdministration />
+					</Suspense>
+				),
+			},
+		],
 	},
-);
+	{
+		path: '/login',
+		element: (
+			<Suspense fallback={<LazyLoading />}>
+				<LazyLogin />
+			</Suspense>
+		),
+	},
+	{
+		path: '*',
+		element: <Navigate to={'/'} />,
+	},
+]);

@@ -14,7 +14,7 @@ export const studentsApi = createApi({
 		baseUrl: `${import.meta.env.VITE_API_URL}/api/students`,
 		credentials: 'include',
 	}),
-	tagTypes: ['Students'],
+	tagTypes: ['Students', 'Grades'],
 	endpoints: builder => ({
 		getStudents: builder.query<
 			Paginate<Student[]>,

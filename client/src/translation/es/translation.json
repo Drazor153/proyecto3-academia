@@ -52,6 +52,7 @@
 	"listening": "Auditiva",
 	"logging_out": "Cerrando sesión",
 	"login": "Iniciar sesión",
+	"logout": "Cerrar sesión",
 	"manage_announcements": "Administrar anuncios",
 	"menu": "Menú",
 	"name": "Nombre",
@@ -177,5 +178,14 @@
 	"image": "Imagen",
 	"student_created": "Estudiante creado exitosamente",
 	"student_updated": "Estudiante actualizado exitosamente",
-	"student_not_found": "Estudiante no encontrado"
+	"student_not_found": "Estudiante no encontrado",
+	"no_justifications": "No hay justificaciones",
+	"change_password": "Cambiar contraseña",
+	"old_password": "Contraseña antigua",
+	"new_password": "Contraseña nueva",
+	"confirm_password": "Confirmar contraseña",
+	"mismatch_password": "Las contraseñas no coinciden",
+	"same_password": "La contraseña nueva debe ser distinta a la antigua",
+	"password_change_successful": "Contraseña cambiada exitosamente",
+	"changing_password": "Cambiando contraseña"
 }

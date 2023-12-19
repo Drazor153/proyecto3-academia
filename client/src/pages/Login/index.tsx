@@ -14,6 +14,7 @@ import { useAuthUserMutation } from '../../redux/services/userApi';
 import { setUser } from '../../redux/features/userSlice';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ThreeDots } from 'react-loading-icons';
 
 type Login = {
 	run: string;
@@ -40,18 +41,16 @@ function Login() {
 
 	const [auth] = useAuthUserMutation();
 
-	const [showPassword, setShowPassword] = useState(false);
-
-	const [run, setRun] = useState('');
-
 	const imgRef = useRef<HTMLImageElement>(null);
-
+	const [showPassword, setShowPassword] = useState(false);
+	const [run, setRun] = useState('');
 	const [animate, setAnimate] = useState<{
 		x?: number;
 		y?: number;
 		width?: number;
 		height?: number;
 	}>({ x: 0, y: 0 });
+	const [isLoading, setIsLoading] = useState(false);
 
 	const animPlayed = sessionStorage.getItem('animPlayed');
 
@@ -62,6 +61,7 @@ function Login() {
 	};
 
 	const handlerLogin: SubmitHandler<formType> = data => {
+		setIsLoading(true);
 		data.run = data.run.replace(/[^0-9kK]/g, '').toUpperCase();
 
 		if (!validateRut(String(data.run))) return toast.error(t('invalid_run'));
@@ -73,9 +73,11 @@ function Login() {
 			.then(res => {
 				dispatch(setUser(res.userData));
 				navigate('/');
+				setIsLoading(false);
 			})
 			.catch(err => {
 				toast.error(t(err.data.message));
+				setIsLoading(false);
 			});
 	};
 
@@ -174,7 +176,13 @@ function Login() {
 								onClick={handlerClickShowPassword}
 							/>
 						</FloatLabelInput>
-						<button type='submit'>{t('login')}</button>
+						<button
+							type='submit'
+							disabled={isLoading}
+							className={isLoading ? 'loading-btn' : ''}
+						>
+							{isLoading ? <ThreeDots /> : t('login')}
+						</button>
 					</form>
 				</motion.div>
 			</AnimatePresence>

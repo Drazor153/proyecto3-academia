@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Data, Level, LevelInfo } from '../../utils/types';
+import { Data, Level, LevelInfo, Topic } from '../../utils/types';
 
 export const levelsApi = createApi({
 	reducerPath: 'levelsAPI',
@@ -13,11 +13,17 @@ export const levelsApi = createApi({
 		}),
 
 		getLevelsByRoleRun: builder.query<Data<Level[]>, { role: string }>({
-			query: ({ role }) => {
-				return `/${role}/levels/`;
-			},
+			query: ({ role }) => `/${role}/levels/`,
+		}),
+		getTopics: builder.query<Data<Topic[]>, null>({
+			query: () => '/levels/topics',
 		}),
 	}),
 });
 
-export const { useGetLevelsQuery, useGetLevelsByRoleRunQuery } = levelsApi;
+export const {
+	useGetLevelsQuery,
+	useGetLevelsByRoleRunQuery,
+	useGetTopicsQuery,
+	useLazyGetTopicsQuery,
+} = levelsApi;

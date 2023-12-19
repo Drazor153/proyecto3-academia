@@ -1,52 +1,62 @@
 @use 'base';
 
 button {
-  border-radius: 5px;
-  border-style: none;
-  color: base.$white;
-  cursor: pointer;
-  font-size: 1.2rem;
-  height: 3.5rem;
-  outline: 0;
-  transition: all 0.2s;
-  vertical-align: bottom;
-  width: 190px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  background-color: base.$crimsonred;
-  opacity: 0.7;
+	border-radius: 5px;
+	border-style: none;
+	color: base.$white;
+	cursor: pointer;
+	font-size: 1.2rem;
+	height: 3.5rem;
+	outline: 0;
+	transition: all 0.2s;
+	vertical-align: bottom;
+	width: 190px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+	background-color: base.$crimsonred;
+	opacity: 0.7;
 
-  &:hover:not([disabled]) {
-    opacity: 1;
-  }
+	&:hover:not([disabled]) {
+		opacity: 1;
+	}
 
-  &:disabled {
-    opacity: 0.7;
-    cursor: default;
-  }
+	&:disabled {
+		opacity: 0.7;
+		cursor: default;
+	}
 
-  .icon {
-    font-size: 1.5rem;
-  }
+	.icon {
+		font-size: 1.5rem;
+	}
 
-  &.selected {
-    opacity: 1;
-  }
+	&.selected {
+		opacity: 1;
+	}
 }
 
 .lang-swapper {
-  padding: 0px 10px;
-  color: base.$white;
-  margin: 5px 0px;
-  grid-area: lang;
-  height: 50px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
+	padding: 0px 10px;
+	color: base.$white;
+	margin: 5px 0px;
+	grid-area: lang;
+	height: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
 
-  img {
-    width: 50px;
-  }
+	img {
+		width: 50px;
+	}
+}
+
+.loading-btn {
+	transition: background-color 0.2s;
+	position: relative;
+	background-color: transparent !important;
+
+	.icon-loading {
+		width: 70px;
+	}
 }

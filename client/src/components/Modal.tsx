@@ -2,10 +2,10 @@ import { AiOutlineClose } from 'react-icons/ai';
 
 interface ModalProps {
 	children: React.ReactNode;
-	footer: React.ReactNode;
+	footer?: React.ReactNode;
 	isOpen: () => boolean;
 	onClick?: () => void;
-	title: string;
+	title?: string;
 	className?: string;
 }
 
@@ -35,17 +35,19 @@ function Modal({
 			{/* <div className={`modal ${className ?? ''} ${isOpen() ? 'open' : ''}`}> */}
 			<div className={modalClasses.join(' ')}>
 				<div className='modal-container'>
-					<div className='modal-header'>
-						<h2 className='modal-title'>{title}</h2>
-						<button
-							className='modal-close'
-							onClick={onClick}
-						>
-							<AiOutlineClose />
-						</button>
-					</div>
+					{title && (
+						<div className='modal-header'>
+							<h2 className='modal-title'>{title}</h2>
+							<button
+								className='modal-close'
+								onClick={onClick}
+							>
+								<AiOutlineClose />
+							</button>
+						</div>
+					)}
 					<div className='modal-body'>{children}</div>
-					<div className='modal-footer'>{footer}</div>
+					{footer && <div className='modal-footer'>{footer}</div>}
 				</div>
 			</div>
 		</>

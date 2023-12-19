@@ -1,12 +1,13 @@
-import { useGetLevelsQuery } from '@/redux/services/levelsApi';
+import {
+	useGetLevelsQuery,
+	useLazyGetTopicsQuery,
+} from '@/redux/services/levelsApi';
 import { AnimatePresence, motion } from 'framer-motion';
 import { t } from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaCaretRight } from 'react-icons/fa';
 import ThreeDots from 'react-loading-icons/dist/esm/components/three-dots';
-
-const initialState = {};
 
 interface PeriodProps {
 	semesterID: number;
@@ -33,8 +34,6 @@ export default function Period({ semesterID }: PeriodProps) {
 		C2: false,
 	});
 
-	const [data, setData] = useState<any>({});
-
 	const {
 		data: dataLevels,
 		isLoading: isLoadingLevels,
@@ -42,16 +41,61 @@ export default function Period({ semesterID }: PeriodProps) {
 		isFetching: isFetchingLevels,
 	} = useGetLevelsQuery(null);
 
+	const [getTopics, topics] = useLazyGetTopicsQuery();
+
+	// TODO: revisar esto bien
+	console.log('topics: ', topics);
+	const defaultState = {
+		year: new Date().getFullYear(),
+		semesters: [1, 2].map(semester => ({
+			semester,
+			startDate: '2021-03-01T00:00:00.000Z',
+			endDate: '2021-07-15T00:00:00.000Z',
+			levels: useGetLevelsQuery(null).data?.data.map(({ code }) => ({
+				code,
+				lessons: ['A', 'B', 'C'].map(lesson => ({
+					lesson,
+					teachers: [],
+				})),
+				quizzes: [1, 2, 3].map(quiz => {
+					if (topics.isUninitialized) getTopics(null);
+					return {
+						quiz,
+						startDate: '2021-03-01T00:00:00.000Z',
+						endDate: '2021-07-15T00:00:00.000Z',
+						topics: topics.data?.data.map(({ id }) => ({
+							id,
+						})),
+					};
+				}),
+			})),
+		})),
+	};
+
+	console.log(defaultState);
+
 	return (
-		<>
-			{isLoadingLevels && <ThreeDots />}
+		<section
+			style={{
+				boxShadow: 'none',
+				margin: 0,
+				padding: 0,
+				position: 'relative',
+				height: '100%',
+			}}
+		>
+			{isLoadingLevels || (isFetchingLevels && <ThreeDots />)}
 			{isSuccessLevels && dataLevels && (
 				<AnimatePresence>
 					<motion.section
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
-						style={{ margin: 0, boxShadow: 'none', height: '100%' }}
+						style={{
+							margin: 0,
+							boxShadow: 'none',
+							height: '100%',
+						}}
 					>
 						{dataLevels.data.map(({ code, name }) => (
 							<div key={code}>
@@ -85,6 +129,6 @@ export default function Period({ semesterID }: PeriodProps) {
 					</motion.section>
 				</AnimatePresence>
 			)}
-		</>
+		</section>
 	);
 }

@@ -16,6 +16,21 @@
 	}
 }
 
+.no-justifications {
+	display: grid;
+	justify-items: center;
+	height: max-content;
+	background-color: rgba($crimsonred, 0.2);
+	border-radius: 5px;
+	width: 100%;
+
+	h3 {
+		font-weight: bold;
+		margin: 0;
+		padding: 1rem;
+	}
+}
+
 .student-justifications-table {
 	thead,
 	tbody {

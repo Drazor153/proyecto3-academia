@@ -62,4 +62,5 @@ export const {
 	useLazyAutoLoginQuery,
 	useLogoutMutation,
 	useResetPasswordMutation,
+	useChangePasswordMutation,
 } = userApi;

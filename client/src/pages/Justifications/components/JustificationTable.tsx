@@ -28,7 +28,7 @@ export default function JustificationTable() {
 	if (!justifications || justifications.length === 0)
 		return (
 			<div className='no-justifications'>
-				<h2>{t('no_justifications')}</h2>
+				<h3>{t('no_justifications')}</h3>
 			</div>
 		);
 

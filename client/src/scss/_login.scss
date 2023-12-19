@@ -36,6 +36,9 @@
 		border: 1px solid white;
 		box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
 
+		@media (max-width: 1366px) {
+			height: 90%;
+		}
 		img {
 			width: 50%;
 			margin: 20px 0px;
@@ -104,6 +107,13 @@
 					padding: 3px 3px 3px 3px;
 					border: none;
 					margin: 0;
+
+					&[type='password'] {
+						&::-ms-reveal,
+						&::-ms-clear {
+							display: none;
+						}
+					}
 				}
 			}
 		}

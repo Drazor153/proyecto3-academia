@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons';
-import { Student } from '../../../utils/types';
+import { ResponseMsg, Student } from '../../../utils/types';
 import Select from 'react-select';
 import { useTranslation } from 'react-i18next';
 
@@ -100,8 +100,8 @@ function FormNewStudent() {
 		resolver: zodResolver(formSchema),
 	});
 
-	const handleSuccessMsg = (payload: ServerResponse) => {
-		toast.success(payload.message);
+	const handleSuccessMsg = (payload: ResponseMsg) => {
+		toast.success(payload.msg);
 		setRun('');
 		reset();
 	};

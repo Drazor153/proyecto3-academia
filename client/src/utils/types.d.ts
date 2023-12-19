@@ -24,6 +24,11 @@ export type Level = {
 	}[];
 };
 
+export type Topic = {
+	id: number;
+	name: string;
+};
+
 export type LevelInfo = {
 	code: string;
 	name: string;

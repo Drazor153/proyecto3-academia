@@ -17,7 +17,7 @@ function Classes() {
 		state => state.userReducer,
 	).role.toLowerCase()}s`;
 
-	role = role === 'admins' ? 'teachers' : 'students';
+	role = role === 'students' ? 'students' : 'teachers';
 
 	const [select, setSelect] = useReducer(reducer, {
 		year: 0,
