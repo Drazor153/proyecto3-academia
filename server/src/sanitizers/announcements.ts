@@ -25,7 +25,7 @@ export const sanitizeAnnouncements = (input: AnnouncementsRaw[], expiring = fals
       updatedAt: val.updated_at,
       expiresAt: val.expires_at,
       target: val.send_to,
-      image: val.image.toString('base64'),
+      image: val.image?.toString('base64'),
     });
   });
 

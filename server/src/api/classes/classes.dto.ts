@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
-  IsDate,
+  IsDateString,
   IsInt,
   IsNotEmpty,
   IsNumberString,
@@ -30,7 +30,7 @@ export class CreateClassDto {
   lessonId: number;
 
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   date: Date;
 
   @IsNotEmpty()

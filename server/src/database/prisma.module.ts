@@ -4,14 +4,12 @@ import {
   AnnouncementsRepo,
   ClassesRepo,
   LessonsRepo,
-  StudentsRepo,
   UsersRepo,
 } from './repositories';
 import JustificationsRepo from './repositories/justifications';
 
 const services = [
   PrismaService,
-  StudentsRepo,
   AnnouncementsRepo,
   UsersRepo,
   ClassesRepo,

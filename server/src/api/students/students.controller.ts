@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -14,8 +15,10 @@ import {
   GetStudentGradesParams,
   PaginatedStudentsQuery,
   StudentCareerParams,
+  UpdateStudentDto,
+  UpdateStudentParams,
 } from './students.dto';
-import { Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/decorators/roles';
 import { RolesGuard } from '@/guards/roles.guard';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
@@ -80,5 +83,14 @@ export class StudentsController {
       `Admin creating new student with run: ${studentDto.run} and name: ${studentDto.name}`
     );
     return this.studentsService.createNewStudent(studentDto);
+  }
+
+  @Patch(':run')
+  @Roles(RoleEnum.Admin)
+  updateStudent(@Param() params: UpdateStudentParams, @Body() studentDto: UpdateStudentDto) {
+    this.logger.info(
+      `Admin updating student with run: ${params.run}`
+    );
+    return this.studentsService.updateStudent(+params.run, studentDto);
   }
 }

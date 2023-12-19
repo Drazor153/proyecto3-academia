@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
-import { ACCESS_KEY } from './roles.decorator';
+import { ACCESS_KEY } from '../decorators/roles';
 
 @Injectable()
 export class AccessTokenGuard extends AuthGuard('jwt') {

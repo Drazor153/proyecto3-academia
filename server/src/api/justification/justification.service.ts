@@ -5,7 +5,7 @@ import {
   GetJustificationsDto,
 } from './justification.dto';
 import { savePdf } from '@/common/storage';
-import { hasNextPage, paginate } from '@/common/paginate';
+import { paginated } from '@/common/paginate';
 import { JustificationStatus } from '@/common/constants';
 import { JustificationsRepo } from '@repos';
 import { filterJustifications } from '@/sanitizers/justifications';
@@ -41,11 +41,9 @@ export class JustificationService {
       dv: justification.student.dv,
     }));
 
-    const paginatedJustifications = paginate(justifications, +page, +size);
-    const previous = +page > 1;
-    const next = hasNextPage(justifications, +page, +size);
+    const {array,next,previous} = paginated(justifications, +page, +size);
 
-    return { data: paginatedJustifications, next, previous };
+    return { data: array, next, previous };
   }
 
   /*

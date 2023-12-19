@@ -20,7 +20,7 @@ export class AuthService {
     const user = await this.usersRepo.findOne(run);
 
     if (!user) {
-      throw new BadRequestException({ type: 'msg', message: 'User not found' });
+      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
     }
 
     const { password: userPassword, ...userData } = user;
@@ -30,7 +30,7 @@ export class AuthService {
     if (!result) {
       throw new BadRequestException({
         type: 'msg',
-        message: 'Credentials are incorrect',
+        message: 'credentials_are_incorrect',
       });
     }
 
@@ -42,10 +42,10 @@ export class AuthService {
     return { tokens, userData };
   }
 
-  async autologin(run: number) {
+  async autoLogin(run: number) {
     const queryUser = await this.usersRepo.findOne(run);
     if (!queryUser) {
-      throw new BadRequestException({ type: 'msg', message: 'User not found' });
+      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
     }
     const { password: _, ...user } = queryUser;
 
@@ -119,6 +119,38 @@ export class AuthService {
     return tokens;
   }
 
+  async changePassword(run: number, oldPassword: string, newPassword: string) {
+    const user = await this.usersRepo.findOne(run);
+    if (!user) {
+      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
+    }
+    const { password: userPassword } = user;
+    const result = await comparePassword(oldPassword, userPassword);
+    if (!result) {
+      throw new BadRequestException({
+        type: 'msg',
+        message: 'credentials_are_incorrect',
+      });
+    }
+    const hashedPassword = await hashPassword(newPassword);
+    await this.usersRepo.update(run, { password: hashedPassword });
+
+    return { msg: 'password_change_successful' }
+  }
+
+  async resetUserPassword(runOuter: number) {
+    const user = await this.usersRepo.findOne(runOuter);
+    if (!user) {
+      throw new BadRequestException({ type: 'msg', message: 'User not found' });
+    }
+    const { run, first_surname } = user;
+    const hashedPassword = await hashPassword(
+      `${run}_${first_surname.toUpperCase()}`
+    );
+    await this.usersRepo.update(run, { password: hashedPassword });
+
+    return { msg: 'password_reset_successful'}
+  }
   // getUserFromRefreshToken(token: string) {
   //   try {
   //     const { sub, role } = this.jwtService.verify(token, {

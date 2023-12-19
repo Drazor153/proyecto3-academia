@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
-import { Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/decorators/roles';
 import { RolesGuard } from '@/guards/roles.guard';
 import {
   AnnouncementQuery,

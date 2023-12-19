@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { JustificationService } from './justification.service';
 import { PinoLogger } from 'nestjs-pino';
-import { Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/decorators/roles';
 import { RolesGuard } from '@/guards/roles.guard';
 import {
   CreateNewJustificationDto,

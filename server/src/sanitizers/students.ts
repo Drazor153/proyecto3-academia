@@ -8,6 +8,36 @@ import {
   StudentLevelSanitized,
 } from '@/interfaces/students.sanitizer';
 
+type Students = {
+  run: number;
+  name: string;
+  dv: string;
+  first_surname: string;
+  enrols: {
+    paid: boolean;
+    levelCode: string;
+  }[];
+};
+
+type Filters = {
+  run: string;
+  name: string;
+  level: string;
+  paidString: string;
+};
+export const filterStudents = (students: Students[], filters: Filters) => {
+  const { run, name, level, paidString } = filters;
+
+  const paid = paidString === 'true';
+  return students.filter(
+    (student) =>
+      (!paidString || student.enrols[0].paid === paid) &&
+      String(student.run).startsWith(run) &&
+      student.enrols[0].levelCode.includes(level) &&
+      student.name.toLowerCase().startsWith(name ? name.toLowerCase() : '')
+  );
+};
+
 export const sanitizeStudentLevels = (input: StudentLevelRaw[]) => {
   const dataArray: StudentLevelSanitized[] = [];
 

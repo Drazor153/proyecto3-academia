@@ -1,5 +1,7 @@
 import {
   IsAlphanumeric,
+  IsBoolean,
+  IsEmail,
   IsInt,
   IsNotEmpty,
   IsNumberString,
@@ -68,4 +70,38 @@ export class CreateNewStudentDto {
   @IsNotEmpty()
   @IsString()
   level: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  paid: boolean;
+
+  @IsOptional()
+  @IsEmail()
+  email: string;
+}
+
+export class UpdateStudentParams {
+  @IsNumberString()
+  run: string;
+}
+export class UpdateStudentDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+  
+  @IsNotEmpty()
+  @IsString()
+  first_surname: string;
+
+  @IsNotEmpty()
+  @IsString()
+  level: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  paid: boolean;
+  
+  @IsOptional()
+  @IsEmail()
+  email: string;
 }

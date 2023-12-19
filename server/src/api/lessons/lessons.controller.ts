@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/comm
 import { LessonParams } from '@/api/classes/classes.dto';
 import { LessonsService } from './lessons.service';
 import { RolesGuard } from '@/guards/roles.guard';
-import { Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/decorators/roles';
 import { UserRequest } from '@/interfaces/request.interface';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';

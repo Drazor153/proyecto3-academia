@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/database/prisma.service';
 import { CreateAnnouncementDto } from './announcements.dto';
 import { UserPayload } from '@/interfaces/request.interface';
 import { AnnouncementsRepo } from '@repos';
-import { hasNextPage, paginate } from '@/common/paginate';
+import { paginated } from '@/common/paginate';
 import { AnnTargets, EnrolsStatus, RoleEnum } from '@/common/constants';
 import { sanitizeAnnouncements } from '@/sanitizers/announcements';
 @Injectable()
@@ -85,16 +85,16 @@ export class AnnouncementsService {
             lesson: {
               year: currentDate.getFullYear(),
               semester: currentDate.getMonth() < 6 ? 1 : 2,
-            }
+            },
           },
           select: {
             lesson: {
               select: {
                 levelCode: true,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
         // Lesson: {
         //   where: {
         //     year: currentDate.getFullYear(),
@@ -107,7 +107,9 @@ export class AnnouncementsService {
       },
     });
 
-    const levelCodes = teacher.lesson_teacher.map(({lesson}) => lesson.levelCode);
+    const levelCodes = teacher.lesson_teacher.map(
+      ({ lesson }) => lesson.levelCode
+    );
 
     const query = await this.annRepository.allPerRole({
       send_to: {
@@ -123,11 +125,9 @@ export class AnnouncementsService {
 
     const announcements = sanitizeAnnouncements(annQuery);
 
-    const paginated = paginate(announcements, page, size);
-    const previous = page > 1;
-    const next = hasNextPage(announcements, page, size);
+    const { array, next, previous } = paginated(announcements, page, size);
 
-    return { next, previous, data: paginated };
+    return { data: array, next, previous };
   }
 
   async createAnnouncement(run: number, data: CreateAnnouncementDto) {
@@ -143,8 +143,11 @@ export class AnnouncementsService {
   }
 
   async deleteAnnouncement(id: number) {
-    const announcement = await this.annRepository.delete(id);
-
-    return announcement;
+    try {
+      const announcement = await this.annRepository.delete(id);
+      return announcement;
+    } catch (error) {
+      throw new BadRequestException('announcement_not_found');
+    }
   }
 }

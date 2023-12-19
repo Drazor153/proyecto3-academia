@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from './roles.decorator';
+import { ROLES_KEY } from '../decorators/roles';
 import { UserRequest } from 'src/interfaces/request.interface';
 import { RoleEnum } from '../common/constants';
 
@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const request: UserRequest = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest() as UserRequest;
     const user = request.user;
     if (!user || !user.role) {
       throw new UnauthorizedException('Invalid user');

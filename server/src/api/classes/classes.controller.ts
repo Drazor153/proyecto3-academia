@@ -13,7 +13,7 @@ import {
   CreateClassDto,
   UpdateClassDto,
 } from '@/api/classes/classes.dto';
-import { Roles } from '@/guards/roles.decorator';
+import { Roles } from '@/decorators/roles';
 import { RolesGuard } from '@/guards/roles.guard';
 import { PinoLogger } from 'nestjs-pino';
 import { ApiTags } from '@nestjs/swagger';
