@@ -4,8 +4,10 @@ export interface TeacherLevelsRaw {
   }[];
   levelCode: string;
   id: number;
-  year: number;
-  semester: number;
+  period: {
+    year: number;
+    semester: number;
+  }
   lesson: string;
   level: {
     code: string;
@@ -29,16 +31,15 @@ export interface TeacherLevelsSanitizied {
 }
 
 export interface TopicQuizRaw {
-  id: number;
-  number: number;
-  year: number;
-  semester: number;
-  topicId: number;
-  levelCode: string;
   topic: {
-    id: number;
-    name: string;
+      id: number;
+      name: string;
   };
+  id: number;
+  levelCode: string;
+  periodId: number;
+  number: number;
+  topicId: number;
 }
 
 export interface TopicQuizSanitizied {

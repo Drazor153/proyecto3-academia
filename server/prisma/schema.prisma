@@ -56,10 +56,12 @@ model Level {
 
 model enrols {
   studentRun Int
-  levelCode  String  @db.Char(2)
-  paid       Boolean @default(false)
-  status     String
   periodId   Int
+  levelCode  String  @db.Char(2)
+  status     String
+  paid       Boolean @default(false)
+  avg        Float   @default(0)
+  opt        Float?
 
   level   Level  @relation(fields: [levelCode], references: [code], onDelete: Cascade, onUpdate: Cascade)
   student User   @relation(fields: [studentRun], references: [run], onDelete: Cascade, onUpdate: Cascade)
@@ -81,6 +83,8 @@ model Quiz {
   periodId  Int
   number    Int
   topicId   Int
+  starts_at DateTime
+  ends_at   DateTime
 
   period Period @relation(fields: [periodId], references: [id])
   topic  Topic  @relation(fields: [topicId], references: [id])

@@ -1,0 +1,43 @@
+{
+  "year": 2023,
+  "semesters": [
+    {
+      "semester": 1,
+      "start_at": "date",
+      "end_at": "date",
+      "levels": [
+        {
+          "code": "A1",
+          "lessons": [
+            {
+              "lesson": "A",
+              "teachers": []
+            }
+          ],
+          "quizzes": [
+            {
+              "number": 1,
+              "starts_at": "2023-03-04T21:09:45.726Z",
+              "ends_at": "2023-03-11T21:09:45.726Z"
+            },
+            {
+              "number": 2,
+              "starts_at": "2023-03-04T21:09:45.726Z",
+              "ends_at": "2023-03-11T21:09:45.726Z"
+            },
+            {
+              "number": 3,
+              "starts_at": "2023-03-04T21:09:45.726Z",
+              "ends_at": "2023-03-11T21:09:45.726Z"
+            },
+            {
+              "number": 4,
+              "starts_at": "2023-03-04T21:09:45.726Z",
+              "ends_at": "2023-03-11T21:09:45.726Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

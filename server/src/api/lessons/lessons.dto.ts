@@ -29,10 +29,10 @@ class QuizDto {
   number: number;
 
   @IsDateString()
-  start_at: Date;
+  starts_at: Date;
 
   @IsDateString()
-  end_at: Date;
+  ends_at: Date;
 
   @IsPositive()
   topicId: number;
@@ -42,9 +42,9 @@ class QuizDto {
   levelCode: LevelCodes;
 }
 
-export class CreateLessonsDto {
+export class SemesterDto{
   @IsPositive()
-  period: number
+  semester: number;
 
   @IsArray()
   @ValidateNested({ each: true })
@@ -56,3 +56,14 @@ export class CreateLessonsDto {
   @Type(() => QuizDto)
   quizzes: QuizDto[];
 }
+export class CreateLessonsDto {
+  @IsPositive()
+  year: number
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SemesterDto)
+  semesters: SemesterDto[];
+
+}
+

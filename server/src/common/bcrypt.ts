@@ -10,3 +10,9 @@ export async function hashPassword(password: string) {
 export function comparePassword(password: string, hash: string) {
   return bcrypt.compare(password, hash);
 }
+
+// const a = async () => {
+//   const res = await hashPassword('teacher_carrasco')
+//   console.log(res);
+// }
+// a()

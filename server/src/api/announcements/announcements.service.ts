@@ -83,8 +83,10 @@ export class AnnouncementsService {
         lesson_teacher: {
           where: {
             lesson: {
-              year: currentDate.getFullYear(),
-              semester: currentDate.getMonth() < 6 ? 1 : 2,
+              period: { 
+                year: currentDate.getFullYear(),
+                semester: currentDate.getMonth() < 6 ? 1 : 2,
+              }
             },
           },
           select: {

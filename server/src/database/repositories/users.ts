@@ -55,11 +55,9 @@ export default class UsersRepo {
         enrols: {
           update: {
             where: {
-              levelCode_studentRun_year_semester: {
-                levelCode: level,
+              studentRun_periodId: {
+                periodId: 1,
                 studentRun: run,
-                year: new Date().getFullYear(),
-                semester: 1,
               },
               status: EnrolsStatus.Active,
             },
@@ -111,8 +109,12 @@ export default class UsersRepo {
           select: {
             levelCode: true,
             status: true,
-            year: true,
-            semester: true,
+            period: {
+              select: {
+                year: true,
+                semester: true,
+              },
+            },
             paid: true,
             level: {
               select: {
@@ -120,7 +122,8 @@ export default class UsersRepo {
               },
             },
           },
-          orderBy: [{ year: 'desc' }, { semester: 'desc' }],
+          orderBy: [{ period: { year: 'desc' }},
+            { period: { semester: 'desc' }}]
         },
       },
     });
@@ -135,7 +138,7 @@ export default class UsersRepo {
     });
   }
 
-  createNewActiveStudent(params: {
+  async createNewActiveStudent(params: {
     run: number;
     dv: string;
     name: string;
@@ -145,6 +148,9 @@ export default class UsersRepo {
     paid: boolean;
   }) {
     const { run, dv, name, first_surname, level, hashedPassword } = params;
+    const period = await this.prisma.period.findFirst({
+      where: { year: 2023, semester: 1 },
+    });
     return this.prisma.user.create({
       data: {
         run,
@@ -157,14 +163,9 @@ export default class UsersRepo {
         enrols: {
           create: {
             status: EnrolsStatus.Active,
-            year: new Date().getFullYear(),
-            semester: 1,
             paid: params.paid,
-            level: {
-              connect: {
-                code: level,
-              },
-            },
+            levelCode: level,
+            periodId: period.id,
           },
         },
       },
@@ -182,14 +183,25 @@ export default class UsersRepo {
         studentRun: run,
       },
       orderBy: {
-        year: 'desc',
+        period: { year: 'desc' },
       },
-      include: {
+      select: {
         level: {
           include: {
-            teaches: true,
+            teaches: {
+              select: {
+                id: true,
+                levelCode: true,
+                periodId: true,
+                lesson: true,
+              },
+              orderBy: {
+                lesson: 'asc',
+              }
+            },
           },
         },
+        period: { select: { year: true, semester: true } },
       },
     });
   }
@@ -206,11 +218,13 @@ export default class UsersRepo {
     const topics = await this.prisma.topic.findMany();
     const query = await this.prisma.quiz.findMany({
       where: {
-        year: +year,
-        semester: +semester,
+        period: {
+          year: +year,
+          semester: +semester,
+        },
         levelCode: level,
       },
-      include: {
+      select: {
         gives: {
           where: {
             studentRun: run,
@@ -220,6 +234,7 @@ export default class UsersRepo {
           },
         },
         topic: true,
+        number: true,
       },
       orderBy: {
         id: 'asc',

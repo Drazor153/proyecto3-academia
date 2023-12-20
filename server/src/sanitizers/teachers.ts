@@ -10,13 +10,13 @@ export const sanitizeTeacherLevels = (input: TeacherLevelsRaw[]) => {
   const dataArray: TeacherLevelsSanitizied[] = [];
 
   input.forEach((val) => {
-    const yearExists = dataArray.find((year) => year.year === val.year);
+    const yearExists = dataArray.find((year) => year.year === val.period.year);
     if (!yearExists) {
       dataArray.push({
-        year: val.year,
+        year: val.period.year,
         semesters: [
           {
-            semester: val.semester,
+            semester: val.period.semester,
             levels: [
               {
                 level: val.level.name,
@@ -35,11 +35,11 @@ export const sanitizeTeacherLevels = (input: TeacherLevelsRaw[]) => {
       return;
     }
     const semesterExists = yearExists.semesters.find(
-      (semester) => semester.semester === val.semester
+      (semester) => semester.semester === val.period.semester
     );
     if (!semesterExists) {
       yearExists.semesters.push({
-        semester: val.semester,
+        semester: val.period.semester,
         levels: [
           {
             level: val.level.name,

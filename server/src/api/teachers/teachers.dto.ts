@@ -2,6 +2,7 @@ import {
   IsArray,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsString,
   ValidateNested,
@@ -35,7 +36,7 @@ export class Grades {
   run: number;
 
   @IsNotEmpty()
-  @IsInt()
+  @IsNumber()
   grade: number;
 }
 

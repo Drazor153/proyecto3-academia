@@ -27,8 +27,10 @@ export class LessonsService {
         enrols: {
           some: {
             levelCode: level.level.code,
-            year: level.year,
-            semester: level.semester,
+            period: {
+              year: level.period.year,
+              semester: level.period.semester,
+            },
             status: EnrolsStatus.Active,
           },
         },
@@ -125,9 +127,9 @@ export class LessonsService {
   }
 
   async createLessons(data: CreateLessonsDto){
-    // const {period, lessons} = data;
+    const {year,semesters} = data;
     console.log(data);
+    await this.lessonsRepo.createMany(year, semesters);
     return {msg: 'lessons_created'}
-    // this.lessonsRepo.createMany(year, semester, lessons);
   }
 }

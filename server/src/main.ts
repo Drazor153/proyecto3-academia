@@ -1,13 +1,13 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
-import * as cookieParser from 'cookie-parser';
-import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
-import { json, urlencoded } from 'express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
+import { json, urlencoded } from 'express';
+import * as fs from 'fs';
+import { Logger } from 'nestjs-pino';
+import { AppModule } from './app.module';
 
 const httpsOptions = {
   key: fs.readFileSync('./ssl/key.pem', 'utf8'),
@@ -46,10 +46,12 @@ async function bootstrap() {
       'https://10.242.212.120:5173',
       'https://10.242.251.119:5173',
       'https://10.242.233.30:5173',
+      'https://10.242.206.200:5173',
       'https://localhost:4173',
       'https://10.242.212.120:4173',
       'https://10.242.251.119:4173',
       'https://10.242.233.30:4173',
+      'https://10.242.206.200:5173'
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

@@ -27,10 +27,11 @@ export class TeachersService {
       where:
         role === RoleEnum.Admin
           ? {}
-          : { lesson_teacher: { every: { teacherRun: run } } },
+          : { lesson_teacher: { some: { teacherRun: run } } },
       include: {
         level: true,
         lesson_teacher: { select: { teacherRun: true } },
+        period: {select: {year: true, semester: true}},
       },
       orderBy: [
         {
@@ -52,31 +53,33 @@ export class TeachersService {
 
     const topicQuizzesQuery = await this.prisma.quiz.findMany({
       where: {
-        year: +year,
-        semester: +semester,
+        period: {
+          year: +year,
+          semester: +semester,
+        },
         levelCode: level,
       },
       include: {
         topic: true,
       },
       orderBy: {
-        id: 'asc',
+        number: 'asc',
       },
     });
 
-    const topicQuizzesSanitizied = sanitizeTopicQuizzes(
+    const topicQuizzesSanitized = sanitizeTopicQuizzes(
       topics,
       topicQuizzesQuery
     );
 
     return {
-      data: topicQuizzesSanitizied,
+      data: topicQuizzesSanitized,
     };
   }
   async getQuizGrades({ quizId }: GetQuizGradesParams) {
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: +quizId },
-    });
+      include: {period: {select: {year: true, semester: true}}}    });
 
     if (!quiz) {
       throw new NotFoundException({
@@ -91,8 +94,10 @@ export class TeachersService {
         enrols: {
           some: {
             levelCode: quiz.levelCode,
-            year: quiz.year,
-            semester: quiz.semester,
+            period: {
+              year: quiz.period.year,
+              semester: quiz.period.semester,
+            },
             status: EnrolsStatus.Active,
           },
         },

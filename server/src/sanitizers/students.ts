@@ -42,13 +42,13 @@ export const sanitizeStudentLevels = (input: StudentLevelRaw[]) => {
   const dataArray: StudentLevelSanitized[] = [];
 
   input.forEach((val) => {
-    const yearExists = dataArray.find((year) => year.year === val.year);
+    const yearExists = dataArray.find((year) => year.year === val.period.year);
     if (!yearExists) {
       dataArray.push({
-        year: val.year,
+        year: val.period.year,
         semesters: [
           {
-            semester: val.semester,
+            semester: val.period.semester,
             levels: [
               {
                 level: val.level.name,
@@ -65,11 +65,11 @@ export const sanitizeStudentLevels = (input: StudentLevelRaw[]) => {
       return;
     }
     const semesterExists = yearExists.semesters.find(
-      (semester) => semester.semester === val.semester
+      (semester) => semester.semester === val.period.semester
     );
     if (!semesterExists) {
       yearExists.semesters.push({
-        semester: val.semester,
+        semester: val.period.semester,
         levels: [
           {
             level: val.level.name,
@@ -145,21 +145,21 @@ export const sanitizeStudentCareer = (input: StudentCareerRaw) => {
   const newArray: StudentCareerSanitized[] = [];
 
   input.enrols.forEach((val) => {
-    const yearExists = newArray.find((year) => year.year === val.year);
+    const yearExists = newArray.find((year) => year.year === val.period.year);
     if (!yearExists) {
       newArray.push({
-        year: val.year,
-        semesters: [{ semester: val.semester, paid: val.paid }],
+        year: val.period.year,
+        semesters: [{ semester: val.period.semester, paid: val.paid }],
         level: val.level.name,
         status: val.status,
       });
       return;
     }
     const semesterExists = yearExists.semesters.find(
-      ({ semester }) => semester === val.semester
+      ({ semester }) => semester === val.period.semester
     );
     if (!semesterExists) {
-      yearExists.semesters.push({ semester: val.semester, paid: val.paid });
+      yearExists.semesters.push({ semester: val.period.semester, paid: val.paid });
       return;
     }
   });
