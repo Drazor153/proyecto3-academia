@@ -24,6 +24,7 @@ type IsOpen = {
 
 export default function Period({ semesterID }: PeriodProps) {
 	useTranslation();
+console.log(semesterID);
 
 	const [isOpen, setIsOpen] = useState<IsOpen>({
 		A1: false,

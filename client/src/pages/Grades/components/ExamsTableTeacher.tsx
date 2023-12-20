@@ -138,7 +138,10 @@ function ModalExam({
 	});
 
 	if (isLoading || isFetching) return <ThreeDots />;
-	if (!isSuccess) return toast.error(t('error'), { toastId: 'error' });
+	if (!isSuccess) {
+		toast.error(t('error'), { toastId: 'error' });
+		return <></>;
+	}
 
 	const quizzesRow = result.data.map((quiz, i) => (
 		<QuizRow
@@ -195,23 +198,21 @@ function ModalExam({
 
 	if (isLoading) return <ThreeDots />;
 
-	if (isSuccess) {
-		return (
-			<Modal {...props}>
-				<table className='table grades-input-table'>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th>{t('run')}</th>
-							<th>{t('name')}</th>
-							<th>{t('grade')}</th>
-						</tr>
-					</thead>
-					<tbody>{quizzesRow}</tbody>
-				</table>
-			</Modal>
-		);
-	}
+	return (
+		<Modal {...props}>
+			<table className='table grades-input-table'>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>{t('run')}</th>
+						<th>{t('name')}</th>
+						<th>{t('grade')}</th>
+					</tr>
+				</thead>
+				<tbody>{quizzesRow}</tbody>
+			</table>
+		</Modal>
+	);
 }
 
 function QuizRow({

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaCaretRight, FaCaretDown } from 'react-icons/fa';
+import { FaCaretRight } from 'react-icons/fa';
 import Select from 'react-select';
 
 const year = [
@@ -116,12 +116,12 @@ export default function ExamsCalendarManagement() {
 	const [quizzesOptions, setQuizzesOptions] = useState<
 		{ value: string; label: string }[]
 	>([]);
-	const [showModal, setShowModal] = useState(false);
+	// const [showModal, setShowModal] = useState(false);
 
-	const isEditing = () => {
-		if (selectedYear) return true;
-		return false;
-	};
+	// const isEditing = () => {
+	// 	if (selectedYear) return true;
+	// 	return false;
+	// };
 
 	const getQuizzesByPeriod = async () => {
 		const data = [
@@ -130,6 +130,8 @@ export default function ExamsCalendarManagement() {
 			{ value: '3', label: 'Quiz 3' },
 		];
 		setQuizzesOptions(data);
+		console.log(quizzesOptions);
+		
 	};
 
 	useEffect(() => {

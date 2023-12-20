@@ -47,7 +47,7 @@ const { years, semesters, startDates, endDates } = {
 export default function AcademicCalendarManagement() {
 	useTranslation();
 
-	const [viewPeriod, setViewPeriod] = useState(false);
+	// const [viewPeriod, setViewPeriod] = useState(false);
 
 	const [{ year, semester, startDate, endDate }, setAcademicCalendar] =
 		useState<AcademicCalendar>(initialState);
@@ -138,7 +138,7 @@ export default function AcademicCalendarManagement() {
 					</span>
 				</button>
 			</section>
-			{!viewPeriod && <Period semesterID={0} />}
+			{!false && <Period semesterID={0} />}
 		</>
 	);
 }

@@ -219,7 +219,6 @@ function SearchStudent() {
 		const data = new FormData(editStudentForm.current as HTMLFormElement);
 		const name = data.get('name') as string;
 		const first_surname = data.get('first_surname') as string;
-		const paid = data.get('paid') == 'on' ? true : false;
 
 		if (name == '' || first_surname == '') {
 			toast.error(t('empty_fields'));
@@ -232,7 +231,7 @@ function SearchStudent() {
 			name: data.get('name') as string,
 			first_surname: data.get('first_surname') as string,
 			level: selectedStudent.level,
-			paid: data.get('paid') == 'on' ? true : false,
+			paid: data.get('paid') === 'on',
 		})
 			.unwrap()
 			.then(payload => {

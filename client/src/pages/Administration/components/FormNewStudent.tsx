@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import FloatLabelInput from '../../../components/FloatLabelInput';
 import { useGetLevelsQuery } from '../../../redux/services/levelsApi';
 import { ThreeDots } from 'react-loading-icons';
-import { ResponseMsg, Student } from '../../../utils/types';
+import { Student } from '../../../utils/types';
 import Select from 'react-select';
 import { useTranslation } from 'react-i18next';
 
@@ -33,11 +33,11 @@ const formSchema: ZodType<Student> = z.object({
 
 type formType = z.infer<typeof formSchema>;
 
-type Response =
-	| { errorMsg: { msg: string }[]; errorType: 'invalidFields' }
-	| { errorMsg: string; errorType: 'msg' };
+// type Response =
+// 	| { errorMsg: { msg: string }[]; errorType: 'invalidFields' }
+// 	| { errorMsg: string; errorType: 'msg' };
 
-type ServerResponse = { status: number; data: Response };
+// type ServerResponse = { status: number; data: Response };
 
 function LevelsSelect({ control }: { control: Control<Student> }) {
 	const {
