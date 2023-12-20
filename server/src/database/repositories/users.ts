@@ -122,8 +122,10 @@ export default class UsersRepo {
               },
             },
           },
-          orderBy: [{ period: { year: 'desc' }},
-            { period: { semester: 'desc' }}]
+          orderBy: [
+            { period: { year: 'desc' } },
+            { period: { semester: 'desc' } },
+          ],
         },
       },
     });
@@ -133,7 +135,6 @@ export default class UsersRepo {
     return this.prisma.user.findUnique({
       where: {
         run,
-        role: RoleEnum.Student,
       },
     });
   }
@@ -197,7 +198,7 @@ export default class UsersRepo {
               },
               orderBy: {
                 lesson: 'asc',
-              }
+              },
             },
           },
         },
@@ -237,7 +238,7 @@ export default class UsersRepo {
         number: true,
       },
       orderBy: {
-        id: 'asc',
+        number: 'asc',
       },
     });
 

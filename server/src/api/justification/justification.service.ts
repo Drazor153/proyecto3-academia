@@ -25,51 +25,64 @@ export class JustificationService {
       name,
       run,
       status: approved,
-    }).map((justification) => ({
-      id: justification.id,
-      studentRun: justification.studentRun,
-      initAusencia: justification.init_ausencia,
-      endAusencia: justification.end_ausencia,
-      numInasistente: justification.num_inasistente,
-      reason: justification.reason,
-      file: justification.file,
-      approved: justification.approved,
-      Attendance: justification.Attendance,
-      name: justification.student.name,
-      first_surname: justification.student.first_surname,
-      run: justification.student.run,
-      dv: justification.student.dv,
-    }));
+    }).map((justification) => {
+      const {
+        id,
+        init_ausencia,
+        end_ausencia,
+        num_inasistente,
+        reason,
+        file,
+        approved,
+        Attendance,
+        student,
+      } = justification;
+      return {
+        id,
+        initAusencia: init_ausencia,
+        endAusencia: end_ausencia,
+        numInasistente: num_inasistente,
+        reason,
+        file: `${id}_${file}.pdf`,
+        approved,
+        Attendance,
+        studentRun: student.run,
+        name: student.name,
+        first_surname: student.first_surname,
+        run: student.run,
+        dv: student.dv,
+      };
+    });
 
-    const {array,next,previous} = paginated(justifications, +page, +size);
+    const { array, next, previous } = paginated(justifications, +page, +size);
 
     return { data: array, next, previous };
   }
 
-  /*
-  {
-  "run": 20345543,
-  "initAusencia": "Fri May 14 2023 01:17:07 GMT-0700 (PDT)",
-  "endAusencia": "Fri May 04 2023 01:17:07 GMT-0700 (PDT)",
-  "numInasistente": 10,
-  "reason_i": "trolie unu",
-  "file_i": "directorio/malardo",
-  "attendance": "[{classId: 1, studentRun: 12345678}]"
-  }
-  */
-
   async getOwnJustifications(run: number) {
     const query = await this.justificationsRepo.getJustificationsByRun(run);
-    const justifications = query.map((justification) => ({
-      id: justification.id,
-      initAusencia: justification.init_ausencia,
-      endAusencia: justification.end_ausencia,
-      numInasistente: justification.num_inasistente,
-      reason: justification.reason,
-      file: `${justification.id}_${justification.file}.pdf`,
-      approved: justification.approved,
-      Attendance: justification.Attendance,
-    }));
+    const justifications = query.map((justification) => {
+      const {
+        id,
+        init_ausencia,
+        end_ausencia,
+        num_inasistente,
+        reason,
+        file,
+        approved,
+        Attendance,
+      } = justification;
+      return {
+        id: id,
+        reason,
+        file: `${id}_${file}.pdf`,
+        approved,
+        Attendance,
+        initAusencia: init_ausencia,
+        endAusencia: end_ausencia,
+        numInasistente: num_inasistente,
+      };
+    });
 
     return { data: justifications };
   }

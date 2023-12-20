@@ -15,7 +15,6 @@ export class AnnouncementsService {
 
   async getCategoriesTargets() {
     const res = await this.annRepository.getCategoriesTargets();
-
     return res;
   }
 
@@ -83,10 +82,10 @@ export class AnnouncementsService {
         lesson_teacher: {
           where: {
             lesson: {
-              period: { 
+              period: {
                 year: currentDate.getFullYear(),
                 semester: currentDate.getMonth() < 6 ? 1 : 2,
-              }
+              },
             },
           },
           select: {
@@ -139,9 +138,12 @@ export class AnnouncementsService {
   }
 
   async updateAnnouncement(id: number, data: CreateAnnouncementDto) {
-    const updated_announcement = await this.annRepository.update(id, data);
-
-    return updated_announcement;
+    try {
+      const updated_announcement = await this.annRepository.update(id, data);
+      return updated_announcement;
+    } catch (error) {
+      throw new BadRequestException({ msg: 'announcement_not_found' });
+    }
   }
 
   async deleteAnnouncement(id: number) {
@@ -149,7 +151,7 @@ export class AnnouncementsService {
       const announcement = await this.annRepository.delete(id);
       return announcement;
     } catch (error) {
-      throw new BadRequestException('announcement_not_found');
+      throw new BadRequestException({ msg: 'announcement_not_found' });
     }
   }
 }

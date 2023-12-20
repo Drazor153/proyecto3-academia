@@ -47,7 +47,7 @@ export class StudentsService {
     const studentQuery = await this.usersRepo.getStudentCareerByRun(run);
 
     if (!studentQuery) {
-      throw new BadRequestException('student_not_found');
+      throw new BadRequestException({ msg: 'student_not_found' });
     }
 
     const sanitized = sanitizeStudentCareer(studentQuery);
@@ -58,8 +58,8 @@ export class StudentsService {
     const { run, first_surname } = params;
     const studentExist = await this.usersRepo.getStudentByRun(run);
 
-    if (studentExist !== null) {
-      throw new BadRequestException('student_exists');
+    if (studentExist) {
+      throw new BadRequestException({ msg: 'student_exists' });
     }
 
     const hashedPassword = await hashPassword(
@@ -97,7 +97,7 @@ export class StudentsService {
       await this.usersRepo.updateStudent(run, studentDto);
       return { msg: 'student_updated' };
     } catch (error) {
-      throw new BadRequestException('student_not_found');
+      throw new BadRequestException({ msg: 'student_not_found' });
     }
   }
 }

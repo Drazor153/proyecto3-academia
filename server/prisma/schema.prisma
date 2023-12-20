@@ -78,13 +78,13 @@ model Topic {
 }
 
 model Quiz {
-  id        Int    @id @default(autoincrement())
-  levelCode String @db.Char(2)
+  id        Int      @id @default(autoincrement())
+  levelCode String   @db.Char(2)
   periodId  Int
   number    Int
   topicId   Int
-  starts_at DateTime
-  ends_at   DateTime
+  starts_at DateTime @default(now())
+  ends_at   DateTime @default(now())
 
   period Period @relation(fields: [periodId], references: [id])
   topic  Topic  @relation(fields: [topicId], references: [id])

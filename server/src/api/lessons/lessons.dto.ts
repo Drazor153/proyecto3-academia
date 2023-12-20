@@ -9,24 +9,18 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { LevelCodes } from '@/common/constants';
-
-class LessonDto {
-  @IsString()
-  @Length(1, 1)
-  lesson: string;
-
-  @IsString()
-  @IsEnum(LevelCodes)
-  levelCode: LevelCodes;
+export class CreateLessonsDto {
+  @IsPositive()
+  year: number;
 
   @IsArray()
-  @IsPositive({ each: true })
-  teachersRun: number[];
+  @ValidateNested({ each: true })
+  @Type(() => SemesterDto)
+  semesters: SemesterDto[];
 }
-
-class QuizDto {
+export class SemesterDto {
   @IsPositive()
-  number: number;
+  semester: number;
 
   @IsDateString()
   starts_at: Date;
@@ -34,17 +28,15 @@ class QuizDto {
   @IsDateString()
   ends_at: Date;
 
-  @IsPositive()
-  topicId: number;
-
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LevelDto)
+  levels: LevelDto[];
+}
+class LevelDto {
   @IsString()
   @IsEnum(LevelCodes)
-  levelCode: LevelCodes;
-}
-
-export class SemesterDto{
-  @IsPositive()
-  semester: number;
+  code: LevelCodes;
 
   @IsArray()
   @ValidateNested({ each: true })
@@ -56,14 +48,23 @@ export class SemesterDto{
   @Type(() => QuizDto)
   quizzes: QuizDto[];
 }
-export class CreateLessonsDto {
-  @IsPositive()
-  year: number
+
+class LessonDto {
+  @IsString()
+  @Length(1, 1)
+  lesson: string;
 
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SemesterDto)
-  semesters: SemesterDto[];
-
+  @IsPositive({ each: true })
+  teachersRun: number[];
 }
+class QuizDto {
+  @IsPositive()
+  number: number;
 
+  @IsDateString()
+  starts_at: Date;
+
+  @IsDateString()
+  ends_at: Date;
+}

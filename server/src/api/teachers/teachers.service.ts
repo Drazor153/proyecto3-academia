@@ -31,7 +31,7 @@ export class TeachersService {
       include: {
         level: true,
         lesson_teacher: { select: { teacherRun: true } },
-        period: {select: {year: true, semester: true}},
+        period: { select: { year: true, semester: true } },
       },
       orderBy: [
         {
@@ -79,13 +79,11 @@ export class TeachersService {
   async getQuizGrades({ quizId }: GetQuizGradesParams) {
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: +quizId },
-      include: {period: {select: {year: true, semester: true}}}    });
+      include: { period: { select: { year: true, semester: true } } },
+    });
 
     if (!quiz) {
-      throw new NotFoundException({
-        errorType: 'msg',
-        errorMsg: 'Quiz not found',
-      });
+      throw new NotFoundException({ msg: 'quiz_not_found' });
     }
 
     const query = await this.prisma.user.findMany({
@@ -120,7 +118,7 @@ export class TeachersService {
         run: val.run,
         name: val.name,
         first_surname: val.first_surname,
-        grade: grade ? grade : 0,
+        grade: grade ?? 0,
         dv: val.dv,
       };
     });
@@ -128,8 +126,9 @@ export class TeachersService {
     return { data: gradesData };
   }
 
-  postQuizzesGrades({ quizId, grades }: PostQuizzesGradesBody) {
-    grades.forEach(async (val) => {
+  async postQuizzesGrades({ quizId, grades }: PostQuizzesGradesBody) {
+    
+    const promises = grades.map(async (val) => {
       await this.prisma.gives.upsert({
         where: {
           quizId_studentRun: {
@@ -147,9 +146,10 @@ export class TeachersService {
         },
       });
     });
+    await Promise.all(promises);
 
-    this.logger.info(`${grades.length} notas actualizadas`);
+    this.logger.info(`${grades.length} grades updated`);
 
-    return { msg: 'Notas actualizadas!' };
+    return { msg: 'grades_updated' };
   }
 }

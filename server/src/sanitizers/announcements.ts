@@ -3,11 +3,13 @@ import {
   AnnouncementsSanitized,
 } from 'src/interfaces/announcements.sanitizer.interface';
 
-export const sanitizeAnnouncements = (input: AnnouncementsRaw[], expiring = false) => {
+export const sanitizeAnnouncements = (
+  input: AnnouncementsRaw[],
+  expiring = false
+) => {
   const now = Date.now();
   const announcements: AnnouncementsSanitized[] = [];
   input.forEach((val) => {
-
     if (expiring && val.expires_at.getTime() < now) {
       return;
     }

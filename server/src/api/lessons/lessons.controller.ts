@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { LessonParams } from '@/api/classes/classes.dto';
 import { LessonsService } from './lessons.service';
 import { RolesGuard } from '@/guards/roles.guard';
@@ -36,7 +44,7 @@ export class LessonsController {
 
   @Post('')
   @Roles(RoleEnum.Admin)
-  createLessons(@Body() createLessonDto: CreateLessonsDto){
+  createLessons(@Body() createLessonDto: CreateLessonsDto) {
     this.logger.info(`Admin creating lessons`);
     return this.lessonsService.createLessons(createLessonDto);
   }

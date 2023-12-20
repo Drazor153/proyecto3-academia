@@ -159,7 +159,10 @@ export const sanitizeStudentCareer = (input: StudentCareerRaw) => {
       ({ semester }) => semester === val.period.semester
     );
     if (!semesterExists) {
-      yearExists.semesters.push({ semester: val.period.semester, paid: val.paid });
+      yearExists.semesters.push({
+        semester: val.period.semester,
+        paid: val.paid,
+      });
       return;
     }
   });

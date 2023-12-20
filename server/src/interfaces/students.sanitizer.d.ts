@@ -1,18 +1,18 @@
 export interface StudentLevelRaw {
   level: {
-      teaches: {
-          id: number;
-          periodId: number;
-          levelCode: string;
-          lesson: string;
-      }[];
+    teaches: {
+      id: number;
+      periodId: number;
+      levelCode: string;
+      lesson: string;
+    }[];
   } & {
-      code: string;
-      name: string;
+    code: string;
+    name: string;
   };
   period: {
-      year: number;
-      semester: number;
+    year: number;
+    semester: number;
   };
 }
 export interface StudentLevelSanitized {
@@ -33,11 +33,11 @@ export interface StudentLevelSanitized {
 export interface StudentGradesRaw {
   number: number;
   topic: {
-      id: number;
-      name: string;
+    id: number;
+    name: string;
   };
   gives: {
-      grade: number;
+    grade: number;
   }[];
 }
 
@@ -49,18 +49,18 @@ export interface StudentGradesSanitized {
   }[];
 }
 
-export interface StudentCareerRaw  {
+export interface StudentCareerRaw {
   enrols: {
-      levelCode: string;
-      level: {
-          name: string;
-      };
-      period: {
-          year: number;
-          semester: number;
-      };
-      status: string;
-      paid: boolean;
+    levelCode: string;
+    level: {
+      name: string;
+    };
+    period: {
+      year: number;
+      semester: number;
+    };
+    status: string;
+    paid: boolean;
   }[];
   run: number;
   dv: string;

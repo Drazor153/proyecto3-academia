@@ -27,25 +27,25 @@ export class LevelsController {
   }
 
   @Get('/topics')
-  getTopics(){
+  getTopics() {
     this.logger.info('Admin getting all topics');
     return this.levelsService.getTopics();
   }
 
   @Get('/teachers')
-  getTeachers(){
+  getTeachers() {
     this.logger.info('Admin getting all teachers');
     return this.levelsService.getTeachers();
   }
 
   @Get('/periods')
-  getPeriods(){
+  getPeriods() {
     this.logger.info('Admin getting all periods');
     return this.levelsService.getPeriods();
   }
 
   @Post('/periods')
-  createPeriod(@Body() period: PeriodDto){
+  createPeriod(@Body() period: PeriodDto) {
     this.logger.info('Admin creating a new period');
     return this.levelsService.createPeriod(period);
   }

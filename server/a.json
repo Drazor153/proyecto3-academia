@@ -3,15 +3,15 @@
   "semesters": [
     {
       "semester": 1,
-      "start_at": "date",
-      "end_at": "date",
+      "starts_at": "2023-03-04T21:09:45.726Z",
+      "ends_at": "2023-06-30T21:09:45.726Z",
       "levels": [
         {
-          "code": "A1",
+          "code": "A2",
           "lessons": [
             {
               "lesson": "A",
-              "teachers": []
+              "teachersRun": []
             }
           ],
           "quizzes": [
@@ -27,11 +27,6 @@
             },
             {
               "number": 3,
-              "starts_at": "2023-03-04T21:09:45.726Z",
-              "ends_at": "2023-03-11T21:09:45.726Z"
-            },
-            {
-              "number": 4,
               "starts_at": "2023-03-04T21:09:45.726Z",
               "ends_at": "2023-03-11T21:09:45.726Z"
             }

@@ -13,14 +13,14 @@ export class LevelsService {
 
   async getTopics() {
     const data = await this.prisma.topic.findMany();
-    return {data};
+    return { data };
   }
 
   getTeachers() {
     return this.prisma.user.findMany({
       where: {
-        role: RoleEnum.Teacher
-      }
+        role: RoleEnum.Teacher,
+      },
     });
   }
 

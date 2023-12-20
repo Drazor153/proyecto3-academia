@@ -25,54 +25,68 @@ export default class LessonsRepo {
   }
 
   async createMany(year: number, semesters: SemesterDto[]) {
-    for(const value of semesters){
-      const { semester, lessons, quizzes } = value;
-      const period = await this.prisma.period.findFirst({
+    for (const value of semesters) {
+      const { semester, levels, ends_at, starts_at } = value;
+      let period = await this.prisma.period.findFirst({
         where: {
           year,
           semester,
         },
       });
       if (!period) {
-        throw new BadRequestException('period_not_found');
+        period = await this.prisma.period.create({
+          data: {
+            year,
+            semester,
+            start_date: starts_at,
+            end_date: ends_at,
+          },
+        });
+        throw new BadRequestException({ msg: 'period_not_found' });
       }
       console.log(period);
 
-      const lessonsPromises = lessons.map(async (value) => {
-        const { lesson, levelCode, teachersRun } = value;
-        await this.prisma.lesson.create({
-          data: {
-            levelCode,
-            periodId: period.id,
-            lesson,
-            lesson_teacher: {
-              create: teachersRun.map((run) => ({
-                teacherRun: run,
-              })),
+      for (const level of levels) {
+        const { code, lessons, quizzes } = level;
+
+        const lessonsPromises = lessons.map(async (value) => {
+          const { lesson, teachersRun } = value;
+          await this.prisma.lesson.create({
+            data: {
+              levelCode: code,
+              periodId: period.id,
+              lesson,
+              lesson_teacher: {
+                create: teachersRun.map((run) => ({
+                  teacherRun: run,
+                })),
+              },
             },
-          },
+          });
         });
-      });
 
-      const quizzesPromises = quizzes.map(async (value) => {
-        const {number, ends_at,levelCode,starts_at,topicId} = value;
+        const topics = await this.prisma.topic.findMany();
 
-        await this.prisma.quiz.create({
-          data: {
-            number,
-            levelCode,
-            topicId,
-            periodId: period.id,
-            // starts_at,
-            // ends_at,
-          },
+        const quizzesPromises = quizzes.map(async (value) => {
+          const { number, ends_at, starts_at } = value;
+          topics.forEach(async (topic) => {
+            await this.prisma.quiz.create({
+              data: {
+                number,
+                levelCode: code,
+                topicId: topic.id,
+                periodId: period.id,
+                starts_at,
+                ends_at,
+              },
+            });
+          });
         });
-      });
 
-      await Promise.all([...lessonsPromises, ...quizzesPromises]);
-      
+        await Promise.all([...lessonsPromises, ...quizzesPromises]);
+      }
     }
-      
+
     // lessons.forEach(async ({ lesson, levelCode, teachersRun }) => {
     //   await this.prisma.lesson.create({
     //     data: {

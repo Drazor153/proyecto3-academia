@@ -88,7 +88,7 @@ export class UpdateStudentDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-  
+
   @IsNotEmpty()
   @IsString()
   first_surname: string;
@@ -100,7 +100,7 @@ export class UpdateStudentDto {
   @IsNotEmpty()
   @IsBoolean()
   paid: boolean;
-  
+
   @IsOptional()
   @IsEmail()
   email: string;

@@ -20,7 +20,7 @@ export class AuthService {
     const user = await this.usersRepo.findOne(run);
 
     if (!user) {
-      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
+      throw new BadRequestException({ msg: 'user_not_found' });
     }
 
     const { password: userPassword, ...userData } = user;
@@ -28,10 +28,7 @@ export class AuthService {
     const result = await comparePassword(password, userPassword);
 
     if (!result) {
-      throw new BadRequestException({
-        type: 'msg',
-        message: 'credentials_are_incorrect',
-      });
+      throw new BadRequestException({ msg: 'credentials_incorrect' });
     }
 
     const tokens = await this.getTokens(run, user.role as RoleEnum);
@@ -45,7 +42,7 @@ export class AuthService {
   async autoLogin(run: number) {
     const queryUser = await this.usersRepo.findOne(run);
     if (!queryUser) {
-      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
+      throw new BadRequestException({ msg: 'user_not_found' });
     }
     const { password: _, ...user } = queryUser;
 
@@ -101,7 +98,7 @@ export class AuthService {
     const user = await this.usersRepo.findOneWithRefreshToken(run);
 
     if (!user || !user.refresh_token) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException({ msg: 'access_denied' });
     }
 
     const refreshTokenMatches = await comparePassword(
@@ -110,7 +107,7 @@ export class AuthService {
     );
 
     if (!refreshTokenMatches) {
-      throw new ForbiddenException('Access Denied');
+      throw new ForbiddenException({ msg: 'access_denied' });
     }
 
     const tokens = await this.getTokens(run, user.role as RoleEnum);
@@ -122,26 +119,23 @@ export class AuthService {
   async changePassword(run: number, oldPassword: string, newPassword: string) {
     const user = await this.usersRepo.findOne(run);
     if (!user) {
-      throw new BadRequestException({ type: 'msg', message: 'user_not_found' });
+      throw new BadRequestException({ msg: 'user_not_found' });
     }
     const { password: userPassword } = user;
     const result = await comparePassword(oldPassword, userPassword);
     if (!result) {
-      throw new BadRequestException({
-        type: 'msg',
-        message: 'credentials_are_incorrect',
-      });
+      throw new BadRequestException({ msg: 'credentials_incorrect' });
     }
     const hashedPassword = await hashPassword(newPassword);
     await this.usersRepo.update(run, { password: hashedPassword });
 
-    return { msg: 'password_change_successful' }
+    return { msg: 'password_change_successful' };
   }
 
   async resetUserPassword(runOuter: number) {
     const user = await this.usersRepo.findOne(runOuter);
     if (!user) {
-      throw new BadRequestException({ type: 'msg', message: 'User not found' });
+      throw new BadRequestException({ msg: 'user_not_found' });
     }
     const { run, first_surname } = user;
     const hashedPassword = await hashPassword(
@@ -149,7 +143,7 @@ export class AuthService {
     );
     await this.usersRepo.update(run, { password: hashedPassword });
 
-    return { msg: 'password_reset_successful'}
+    return { msg: 'password_reset_successful' };
   }
   // getUserFromRefreshToken(token: string) {
   //   try {
@@ -158,7 +152,7 @@ export class AuthService {
   //     });
   //     return { run: sub, role };
   //   } catch (error) {
-  //     throw new BadRequestException({ type: 'msg', message: 'Invalid token' });
+  //     throw new BadRequestException({ msg: 'Invalid token' });
   //   }
   // }
 }

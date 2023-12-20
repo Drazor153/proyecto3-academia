@@ -1,4 +1,4 @@
-export class PeriodDto{
+export class PeriodDto {
   name: string;
   start: Date;
   end: Date;

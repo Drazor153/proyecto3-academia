@@ -1,5 +1,11 @@
 import { Transform } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsNumberString, IsPositive, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsNumberString,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class LoginFormDto {
   @IsNotEmpty()

@@ -7,7 +7,7 @@ export interface TeacherLevelsRaw {
   period: {
     year: number;
     semester: number;
-  }
+  };
   lesson: string;
   level: {
     code: string;
@@ -32,8 +32,8 @@ export interface TeacherLevelsSanitizied {
 
 export interface TopicQuizRaw {
   topic: {
-      id: number;
-      name: string;
+    id: number;
+    name: string;
   };
   id: number;
   levelCode: string;

@@ -27,7 +27,7 @@ export default class AnnouncementsRepo {
       },
       orderBy: {
         id: 'desc',
-      }
+      },
     });
   }
 

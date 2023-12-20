@@ -1,6 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
+import { REFRESH_KEY } from '../decorators/roles';
 
 @Injectable()
 export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
@@ -10,7 +11,7 @@ export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isNoRefresh = this.reflector.get<boolean>(
-      'refresh',
+      REFRESH_KEY,
       context.getHandler()
     );
     if (isNoRefresh) {

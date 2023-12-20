@@ -9,16 +9,16 @@ import { CreateLessonsDto } from './lessons.dto';
 
 @Injectable()
 export class LessonsService {
-  constructor(private prisma: PrismaService,private lessonsRepo: LessonsRepo) {}
+  constructor(
+    private prisma: PrismaService,
+    private lessonsRepo: LessonsRepo
+  ) {}
 
   async getStudents({ lessonId }: LessonParams) {
     const level = await this.lessonsRepo.findById(+lessonId);
 
     if (!level) {
-      throw new NotFoundException({
-        errorType: 'msg',
-        errorMsg: 'Lesson not found',
-      });
+      throw new NotFoundException({ msg: 'lesson_not_found' });
     }
 
     const studentsInLevel = await this.prisma.user.findMany({
@@ -70,8 +70,8 @@ export class LessonsService {
                       first_surname: true,
                     },
                   },
-                }
-              }
+                },
+              },
             },
           },
         },
@@ -115,10 +115,7 @@ export class LessonsService {
     });
 
     if (!query) {
-      throw new NotFoundException({
-        errorType: 'msg',
-        errorMsg: 'Lesson not found',
-      });
+      throw new NotFoundException({ msg: 'lesson_not_found' });
     }
 
     const sanitized = sanitizeLessonClasses(query);
@@ -126,10 +123,10 @@ export class LessonsService {
     return { data: sanitized };
   }
 
-  async createLessons(data: CreateLessonsDto){
-    const {year,semesters} = data;
+  async createLessons(data: CreateLessonsDto) {
+    const { year, semesters } = data;
     console.log(data);
     await this.lessonsRepo.createMany(year, semesters);
-    return {msg: 'lessons_created'}
+    return { msg: 'lessons_created' };
   }
 }

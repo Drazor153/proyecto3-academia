@@ -87,10 +87,11 @@ export class StudentsController {
 
   @Patch(':run')
   @Roles(RoleEnum.Admin)
-  updateStudent(@Param() params: UpdateStudentParams, @Body() studentDto: UpdateStudentDto) {
-    this.logger.info(
-      `Admin updating student with run: ${params.run}`
-    );
+  updateStudent(
+    @Param() params: UpdateStudentParams,
+    @Body() studentDto: UpdateStudentDto
+  ) {
+    this.logger.info(`Admin updating student with run: ${params.run}`);
     return this.studentsService.updateStudent(+params.run, studentDto);
   }
 }
