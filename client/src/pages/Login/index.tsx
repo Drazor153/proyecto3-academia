@@ -59,7 +59,6 @@ function Login() {
 		const cleanRUN = newRUN.replace(/[^0-9kK]/g, '').toUpperCase();
 		setRun(formatRut(cleanRUN, RutFormat.DOTS_DASH));
 	};
-	
 
 	const handlerLogin: SubmitHandler<formType> = data => {
 		data.run = data.run.replace(/[^0-9kK]/g, '').toUpperCase();

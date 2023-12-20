@@ -104,7 +104,7 @@ function FormNewStudent() {
 		toast.update(toastId, {
 			render: t('student_registered'),
 			type: 'success',
-
+			autoClose: 1000,
 			isLoading: false,
 		});
 		setRun('');
@@ -115,7 +115,7 @@ function FormNewStudent() {
 		toast.update(toastId, {
 			render: t(error.data.msg),
 			type: 'error',
-
+			autoClose: 1000,
 			isLoading: false,
 		});
 	};

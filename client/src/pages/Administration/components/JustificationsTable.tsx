@@ -100,6 +100,7 @@ function JustificationsDetails() {
 					render: t('status_changed'),
 					type: 'success',
 					isLoading: false,
+					autoClose: 1000,
 				});
 			})
 			.catch(() => {
@@ -107,6 +108,7 @@ function JustificationsDetails() {
 					render: t('status_changed_error'),
 					type: 'error',
 					isLoading: false,
+					autoClose: 1000,
 				});
 			});
 	};

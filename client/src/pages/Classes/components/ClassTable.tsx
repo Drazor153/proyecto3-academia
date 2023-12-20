@@ -385,6 +385,7 @@ function ModalClassList({
 						render: t(res.msg),
 						type: 'success',
 						isLoading: false,
+						autoClose: 1000,
 					});
 					closeModal();
 					setPositionTable();
@@ -394,6 +395,7 @@ function ModalClassList({
 						render: t(err.data.msg),
 						type: 'error',
 						isLoading: false,
+						autoClose: 1000,
 					});
 				});
 		} else {
@@ -406,6 +408,7 @@ function ModalClassList({
 						render: t(res.msg),
 						type: 'success',
 						isLoading: false,
+						autoClose: 1000,
 					});
 					closeModal();
 					setPositionTable();
@@ -415,6 +418,7 @@ function ModalClassList({
 						render: t(err.data.msg),
 						type: 'error',
 						isLoading: false,
+						autoClose: 1000,
 					});
 				});
 		}
@@ -668,6 +672,7 @@ function ModalDeleteClass({
 					render: t(res.msg),
 					type: 'success',
 					isLoading: false,
+					autoClose: 1000,
 				});
 				setShowModalDeleteClass(!showModalDeleteClass);
 			})

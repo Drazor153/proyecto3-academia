@@ -45,7 +45,7 @@ function EditStudent({
 				toast.update('reset-password', {
 					type: 'success',
 					render: t(payload.msg),
-
+					autoClose: 1000,
 					isLoading: false,
 				}),
 			)
@@ -53,7 +53,7 @@ function EditStudent({
 				toast.update('reset-password', {
 					type: 'error',
 					render: t(error.message),
-
+					autoClose: 1000,
 					isLoading: false,
 				}),
 			);
@@ -238,7 +238,7 @@ function SearchStudent() {
 				toast.update('edit-student', {
 					type: 'success',
 					render: t(payload.msg),
-
+					autoClose: 1000,
 					isLoading: false,
 				});
 				setIsEditing(false);

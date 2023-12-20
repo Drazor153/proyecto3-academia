@@ -168,6 +168,7 @@ function ModalExam({
 					render: t('grades_changed'),
 					type: 'success',
 					isLoading: false,
+					autoClose: 1000,
 				});
 			})
 			.catch(error => {
@@ -175,6 +176,7 @@ function ModalExam({
 					render: t(error.data.message),
 					type: 'success',
 					isLoading: false,
+					autoClose: 1000,
 				});
 			});
 	};

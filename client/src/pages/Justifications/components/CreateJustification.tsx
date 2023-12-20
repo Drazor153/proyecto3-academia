@@ -62,6 +62,7 @@ export function CreateJustification({
 					isLoading: false,
 					type: 'success',
 					render: t(payload.msg),
+					autoClose: 1000,
 				});
 				closeModal();
 			})
@@ -70,6 +71,7 @@ export function CreateJustification({
 					isLoading: false,
 					type: 'error',
 					render: t(error.data.msg),
+					autoClose: 1000,
 				}),
 			);
 	};
