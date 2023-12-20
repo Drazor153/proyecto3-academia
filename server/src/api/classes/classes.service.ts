@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   ClassParams,
   CreateClassDto,
@@ -11,24 +11,30 @@ export class ClassesService {
   constructor(private classesRepo: ClassesRepo) {}
 
   async createClass(data: CreateClassDto) {
-    const query = await this.classesRepo.create(data);
-
-    console.log(query);
-
-    return { msg: 'Clase creada!' };
+    try {
+      const query = await this.classesRepo.create(data);
+      console.log(query);
+      return { msg: 'class_created' };
+    } catch (error) {
+      throw new BadRequestException('class_created_error');
+    }
   }
   async updateClass({ classId }: ClassParams, dto: UpdateClassDto) {
-    const query = await this.classesRepo.update(+classId, dto);
-
-    console.log(`Updated class: ${query}`);
-
-    return { msg: 'Clase actualizada!' };
+    try {
+      const query = await this.classesRepo.update(+classId, dto);
+      console.log(`Updated class: ${query}`);
+      return { msg: 'class_updated' };
+    } catch (error) {
+      throw new BadRequestException('class_updated_error');
+    }
   }
   async deleteClass({ classId }: ClassParams) {
-    const query = await this.classesRepo.delete(+classId);
-
-    console.log(`Deleted class: ${query}`);
-
-    return { msg: 'Clase eliminada!' };
+    try {
+      const query = await this.classesRepo.delete(+classId);
+      console.log(`Deleted class: ${query}`);
+      return { msg: 'class_deleted' };
+    } catch (error) {
+      throw new BadRequestException('class_deleted_error');
+    }
   }
 }

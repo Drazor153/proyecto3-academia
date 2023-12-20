@@ -8,20 +8,11 @@ import {
   IsNumberString,
   IsString,
   ValidateNested,
+  buildMessage,
 } from 'class-validator';
 export class LessonParams {
   @IsNumberString()
   lessonId: number;
-}
-
-export class AttendanceDto {
-  @IsNotEmpty()
-  @IsInt()
-  studentRun: number;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  attended: boolean;
 }
 
 export class CreateClassDto {
@@ -50,10 +41,23 @@ export class UpdateClassDto {
   contents: string;
 
   @IsNotEmpty()
+  @IsDateString()
+  date: Date;
+
+  @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AttendanceDto)
   attendance: AttendanceDto[];
+}
+export class AttendanceDto {
+  @IsNotEmpty()
+  @IsInt()
+  studentRun: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  attended: boolean;
 }
 
 export class ClassParams {

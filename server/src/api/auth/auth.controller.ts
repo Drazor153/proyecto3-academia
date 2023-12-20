@@ -87,7 +87,7 @@ export class AuthController {
     @Req() req: UserRequest,
     @Res({ passthrough: true }) res: Response
   ) {
-    this.logger.info(`User with run ${req.user.sub} is logging out.`);
+    // this.logger.info(`User with run ${req.user.sub} is logging out.`);
     await this.authService.logout(req.user.sub);
     res.clearCookie('access-token', COOKIE_OPTIONS);
     res.clearCookie('refresh-token', COOKIE_OPTIONS);
@@ -103,7 +103,7 @@ export class AuthController {
     @Req() req: UserRequest,
     @Res({ passthrough: true }) res: Response
   ) {
-    this.logger.info(`User with run ${req.user.sub} is refreshing tokens.`);
+    // this.logger.info(`User with run ${req.user.sub} is refreshing tokens.`);
     const { sub: run, refreshToken } = req.user;
     const tokens = await this.authService.refreshTokens(run, refreshToken);
 

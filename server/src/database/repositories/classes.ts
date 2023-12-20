@@ -24,11 +24,12 @@ export default class ClassesRepo {
   }
 
   update(id: number, data: UpdateClassDto) {
-    const { attendance, contents } = data;
+    const { attendance, contents, date } = data;
     return this.prisma.class.update({
       where: { id },
       data: {
         contents,
+        date,
         attendance: {
           updateMany: attendance.map((val) => ({
             where: { classId: id, studentRun: val.studentRun },
