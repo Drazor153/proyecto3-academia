@@ -34,7 +34,7 @@ export default function JustificationTable() {
 
 	return (
 		<>
-			<table className='student-justifications-table'>
+			<table className='table student-justifications-table'>
 				<thead>
 					<tr>
 						<th>{t('date')}</th>
@@ -55,6 +55,7 @@ export default function JustificationTable() {
 							<td>{t(justification.approved)}</td>
 							<td className='action-buttons'>
 								<button
+									className='button'
 									onClick={() => setSelectedFile(justification.file as string)}
 								>
 									<TiDocumentText className='icon' />

@@ -45,7 +45,7 @@ function TopicTable() {
 				<h3>{t('Beginner')}</h3>
 			</div>
 			{isOpen && (
-				<table>
+				<table className='table'>
 					<thead>
 						<tr>
 							<th>{t('topic')}</th>

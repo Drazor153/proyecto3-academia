@@ -29,7 +29,7 @@ function Sidebar() {
 		logoutQuery(null)
 			.unwrap()
 			.then(result => {
-				toast.success(result.msg);
+				toast.success(t(result.msg), { autoClose: 1000 });
 				dispatch(logout());
 				setShowLogout(false);
 				navigate('/login');

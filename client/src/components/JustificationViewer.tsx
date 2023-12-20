@@ -18,10 +18,9 @@ export default function JustificationViewer({
 
 	return (
 		<Modal
-			title=''
 			isOpen={() => url !== ''}
 			onClick={() => onClose()}
-			footer={<></>}
+			style={{ width: '600px' }}
 		>
 			<div className='pdf-viewer-container'>
 				<Viewer

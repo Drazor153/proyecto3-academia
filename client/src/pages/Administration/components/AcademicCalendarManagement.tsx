@@ -132,7 +132,7 @@ export default function AcademicCalendarManagement() {
 						/>
 					</div>
 				</section>
-				<button>
+				<button className='button'>
 					<span>
 						<BiSolidPlusSquare className='biSolidPlusSquare' />
 					</span>

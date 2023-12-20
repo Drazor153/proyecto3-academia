@@ -49,7 +49,7 @@ function Students({ content }: { content: string }) {
 					<button
 						key={index}
 						onClick={() => navigate(`/administration/students/${item}`)}
-						className={content == item ? 'selected' : ''}
+						className={`button ${content == item ? 'selected' : ''}`}
 					>
 						{t(item)}
 					</button>
@@ -72,7 +72,7 @@ function Calendar({ content }: { content: string }) {
 					<button
 						key={index}
 						onClick={() => navigate(`/administration/calendar/${item}`)}
-						className={content == item ? 'selected' : ''}
+						className={`button ${content == item ? 'selected' : ''}`}
 					>
 						{t(item)}
 					</button>
@@ -147,7 +147,7 @@ function Administration() {
 							onClick={() => {
 								navigate(path);
 							}}
-							className={menu === name ? 'selected' : ''}
+							className={`button ${menu === name ? 'selected' : ''}`}
 						>
 							{t(name)}
 						</button>

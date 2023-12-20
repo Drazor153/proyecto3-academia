@@ -123,7 +123,7 @@ function ExamsTable({
 
 	return (
 		<>
-			<table className='grades-table'>
+			<table className='table grades-table'>
 				<thead>
 					<tr>
 						<th>{t('quiz')}</th>

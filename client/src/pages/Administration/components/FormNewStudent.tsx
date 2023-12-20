@@ -37,7 +37,7 @@ type Response =
 	| { errorMsg: { msg: string }[]; errorType: 'invalidFields' }
 	| { errorMsg: string; errorType: 'msg' };
 
-type ServerResponse = { status: number; data: Response; message: string };
+type ServerResponse = { status: number; data: Response };
 
 function LevelsSelect({ control }: { control: Control<Student> }) {
 	const {
@@ -100,27 +100,32 @@ function FormNewStudent() {
 		resolver: zodResolver(formSchema),
 	});
 
-	const handleSuccessMsg = (payload: ResponseMsg) => {
-		toast.success(payload.msg);
+	const handleSuccessMsg = (toastId: string) => {
+		toast.update(toastId, {
+			render: t('student_registered'),
+			type: 'success',
+
+			isLoading: false,
+		});
 		setRun('');
 		reset();
 	};
 
-	const handleErrorMsg = (error: ServerResponse) => {
-		switch (error.data.errorType) {
-			case 'invalidFields':
-				toast.error(t(error.data.errorMsg[0].msg));
-				break;
-			case 'msg':
-				toast.error(t(error.data.errorMsg));
-				break;
-		}
+	const handleErrorMsg = (error: any, toastId: string) => {
+		toast.update(toastId, {
+			render: t(error.data.msg),
+			type: 'error',
+
+			isLoading: false,
+		});
 	};
 
 	const onSubmit: SubmitHandler<formType> = data => {
 		if (!validateRut(String(data.run))) return toast.error(t('invalid_run'));
 
 		const { digits, verifier } = deconstructRut(String(data.run));
+
+		toast.loading(t('registering_student'), { toastId: 'registering_student' });
 
 		addStudent({
 			run: parseInt(digits),
@@ -131,8 +136,8 @@ function FormNewStudent() {
 			paid: data.paid,
 		})
 			.unwrap()
-			.then(payload => handleSuccessMsg(payload))
-			.catch(error => handleErrorMsg(error));
+			.then(() => handleSuccessMsg('registering_student'))
+			.catch(error => handleErrorMsg(error, 'registering_student'));
 	};
 
 	const onError = () => {
@@ -192,7 +197,12 @@ function FormNewStudent() {
 					<LevelsSelect control={control} />
 				</div>
 				<div className='btn-section'>
-					<button type='submit'>{t('register')}</button>
+					<button
+						className='button'
+						type='submit'
+					>
+						{t('register')}
+					</button>
 				</div>
 			</form>
 		</>

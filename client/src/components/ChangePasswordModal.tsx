@@ -51,15 +51,13 @@ export default function ChangePasswordModal({
 					isLoading: false,
 					type: 'success',
 					render: t(payload.msg),
-					autoClose: 1000,
 				});
 			})
 			.catch(error => {
 				toast.update('changing_password', {
 					isLoading: false,
 					type: 'error',
-					render: t(error.msg),
-					autoClose: 1000,
+					render: t(error.data.msg),
 				});
 			});
 
@@ -99,7 +97,7 @@ export default function ChangePasswordModal({
 					<button
 						type='submit'
 						disabled={isLoading}
-						className={isLoading ? 'loading-btn' : ''}
+						className={`button ${isLoading ? 'loading-btn' : ''}`}
 					>
 						{isLoading ? <ThreeDots /> : t('confirm')}
 					</button>

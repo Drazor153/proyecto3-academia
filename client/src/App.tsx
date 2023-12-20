@@ -9,7 +9,7 @@ function App() {
 			<Worker workerUrl='https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js'>
 				<RouterProvider router={routes} />
 			</Worker>
-			<ToastContainer />
+			<ToastContainer autoClose={1000} />
 		</div>
 	);
 }

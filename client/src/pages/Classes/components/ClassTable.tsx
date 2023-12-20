@@ -20,6 +20,13 @@ import { BiSolidPlusSquare } from 'react-icons/bi';
 import { ImEyeMinus, ImEyePlus } from 'react-icons/im';
 import { IoIosClose } from 'react-icons/io';
 import { MdOutlineDeleteForever } from 'react-icons/md';
+import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
+import { toast } from 'react-toastify';
+import { ThreeDots } from 'react-loading-icons';
+import { AnimatePresence, motion } from 'framer-motion';
+import { DatePicker, TimePicker } from 'antd';
+import dayjs from 'dayjs';
+
 import {
 	useAddClassMutation,
 	useDeleteClassMutation,
@@ -28,9 +35,6 @@ import {
 	useUpdateClassMutation,
 } from '../../../redux/services/classesApi';
 import { Select } from '../types';
-import { RutFormat, deconstructRut, formatRut } from '@fdograph/rut-utilities';
-import { toast } from 'react-toastify';
-import { ThreeDots } from 'react-loading-icons';
 
 // TODO: ver el date de to
 
@@ -94,7 +98,7 @@ function TableStudent({ classes }: TableProps) {
 	return (
 		<>
 			<table
-				className='table-class-list'
+				className='table table-class-list'
 				user-role={'students'}
 			>
 				<thead>
@@ -154,7 +158,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 		id: -1,
 	});
 
-	const handlerClickNewClass = () => {
+	const handleClickNewClass = () => {
 		if (students) {
 			const attendanceList: AttendanceList[] = [];
 			students.data.map(({ run, dv, name, first_surname }) => {
@@ -180,7 +184,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 		}
 	};
 
-	const handlerClickViewClass = ({ id }: { id: number }) => {
+	const handleClickViewClass = ({ id }: { id: number }) => {
 		const attendanceList: AttendanceList[] = [];
 
 		const { attendance, contents, date } = (
@@ -209,7 +213,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 		setShowModalViewClass(!showModalViewClass);
 	};
 
-	const handlerClickDelete = ({ id }: { id: number }) => {
+	const handleClickDelete = ({ id }: { id: number }) => {
 		setSelectedClass({
 			...selectedClass,
 			id,
@@ -223,7 +227,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 			{students && (
 				<>
 					<table
-						className='table-class-list'
+						className='table table-class-list'
 						user-role={'teachers'}
 					>
 						<thead>
@@ -232,12 +236,13 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 									<p>{t('class_list')}</p>
 									<BiSolidPlusSquare
 										className='biSolidPlusSquare'
-										onClick={handlerClickNewClass}
+										onClick={handleClickNewClass}
 									/>
 								</th>
 							</tr>
 							<tr className='grid'>
 								<th>{t('date')}</th>
+								<th>{t('time')}</th>
 								<th>{t('content')}</th>
 								<th>{t('attendance')}</th>
 								<th>{t('actions')}</th>
@@ -251,12 +256,25 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 										({ attended }) => attended,
 									).length;
 									const total = attendance.length;
+
+									const _date = new Date(date).toLocaleDateString('es-CL', {
+										day: '2-digit',
+										month: '2-digit',
+										year: 'numeric',
+									});
+									const _time = new Date(date).toLocaleTimeString('es-CL', {
+										hour: '2-digit',
+										minute: '2-digit',
+										hour12: true,
+									});
+
 									return (
 										<tr
-											key={date.toLocaleString()}
+											key={`${_date}-${_time}`}
 											className='grid'
 										>
-											<td>{new Date(date).toLocaleString()}</td>
+											<td>{_date}</td>
+											<td>{_time}</td>
 											<td datatype='content'>
 												{contentsList.map(content => (
 													<p key={content.trim()}>{content.trim()}</p>
@@ -271,7 +289,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 												{(!showModalViewClass || selectedClass.id !== id) && (
 													<>
 														<ImEyePlus
-															onClick={() => handlerClickViewClass({ id: id })}
+															onClick={() => handleClickViewClass({ id: id })}
 															className='imEyePlus'
 														/>
 													</>
@@ -280,7 +298,7 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 													<ImEyeMinus className='imEyeMinus' />
 												)}
 												<MdOutlineDeleteForever
-													onClick={() => handlerClickDelete({ id })}
+													onClick={() => handleClickDelete({ id })}
 													className='mdOutlineDeleteForever'
 												/>
 											</td>
@@ -291,11 +309,10 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 						</tbody>
 					</table>
 					<ModalClassList
-						setShowModalViewClass={setShowModalViewClass}
-						showModalViewClass={showModalViewClass}
-						select={select}
+						closeModal={() => setShowModalViewClass(false)}
 						selectedClass={selectedClass}
 						setSelectedClass={setSelectedClass}
+						showModalViewClass={showModalViewClass}
 					/>
 					<ModalDeleteClass
 						selectedClass={selectedClass}
@@ -309,24 +326,28 @@ function TableTeacher({ classes, select }: TableProps & { select: Select }) {
 }
 
 interface ModalClassListProps {
-	setShowModalViewClass: Dispatch<SetStateAction<boolean>>;
-	showModalViewClass: boolean;
-	select: Select;
+	closeModal: () => void;
 	selectedClass: SelectedClass;
 	setSelectedClass: Dispatch<SetStateAction<SelectedClass>>;
+	showModalViewClass: boolean;
 }
 
 function ModalClassList({
-	showModalViewClass,
+	closeModal,
 	selectedClass,
 	setSelectedClass,
-	setShowModalViewClass,
+	showModalViewClass,
 }: ModalClassListProps) {
+	const [{ date, time }, setDateTime] = useState<{
+		date: string;
+		time: string;
+	}>({ date: '', time: '' });
+
 	const [addClass] = useAddClassMutation();
 	const [updateClass] = useUpdateClassMutation();
 	const labelRef = useRef<HTMLLabelElement>(null);
 
-	const handlerChangeContent = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setSelectedClass({ ...selectedClass, contents: e.target.value });
 	};
 
@@ -337,11 +358,10 @@ function ModalClassList({
 		table.children[1].scrollTop = 0;
 	};
 
-	const handlerClickConfirm = () => {
-		console.log(selectedClass);
+	const handleClickConfirm = () => {
 		const body: PostClass = {
 			lessonId: selectedClass.lesson.id,
-			date: selectedClass.date,
+			date: new Date(`${date} ${time}`),
 			contents: selectedClass.contents,
 			attendance: selectedClass.attendanceList.map(
 				({ attendance, student }) => {
@@ -353,38 +373,64 @@ function ModalClassList({
 				},
 			),
 		};
+
 		if (selectedClass.id > -1) {
-			const { lessonId, date, ...rest } = body;
+			const updatingClass = toast.loading(t('updating_class'));
+			const { lessonId, ...rest } = body;
 
 			updateClass({ id: selectedClass.id, body: rest })
 				.unwrap()
 				.then(res => {
-					console.log(res.msg);
-					setShowModalViewClass(!showModalViewClass);
+					toast.update(updatingClass, {
+						render: t(res.msg),
+						type: 'success',
+						isLoading: false,
+					});
+					closeModal();
 					setPositionTable();
+				})
+				.catch(err => {
+					toast.update(updatingClass, {
+						render: t(err.data.msg),
+						type: 'error',
+						isLoading: false,
+					});
 				});
 		} else {
+			const creatingClass = toast.loading(t('creating_class'));
+
 			addClass({ body })
 				.unwrap()
 				.then(res => {
-					console.log(res.msg);
-					setShowModalViewClass(!showModalViewClass);
+					toast.update(creatingClass, {
+						render: t(res.msg),
+						type: 'success',
+						isLoading: false,
+					});
+					closeModal();
 					setPositionTable();
+				})
+				.catch(err => {
+					toast.update(creatingClass, {
+						render: t(err.data.msg),
+						type: 'error',
+						isLoading: false,
+					});
 				});
 		}
 	};
 
-	const handlerClickCloseModal = () => {
+	const handleClickCloseModal = () => {
 		setSelectedClass({
 			...selectedClass,
 			contents: '',
 			id: -1,
 		});
-		setShowModalViewClass(!showModalViewClass);
+		closeModal();
 		setPositionTable();
 	};
 
-	const handlerOnChangeAttendance = (
+	const handleOnChangeAttendance = (
 		e: ChangeEvent<HTMLInputElement>,
 		student: {
 			run: string;
@@ -404,7 +450,7 @@ function ModalClassList({
 		});
 	};
 
-	const handlerLabelKeyDown = (
+	const handleLabelKeyDown = (
 		e: React.KeyboardEvent<HTMLLabelElement>,
 		student: {
 			run: string;
@@ -414,10 +460,10 @@ function ModalClassList({
 	) => {
 		if (e.key === ' ' || e.key === 'Enter') {
 			const cb = document.getElementById(
-				`attendance ${student.name}`,
+				`attendance ${student.run}`,
 			) as HTMLInputElement;
 			cb.checked = !cb.checked;
-			handlerOnChangeAttendance(
+			handleOnChangeAttendance(
 				{ target: { checked: cb.checked } } as ChangeEvent<HTMLInputElement>,
 				student,
 			);
@@ -428,120 +474,175 @@ function ModalClassList({
 		labelRef.current?.focus();
 	}, [selectedClass.attendanceList]);
 
+	useEffect(() => {
+		setDateTime({
+			date: new Date(selectedClass.date).toDateString(),
+			time: new Date(selectedClass.date).toTimeString(),
+		});
+	}, [selectedClass.date]);
+
+	useEffect(() => {
+		if (showModalViewClass) {
+			setPositionTable();
+		}
+	}, [showModalViewClass]);
+
 	return (
-		<>
-			<div
-				className={`background ${
-					showModalViewClass ? 'showModalViewClass' : ''
-				}`}
-			/>
-			<div
-				className={`attendance ${
-					showModalViewClass ? 'showModalViewClass' : ''
-				}`}
-			>
-				<h2>
-					{t('date')} {selectedClass.date.toLocaleString()}
-				</h2>
-				<IoIosClose
-					className='ioClose'
-					onClick={handlerClickCloseModal}
-				/>
-				<div className='body'>
-					<div className='content'>
-						<p>{t('content')}</p>
-						<input
-							type={'text'}
-							name='content'
-							id='content'
-							value={selectedClass.contents}
-							onChange={handlerChangeContent}
+		<AnimatePresence>
+			{showModalViewClass && (
+				<motion.section
+					style={{
+						margin: 0,
+						padding: 0,
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						width: '100%',
+						height: '100%',
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+					}}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				>
+					<div className='attendance'>
+						<h2>{t(selectedClass.id !== -1 ? 'class' : 'new_class')}</h2>
+						<IoIosClose
+							className='ioClose'
+							onClick={handleClickCloseModal}
 						/>
+						<div className='body'>
+							<div className='left'>
+								<label htmlFor='content'>
+									<h2>{t('content')}</h2>
+								</label>
+								<textarea
+									name='content'
+									id='content'
+									value={selectedClass.contents}
+									onChange={handleChangeContent}
+								/>
+
+								<label>
+									<h2>{t('date')}</h2>
+								</label>
+								<DatePicker
+									size='large'
+									disabledDate={current => {
+										return current && current > dayjs().endOf('day');
+									}}
+									value={dayjs(date)}
+									className='date-picker'
+									format={'DD-MM-YYYY'}
+									onChange={date => {
+										setDateTime(prev => ({
+											...prev,
+											date: date!.toDate().toDateString(),
+										}));
+									}}
+								/>
+								<label>
+									<h2>{t('time')}</h2>
+								</label>
+								<TimePicker
+									size='large'
+									value={dayjs(time, 'HH:mm')}
+									format={'HH:mm'}
+									use12Hours
+									onChange={time => {
+										// console.log(time);
+										setDateTime(prev => ({
+											...prev,
+											time: time!.format('HH:mm'),
+										}));
+									}}
+								/>
+							</div>
+							<table className='table table-attendance-list'>
+								<thead>
+									<tr data-title>
+										<th colSpan={4}>
+											<p>{t('attendance_list')}</p>
+										</th>
+									</tr>
+									<tr>
+										<th>Nº</th>
+										<th>{t('run')}</th>
+										<th>
+											<p>{t('students')}</p>
+										</th>
+										<th>
+											<p>{t('attendance')}</p>
+										</th>
+									</tr>
+								</thead>
+								<tbody
+									onKeyDown={e => {
+										if (e.key === ' ') e.preventDefault();
+									}}
+								>
+									{selectedClass.attendanceList.map(
+										({ attendance, student }, index) => {
+											return (
+												<tr
+													key={`${student.run} ${attendance}`}
+													className='student'
+												>
+													<td>
+														<p>{index + 1}</p>
+													</td>
+													<td>
+														<p>{student.run}</p>
+													</td>
+													<td data-student-name>
+														<p>
+															{`${student.first_surname.toLowerCase()}, ${student.name.toLowerCase()}`}
+														</p>
+													</td>
+													<td>
+														<p>{t('present')}</p>
+														<input
+															type='checkbox'
+															name={`attendance ${student.run}`}
+															id={`attendance ${student.run}`}
+															checked={attendance === 'present'}
+															onChange={e => {
+																handleOnChangeAttendance(e, student);
+															}}
+														/>
+														<label
+															tabIndex={0}
+															className='label-attendance'
+															htmlFor={`attendance ${student.run}`}
+															onKeyDown={e => handleLabelKeyDown(e, student)}
+															ref={labelRef}
+														></label>
+													</td>
+												</tr>
+											);
+										},
+									)}
+								</tbody>
+							</table>
+						</div>
+						<div className='footer'>
+							<button
+								className='button cancel'
+								onClick={handleClickCloseModal}
+							>
+								{t('cancel')}
+							</button>
+							<button
+								className='button confirm'
+								onClick={handleClickConfirm}
+							>
+								{t('confirm')}
+							</button>
+						</div>
 					</div>
-					<table className='table-attendance-list'>
-						<thead>
-							<tr data-title>
-								<th colSpan={4}>
-									<p>{t('attendance_list')}</p>
-								</th>
-							</tr>
-							<tr>
-								<th>Nº</th>
-								<th>Run</th>
-								<th>
-									<p>{t('students')}</p>
-								</th>
-								<th>
-									<p>{t('attendance')}</p>
-								</th>
-							</tr>
-						</thead>
-						<tbody
-							onKeyDown={e => {
-								if (e.key === ' ') e.preventDefault();
-							}}
-						>
-							{selectedClass.attendanceList.map(
-								({ attendance, student }, index) => {
-									return (
-										<tr
-											key={`${student.run} ${attendance}`}
-											className='student'
-										>
-											<td>
-												<p>{index + 1}</p>
-											</td>
-											<td>
-												<p>{student.run}</p>
-											</td>
-											<td data-student-name>
-												<p>
-													{`${student.first_surname.toLowerCase()}, ${student.name.toLowerCase()}`}
-												</p>
-											</td>
-											<td>
-												<p>{t('present')}</p>
-												<input
-													type='checkbox'
-													name={`attendance ${student.run}`}
-													id={`attendance ${student.run}`}
-													checked={attendance === 'present'}
-													onChange={e => {
-														// console.log(e);
-														handlerOnChangeAttendance(e, student);
-													}}
-												/>
-												<label
-													tabIndex={0}
-													className='label-attendance'
-													htmlFor={`attendance ${student.run}`}
-													onKeyDown={e => handlerLabelKeyDown(e, student)}
-													ref={labelRef}
-												></label>
-											</td>
-										</tr>
-									);
-								},
-							)}
-						</tbody>
-					</table>
-				</div>
-				<div className='footer'>
-					<button
-						className='confirm'
-						onClick={handlerClickConfirm}
-					>
-						{t('confirm')}
-					</button>
-					<button
-						className='cancel'
-						onClick={handlerClickCloseModal}
-					>
-						{t('cancel')}
-					</button>
-				</div>
-			</div>
-		</>
+				</motion.section>
+			)}
+		</AnimatePresence>
 	);
 }
 
@@ -558,51 +659,73 @@ function ModalDeleteClass({
 }: ModalDeleteClassProps) {
 	const [deleteClasses] = useDeleteClassMutation();
 
-	const handlerClickConfirm = () => {
+	const handleClickConfirm = () => {
+		const deletingClass = toast.loading(t('deleting_class'));
 		deleteClasses({ id: selectedClass.id })
 			.unwrap()
 			.then(res => {
-				console.log(res);
+				toast.update(deletingClass, {
+					render: t(res.msg),
+					type: 'success',
+					isLoading: false,
+				});
 				setShowModalDeleteClass(!showModalDeleteClass);
+			})
+			.catch(err => {
+				console.log(err);
+				toast.update(deletingClass, {
+					render: t(err.data.message),
+					type: 'error',
+					isLoading: false,
+				});
 			});
 	};
 
 	return (
-		<>
-			<div
-				className={`background ${
-					showModalDeleteClass ? 'showModalDeleteClass' : ''
-				}`}
-			/>
-			<div
-				className={`delete-modal ${
-					showModalDeleteClass ? 'showModalDeleteClass' : ''
-				}`}
-			>
-				<h2>{t('delete_class')}</h2>
-				<IoIosClose
-					className='ioClose'
-					onClick={() => setShowModalDeleteClass(!showModalDeleteClass)}
-				/>
-				<div className='body'>
-					<p>{t('delete_class_message')}</p>
-				</div>
-				<div className='footer'>
-					<button
-						className='confirm'
-						onClick={handlerClickConfirm}
-					>
-						{t('confirm')}
-					</button>
-					<button
-						className='cancel'
-						onClick={() => setShowModalDeleteClass(!showModalDeleteClass)}
-					>
-						{t('cancel')}
-					</button>
-				</div>
-			</div>
-		</>
+		<AnimatePresence>
+			{showModalDeleteClass && (
+				<motion.section
+					style={{
+						margin: 0,
+						padding: 0,
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						width: '100%',
+						height: '100%',
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+					}}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+				>
+					<div className='delete-modal'>
+						<h2>{t('delete_class')}</h2>
+						<IoIosClose
+							className='ioClose'
+							onClick={() => setShowModalDeleteClass(!showModalDeleteClass)}
+						/>
+						<div className='body'>
+							<p>{t('delete_class_message')}</p>
+						</div>
+						<div className='footer'>
+							<button
+								className='button confirm'
+								onClick={handleClickConfirm}
+							>
+								{t('confirm')}
+							</button>
+							<button
+								className='button cancel'
+								onClick={() => setShowModalDeleteClass(!showModalDeleteClass)}
+							>
+								{t('cancel')}
+							</button>
+						</div>
+					</div>
+				</motion.section>
+			)}
+		</AnimatePresence>
 	);
 }
 

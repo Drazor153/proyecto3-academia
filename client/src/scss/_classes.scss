@@ -34,7 +34,6 @@
 	overflow: hidden;
 	border-radius: 10px;
 	transition: max-height 0.5s;
-	user-select: none;
 
 	.flex,
 	.lesson {
@@ -107,29 +106,27 @@
 .hiOutlinePencilSquare,
 .mdOutlineDeleteForever {
 	cursor: pointer;
-	font-size: 1.75rem;
+	// font-size: 1.75rem;
+	width: 50%;
+	height: 26px;
 }
 
+.mdOutlineDeleteForever:hover,
 .imEyePlus:hover {
-	color: $orange;
-}
-
-.mdOutlineDeleteForever:hover {
-	color: $pink;
+	color: $lightred;
 }
 
 .table-class-list {
 	tbody {
 		tr {
 			td {
-				gap: 3px;
+				// gap: 5px;
+				background-color: rgba($brown, 0.25);
 
 				&[datatype='content'],
 				&[datatype='teacher'] {
 					flex-direction: column;
 					align-items: start;
-					user-select: text;
-
 					&[datatype='content'] p {
 						white-space: nowrap;
 						text-overflow: ellipsis;
@@ -148,12 +145,12 @@
 
 	&[user-role='teachers'] {
 		.grid {
-			grid-template-columns: 20% calc(35% - 6px) 25% 20%;
+			grid-template-columns: 15% 15% calc(35% - 6px) 20% 15%;
 		}
 
 		@media screen and (min-width: 1366px) {
 			.grid {
-				grid-template-columns: 10% auto 15% 10%;
+				grid-template-columns: 11% 11% auto 12% 11%;
 			}
 		}
 	}
@@ -180,10 +177,7 @@
 	width: 75%;
 	height: 75%;
 	background-color: #cbd1d5;
-	border-radius: 10px;
-	opacity: 0;
-	visibility: hidden;
-	transition: opacity 0.25s, visibility 0.25s;
+	border-radius: 5px;
 	font-size: 1.25rem;
 	display: flex;
 	flex-direction: column;
@@ -192,14 +186,15 @@
 	.ioClose {
 		position: absolute;
 		cursor: pointer;
-		color: white;
+		color: $white;
 		top: 2.5px;
-		right: 5px;
+		right: 2.5px;
 		height: 35px;
 		width: 35px;
+		transition: color 0.25s;
 
 		&:hover {
-			color: $pink;
+			color: $lightred;
 		}
 	}
 
@@ -212,43 +207,113 @@
 		justify-content: center;
 		align-items: center;
 		height: 40px;
-		border-radius: 10px 10px 0 0;
+		border-radius: 5px 5px 0 0;
 	}
 
 	.body {
 		display: flex;
-		flex-direction: column;
+		// flex-direction: column;
 		font-size: 1.5rem;
 		height: 100%;
-		padding: 10px 10px 0 10px;
+		padding: 10px 0px 0 10px;
 		gap: 10px;
+		overflow: hidden;
 
 		p {
 			text-align: center;
 		}
 
-		.content {
-			display: grid;
-			grid-template-columns: 20% auto;
-			align-items: center;
+		.left {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			align-items: start;
+			height: 100%;
+			overflow-y: auto;
 
-			input[type='text'] {
-				height: 40px;
-				border-radius: 5px;
-				font-size: 1.25rem;
-				border: 2px solid gray;
-				padding-inline: 5px;
-				// width: 95%;
+			label {
+				width: 100%;
+				font-size: 0.9rem;
 
-				&:focus {
-					border-radius: 5px;
-					border: 2px solid $brown;
-					outline: none;
+				h2 {
+					justify-content: start;
 				}
 			}
 
-			@media screen and (min-width: 1366px) {
-				grid-template-columns: 12.5% auto;
+			textarea {
+				border-radius: 0 0 5px 5px;
+				color: $darkbrown;
+				font-size: 1.25rem;
+				border: 2px solid gray;
+				padding: 5px;
+				width: 100%;
+				resize: vertical;
+				min-height: 25%;
+				max-height: 50%;
+				background-color: rgba($brown, 0.25);
+				box-shadow: none;
+
+				transition: background-color 0.25s, border 0.25s, outline 0.25s;
+
+				&:focus {
+					background-color: $white;
+					border: 2px solid $brown;
+					outline: none;
+				}
+
+				margin-bottom: 10px;
+			}
+
+			.ant-picker {
+				width: 100%;
+				border-radius: 0 0 5px 5px;
+				background-color: rgba($brown, 0.25);
+				border: 2px solid gray;
+				box-shadow: none;
+
+				transition: background-color 0.25s, border 0.25s, outline 0.25s;
+
+				&:not(:last-child) {
+					margin-bottom: 10px;
+				}
+
+				input {
+					color: $darkbrown;
+				}
+
+				&.date-picker:hover {
+					.ant-picker-suffix {
+						opacity: 0;
+					}
+					.ant-picker-clear {
+						opacity: 1;
+					}
+				}
+
+				&.ant-picker-focused {
+					background-color: $white;
+					border-color: $brown;
+					outline: none;
+				}
+
+				.ant-picker-suffix {
+					color: gray;
+				}
+				.ant-picker-clear {
+					background-color: transparent;
+					color: gray;
+
+					&:hover {
+						color: $lightred;
+					}
+				}
+			}
+
+			@media screen and (max-width: 1366px) {
+				textarea,
+				.ant-picker:not(:last-child) {
+					margin-bottom: auto;
+				}
 			}
 		}
 
@@ -257,10 +322,7 @@
 			height: 100%;
 			overflow: hidden;
 			place-self: center;
-
-			@media screen and (min-width: 1366px) {
-				width: 75%;
-			}
+			flex: 2;
 
 			thead {
 				tr {
@@ -282,10 +344,6 @@
 			}
 
 			tbody {
-				@media screen and (max-width: 1366px) {
-					height: 175px;
-				}
-
 				tr {
 					grid-template-columns: 5% 20% auto 30%;
 
@@ -296,6 +354,12 @@
 					td {
 						align-items: center;
 						padding: 0 10px;
+
+						&[data-student-name] {
+							p {
+								text-align: start !important;
+							}
+						}
 
 						&:last-child {
 							justify-content: space-evenly;
@@ -405,4 +469,115 @@
 .showModalDeleteClass {
 	opacity: 1;
 	visibility: visible;
+}
+
+.ant-picker-dropdown {
+	.ant-picker-panel-container {
+		border-radius: 5px;
+		outline: none;
+	}
+	.ant-picker-header {
+		background-color: $brown;
+		// color: white;
+		border-radius: 5px 5px 0 0;
+		outline: none;
+
+		button {
+			color: white;
+
+			&:hover {
+				color: $lightred;
+			}
+		}
+	}
+
+	// .ant-picker-body {
+	.ant-picker-content {
+		.ant-picker-time-panel-column {
+			> li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
+				background-color: rgba($brown, 0.25);
+				border-color: rgba($brown, 0.25);
+			}
+			> li.ant-picker-time-panel-cell-selected
+				.ant-picker-time-panel-cell-inner {
+				color: $white;
+				background-color: $brown;
+			}
+			&::after {
+				display: none;
+			}
+		}
+
+		th {
+			color: $brown;
+		}
+
+		td {
+			&.ant-picker-cell {
+				&:hover:not(.ant-picker-cell-selected):not(
+						.ant-picker-cell-range-start
+					):not(.ant-picker-cell-range-end):not(
+						.ant-picker-cell-range-hover-start
+					):not(.ant-picker-cell-range-hover-end)
+					.ant-picker-cell-inner {
+					background-color: rgba($brown, 0.25);
+					border-color: rgba($brown, 0.25);
+				}
+
+				// &.ant-picker-cell-inner {
+				// 	&:hover {
+				// 		background-color: $brown;
+				// 	}
+				// }
+
+				&-selected {
+					.ant-picker-cell-inner {
+						background-color: $brown;
+						border-color: $brown;
+					}
+				}
+
+				&-today {
+					.ant-picker-cell-inner {
+						&::before {
+							border-color: $brown;
+						}
+					}
+				}
+			}
+		}
+		// }
+	}
+
+	.ant-picker-footer {
+		background-color: $brown;
+		border-radius: 0 0 5px 5px;
+		outline: none;
+
+		a {
+			color: white;
+
+			&:hover {
+				color: $lightred;
+			}
+		}
+
+		.ant-btn-primary {
+			color: white;
+			background-color: $brown;
+			border-color: $brown;
+			box-shadow: none;
+			outline: none;
+
+			&:disabled {
+				color: grey;
+				border-color: $brown;
+				// background-color: rgba($brown, 0.25);
+			}
+			&:not(:disabled):not(.ant-btn-disabled):hover {
+				background-color: $brown;
+				color: $lightred;
+			}
+		}
+	}
 }

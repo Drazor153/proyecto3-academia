@@ -16,6 +16,7 @@ function CreateJustificationFooter({
 	return (
 		<>
 			<button
+				className='button'
 				type='button'
 				onClick={submitHandler}
 			>
@@ -61,7 +62,6 @@ export function CreateJustification({
 					isLoading: false,
 					type: 'success',
 					render: t(payload.msg),
-					autoClose: 1000,
 				});
 				closeModal();
 			})
@@ -69,8 +69,7 @@ export function CreateJustification({
 				toast.update(loadingToast, {
 					isLoading: false,
 					type: 'error',
-					render: t(error.message),
-					autoClose: 1000,
+					render: t(error.data.msg),
 				}),
 			);
 	};

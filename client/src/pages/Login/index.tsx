@@ -61,13 +61,13 @@ function Login() {
 	};
 
 	const handlerLogin: SubmitHandler<formType> = data => {
-		setIsLoading(true);
 		data.run = data.run.replace(/[^0-9kK]/g, '').toUpperCase();
 
 		if (!validateRut(String(data.run))) return toast.error(t('invalid_run'));
 
 		data.run = data.run.substring(0, data.run.length - 1);
 
+		setIsLoading(true);
 		auth(data)
 			.unwrap()
 			.then(res => {
@@ -76,7 +76,7 @@ function Login() {
 				setIsLoading(false);
 			})
 			.catch(err => {
-				toast.error(t(err.data.message));
+				toast.error(t(err.data.msg));
 				setIsLoading(false);
 			});
 	};
@@ -179,7 +179,7 @@ function Login() {
 						<button
 							type='submit'
 							disabled={isLoading}
-							className={isLoading ? 'loading-btn' : ''}
+							className={`button ${isLoading ? 'loading-btn' : ''}`}
 						>
 							{isLoading ? <ThreeDots /> : t('login')}
 						</button>

@@ -26,14 +26,14 @@ function Dashboard() {
 						<Shortcuts>
 							{shortcutsItems /**.slice(1, -1)*/
 								.map((item, index) => {
-									// if (item.type !== 'route') {
-									return (
-										<Shortcut
-											key={item.name}
-											index={index}
-											item={item}
-										/>
-									);
+									if (item.only.includes(role) || item.only.includes('ALL'))
+										return (
+											<Shortcut
+												key={item.name}
+												index={index}
+												item={item}
+											/>
+										);
 									// }
 								})}
 						</Shortcuts>

@@ -25,6 +25,7 @@ export const justificationApi = createApi({
 					params,
 				};
 			},
+			providesTags: ['Justification'],
 		}),
 
 		getOwnJustification: builder.query<Data<Justification[]>, null>({

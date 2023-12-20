@@ -251,7 +251,7 @@ function AnnouncementTable(): JSX.Element {
 			{isLoading && <ThreeDots />}
 			{isSuccess && (
 				<>
-					<table className='table-announcement-list'>
+					<table className='table table-announcement-list'>
 						<thead>
 							<tr data-title>
 								<th>
@@ -350,6 +350,7 @@ function AnnouncementTable(): JSX.Element {
 						</p>
 						<div className='pagination-btn-container'>
 							<button
+								className='button'
 								disabled={page == 1 || isFetching}
 								name={'previous'}
 								onClick={handleChangePage}
@@ -357,6 +358,7 @@ function AnnouncementTable(): JSX.Element {
 								<AiOutlineDoubleLeft />
 							</button>
 							<button
+								className='button'
 								disabled={!announcement?.next || isFetching}
 								name={'next'}
 								onClick={handleChangePage}
@@ -374,8 +376,18 @@ function AnnouncementTable(): JSX.Element {
 				title={t('announcement_details')}
 				footer={
 					<>
-						<button onClick={onSave}>{t('save')}</button>
-						<button onClick={closeModal}>{t('cancel')}</button>
+						<button
+							className='button'
+							onClick={onSave}
+						>
+							{t('save')}
+						</button>
+						<button
+							className='button'
+							onClick={closeModal}
+						>
+							{t('cancel')}
+						</button>
 					</>
 				}
 				onClick={closeModal}
@@ -395,8 +407,18 @@ function AnnouncementTable(): JSX.Element {
 				title={t('delete_announcement')}
 				footer={
 					<>
-						<button onClick={onDelete}>{t('delete')}</button>
-						<button onClick={closeModal}>{t('cancel')}</button>
+						<button
+							className='button'
+							onClick={onDelete}
+						>
+							{t('delete')}
+						</button>
+						<button
+							className='button'
+							onClick={closeModal}
+						>
+							{t('cancel')}
+						</button>
 					</>
 				}
 				onClick={closeModal}

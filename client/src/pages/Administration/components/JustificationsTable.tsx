@@ -15,6 +15,7 @@ import {
 } from '@/redux/services/justificationApi';
 import JustificationViewer from '@/components/JustificationViewer';
 import { Justification } from '@/utils/types';
+import { toast } from 'react-toastify';
 
 function JustificationsDetails() {
 	useTranslation();
@@ -90,6 +91,26 @@ function JustificationsDetails() {
 		}
 	};
 
+	const handleJustificationStatus = (id: string, status: string) => {
+		toast.loading(t('changing_status'), { toastId: 'loading' });
+		sendJustificationStatus({ id, status })
+			.unwrap()
+			.then(() => {
+				toast.update('loading', {
+					render: t('status_changed'),
+					type: 'success',
+					isLoading: false,
+				});
+			})
+			.catch(() => {
+				toast.update('loading', {
+					render: t('status_changed_error'),
+					type: 'error',
+					isLoading: false,
+				});
+			});
+	};
+
 	return (
 		<>
 			<h2>{t('search')}</h2>
@@ -137,7 +158,7 @@ function JustificationsDetails() {
 					</div>
 				</div>
 			</div>
-			<table className='justifications-table'>
+			<table className='table justifications-table'>
 				<thead>
 					<tr>
 						<th>{t('date')}</th>
@@ -179,32 +200,35 @@ function JustificationsDetails() {
 										{justification.first_surname?.toLowerCase()},{' '}
 										{justification.name?.toLowerCase()}
 									</td>
-									<td>{justification.approved}</td>
+									<td>{t(justification.approved)}</td>
 									<td>
 										<div className='action-buttons'>
 											<button
+												className='button'
 												onClick={() => setSelectedJustification(justification)}
 											>
 												<TiDocumentText className='icon' />
 												<span>{t('view')}</span>
 											</button>
 											<button
+												className='button'
 												onClick={() =>
-													sendJustificationStatus({
-														id: justification.id!.toString(),
-														status: 'rejected',
-													})
+													handleJustificationStatus(
+														justification.id!.toString(),
+														'rejected',
+													)
 												}
 											>
 												<TiCancel className='icon' />
 												<span>{t('reject')}</span>
 											</button>
 											<button
+												className='button'
 												onClick={() =>
-													sendJustificationStatus({
-														id: justification.id!.toString(),
-														status: 'approved',
-													})
+													handleJustificationStatus(
+														justification.id!.toString(),
+														'approved',
+													)
 												}
 											>
 												<TiTick className='icon' />
@@ -223,6 +247,7 @@ function JustificationsDetails() {
 				</p>
 				<div className='pagination-btn-container'>
 					<button
+						className='button'
 						disabled={page == 1}
 						name={'previous'}
 						onClick={handleChangePage}
@@ -230,6 +255,7 @@ function JustificationsDetails() {
 						<AiOutlineDoubleLeft />
 					</button>
 					<button
+						className='button'
 						disabled={!result.data?.next}
 						name={'next'}
 						onClick={handleChangePage}

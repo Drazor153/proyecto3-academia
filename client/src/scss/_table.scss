@@ -1,8 +1,7 @@
 @use 'base';
 @use 'scrollbar';
 
-table {
-	user-select: none;
+.table {
 	color: white;
 	border-collapse: collapse;
 	font-size: 1.35rem;

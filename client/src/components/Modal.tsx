@@ -7,6 +7,7 @@ interface ModalProps {
 	onClick?: () => void;
 	title?: string;
 	className?: string;
+	style?: React.CSSProperties;
 }
 
 // {children, footer, setIsOpen, title}: ModalProps
@@ -18,6 +19,7 @@ function Modal({
 	onClick,
 	title,
 	className,
+	style,
 }: ModalProps) {
 	const darkBgClasses = ['darkBG', ...(isOpen() ? ['open'] : [])];
 	const modalClasses = [
@@ -33,13 +35,16 @@ function Modal({
 				onClick={onClick}
 			/>
 			{/* <div className={`modal ${className ?? ''} ${isOpen() ? 'open' : ''}`}> */}
-			<div className={modalClasses.join(' ')}>
+			<div
+				className={modalClasses.join(' ')}
+				style={style ? style : {}}
+			>
 				<div className='modal-container'>
 					{title && (
 						<div className='modal-header'>
 							<h2 className='modal-title'>{title}</h2>
 							<button
-								className='modal-close'
+								className='button modal-close'
 								onClick={onClick}
 							>
 								<AiOutlineClose />

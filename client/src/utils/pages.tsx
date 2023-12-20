@@ -1,7 +1,4 @@
 import { FaTh, FaBookOpen, FaRegCalendarAlt, FaFileAlt } from 'react-icons/fa';
-import Dashboard from '../pages/Dashboard';
-import Grades from '../pages/Grades';
-import Classes from '../pages/Classes';
 import Administration from '../pages/Administration';
 import { MdManageAccounts, MdNewspaper, MdPersonSearch } from 'react-icons/md';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
@@ -9,9 +6,6 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import UserInfo from '../components/UserInfo';
 import LanguageSwap from '../components/LanguageSwap';
 import Sidebar from '../components/Sidebar';
-import Login from '../pages/Login';
-import Profile from '@/pages/Profile';
-import Justifications from '@/pages/Justifications';
 import { Suspense, lazy } from 'react';
 import LazyLoading from '@/components/LazyLoading';
 
@@ -53,21 +47,25 @@ export const shortcutsItems = [
 		path: '/',
 		name: 'Dashboard',
 		icon: <FaTh />,
+		only: ['ALL'],
 	},
 	{
 		path: '/grades',
 		name: 'Grades',
 		icon: <FaBookOpen />,
+		only: ['ALL'],
 	},
 	{
 		path: '/classes',
 		name: 'Classes',
 		icon: <FaRegCalendarAlt />,
+		only: ['ALL'],
 	},
 	{
 		path: '/justifications',
 		name: 'Justifications',
 		icon: <FaFileAlt />,
+		only: ['STUDENT'],
 	},
 ];
 
@@ -95,20 +93,20 @@ export const privilegedShortcutsItems = [
 	},
 ];
 
-export const profileItems = [
-	{
-		path: '/profile/basic',
-		name: 'basic_information',
-	},
-	{
-		path: '/profile/academic',
-		name: 'academic_information',
-	},
-	{
-		path: '/profile/security',
-		name: 'security',
-	},
-];
+// export const profileItems = [
+// 	{
+// 		path: '/profile/basic',
+// 		name: 'basic_information',
+// 	},
+// 	{
+// 		path: '/profile/academic',
+// 		name: 'academic_information',
+// 	},
+// 	{
+// 		path: '/profile/security',
+// 		name: 'security',
+// 	},
+// ];
 
 export const administrationItems = [
 	{

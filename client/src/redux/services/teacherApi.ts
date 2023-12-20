@@ -15,6 +15,7 @@ export const teacherApi = createApi({
 		>({
 			query: ({ year, semester, level }) =>
 				`/grades/${year}/${semester}/${level}`,
+			providesTags: ['Quiz'],
 		}),
 
 		getGradesByExamId: builder.query<Data<Quiz[]>, { quizId: number }>({

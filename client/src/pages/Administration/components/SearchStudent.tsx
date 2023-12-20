@@ -45,7 +45,7 @@ function EditStudent({
 				toast.update('reset-password', {
 					type: 'success',
 					render: t(payload.msg),
-					autoClose: 2000,
+
 					isLoading: false,
 				}),
 			)
@@ -53,7 +53,7 @@ function EditStudent({
 				toast.update('reset-password', {
 					type: 'error',
 					render: t(error.message),
-					autoClose: 2000,
+
 					isLoading: false,
 				}),
 			);
@@ -119,14 +119,14 @@ function EditStudent({
 							defaultChecked={studentInfo.paid}
 						/>
 						<label htmlFor='payment'>
-							{t('paid_enrollment')}
-							<span>({t('last_semester')})</span>
+							{t('paid_enrollment')} <span>({t('last_semester')})</span>
 						</label>
 					</fieldset>
 				</div>
 			</div>
 			<div className='btn-section'>
 				<button
+					className='button'
 					type='button'
 					onClick={handleResetPasswordBtn}
 				>
@@ -149,7 +149,7 @@ function ShowStudentCareer({ run }: { run: number }) {
 
 	return (
 		<div className='student-career-container'>
-			<table>
+			<table className='table'>
 				<thead>
 					<tr>
 						<th>{t('year')}</th>
@@ -239,7 +239,7 @@ function SearchStudent() {
 				toast.update('edit-student', {
 					type: 'success',
 					render: t(payload.msg),
-					autoClose: 2000,
+
 					isLoading: false,
 				});
 				setIsEditing(false);
@@ -249,7 +249,7 @@ function SearchStudent() {
 				toast.update('edit-student', {
 					type: 'error',
 					render: t(error.message),
-					autoClose: 2000,
+
 					isLoading: false,
 				}),
 			);
@@ -381,7 +381,7 @@ function SearchStudent() {
 					</div>
 				</div>
 			</div>
-			<table className='students-table search'>
+			<table className='table students-table search'>
 				<thead>
 					<tr>
 						<th>{t('run')}</th>
@@ -424,11 +424,15 @@ function SearchStudent() {
 									<td>{student.paid ? t('paid') : t('free')}</td>
 									<td>
 										<div className='action-buttons'>
-											<button onClick={() => setSelectedStudent(student)}>
+											<button
+												className='button'
+												onClick={() => setSelectedStudent(student)}
+											>
 												<IoMdSchool className='icon' />
 												<span>{t('career')}</span>
 											</button>
 											<button
+												className='button'
 												onClick={() => {
 													setIsEditing(true);
 													setSelectedStudent(student);
@@ -450,6 +454,7 @@ function SearchStudent() {
 				</p>
 				<div className='pagination-btn-container'>
 					<button
+						className='button'
 						disabled={page == 1}
 						name={'previous'}
 						onClick={handleChangePage}
@@ -457,6 +462,7 @@ function SearchStudent() {
 						<AiOutlineDoubleLeft />
 					</button>
 					<button
+						className='button'
 						disabled={!result.data?.next}
 						name={'next'}
 						onClick={handleChangePage}
@@ -472,7 +478,12 @@ function SearchStudent() {
 				isOpen={() => selectedStudent !== null && !isEditing}
 				onClick={() => setSelectedStudent(null)}
 				footer={
-					<button onClick={() => setSelectedStudent(null)}>{t('close')}</button>
+					<button
+						className='button'
+						onClick={() => setSelectedStudent(null)}
+					>
+						{t('close')}
+					</button>
 				}
 				className='student-modal'
 			>
@@ -490,6 +501,7 @@ function SearchStudent() {
 				footer={
 					<>
 						<button
+							className='button'
 							onClick={() => {
 								setIsEditing(false);
 								setSelectedStudent(null);
@@ -497,7 +509,12 @@ function SearchStudent() {
 						>
 							{t('close')}
 						</button>
-						<button onClick={() => handleEditStudentBtn()}>{t('save')}</button>
+						<button
+							className='button'
+							onClick={() => handleEditStudentBtn()}
+						>
+							{t('save')}
+						</button>
 					</>
 				}
 				className='student-modal'

@@ -16,7 +16,10 @@ export default function Justifications() {
 				<section className='justifications-container'>
 					<h2>{t('justification_list')}</h2>
 					<JustificationTable />
-					<button onClick={() => setOpenModal(true)}>
+					<button
+						className='button'
+						onClick={() => setOpenModal(true)}
+					>
 						<IoCreateOutline />
 						<span>{t('create')}</span>
 					</button>

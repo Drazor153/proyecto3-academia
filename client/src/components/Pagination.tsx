@@ -11,9 +11,14 @@ function Pagination({ totalItems, itemsPerPage }: PaginationProps) {
 	}
 
 	return (
-		<div className="pagination">
+		<div className='pagination'>
 			{pages.map(page => (
-				<button key={page}>{page}</button>
+				<button
+					key={page}
+					className='button '
+				>
+					{page}
+				</button>
 			))}
 		</div>
 	);

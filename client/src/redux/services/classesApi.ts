@@ -55,7 +55,7 @@ export const classesApi = createApi({
 
 		updateClass: builder.mutation<
 			ResponseMsg,
-			{ id: number; body: Omit<PostClass, 'lessonId' | 'date'> }
+			{ id: number; body: Omit<PostClass, 'lessonId'> }
 		>({
 			query: ({ id, body }) => {
 				return {
